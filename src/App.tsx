@@ -3,7 +3,7 @@ import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 
 export const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<Boolean>(false);
   return (
     <div className="App h-screen">
       {isAuthenticated ? (
