@@ -1,12 +1,16 @@
-import { Sidebar } from "./components/Sidebar";
+import { useState } from "react";
+import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 
 export const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   return (
-    <div className="App">
-      <Main>
-        <Sidebar />
-      </Main>
+    <div className="App h-screen">
+      {isAuthenticated ? (
+        <Main />
+      ) : (
+        <Auth setIsAuthenticated={setIsAuthenticated} />
+      )}
     </div>
   );
 };
