@@ -1,7 +1,12 @@
+import { Sidebar } from "./components/Sidebar";
+import { Main } from "./pages/Main";
+
 export const App = () => {
   return (
     <div className="App">
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <Main>
+        <Sidebar />
+      </Main>
     </div>
   );
 };
