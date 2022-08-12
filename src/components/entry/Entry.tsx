@@ -132,7 +132,7 @@ export const Entry: React.FC<EntryProps> = ({
               >
                 <DotsThree size={20} />
                 {isMenuOpen ? (
-                  <ul className="absolute p-2 bg-white text-darkGrey rounded-xl w-[200px] shadow-lg">
+                  <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl w-[200px] shadow-lg">
                     <li
                       onClick={editEntry}
                       className="p-2 hover:bg-offWhite rounded-lg"
