@@ -1,36 +1,44 @@
+import { IEntry, UserRole } from "../types";
+import { Entry } from "./Entry";
+
+const mockEntries: IEntry[] = [
+  {
+    id: "1f1f2fa4-13fa-11ed-861d-0242ac120002",
+    version: 1,
+    text: "Lorem Ipsum is simply <strong>dummy text</strong> of the printing and typesetting industry.",
+    author: "Stefan Schneider",
+    role: "Kläger",
+    section_id: "d990191e-13fc-11ed-861d-0242ac120002",
+  },
+  {
+    id: "257550a4-13fa-11ed-861d-0242ac120002",
+    version: 2,
+    text: "Lorem Ipsum has been the <i>industry's standard dummy text</i>ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    author: "Michael Bauer",
+    role: "Beklagter",
+    section_id: "d990191e-13fc-11ed-861d-0242ac120002",
+    associated_entry: "1f1f2fa4-13fa-11ed-861d-0242ac120002",
+  },
+];
+
 export const Discussion = () => {
   return (
     <div className="bg-offWhite h-full overflow-y-scroll p-4 space-y-4">
       <div className="max-w-[1200px] m-auto">
-        {Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map((i) => (
-          <section key={i}>
-            <div className="text-xl font-bold">
-              <span>{i}.</span> Gliederungspunkt
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-lightPurple text-black p-4 border border-darkPurple rounded-lg">
-                <h3>Beitrag Kläger</h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Consequuntur dolorum earum dolores omnis odit, voluptas
-                  ratione? Praesentium reprehenderit perspiciatis repudiandae
-                  officia veniam qui facere at deserunt, harum ab pariatur
-                  beatae?
-                </p>
-              </div>
-              <div className="bg-lightPetrol text-black p-4 border border-darkPetrol rounded-lg">
-                <h3>Beitrag Beklagter</h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Consequuntur dolorum earum dolores omnis odit, voluptas
-                  ratione? Praesentium reprehenderit perspiciatis repudiandae
-                  officia veniam qui facere at deserunt, harum ab pariatur
-                  beatae?
-                </p>
-              </div>
-            </div>
-          </section>
-        ))}
+        <section className="space-y-8">
+          <div className="text-xl font-bold">
+            <span>1.</span> Gliederungspunkt
+          </div>
+          <div className="space-y-8">
+            {mockEntries.map((entry) => (
+              <Entry
+                key={entry.id}
+                entry={entry}
+                viewedBy={UserRole.Plaintiff}
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

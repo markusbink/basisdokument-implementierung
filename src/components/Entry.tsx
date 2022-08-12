@@ -15,6 +15,7 @@ interface EntryProps {
 
 export const Entry: React.FC<EntryProps> = ({ entry, viewedBy }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
+
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
   const isOwnEntry =
@@ -34,12 +35,7 @@ export const Entry: React.FC<EntryProps> = ({ entry, viewedBy }) => {
           }`}
         >
           <EntryHeader entry={entry} toggleHeader={toggleHeader} />
-          {isExpanded && (
-            <p
-              className="p-6"
-              dangerouslySetInnerHTML={{ __html: entry.text }}
-            ></p>
-          )}
+          {isExpanded && <EntryBody>{entry.text}</EntryBody>}
         </div>
         {isJudge || !isOwnEntry ? (
           <Button
@@ -116,6 +112,19 @@ export const EntryHeader: React.FC<EntryHeaderProps> = ({
         </Action>
       </div>
     </div>
+  );
+};
+
+interface EntryBodyProps {
+  children: React.ReactNode;
+}
+
+export const EntryBody: React.FC<EntryBodyProps> = ({ children }) => {
+  return (
+    <p
+      className="p-6"
+      dangerouslySetInnerHTML={{ __html: children as string }}
+    ></p>
   );
 };
 
