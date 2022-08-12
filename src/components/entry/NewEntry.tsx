@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { CornersIn, CornersOut } from "phosphor-react";
+import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import { UserRole } from "../../types";
 import { Button } from "../Button";
@@ -64,6 +64,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
         />
         <div className="flex justify-end gap-2 p-3 pt-2">
           <Button
+            icon={<X size={20} />}
             onClick={() => setIsNewEntryVisible(false)}
             size="sm"
             bgColor="bg-lightRed"
@@ -72,6 +73,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             Abbrechen
           </Button>
           <Button
+            icon={<FloppyDisk size={20} />}
             onClick={() => setIsNewEntryVisible(false)}
             size="sm"
             bgColor="bg-lightGreen"
