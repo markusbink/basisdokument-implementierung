@@ -1,12 +1,13 @@
-import { IEntry, UserRole } from "../types";
+import cx from "classnames";
 import {
-  BookmarkSimple,
-  Notepad,
-  DotsThree,
   ArrowBendLeftUp,
+  BookmarkSimple,
+  DotsThree,
+  Notepad,
 } from "phosphor-react";
-import { Button } from "./Button";
 import React, { useState } from "react";
+import { IEntry, UserRole } from "../types";
+import { Button } from "./Button";
 
 interface EntryProps {
   entry: IEntry;
@@ -30,7 +31,7 @@ export const Entry: React.FC<EntryProps> = ({ entry, viewedBy }) => {
     <div className={`flex flex-col ${isPlaintiff ? "" : "items-end"}`}>
       <div className="w-1/2">
         <div
-          className={`rounded-lg border overflow-hidden ${
+          className={`rounded-lg border ${
             isPlaintiff ? "border-lightPurple" : "border-lightPetrol"
           }`}
         >
@@ -63,6 +64,7 @@ export const EntryHeader: React.FC<EntryHeaderProps> = ({
   entry,
   toggleHeader,
 }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const isPlaintiff = entry.role === UserRole.Plaintiff;
 
   const bookmarkEntry = (e: React.MouseEvent) => {
@@ -76,10 +78,27 @@ export const EntryHeader: React.FC<EntryHeaderProps> = ({
     e.stopPropagation();
     console.log("add note");
   };
+
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const editEntry = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("edit entry");
+  };
+
+  const deleteEntry = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("delete entry");
+  };
+
   return (
     <div
       onClick={(e) => toggleHeader(e)}
-      className={`flex items-center justify-between px-6 py-3 cursor-pointer  select-none${
+      className={`flex items-center justify-between rounded-t-lg px-6 py-3 cursor-pointer  select-none${
         isPlaintiff
           ? " bg-lightPurple text-darkPurple"
           : " bg-lightPetrol text-darkPetrol"
@@ -107,8 +126,28 @@ export const EntryHeader: React.FC<EntryHeaderProps> = ({
         <Action onClick={addNote} isPlaintiff={isPlaintiff}>
           <Notepad size={20} />
         </Action>
-        <Action isPlaintiff={isPlaintiff}>
+        <Action
+          className="relative"
+          onClick={toggleMenu}
+          isPlaintiff={isPlaintiff}
+        >
           <DotsThree size={20} />
+          {isMenuOpen ? (
+            <ul className="absolute p-2 bg-white text-darkGrey rounded-xl w-[200px] shadow-lg">
+              <li
+                onClick={editEntry}
+                className="p-2 hover:bg-offWhite rounded-lg"
+              >
+                Bearbeiten
+              </li>
+              <li
+                onClick={deleteEntry}
+                className="p-2 hover:bg-offWhite rounded-lg"
+              >
+                Löschen
+              </li>
+            </ul>
+          ) : null}
         </Action>
       </div>
     </div>
@@ -128,7 +167,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ children }) => {
   );
 };
 
-interface ActionProps {
+interface ActionProps extends React.HTMLAttributes<HTMLDivElement> {
   onClick?: (e: React.MouseEvent) => void;
   isPlaintiff: boolean;
   children: React.ReactNode;
@@ -138,15 +177,21 @@ export const Action: React.FC<ActionProps> = ({
   onClick,
   isPlaintiff,
   children,
+  className,
+  ...restProps
 }) => {
   return (
     <div
       onClick={onClick}
-      className={`rounded-md p-1 cursor-pointer ${
-        isPlaintiff
-          ? "hover:bg-darkPurple hover:text-lightPurple"
-          : "hover:bg-darkPetrol hover:text-lightPetrol"
-      }`}
+      className={cx(
+        "rounded-md p-1 cursor-pointer",
+        {
+          "hover:bg-darkPurple hover:text-lightPurple": isPlaintiff,
+          "hover:bg-darkPetrol hover:text-lightPetrol": !isPlaintiff,
+        },
+        className
+      )}
+      {...restProps}
     >
       {children}
     </div>
