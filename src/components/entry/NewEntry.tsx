@@ -44,7 +44,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
           "border-lightPetrol": isPlaintiff,
         })}
       >
-        <div className=" p-4 flex">
+        <div className="p-4 flex justify-end">
           <Action
             onClick={() => setIsExpanded(!isExpanded)}
             isPlaintiff={!isPlaintiff}
@@ -62,26 +62,20 @@ export const NewEntry: React.FC<NewEntryProps> = ({
           )}
           placeholder="Text eingeben"
         />
-        <div className="flex justify-between">
+        <div className="flex justify-end gap-2 p-3 pt-2">
           <Button
             onClick={() => setIsNewEntryVisible(false)}
             size="sm"
-            bgColor="transparent"
-            textColor={cx("font-bold", {
-              "text-darkPurple": isPlaintiff,
-              "text-darkPetrol": !isPlaintiff,
-            })}
+            bgColor="bg-lightRed"
+            textColor="font-bold text-darkRed"
           >
             Abbrechen
           </Button>
           <Button
             onClick={() => setIsNewEntryVisible(false)}
             size="sm"
-            bgColor="transparent"
-            textColor={cx("font-bold", {
-              "text-darkPurple": isPlaintiff,
-              "text-darkPetrol": !isPlaintiff,
-            })}
+            bgColor="bg-lightGreen"
+            textColor="font-bold text-darkGreen"
           >
             Speichern
           </Button>
