@@ -35,7 +35,7 @@ export const Discussion = () => {
                 key={entry.id}
                 entry={entry}
                 isBookmarked={index % 2 === 0}
-                viewedBy={UserRole.Plaintiff}
+                viewedBy={UserRole.Defendant}
               />
             ))}
           </div>

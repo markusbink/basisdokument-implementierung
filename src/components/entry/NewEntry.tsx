@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { CornersIn, CornersOut } from "phosphor-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserRole } from "../../types";
 import { Button } from "../Button";
 import { Action } from "./Action";
@@ -8,13 +8,11 @@ import { EntryHeader } from "./EntryHeader";
 
 interface NewEntryProps {
   parentRole: "Kläger" | "Beklagter";
-  viewedBy: UserRole;
   setIsNewEntryVisible: (isVisible: boolean) => void;
 }
 
 export const NewEntry: React.FC<NewEntryProps> = ({
   parentRole,
-  viewedBy,
   setIsNewEntryVisible,
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -27,6 +25,8 @@ export const NewEntry: React.FC<NewEntryProps> = ({
         {
           "w-1/2": !isExpanded,
           "w-full": isExpanded,
+          "self-start": !isPlaintiff,
+          "self-end": isPlaintiff,
         }
       )}
     >

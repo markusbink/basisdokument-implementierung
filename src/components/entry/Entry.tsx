@@ -172,7 +172,6 @@ export const Entry: React.FC<EntryProps> = ({
           <NewEntry
             parentRole={entry.role}
             setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
-            viewedBy={viewedBy}
           />
         )}
       </div>
