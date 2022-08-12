@@ -2,8 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
 
-.App {
-  font-family: 'Manrope', sans-serif;
+body {
+  font-family: "Manrope", sans-serif;
+}
+
+@layer components {
+  .sm {
+    @apply px-3 py-2 text-sm rounded;
+  }
+
+  .md {
+    @apply px-4 py-3 text-base rounded-md;
+  }
+
+  .lg {
+    @apply px-8 py-4 text-lg rounded-lg;
+  }
+
+  .disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+  .disabled:hover {
+    @apply opacity-50 cursor-not-allowed;
+  }
 }

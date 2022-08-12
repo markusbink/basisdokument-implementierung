@@ -1,12 +1,30 @@
-import React from "react";
-import "./App.css";
+import { useEffect, useState } from "react";
+import { Auth } from "./pages/Auth";
+import { Main } from "./pages/Main";
 
-function App() {
+const registerKeyListener = (e: KeyboardEvent) => {
+  if (e.key === "r" && e.metaKey) {
+    e.preventDefault();
+  }
+};
+
+export const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<Boolean>(false);
+
+  useEffect(() => {
+    window.addEventListener("keydown", registerKeyListener);
+    return () => {
+      window.removeEventListener("keydown", registerKeyListener);
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+    <div className="App h-screen">
+      {isAuthenticated ? (
+        <Main />
+      ) : (
+        <Auth setIsAuthenticated={setIsAuthenticated} />
+      )}
     </div>
   );
-}
-
-export default App;
+};
