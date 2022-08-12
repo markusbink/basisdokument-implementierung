@@ -1,5 +1,5 @@
 import { IEntry, UserRole } from "../types";
-import { Entry } from "./Entry";
+import { Entry } from "./entry/Entry";
 
 const mockEntries: IEntry[] = [
   {
@@ -30,10 +30,11 @@ export const Discussion = () => {
             <span>1.</span> Gliederungspunkt
           </div>
           <div className="space-y-8">
-            {mockEntries.map((entry) => (
+            {mockEntries.map((entry, index) => (
               <Entry
                 key={entry.id}
                 entry={entry}
+                isBookmarked={index % 2 === 0}
                 viewedBy={UserRole.Plaintiff}
               />
             ))}
