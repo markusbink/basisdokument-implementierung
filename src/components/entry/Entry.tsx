@@ -161,7 +161,7 @@ export const Entry: React.FC<EntryProps> = ({
                 <Action onClick={addNote} isPlaintiff={isPlaintiff}>
                   <Notepad size={20} />
                 </Action>
-                {(isJudge || entry.role === viewedBy) && (
+                {(isJudge || (entry.role === viewedBy && !isOld)) && (
                   <Action
                     className={cx("relative", {
                       "bg-darkPurple text-lightPurple":
@@ -185,22 +185,26 @@ export const Entry: React.FC<EntryProps> = ({
                             Hinweis hinzufügen
                           </li>
                         )}
-                        <li
-                          tabIndex={0}
-                          onClick={editEntry}
-                          className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                        >
-                          <Pencil size={20} />
-                          Bearbeiten
-                        </li>
-                        <li
-                          tabIndex={0}
-                          onClick={deleteEntry}
-                          className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                        >
-                          <Trash size={20} />
-                          Löschen
-                        </li>
+                        {!isOld && (
+                          <>
+                            <li
+                              tabIndex={0}
+                              onClick={editEntry}
+                              className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                            >
+                              <Pencil size={20} />
+                              Bearbeiten
+                            </li>
+                            <li
+                              tabIndex={0}
+                              onClick={deleteEntry}
+                              className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                            >
+                              <Trash size={20} />
+                              Löschen
+                            </li>
+                          </>
+                        )}
                       </ul>
                     ) : null}
                   </Action>
