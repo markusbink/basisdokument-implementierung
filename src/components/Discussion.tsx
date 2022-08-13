@@ -35,8 +35,9 @@ export const Discussion = () => {
                 key={entry.id}
                 entry={entry}
                 isBookmarked={index % 2 === 0}
-                isHidden={index % 2 === 0}
-                viewedBy={UserRole.Plaintiff}
+                // isHidden={index % 2 === 0}
+                viewedBy={UserRole.Judge}
+                isOld={index % 2 === 0}
               />
             ))}
           </div>

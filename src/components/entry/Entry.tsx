@@ -4,6 +4,9 @@ import {
   BookmarkSimple,
   DotsThree,
   Notepad,
+  Pencil,
+  Scales,
+  Trash,
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import { IEntry, UserRole } from "../../types";
@@ -19,13 +22,15 @@ interface EntryProps {
   isBookmarked?: boolean;
   viewedBy: UserRole;
   isHidden?: boolean;
+  isOld?: boolean;
 }
 
 export const Entry: React.FC<EntryProps> = ({
   entry,
-  isBookmarked = false,
   viewedBy,
+  isBookmarked = false,
   isHidden = false,
+  isOld = false,
 }) => {
   const [isBodyOpen, setIsBodyOpen] = useState<boolean>(true);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -100,6 +105,10 @@ export const Entry: React.FC<EntryProps> = ({
     setIsEditing(false);
   };
 
+  const addHint = () => {
+    console.log(`add hint to entry ${entry.id}`);
+  };
+
   return (
     <div
       className={cx({
@@ -152,29 +161,50 @@ export const Entry: React.FC<EntryProps> = ({
                 <Action onClick={addNote} isPlaintiff={isPlaintiff}>
                   <Notepad size={20} />
                 </Action>
-                <Action
-                  className="relative"
-                  onClick={toggleMenu}
-                  isPlaintiff={isPlaintiff}
-                >
-                  <DotsThree size={20} />
-                  {isMenuOpen ? (
-                    <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl w-[200px] shadow-lg z-50">
-                      <li
-                        onClick={editEntry}
-                        className="p-2 hover:bg-offWhite rounded-lg"
-                      >
-                        Bearbeiten
-                      </li>
-                      <li
-                        onClick={deleteEntry}
-                        className="p-2 hover:bg-offWhite rounded-lg"
-                      >
-                        Löschen
-                      </li>
-                    </ul>
-                  ) : null}
-                </Action>
+                {(isJudge || entry.role === viewedBy) && (
+                  <Action
+                    className={cx("relative", {
+                      "bg-darkPurple text-lightPurple":
+                        isPlaintiff && isMenuOpen,
+                      "bg-darkPetrol text-lightPetrol":
+                        !isPlaintiff && isMenuOpen,
+                    })}
+                    onClick={toggleMenu}
+                    isPlaintiff={isPlaintiff}
+                  >
+                    <DotsThree size={20} />
+                    {isMenuOpen ? (
+                      <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+                        {isJudge && (
+                          <li
+                            tabIndex={0}
+                            onClick={addHint}
+                            className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                          >
+                            <Scales size={20} />
+                            Hinweis hinzufügen
+                          </li>
+                        )}
+                        <li
+                          tabIndex={0}
+                          onClick={editEntry}
+                          className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                        >
+                          <Pencil size={20} />
+                          Bearbeiten
+                        </li>
+                        <li
+                          tabIndex={0}
+                          onClick={deleteEntry}
+                          className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                        >
+                          <Trash size={20} />
+                          Löschen
+                        </li>
+                      </ul>
+                    ) : null}
+                  </Action>
+                )}
               </div>
             </EntryHeader>
             {/* Body */}
