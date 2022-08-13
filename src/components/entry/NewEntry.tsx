@@ -56,23 +56,16 @@ export const NewEntry: React.FC<NewEntryProps> = ({
         />
       </EntryHeader>
       {/* Toolbar */}
-      <div
-        className={cx("border overflow-hidden rounded-b-lg", {
-          "border-lightPurple": !isPlaintiff,
-          "border-lightPetrol": isPlaintiff,
-        })}
-      >
-        <EntryForm
-          isPlaintiff={isPlaintiff}
-          isExpanded={isExpanded}
-          setIsExpanded={() => {
-            setIsExpanded(!isExpanded);
-            console.log({ isExpanded: !isExpanded });
-          }}
-          onAbort={() => setIsNewEntryVisible()}
-          onSave={() => setIsNewEntryVisible()}
-        />
-      </div>
+      <EntryForm
+        isPlaintiff={isPlaintiff}
+        isExpanded={isExpanded}
+        setIsExpanded={() => {
+          setIsExpanded(!isExpanded);
+          console.log({ isExpanded: !isExpanded });
+        }}
+        onAbort={() => setIsNewEntryVisible()}
+        onSave={() => setIsNewEntryVisible()}
+      />
     </div>
   );
 };

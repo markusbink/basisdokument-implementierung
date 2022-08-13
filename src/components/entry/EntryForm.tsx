@@ -35,7 +35,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   onSave,
   defaultContent,
 }) => {
-  const [editorState, _] = useState(() => {
+  const [editorState, setEditorState] = useState(() => {
     const blocksFromHTML = convertFromHTML(defaultContent || "");
     const contentState = ContentState.createFromBlockArray(
       blocksFromHTML.contentBlocks,
@@ -47,12 +47,13 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   return (
     <div
       className={cx("border border-t-0 rounded-b-lg", {
-        "border-lightPurple": isPlaintiff,
-        "border-lightPetrol": !isPlaintiff,
+        "border-lightPetrol": isPlaintiff,
+        "border-lightPurple": !isPlaintiff,
       })}
     >
       <Editor
         defaultEditorState={editorState}
+        onEditorStateChange={setEditorState}
         wrapperClassName={cx("min-h-[140px] w-full focus:outline-none")}
         editorClassName="p-6 "
         placeholder="Text eingeben..."

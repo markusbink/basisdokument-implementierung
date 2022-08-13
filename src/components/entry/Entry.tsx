@@ -113,95 +113,103 @@ export const Entry: React.FC<EntryProps> = ({
         })}
       >
         <div
-          className={cx("shadow rounded-lg bg-white transition-all ", {
+          className={cx("transition-all", {
             "w-1/2": !isExpanded,
             "w-full": isExpanded,
           })}
         >
-          <EntryHeader
-            isPlaintiff={isPlaintiff}
-            isBodyOpen={isBodyOpen}
-            toggleBody={toggleBody}
-          >
-            {/* Meta-Data */}
-            <div className="flex gap-2 overflow-x-scroll w-[350px]">
-              <span
-                className={cx("rounded-full px-3 py-1 text-xs font-semibold", {
-                  "bg-darkPurple text-lightPurple": isPlaintiff,
-                  "bg-darkPetrol text-lightPetrol": !isPlaintiff,
-                })}
-              >
-                K-1-1
-              </span>
-              <span className="font-bold">{entry.author}</span>
-              <span>25.05.2022</span>
-            </div>
-            {/* Actions */}
-            <div className="flex gap-2">
-              <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
-                <BookmarkSimple
-                  size={20}
-                  weight={isBookmarked ? "fill" : "regular"}
-                />
-              </Action>
-              <Action onClick={addNote} isPlaintiff={isPlaintiff}>
-                <Notepad size={20} />
-              </Action>
-              <Action
-                className="relative"
-                onClick={toggleMenu}
-                isPlaintiff={isPlaintiff}
-              >
-                <DotsThree size={20} />
-                {isMenuOpen ? (
-                  <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl w-[200px] shadow-lg z-50">
-                    <li
-                      onClick={editEntry}
-                      className="p-2 hover:bg-offWhite rounded-lg"
-                    >
-                      Bearbeiten
-                    </li>
-                    <li
-                      onClick={deleteEntry}
-                      className="p-2 hover:bg-offWhite rounded-lg"
-                    >
-                      Löschen
-                    </li>
-                  </ul>
-                ) : null}
-              </Action>
-            </div>
-          </EntryHeader>
-          {isBodyOpen && !isEditing && (
-            <EntryBody isPlaintiff={isPlaintiff}>{entry.text}</EntryBody>
-          )}
-          {isBodyOpen && isEditing && (
-            <EntryForm
-              defaultContent={entry.text}
+          {/* Entry */}
+          <div className={cx("shadow rounded-lg bg-white ")}>
+            <EntryHeader
               isPlaintiff={isPlaintiff}
-              isExpanded={isExpanded}
-              setIsExpanded={() => setIsExpanded(!isExpanded)}
-              onAbort={() => {
-                setIsEditing(false);
-              }}
-              onSave={updateEntry}
-            />
+              isBodyOpen={isBodyOpen}
+              toggleBody={toggleBody}
+            >
+              {/* Meta-Data */}
+              <div className="flex gap-2 overflow-x-scroll w-[350px]">
+                <span
+                  className={cx(
+                    "rounded-full px-3 py-1 text-xs font-semibold",
+                    {
+                      "bg-darkPurple text-lightPurple": isPlaintiff,
+                      "bg-darkPetrol text-lightPetrol": !isPlaintiff,
+                    }
+                  )}
+                >
+                  K-1-1
+                </span>
+                <span className="font-bold">{entry.author}</span>
+                <span>25.05.2022</span>
+              </div>
+              {/* Actions */}
+              <div className="flex gap-2">
+                <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
+                  <BookmarkSimple
+                    size={20}
+                    weight={isBookmarked ? "fill" : "regular"}
+                  />
+                </Action>
+                <Action onClick={addNote} isPlaintiff={isPlaintiff}>
+                  <Notepad size={20} />
+                </Action>
+                <Action
+                  className="relative"
+                  onClick={toggleMenu}
+                  isPlaintiff={isPlaintiff}
+                >
+                  <DotsThree size={20} />
+                  {isMenuOpen ? (
+                    <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl w-[200px] shadow-lg z-50">
+                      <li
+                        onClick={editEntry}
+                        className="p-2 hover:bg-offWhite rounded-lg"
+                      >
+                        Bearbeiten
+                      </li>
+                      <li
+                        onClick={deleteEntry}
+                        className="p-2 hover:bg-offWhite rounded-lg"
+                      >
+                        Löschen
+                      </li>
+                    </ul>
+                  ) : null}
+                </Action>
+              </div>
+            </EntryHeader>
+            {/* Body */}
+            {isBodyOpen && !isEditing && (
+              <EntryBody isPlaintiff={isPlaintiff}>{entry.text}</EntryBody>
+            )}
+            {isBodyOpen && isEditing && (
+              <EntryForm
+                defaultContent={entry.text}
+                isPlaintiff={viewedBy === UserRole.Plaintiff}
+                isExpanded={isExpanded}
+                setIsExpanded={() => setIsExpanded(!isExpanded)}
+                onAbort={() => {
+                  setIsEditing(false);
+                }}
+                onSave={updateEntry}
+              />
+            )}
+          </div>
+          {/* Button to add response */}
+          {canAddEntry && !isNewEntryVisible && (
+            <Button
+              onClick={showNewEntry}
+              icon={<ArrowBendLeftUp weight="bold" size={18} />}
+              size="sm"
+              bgColor="transparent"
+              textColor={cx("font-bold", {
+                "text-darkPurple": isPlaintiff,
+                "text-darkPetrol": !isPlaintiff,
+              })}
+            >
+              Text verfassen
+            </Button>
           )}
         </div>
-        {canAddEntry && !isNewEntryVisible && (
-          <Button
-            onClick={showNewEntry}
-            icon={<ArrowBendLeftUp weight="bold" size={18} />}
-            size="sm"
-            bgColor="transparent"
-            textColor={cx("font-bold", {
-              "text-darkPurple": isPlaintiff,
-              "text-darkPetrol": !isPlaintiff,
-            })}
-          >
-            Text verfassen
-          </Button>
-        )}
         {isNewEntryVisible && (
           <NewEntry
             parentRole={entry.role}
