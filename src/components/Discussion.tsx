@@ -1,5 +1,5 @@
 import { IEntry, UserRole } from "../types";
-import { Entry } from "./entry/Entry";
+import { Entry } from "./entry";
 
 const mockEntries: IEntry[] = [
   {
@@ -36,7 +36,7 @@ export const Discussion = () => {
                 entry={entry}
                 isBookmarked={index % 2 === 0}
                 isHidden={index % 2 === 0}
-                viewedBy={UserRole.Judge}
+                viewedBy={UserRole.Defendant}
                 isOld={index % 2 === 0}
               />
             ))}

@@ -9,13 +9,10 @@ import {
   Trash,
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
+import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
-import { Action } from "./Action";
-import { EntryBody } from "./EntryBody";
-import { EntryForm } from "./EntryForm";
-import { EntryHeader } from "./EntryHeader";
-import { NewEntry } from "./NewEntry";
+import { LitigiousCheck } from "./LitigiousCheck";
 
 interface EntryProps {
   entry: IEntry;
@@ -37,6 +34,7 @@ export const Entry: React.FC<EntryProps> = ({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
+  const [isLitigious, setIsLitigious] = useState<boolean | null>(null);
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -128,7 +126,13 @@ export const Entry: React.FC<EntryProps> = ({
           })}
         >
           {/* Entry */}
-          <div className={cx("shadow rounded-lg bg-white ")}>
+          <div className={cx("shadow rounded-lg bg-white relative ")}>
+            {isJudge && (
+              <LitigiousCheck
+                isLitigious={isLitigious}
+                setIsLitigious={setIsLitigious}
+              />
+            )}
             <EntryHeader
               isPlaintiff={isPlaintiff}
               isBodyOpen={isBodyOpen}
@@ -223,8 +227,12 @@ export const Entry: React.FC<EntryProps> = ({
                 setIsExpanded={() => setIsExpanded(!isExpanded)}
                 onAbort={() => {
                   setIsEditing(false);
+                  setIsExpanded(false);
                 }}
-                onSave={updateEntry}
+                onSave={() => {
+                  updateEntry();
+                  setIsExpanded(false);
+                }}
               />
             )}
           </div>

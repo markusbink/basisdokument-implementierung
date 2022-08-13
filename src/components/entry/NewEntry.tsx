@@ -57,14 +57,19 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       </EntryHeader>
       {/* Toolbar */}
       <EntryForm
-        isPlaintiff={isPlaintiff}
+        isPlaintiff={!isPlaintiff}
         isExpanded={isExpanded}
         setIsExpanded={() => {
           setIsExpanded(!isExpanded);
-          console.log({ isExpanded: !isExpanded });
         }}
-        onAbort={() => setIsNewEntryVisible()}
-        onSave={() => setIsNewEntryVisible()}
+        onAbort={() => {
+          setIsNewEntryVisible();
+          setIsExpanded(false);
+        }}
+        onSave={() => {
+          setIsNewEntryVisible();
+          setIsExpanded(false);
+        }}
       />
     </div>
   );

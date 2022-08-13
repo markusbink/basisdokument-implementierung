@@ -65,7 +65,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           <Action
             className="text-base absolute right-2 top-1/2 -translate-y-1/2"
             onClick={() => setIsExpanded()}
-            isPlaintiff={!isPlaintiff}
+            isPlaintiff={isPlaintiff}
           >
             {isExpanded ? <CornersIn /> : <CornersOut />}
           </Action>,
