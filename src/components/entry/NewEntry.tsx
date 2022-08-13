@@ -1,10 +1,12 @@
 import cx from "classnames";
-import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
-import React, { useEffect, useState } from "react";
+import { CornersIn, CornersOut, FloppyDisk, X, Pencil } from "phosphor-react";
+import React, { useState } from "react";
 import { UserRole } from "../../types";
 import { Button } from "../Button";
 import { Action } from "./Action";
 import { EntryHeader } from "./EntryHeader";
+import { EditText } from "react-edit-text";
+import "react-edit-text/dist/index.css";
 
 interface NewEntryProps {
   parentRole: "Kläger" | "Beklagter";
@@ -35,7 +37,20 @@ export const NewEntry: React.FC<NewEntryProps> = ({
         className="rounded-b-none cursor-default"
         isPlaintiff={!isPlaintiff}
       >
-        <span className="font-bold">Stefan Schneider</span>
+        <EditText
+          inputClassName={cx("font-bold focus:outline-none bg-transparent", {
+            "border-darkPurple": !isPlaintiff,
+            "border-darkPetrol": isPlaintiff,
+          })}
+          className={cx("font-bold", {
+            "text-darkPurple": !isPlaintiff,
+            "text-darkPetrol": isPlaintiff,
+          })}
+          defaultValue="Stefan Schneider"
+          showEditButton
+          editButtonContent={<Pencil size={18} />}
+          editButtonProps={{ className: cx("bg-transparent") }}
+        />
       </EntryHeader>
       {/* Toolbar */}
       <div
