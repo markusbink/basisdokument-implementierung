@@ -40,17 +40,20 @@ export const NewEntry: React.FC<NewEntryProps> = ({
         isPlaintiff={!isPlaintiff}
       >
         <EditText
-          inputClassName={cx("font-bold focus:outline-none bg-transparent", {
-            "border-darkPurple": !isPlaintiff,
-            "border-darkPetrol": isPlaintiff,
-          })}
-          className={cx("font-bold", {
+          inputClassName={cx(
+            "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
+            {
+              "border-darkPurple": !isPlaintiff,
+              "border-darkPetrol": isPlaintiff,
+            }
+          )}
+          className={cx("font-bold p-0 my-0 flex items-center mr-2", {
             "text-darkPurple": !isPlaintiff,
             "text-darkPetrol": isPlaintiff,
           })}
           defaultValue="Stefan Schneider"
           showEditButton
-          editButtonContent={<Pencil size={18} />}
+          editButtonContent={<Pencil />}
           editButtonProps={{ className: cx("bg-transparent") }}
         />
       </EntryHeader>
