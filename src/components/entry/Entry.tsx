@@ -17,12 +17,14 @@ interface EntryProps {
   entry: IEntry;
   isBookmarked?: boolean;
   viewedBy: UserRole;
+  isHidden?: boolean;
 }
 
 export const Entry: React.FC<EntryProps> = ({
   entry,
   isBookmarked = false,
   viewedBy,
+  isHidden = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -89,7 +91,12 @@ export const Entry: React.FC<EntryProps> = ({
   };
 
   return (
-    <div>
+    <div
+      className={cx({
+        "opacity-50": isHidden,
+        "pointer-events-none": isHidden,
+      })}
+    >
       <div
         className={cx("flex flex-col", {
           "items-end": !isPlaintiff,

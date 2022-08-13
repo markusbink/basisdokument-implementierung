@@ -15,7 +15,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   parentRole,
   setIsNewEntryVisible,
 }) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const isPlaintiff = parentRole === UserRole.Plaintiff;
 
   return (
@@ -44,7 +44,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
           "border-lightPetrol": isPlaintiff,
         })}
       >
-        <div className="p-4 flex justify-end">
+        <div className="px-4 py-2 flex justify-end">
           <Action
             onClick={() => setIsExpanded(!isExpanded)}
             isPlaintiff={!isPlaintiff}
