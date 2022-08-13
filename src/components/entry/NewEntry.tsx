@@ -10,6 +10,18 @@ import { EntryHeader } from "./EntryHeader";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
+const toolbarOptions = {
+  options: ["inline", "list"],
+  inline: {
+    className: ["!mb-0"],
+    options: ["bold", "italic", "underline", "strikethrough"],
+  },
+  list: {
+    className: ["!mb-0"],
+    options: ["unordered", "ordered"],
+  },
+};
+
 interface NewEntryProps {
   parentRole: "Kläger" | "Beklagter";
   setIsNewEntryVisible: (isVisible: boolean) => void;
@@ -75,17 +87,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
           editorClassName="p-6 "
           placeholder="Text eingeben..."
           toolbarClassName="p-2 relative"
-          toolbar={{
-            options: ["inline", "list"],
-            inline: {
-              className: ["!mb-0"],
-              options: ["bold", "italic", "underline", "strikethrough"],
-            },
-            list: {
-              className: ["!mb-0"],
-              options: ["unordered", "ordered"],
-            },
-          }}
+          toolbar={toolbarOptions}
           toolbarCustomButtons={[
             <Action
               className="text-base absolute right-2 top-1/2 -translate-y-1/2"
