@@ -1,12 +1,14 @@
 import cx from "classnames";
-import { CornersIn, CornersOut, FloppyDisk, X, Pencil } from "phosphor-react";
+import { CornersIn, CornersOut, FloppyDisk, Pencil, X } from "phosphor-react";
 import React, { useState } from "react";
+import { EditText } from "react-edit-text";
+import "react-edit-text/dist/index.css";
 import { UserRole } from "../../types";
 import { Button } from "../Button";
 import { Action } from "./Action";
 import { EntryHeader } from "./EntryHeader";
-import { EditText } from "react-edit-text";
-import "react-edit-text/dist/index.css";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 interface NewEntryProps {
   parentRole: "Kläger" | "Beklagter";
@@ -59,24 +61,39 @@ export const NewEntry: React.FC<NewEntryProps> = ({
           "border-lightPetrol": isPlaintiff,
         })}
       >
-        <div className="px-4 py-2 flex justify-end">
-          <Action
-            onClick={() => setIsExpanded(!isExpanded)}
-            isPlaintiff={!isPlaintiff}
-          >
-            {isExpanded ? <CornersIn /> : <CornersOut />}
-          </Action>
-        </div>
-        <textarea
-          className={cx(
-            "p-6 min-h-[140px] w-full border-y focus:outline-none",
+        <Editor
+          wrapperClassName={cx(
+            "min-h-[140px] w-full border-y focus:outline-none",
             {
               "border-lightPurple": !isPlaintiff,
               "border-lightPetrol": isPlaintiff,
             }
           )}
-          placeholder="Text eingeben"
+          editorClassName="p-6 "
+          placeholder="Text eingeben..."
+          toolbarClassName="p-2 relative"
+          toolbar={{
+            options: ["inline", "list"],
+            inline: {
+              className: ["!mb-0"],
+              options: ["bold", "italic", "underline", "strikethrough"],
+            },
+            list: {
+              className: ["!mb-0"],
+              options: ["unordered", "ordered"],
+            },
+          }}
+          toolbarCustomButtons={[
+            <Action
+              className="text-base absolute right-2 top-1/2 -translate-y-1/2"
+              onClick={() => setIsExpanded(!isExpanded)}
+              isPlaintiff={!isPlaintiff}
+            >
+              {isExpanded ? <CornersIn /> : <CornersOut />}
+            </Action>,
+          ]}
         />
+
         <div className="flex justify-end gap-2 p-3 pt-2">
           <Button
             icon={<X size={20} />}
