@@ -29,10 +29,15 @@ body {
   }
 }
 
+/* React DraftJS WYSIWYG Editor Customizations */
 .rdw-option-wrapper {
   @apply w-7 h-7 rounded bg-offWhite hover:shadow-none hover:border-lightGrey;
 }
 
 .rdw-option-active {
   @apply shadow-none border-mediumGrey box-border;
+}
+
+.public-DraftStyleDefault-block {
+  @apply my-0;
 }

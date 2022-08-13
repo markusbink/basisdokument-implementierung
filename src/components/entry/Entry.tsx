@@ -10,6 +10,7 @@ import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
 import { Action } from "./Action";
 import { EntryBody } from "./EntryBody";
+import { EntryForm } from "./EntryForm";
 import { EntryHeader } from "./EntryHeader";
 import { NewEntry } from "./NewEntry";
 
@@ -26,7 +27,9 @@ export const Entry: React.FC<EntryProps> = ({
   viewedBy,
   isHidden = false,
 }) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [isBodyOpen, setIsBodyOpen] = useState<boolean>(true);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
 
@@ -60,7 +63,7 @@ export const Entry: React.FC<EntryProps> = ({
   }, [isMenuOpen]);
 
   const toggleBody = (e: React.MouseEvent) => {
-    setIsExpanded(!isExpanded);
+    setIsBodyOpen(!isBodyOpen);
   };
 
   const showNewEntry = () => {
@@ -84,10 +87,17 @@ export const Entry: React.FC<EntryProps> = ({
 
   const editEntry = (e: React.MouseEvent) => {
     console.log(`edit entry ${entry.id}`);
+    setIsEditing(true);
+    setIsBodyOpen(true);
   };
 
   const deleteEntry = (e: React.MouseEvent) => {
     console.log(`delete entry ${entry.id}`);
+  };
+
+  const updateEntry = () => {
+    console.log(`update entry ${entry.id}`);
+    setIsEditing(false);
   };
 
   return (
@@ -102,14 +112,19 @@ export const Entry: React.FC<EntryProps> = ({
           "items-end": !isPlaintiff,
         })}
       >
-        <div className={cx("w-1/2")}>
+        <div
+          className={cx("shadow rounded-lg bg-white transition-all ", {
+            "w-1/2": !isExpanded,
+            "w-full": isExpanded,
+          })}
+        >
           <EntryHeader
             isPlaintiff={isPlaintiff}
-            isExpanded={isExpanded}
+            isBodyOpen={isBodyOpen}
             toggleBody={toggleBody}
           >
             {/* Meta-Data */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 overflow-x-scroll w-[350px]">
               <span
                 className={cx("rounded-full px-3 py-1 text-xs font-semibold", {
                   "bg-darkPurple text-lightPurple": isPlaintiff,
@@ -139,7 +154,7 @@ export const Entry: React.FC<EntryProps> = ({
               >
                 <DotsThree size={20} />
                 {isMenuOpen ? (
-                  <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl w-[200px] shadow-lg">
+                  <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl w-[200px] shadow-lg z-50">
                     <li
                       onClick={editEntry}
                       className="p-2 hover:bg-offWhite rounded-lg"
@@ -157,8 +172,20 @@ export const Entry: React.FC<EntryProps> = ({
               </Action>
             </div>
           </EntryHeader>
-          {isExpanded && (
+          {isBodyOpen && !isEditing && (
             <EntryBody isPlaintiff={isPlaintiff}>{entry.text}</EntryBody>
+          )}
+          {isBodyOpen && isEditing && (
+            <EntryForm
+              defaultContent={entry.text}
+              isPlaintiff={isPlaintiff}
+              isExpanded={isExpanded}
+              setIsExpanded={() => setIsExpanded(!isExpanded)}
+              onAbort={() => {
+                setIsEditing(false);
+              }}
+              onSave={updateEntry}
+            />
           )}
         </div>
         {canAddEntry && !isNewEntryVisible && (

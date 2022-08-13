@@ -2,7 +2,7 @@ import cx from "classnames";
 
 interface EntryHeaderProps {
   isPlaintiff: boolean;
-  isExpanded?: boolean;
+  isBodyOpen?: boolean;
   toggleBody?: (e: React.MouseEvent) => void;
   children: React.ReactNode;
   className?: string;
@@ -10,7 +10,7 @@ interface EntryHeaderProps {
 
 export const EntryHeader: React.FC<EntryHeaderProps> = ({
   isPlaintiff,
-  isExpanded,
+  isBodyOpen,
   toggleBody,
   children,
   className,
@@ -23,7 +23,7 @@ export const EntryHeader: React.FC<EntryHeaderProps> = ({
         {
           "bg-lightPurple text-darkPurple": isPlaintiff,
           "bg-lightPetrol text-darkPetrol": !isPlaintiff,
-          "rounded-b-lg": !isExpanded,
+          "rounded-b-lg": !isBodyOpen,
         },
         className
       )}
