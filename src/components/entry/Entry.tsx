@@ -20,6 +20,7 @@ interface EntryProps {
   viewedBy: UserRole;
   isHidden?: boolean;
   isOld?: boolean;
+  isHighlighted?: boolean;
 }
 
 export const Entry: React.FC<EntryProps> = ({
@@ -28,6 +29,7 @@ export const Entry: React.FC<EntryProps> = ({
   isBookmarked = false,
   isHidden = false,
   isOld = false,
+  isHighlighted = false,
 }) => {
   const [isBodyOpen, setIsBodyOpen] = useState<boolean>(true);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -126,7 +128,12 @@ export const Entry: React.FC<EntryProps> = ({
           })}
         >
           {/* Entry */}
-          <div className={cx("shadow rounded-lg bg-white relative ")}>
+          <div
+            className={cx("shadow rounded-lg bg-white relative", {
+              "outline outline-2 outline-offset-4 outline-blue-600":
+                isHighlighted,
+            })}
+          >
             {isJudge && (
               <LitigiousCheck
                 isLitigious={isLitigious}

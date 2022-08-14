@@ -1,6 +1,6 @@
 import cx from "classnames";
-import { Check, Pencil, Trash, X } from "phosphor-react";
-import { useState } from "react";
+import { Check, X } from "phosphor-react";
+import { useEffect, useState } from "react";
 
 interface LitigiousCheckProps {
   isLitigious: boolean | null;
@@ -12,6 +12,24 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
   setIsLitigious,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", closeMenu);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeMenu();
+      }
+    });
+
+    return () => {
+      document.removeEventListener("click", closeMenu);
+    };
+  }, [isMenuOpen]);
+
   return (
     <span
       onClick={(e) => {
