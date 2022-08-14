@@ -10,7 +10,7 @@ import {
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useEntries } from "../../contexts/EntryContext";
+import { useEntries } from "../../contexts";
 import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";

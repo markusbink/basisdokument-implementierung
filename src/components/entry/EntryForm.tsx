@@ -3,7 +3,7 @@ import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { useEntries } from "../../contexts/EntryContext";
+import { useEntries } from "../../contexts";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";

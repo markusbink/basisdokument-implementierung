@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { EntryProvider } from "./contexts/EntryContext";
+import { EntryProvider } from "./contexts";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 
