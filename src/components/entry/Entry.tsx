@@ -35,7 +35,7 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { groupedEntries } = useEntries();
+  const { groupedEntries, displayAsColumn } = useEntries();
   const thread = groupedEntries[entry.section_id][entry.id];
 
   // State of current entry
@@ -132,8 +132,8 @@ export const Entry: React.FC<EntryProps> = ({
         >
           <div
             className={cx("transition-all", {
-              "w-1/2": !isExpanded,
-              "w-full": isExpanded,
+              "w-1/2": !isExpanded && displayAsColumn,
+              "w-full": isExpanded || !displayAsColumn,
             })}
           >
             {/* Entry */}
@@ -278,14 +278,34 @@ export const Entry: React.FC<EntryProps> = ({
             )}
           </div>
           {isNewEntryVisible && (
-            <NewEntry
-              parentRole={entry.role}
-              setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
-            />
+            <div
+              className={cx({
+                "flex w-full": !displayAsColumn,
+              })}
+            >
+              {!displayAsColumn && (
+                <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
+              )}
+              <NewEntry
+                parentRole={entry.role}
+                setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
+              />
+            </div>
           )}
         </div>
       </div>
-      {thread?.length > 0 && <EntryList entries={thread} />}
+      {thread?.length > 0 && (
+        <div
+          className={cx({
+            flex: !displayAsColumn,
+          })}
+        >
+          {!displayAsColumn && (
+            <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
+          )}
+          <EntryList entries={thread} />
+        </div>
+      )}
     </>
   );
 };

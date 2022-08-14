@@ -7,7 +7,7 @@ interface EntryListProps {
 
 export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
   return (
-    <div>
+    <div className="space-y-4 w-full">
       {entries.map((entry, index) => (
         <Entry
           key={entry.id}

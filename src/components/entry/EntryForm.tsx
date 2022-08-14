@@ -3,6 +3,7 @@ import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
+import { useEntries } from "../../contexts/EntryContext";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
@@ -45,6 +46,9 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
 
     return EditorState.createWithContent(contentState);
   });
+
+  const { displayAsColumn } = useEntries();
+
   return (
     <div
       className={cx("border border-t-0 rounded-b-lg", {
@@ -62,22 +66,26 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey"
         )}
         toolbar={toolbarOptions}
-        toolbarCustomButtons={[
-          <span className="absolute right-2 top-1/2 -translate-y-1/2">
-            <Tooltip
-              position="top"
-              text={isExpanded ? "Minimieren" : "Maximieren"}
-            >
-              <Action
-                className="text-base"
-                onClick={() => setIsExpanded()}
-                isPlaintiff={isPlaintiff}
-              >
-                {isExpanded ? <CornersIn /> : <CornersOut />}
-              </Action>
-            </Tooltip>
-          </span>,
-        ]}
+        toolbarCustomButtons={
+          displayAsColumn
+            ? [
+                <span className="absolute right-2 top-1/2 -translate-y-1/2">
+                  <Tooltip
+                    position="top"
+                    text={isExpanded ? "Minimieren" : "Maximieren"}
+                  >
+                    <Action
+                      className="text-base"
+                      onClick={() => setIsExpanded()}
+                      isPlaintiff={isPlaintiff}
+                    >
+                      {isExpanded ? <CornersIn /> : <CornersOut />}
+                    </Action>
+                  </Tooltip>
+                </span>,
+              ]
+            : []
+        }
       />
       <div className="flex justify-end gap-2 p-3 pt-2 border-t border-lightGrey">
         <Button

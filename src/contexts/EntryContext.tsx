@@ -2,6 +2,8 @@ import { createContext, useContext, useState } from "react";
 import { IEntry } from "../types";
 
 interface IEntryContext {
+  displayAsColumn: boolean;
+  setDisplayAsColumn: (displayAsColumn: boolean) => void;
   entries: IEntry[];
   groupedEntries: { [key: string]: { [key: string]: IEntry[] } };
   updateEntry: (entry: IEntry) => void;
@@ -13,8 +15,11 @@ interface EntryProviderProps {
   children: React.ReactNode;
 }
 
-// Function to create object to group entries by sectionid and then inside it by parentid
-
+/**
+ * Groups entries by their respectve entry and parent id.
+ * @param entries The entries to group.
+ * @returns Object containing the grouped entries.
+ */
 const groupEntriesBySectionAndParent = (entries: IEntry[]) => {
   const groupedEntries = entries.reduce((acc, entry) => {
     acc[entry.section_id] ||= {};
@@ -76,35 +81,12 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
       associated_entry: "3e8773e8-a1f8-4983-bbc8-3a53e024062e",
     },
   ]);
-
+  const [displayAsColumn, setDisplayAsColumn] = useState<boolean>(false);
   const groupedEntries = groupEntriesBySectionAndParent(entries);
 
   const updateEntry = (entry: IEntry) => {
     setEntries(entries.map((e) => (e.id === entry.id ? entry : e)));
   };
-
-  // const groupEntriesBySectionId = (entries: IEntry[]) => {
-  //   const entriesBySectionId: { [key: string]: IEntry[] } = {};
-  //   entries.forEach((entry) => {
-  //     entriesBySectionId[entry.section_id] ||= [];
-  //     entriesBySectionId[entry.section_id].push(entry);
-  //   });
-  //   return entriesBySectionId;
-  // };
-
-  // const groupEntriesByParentId = (entries: IEntry[]) => {
-  //   const entriesByParentId: { [key: string]: IEntry[] } = {};
-  //   entries.forEach((entry) => {
-  //     if (entry.associated_entry) {
-  //       entriesByParentId[entry.associated_entry] ||= [];
-  //       entriesByParentId[entry.associated_entry].push(entry);
-  //     } else {
-  //       entriesByParentId["parent"] ||= [];
-  //       entriesByParentId["parent"].push(entry);
-  //     }
-  //   });
-  //   return entriesByParentId;
-  // };
 
   return (
     <EntryContext.Provider
@@ -112,6 +94,8 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
         entries,
         groupedEntries,
         updateEntry,
+        displayAsColumn,
+        setDisplayAsColumn,
       }}
     >
       {children}
