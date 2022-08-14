@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { EntryProvider } from "./contexts/EntryContext";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 
@@ -21,7 +22,9 @@ export const App = () => {
   return (
     <div className="App h-screen">
       {isAuthenticated ? (
-        <Main />
+        <EntryProvider>
+          <Main />
+        </EntryProvider>
       ) : (
         <Auth setIsAuthenticated={setIsAuthenticated} />
       )}

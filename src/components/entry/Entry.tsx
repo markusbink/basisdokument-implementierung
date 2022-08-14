@@ -10,9 +10,11 @@ import {
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
+import { useEntries } from "../../contexts/EntryContext";
 import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
+import { EntryList } from "./EntryList";
 import { LitigiousCheck } from "./LitigiousCheck";
 
 interface EntryProps {
@@ -32,6 +34,11 @@ export const Entry: React.FC<EntryProps> = ({
   isOld = false,
   isHighlighted = false,
 }) => {
+  // Threaded entries
+  const { groupedEntries } = useEntries();
+  const thread = groupedEntries[entry.section_id][entry.id];
+
+  // State of current entry
   const [isBodyOpen, setIsBodyOpen] = useState<boolean>(true);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -111,168 +118,174 @@ export const Entry: React.FC<EntryProps> = ({
   };
 
   return (
-    <div
-      className={cx({
-        "opacity-50": isHidden,
-        "pointer-events-none": isHidden,
-      })}
-    >
+    <>
       <div
-        className={cx("flex flex-col", {
-          "items-end": !isPlaintiff,
+        className={cx({
+          "opacity-50": isHidden,
+          "pointer-events-none": isHidden,
         })}
       >
         <div
-          className={cx("transition-all", {
-            "w-1/2": !isExpanded,
-            "w-full": isExpanded,
+          className={cx("flex flex-col", {
+            "items-end": !isPlaintiff,
           })}
         >
-          {/* Entry */}
           <div
-            className={cx("shadow rounded-lg bg-white relative", {
-              "outline outline-2 outline-offset-4 outline-blue-600":
-                isHighlighted,
+            className={cx("transition-all", {
+              "w-1/2": !isExpanded,
+              "w-full": isExpanded,
             })}
           >
-            {isJudge && (
-              <LitigiousCheck
-                isLitigious={isLitigious}
-                setIsLitigious={setIsLitigious}
-              />
-            )}
-            <EntryHeader
-              isPlaintiff={isPlaintiff}
-              isBodyOpen={isBodyOpen}
-              toggleBody={toggleBody}
-            >
-              {/* Meta-Data */}
-              <div className="flex gap-2 overflow-x-scroll w-[350px]">
-                <span
-                  className={cx(
-                    "rounded-full px-3 py-1 text-xs font-semibold",
-                    {
-                      "bg-darkPurple text-lightPurple": isPlaintiff,
-                      "bg-darkPetrol text-lightPetrol": !isPlaintiff,
-                    }
-                  )}
-                >
-                  K-1-1
-                </span>
-                <span className="font-bold">{entry.author}</span>
-                <span>25.05.2022</span>
-              </div>
-              {/* Actions */}
-              <div className="flex gap-2">
-                <Tooltip text="Zu Lesezeichen hinzufügen">
-                  <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
-                    <BookmarkSimple
-                      size={20}
-                      weight={isBookmarked ? "fill" : "regular"}
-                    />
-                  </Action>
-                </Tooltip>
-                <Tooltip text="Notiz hinzufügen">
-                  <Action onClick={addNote} isPlaintiff={isPlaintiff}>
-                    <Notepad size={20} />
-                  </Action>
-                </Tooltip>
-                {(isJudge || (entry.role === viewedBy && !isOld)) && (
-                  <Tooltip text="Mehr Optionen">
-                    <Action
-                      className={cx("relative", {
-                        "bg-darkPurple text-lightPurple":
-                          isPlaintiff && isMenuOpen,
-                        "bg-darkPetrol text-lightPetrol":
-                          !isPlaintiff && isMenuOpen,
-                      })}
-                      onClick={toggleMenu}
-                      isPlaintiff={isPlaintiff}
-                    >
-                      <DotsThree size={20} />
-                      {isMenuOpen ? (
-                        <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
-                          {isJudge && (
-                            <li
-                              tabIndex={0}
-                              onClick={addHint}
-                              className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                            >
-                              <Scales size={20} />
-                              Hinweis hinzufügen
-                            </li>
-                          )}
-                          {!isOld && (
-                            <>
-                              <li
-                                tabIndex={0}
-                                onClick={editEntry}
-                                className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                              >
-                                <Pencil size={20} />
-                                Bearbeiten
-                              </li>
-                              <li
-                                tabIndex={0}
-                                onClick={deleteEntry}
-                                className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                              >
-                                <Trash size={20} />
-                                Löschen
-                              </li>
-                            </>
-                          )}
-                        </ul>
-                      ) : null}
-                    </Action>
-                  </Tooltip>
-                )}
-              </div>
-            </EntryHeader>
-            {/* Body */}
-            {isBodyOpen && !isEditing && (
-              <EntryBody isPlaintiff={isPlaintiff}>{entry.text}</EntryBody>
-            )}
-            {isBodyOpen && isEditing && (
-              <EntryForm
-                defaultContent={entry.text}
-                isPlaintiff={isPlaintiff}
-                isExpanded={isExpanded}
-                setIsExpanded={() => setIsExpanded(!isExpanded)}
-                onAbort={() => {
-                  setIsEditing(false);
-                  setIsExpanded(false);
-                }}
-                onSave={() => {
-                  updateEntry();
-                  setIsExpanded(false);
-                }}
-              />
-            )}
-          </div>
-          {/* Button to add response */}
-          {canAddEntry && !isNewEntryVisible && (
-            <Button
-              onClick={showNewEntry}
-              icon={<ArrowBendLeftUp weight="bold" size={18} />}
-              size="sm"
-              bgColor="transparent"
-              textColor={cx("font-bold", {
-                "text-darkPurple": isPlaintiff,
-                "text-darkPetrol": !isPlaintiff,
+            {/* Entry */}
+            <div
+              className={cx("shadow rounded-lg bg-white relative", {
+                "outline outline-2 outline-offset-4 outline-blue-600":
+                  isHighlighted,
               })}
             >
-              Text verfassen
-            </Button>
+              {isJudge && (
+                <LitigiousCheck
+                  isLitigious={isLitigious}
+                  setIsLitigious={setIsLitigious}
+                />
+              )}
+              <EntryHeader
+                isPlaintiff={isPlaintiff}
+                isBodyOpen={isBodyOpen}
+                toggleBody={toggleBody}
+              >
+                <div className="flex gap-2 overflow-x-scroll w-[350px]">
+                  <span
+                    className={cx(
+                      "rounded-full px-3 py-1 text-xs font-semibold",
+                      {
+                        "bg-darkPurple text-lightPurple": isPlaintiff,
+                        "bg-darkPetrol text-lightPetrol": !isPlaintiff,
+                      }
+                    )}
+                  >
+                    K-1-1
+                  </span>
+                  <span className="font-bold">{entry.author}</span>
+                  <span>{entry.id}</span>
+                </div>
+                <div className="flex gap-2">
+                  <Tooltip text="Zu Lesezeichen hinzufügen">
+                    <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
+                      <BookmarkSimple
+                        size={20}
+                        weight={isBookmarked ? "fill" : "regular"}
+                      />
+                    </Action>
+                  </Tooltip>
+                  <Tooltip text="Notiz hinzufügen">
+                    <Action onClick={addNote} isPlaintiff={isPlaintiff}>
+                      <Notepad size={20} />
+                    </Action>
+                  </Tooltip>
+                  {(isJudge || (entry.role === viewedBy && !isOld)) && (
+                    <Tooltip text="Mehr Optionen">
+                      <Action
+                        className={cx("relative", {
+                          "bg-darkPurple text-lightPurple":
+                            isPlaintiff && isMenuOpen,
+                          "bg-darkPetrol text-lightPetrol":
+                            !isPlaintiff && isMenuOpen,
+                        })}
+                        onClick={toggleMenu}
+                        isPlaintiff={isPlaintiff}
+                      >
+                        <DotsThree size={20} />
+                        {isMenuOpen ? (
+                          <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+                            {isJudge && (
+                              <li
+                                tabIndex={0}
+                                onClick={addHint}
+                                className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                              >
+                                <Scales size={20} />
+                                Hinweis hinzufügen
+                              </li>
+                            )}
+                            {!isOld && (
+                              <>
+                                <li
+                                  tabIndex={0}
+                                  onClick={editEntry}
+                                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                                >
+                                  <Pencil size={20} />
+                                  Bearbeiten
+                                </li>
+                                <li
+                                  tabIndex={0}
+                                  onClick={deleteEntry}
+                                  className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                                >
+                                  <Trash size={20} />
+                                  Löschen
+                                </li>
+                              </>
+                            )}
+                          </ul>
+                        ) : null}
+                      </Action>
+                    </Tooltip>
+                  )}
+                </div>
+              </EntryHeader>
+              {/* Body */}
+              {isBodyOpen && !isEditing && (
+                // <EntryBody isPlaintiff={isPlaintiff}>{entry.text}</EntryBody>
+                <EntryBody isPlaintiff={isPlaintiff}>
+                  {entry.associated_entry
+                    ? `Replying to ${entry.associated_entry}`
+                    : "Original Post"}
+                </EntryBody>
+              )}
+              {isBodyOpen && isEditing && (
+                <EntryForm
+                  defaultContent={entry.text}
+                  isPlaintiff={isPlaintiff}
+                  isExpanded={isExpanded}
+                  setIsExpanded={() => setIsExpanded(!isExpanded)}
+                  onAbort={() => {
+                    setIsEditing(false);
+                    setIsExpanded(false);
+                  }}
+                  onSave={() => {
+                    updateEntry();
+                    setIsExpanded(false);
+                  }}
+                />
+              )}
+            </div>
+            {/* Button to add response */}
+            {canAddEntry && !isNewEntryVisible && (
+              <Button
+                onClick={showNewEntry}
+                icon={<ArrowBendLeftUp weight="bold" size={18} />}
+                size="sm"
+                bgColor="transparent"
+                textColor={cx("font-bold", {
+                  "text-darkPurple": isPlaintiff,
+                  "text-darkPetrol": !isPlaintiff,
+                })}
+              >
+                Text verfassen
+              </Button>
+            )}
+          </div>
+          {isNewEntryVisible && (
+            <NewEntry
+              parentRole={entry.role}
+              setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
+            />
           )}
         </div>
-        {isNewEntryVisible && (
-          <NewEntry
-            parentRole={entry.role}
-            setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
-          />
-        )}
       </div>
-    </div>
+      {thread?.length > 0 && <EntryList entries={thread} />}
+    </>
   );
 };
