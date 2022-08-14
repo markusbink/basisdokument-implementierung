@@ -4,6 +4,7 @@ import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { Button } from "../Button";
+import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
 
 const toolbarOptions = {
@@ -62,13 +63,20 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         )}
         toolbar={toolbarOptions}
         toolbarCustomButtons={[
-          <Action
-            className="text-base absolute right-2 top-1/2 -translate-y-1/2"
-            onClick={() => setIsExpanded()}
-            isPlaintiff={isPlaintiff}
-          >
-            {isExpanded ? <CornersIn /> : <CornersOut />}
-          </Action>,
+          <span className="absolute right-2 top-1/2 -translate-y-1/2">
+            <Tooltip
+              position="top"
+              text={isExpanded ? "Minimieren" : "Maximieren"}
+            >
+              <Action
+                className="text-base"
+                onClick={() => setIsExpanded()}
+                isPlaintiff={isPlaintiff}
+              >
+                {isExpanded ? <CornersIn /> : <CornersOut />}
+              </Action>
+            </Tooltip>
+          </span>,
         ]}
       />
       <div className="flex justify-end gap-2 p-3 pt-2 border-t border-lightGrey">

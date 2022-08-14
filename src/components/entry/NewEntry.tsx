@@ -5,6 +5,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditText } from "react-edit-text";
 import "react-edit-text/dist/index.css";
 import { UserRole } from "../../types";
+import { Tooltip } from "../Tooltip";
 import { EntryForm } from "./EntryForm";
 import { EntryHeader } from "./EntryHeader";
 
@@ -23,7 +24,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   return (
     <div
       className={cx(
-        "flex flex-col mt-4  transition-all rounded-lg overflow-hidden bg-white shadow",
+        "flex flex-col mt-4  transition-all rounded-lg bg-white shadow",
         {
           "w-1/2": !isExpanded,
           "w-full": isExpanded,
@@ -51,8 +52,14 @@ export const NewEntry: React.FC<NewEntryProps> = ({
           })}
           defaultValue="Stefan Schneider"
           showEditButton
-          editButtonContent={<Pencil />}
-          editButtonProps={{ className: cx("bg-transparent") }}
+          editButtonContent={
+            <Tooltip text="Name bearbeiten">
+              <Pencil />
+            </Tooltip>
+          }
+          editButtonProps={{
+            className: cx("bg-transparent flex items-center"),
+          }}
         />
       </EntryHeader>
       {/* Toolbar */}
