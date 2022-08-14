@@ -278,11 +278,7 @@ export const Entry: React.FC<EntryProps> = ({
             )}
           </div>
           {isNewEntryVisible && (
-            <div
-              className={cx({
-                "flex w-full": !displayAsColumn,
-              })}
-            >
+            <div className={cx("flex flex-col w-full")}>
               {!displayAsColumn && (
                 <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
               )}
