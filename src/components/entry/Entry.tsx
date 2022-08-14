@@ -48,14 +48,9 @@ export const Entry: React.FC<EntryProps> = ({
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
-
-  /**
-   * Used to conditionally style the entries based on which user is viewing it.
-   */
   const isOwnEntry =
     (viewedBy === UserRole.Plaintiff && entry.role === "Kläger") ||
     (viewedBy === UserRole.Defendant && entry.role === "Beklagter");
-
   const canAddEntry = isJudge || !isOwnEntry;
 
   const closeMenu = () => {
@@ -154,7 +149,7 @@ export const Entry: React.FC<EntryProps> = ({
                 isBodyOpen={isBodyOpen}
                 toggleBody={toggleBody}
               >
-                <div className="flex gap-2 overflow-x-scroll w-[350px]">
+                <div className="flex gap-2 overflow-x-scroll">
                   <span
                     className={cx(
                       "rounded-full px-3 py-1 text-xs font-semibold",
@@ -167,7 +162,7 @@ export const Entry: React.FC<EntryProps> = ({
                     K-1-1
                   </span>
                   <span className="font-bold">{entry.author}</span>
-                  <span>{entry.id}</span>
+                  <span>25.08.2022</span>
                 </div>
                 <div className="flex gap-2">
                   <Tooltip text="Zu Lesezeichen hinzufügen">
@@ -237,12 +232,7 @@ export const Entry: React.FC<EntryProps> = ({
               </EntryHeader>
               {/* Body */}
               {isBodyOpen && !isEditing && (
-                // <EntryBody isPlaintiff={isPlaintiff}>{entry.text}</EntryBody>
-                <EntryBody isPlaintiff={isPlaintiff}>
-                  {entry.associated_entry
-                    ? `Replying to ${entry.associated_entry}`
-                    : "Original Post"}
-                </EntryBody>
+                <EntryBody isPlaintiff={isPlaintiff}>{entry.text}</EntryBody>
               )}
               {isBodyOpen && isEditing && (
                 <EntryForm

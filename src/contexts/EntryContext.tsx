@@ -40,7 +40,7 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
     {
       id: "1f1f2fa4-13fa-11ed-861d-0242ac120002",
       version: 1,
-      text: "Entry from Version 1 | Original",
+      text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.",
       author: "Stefan Schneider",
       role: "Kläger",
       section_id: "d990191e-13fc-11ed-861d-0242ac120002",
@@ -48,7 +48,7 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
     {
       id: "257550a4-13fa-11ed-861d-0242ac120002",
       version: 2,
-      text: "Entry from Version 2 | Replying to Entry from Version 1",
+      text: "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.",
       author: "Michael Bauer",
       role: "Beklagter",
       section_id: "d990191e-13fc-11ed-861d-0242ac120002",
@@ -57,7 +57,7 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
     {
       id: "3e8773e8-a1f8-4983-bbc8-3a53e024062e",
       version: 2,
-      text: "Entry from Version 2 | Original",
+      text: "tet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
       author: "Michael Bauer",
       role: "Beklagter",
       section_id: "d990191e-13fc-11ed-861d-0242ac120002",
@@ -65,7 +65,7 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
     {
       id: "727f8829-aef3-4053-bbe8-a08444a79d15",
       version: 3,
-      text: "Entry from Version 3 | Replying to Entry from Version 1",
+      text: "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ",
       author: "Stefan Schneider",
       role: "Kläger",
       section_id: "d990191e-13fc-11ed-861d-0242ac120002",
@@ -74,7 +74,7 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
     {
       id: "190d567e-3971-4122-b658-31ec8e07650f",
       version: 3,
-      text: "Entry from Version 3 | Replying to Entry from Version 2",
+      text: "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.",
       author: "Stefan Schneider",
       role: "Kläger",
       section_id: "d990191e-13fc-11ed-861d-0242ac120002",

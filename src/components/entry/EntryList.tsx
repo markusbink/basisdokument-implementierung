@@ -12,9 +12,8 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
         <Entry
           key={entry.id}
           entry={entry}
-          isBookmarked={index % 2 === 0}
-          isOld={index % 2 === 0}
-          viewedBy={UserRole.Judge}
+          isOld={entry.version !== 3}
+          viewedBy={UserRole.Plaintiff}
         />
       ))}
     </div>
