@@ -229,7 +229,7 @@ export const Entry: React.FC<EntryProps> = ({
             {isBodyOpen && isEditing && (
               <EntryForm
                 defaultContent={entry.text}
-                isPlaintiff={viewedBy === UserRole.Plaintiff}
+                isPlaintiff={isPlaintiff}
                 isExpanded={isExpanded}
                 setIsExpanded={() => setIsExpanded(!isExpanded)}
                 onAbort={() => {

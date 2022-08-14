@@ -47,8 +47,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   return (
     <div
       className={cx("border border-t-0 rounded-b-lg", {
-        "border-lightPetrol": isPlaintiff,
-        "border-lightPurple": !isPlaintiff,
+        "border-lightPurple": isPlaintiff,
+        "border-lightPetrol": !isPlaintiff,
       })}
     >
       <Editor
