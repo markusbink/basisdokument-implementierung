@@ -16,7 +16,7 @@ export const SidebarHeader = () => {
             })}>
             <div className={sidebarOpen ? "transition duration-300 rotate-90" : "transition duration-300 rotate-0"}
                 onClick={() => setSidebarOpen(!sidebarOpen)}>
-                <Button bgColor="None"
+                <Button bgColor="transparent"
                     size="sm"
                     textColor="font-bold text-darkGrey"
                     icon={<List size={18} />}>
@@ -24,7 +24,7 @@ export const SidebarHeader = () => {
             </div>
             
             <div className={sidebarOpen ? "flex flex-row gap-2 w-[1h]" : "flex flex-row gap-2 w-[1h] hidden"}>
-                <Button bgColor={isNotesActive ? "bg-offWhite" : "None"}
+                <Button bgColor={isNotesActive ? "bg-offWhite" : "transparent"}
                     size="sm"
                     textColor="font-bold text-darkGrey"
                     icon={<Notepad size={18} />}
@@ -34,7 +34,7 @@ export const SidebarHeader = () => {
                         setIsBookmarksActive(false);
                     }}>
                 </Button>
-                <Button bgColor={isHintsActive ? "bg-offWhite" : "None"}
+                <Button bgColor={isHintsActive ? "bg-offWhite" : "transparent"}
                     size="sm"
                     textColor="font-bold text-darkGrey"
                     icon={<Scales size={18} />}
@@ -44,7 +44,7 @@ export const SidebarHeader = () => {
                         setIsBookmarksActive(false);
                     }}>
                 </Button>
-                <Button bgColor={isBookmarksActive ? "bg-offWhite" : "None"}
+                <Button bgColor={isBookmarksActive ? "bg-offWhite" : "transparent"}
                     size="sm"
                     textColor="font-bold text-darkGrey"
                     icon={<Bookmarks size={18} />}
