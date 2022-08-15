@@ -8,6 +8,30 @@ body {
   font-family: "Manrope", sans-serif;
 }
 
+.marker-red {
+  @apply bg-marker-red;
+}
+
+.marker-orange {
+  @apply bg-marker-orange;
+}
+
+.marker-yellow {
+  @apply bg-marker-yellow;
+}
+
+.marker-green {
+  @apply bg-marker-green;
+}
+
+.marker-blue {
+  @apply bg-marker-blue;
+}
+
+.marker-purple {
+  @apply bg-marker-purple;
+}
+
 @layer components {
   .sm {
     @apply px-3 py-2 text-sm rounded;

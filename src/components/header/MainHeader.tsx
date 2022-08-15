@@ -1,5 +1,3 @@
-import { useState } from "react";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp, MagnifyingGlass, PencilSimpleLine, Question, UserCircle } from "phosphor-react";
 import { DocumentButton } from "../header/DocumentButton";
 
@@ -14,11 +12,11 @@ export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMe
       {/* actions on the left side */}
       <div className="flex flex-row gap-4 items-center">
         <DocumentButton />
-        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md pl-2 pr-2 h-full">
-          <UserCircle size={18} className="text-darkGrey" />
+        <div style={{display: "none"}} className="flex flex-row align-middle justify-center items-center gap-2 bg-darkGrey rounded-md pl-2 pr-2 h-full">
+          <UserCircle size={18} className="text-white" />
           <div className="">
-            <p className="font-extrabold text-xs">Max Mustermann</p>
-            <p className="text-xs">Beklagtenpartei</p>
+            <p className="font-extrabold text-xs text-white">Max Mustermann</p>
+            <p className="text-xs text-white">Beklagtenpartei</p>
           </div>
         </div>
         <div
@@ -36,20 +34,20 @@ export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMe
       <div className="flex flex-row gap-2 justify-center items-center">
         <div className="flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-full items-center">
           <input className="bg-offWhite h-full outline-0 min-w-[300px] max-w-[400px] pl-2" type="text" placeholder="Im Basisdokument suchen..." />
-          <MagnifyingGlass size={16} className="text-darkGrey ml-1 mr-1" />
+          <MagnifyingGlass size={20} weight="bold" className="text-darkGrey ml-1 mr-1" />
         </div>
       </div>
       {/* actions on the right side */}
-      <div className="flex flex-row gap-2 justify-end">
+      <div className="flex flex-row gap-4 justify-end">
         <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full">
-          <Question size={24} className="text-darkGrey" />
+          <Question size={24} weight="bold" className="text-darkGrey" />
         </div>
         <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full">
           <div className="w-6 h-6 bg-marker-yellow rounded-full border-darkGrey border-2"></div>
         </div>
         <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full">
-          <PencilSimpleLine size={24} className="text-darkGrey" />
-          <CaretDown size={12} className="text-darkGrey" />
+          <PencilSimpleLine size={24} weight="bold" className="text-darkGrey" />
+          <CaretDown size={12} className="text-darkGrey" weight="fill"/>
         </div>
       </div>
     </div>
