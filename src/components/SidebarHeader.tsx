@@ -1,6 +1,7 @@
 import { Bookmarks, List, Notepad, Scales } from "phosphor-react"
 import { useState } from "react"
 import { Button } from "./Button"
+import cx from "classnames"
 
 export const SidebarHeader = () => {
     const [isNotesActive, setIsNotesActive] = useState<boolean>(false);
@@ -9,7 +10,10 @@ export const SidebarHeader = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
     return (
-        <div className={sidebarOpen ? "flex flex-row justify-between" : "flex flex-row justify-end"}>
+        <div className={cx("flex flex-row", {
+            "justify-between": sidebarOpen,
+            "justify-end": !sidebarOpen,
+            })}>
             <div className={sidebarOpen ? "transition duration-300 rotate-90" : "transition duration-300 rotate-0"}
                 onClick={() => setSidebarOpen(!sidebarOpen)}>
                 <Button bgColor="None"
