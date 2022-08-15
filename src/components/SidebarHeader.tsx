@@ -4,9 +4,21 @@ import { Button } from "./Button"
 import cx from "classnames"
 
 export const SidebarHeader = () => {
-    const [isNotesActive, setIsNotesActive] = useState<boolean>(false);
-    const [isHintsActive, setIsHintsActive] = useState<boolean>(false);
-    const [isBookmarksActive, setIsBookmarksActive] = useState<boolean>(false);
+    const buttons = [
+        {
+            name: "Notepad",
+            icon: <Notepad size={18} />,
+        },
+        {
+            name: "Hints",
+            icon: <Scales size={18} />,
+        },
+        {
+            name: "Bookmarks",
+            icon: <Bookmarks size={18} />,
+        },
+    ];
+    const [activeButton, setActiveButton] = useState<string>(buttons[0].name)
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
     return (
@@ -14,48 +26,33 @@ export const SidebarHeader = () => {
             "justify-between": sidebarOpen,
             "justify-end": !sidebarOpen,
             })}>
-            <div className={sidebarOpen ? "transition duration-300 rotate-90" : "transition duration-300 rotate-0"}
+            <div className={cx("transition duration-300", {
+                "rotate-90" : sidebarOpen,
+                 "rotate-0" : !sidebarOpen,
+                })}
                 onClick={() => setSidebarOpen(!sidebarOpen)}>
-                <Button bgColor="transparent"
+                <Button key={"sidebarActive"}
+                    bgColor="transparent"
                     size="sm"
                     textColor="font-bold text-darkGrey"
-                    icon={<List size={18} />}>
-                </Button>
+                    icon={<List size={18} />}
+                />
             </div>
             
             <div className={cx("flex flex-row gap-2", {
                 "hidden": !sidebarOpen,
             })}>
-                <Button bgColor={isNotesActive ? "bg-offWhite" : "transparent"}
-                    size="sm"
-                    textColor="font-bold text-darkGrey"
-                    icon={<Notepad size={18} />}
-                    onClick={() => {
-                        setIsNotesActive(true);
-                        setIsHintsActive(false);
-                        setIsBookmarksActive(false);
-                    }}>
-                </Button>
-                <Button bgColor={isHintsActive ? "bg-offWhite" : "transparent"}
-                    size="sm"
-                    textColor="font-bold text-darkGrey"
-                    icon={<Scales size={18} />}
-                    onClick={() => {
-                        setIsNotesActive(false);
-                        setIsHintsActive(true);
-                        setIsBookmarksActive(false);
-                    }}>
-                </Button>
-                <Button bgColor={isBookmarksActive ? "bg-offWhite" : "transparent"}
-                    size="sm"
-                    textColor="font-bold text-darkGrey"
-                    icon={<Bookmarks size={18} />}
-                    onClick={() => {
-                        setIsNotesActive(false);
-                        setIsHintsActive(false);
-                        setIsBookmarksActive(true);
-                    }}>
-                </Button>
+                {buttons.map((button) => (
+                    <Button key={button.name}
+                        bgColor={button.name === activeButton ? "bg-offWhite" : "transparent"}
+                        size="sm"
+                        textColor="font-bold text-darkGrey"
+                        icon={button.icon}
+                        onClick={() => {
+                            setActiveButton(button.name)
+                        }}
+                    />
+                ))}
             </div>
         </div>
     )

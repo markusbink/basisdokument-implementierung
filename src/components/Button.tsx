@@ -4,7 +4,7 @@ interface ButtonProps {
   textColor?: string;
   size?: "sm" | "md" | "lg";
   onClick?: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   disabled?: boolean;
 }
 
