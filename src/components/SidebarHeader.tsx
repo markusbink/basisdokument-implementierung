@@ -3,21 +3,22 @@ import { useState } from "react"
 import { Button } from "./Button"
 import cx from "classnames"
 
+const buttons = [
+    {
+        name: "Notepad",
+        icon: <Notepad size={18} />,
+    },
+    {
+        name: "Hints",
+        icon: <Scales size={18} />,
+    },
+    {
+        name: "Bookmarks",
+        icon: <Bookmarks size={18} />,
+    },
+];
+
 export const SidebarHeader = () => {
-    const buttons = [
-        {
-            name: "Notepad",
-            icon: <Notepad size={18} />,
-        },
-        {
-            name: "Hints",
-            icon: <Scales size={18} />,
-        },
-        {
-            name: "Bookmarks",
-            icon: <Bookmarks size={18} />,
-        },
-    ];
     const [activeButton, setActiveButton] = useState<string>(buttons[0].name)
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
