@@ -1,27 +1,18 @@
 import { useState } from "react";
+import { MainHeader } from "./header/MainHeader";
+import { DropdownHeader } from "./header/DropdownHeader";
 
 export const Header = () => {
   const [showFoldOutMenu, setShowFoldOutMenu] = useState<Boolean>(false);
+  const [showColumnView, setShowColumnView] = useState<Boolean>(false);
 
   return (
-    <header>
+    <header className="text-darkGrey">
       {/* main part of the header */}
-      <div className="flex p-4">
-        <h1>Header mit Aktionen und Filter</h1>
-        <button
-          className="bg-lightGrey"
-          onClick={() => {
-            setShowFoldOutMenu(!showFoldOutMenu);
-          }}
-        >
-          Ausklappen
-        </button>
-      </div>
+      <MainHeader showFoldOutMenu={showFoldOutMenu} setShowFoldOutMenu={setShowFoldOutMenu} />
       {/* fold-out part of the header */}
       {showFoldOutMenu ? (
-        <div className="p-4 bg-offWhite">
-          <h1>Ausgeklappter Header mit Aktionen und Filter</h1>
-        </div>
+        <DropdownHeader showFoldOutMenu={showFoldOutMenu} setShowFoldOutMenu={setShowFoldOutMenu} showColumnView={showColumnView} setShowColumnView={setShowColumnView} />
       ) : null}
     </header>
   );
