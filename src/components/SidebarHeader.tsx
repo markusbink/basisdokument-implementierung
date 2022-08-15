@@ -1,4 +1,4 @@
-import { Bookmarks, CameraRotate, List, Notepad, Scales } from "phosphor-react"
+import { Bookmarks, List, Notepad, Scales } from "phosphor-react"
 import { useState } from "react"
 import { Button } from "./Button"
 
