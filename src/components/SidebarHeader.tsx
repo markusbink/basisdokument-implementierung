@@ -3,7 +3,6 @@ import { useState } from "react"
 import { Button } from "./Button"
 
 export const SidebarHeader = () => {
-
     const [isNotesActive, setIsNotesActive] = useState<boolean>(false);
     const [isHintsActive, setIsHintsActive] = useState<boolean>(false);
     const [isBookmarksActive, setIsBookmarksActive] = useState<boolean>(false);
