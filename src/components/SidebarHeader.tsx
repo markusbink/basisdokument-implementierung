@@ -23,7 +23,9 @@ export const SidebarHeader = () => {
                 </Button>
             </div>
             
-            <div className={sidebarOpen ? "flex flex-row gap-2 w-[1h]" : "flex flex-row gap-2 w-[1h] hidden"}>
+            <div className={cx("flex flex-row gap-2", {
+                "hidden": !sidebarOpen,
+            })}>
                 <Button bgColor={isNotesActive ? "bg-offWhite" : "transparent"}
                     size="sm"
                     textColor="font-bold text-darkGrey"
