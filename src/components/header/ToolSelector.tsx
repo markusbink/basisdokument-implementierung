@@ -25,18 +25,19 @@ export const ToolSelector = () => {
 
   const CurrentToolComponent = StaticToolList[currentIconSelection.title];
 
+
   return (
     <DropdownMenu.Root
       onOpenChange={() => {
         setShowToolSelectorMenu(!showToolSelectorMenu);
       }}
     >
-      <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full cursor-pointer">
-        <CurrentToolComponent size={24} weight="bold" className="text-darkGrey" />
+      <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-14 h-full cursor-pointer">
+        <CurrentToolComponent size={20} weight="bold" className="text-darkGrey" />
         {showToolSelectorMenu ? <CaretUp size={12} className="text-darkGrey" weight="fill" /> : <CaretDown size={12} className="text-darkGrey" weight="fill" />}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg w-16 p-2 gap-2">
+        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg w-14 p-2 gap-2">
           {/* Iterate through list with this element */}
           {tools &&
             tools.length > 0 &&
@@ -45,12 +46,12 @@ export const ToolSelector = () => {
               return (
                 <DropdownMenu.Item
                   key={tool.id}
-                  className="flex flex-row items-center justify-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer w-12"
+                  className="flex flex-row items-center justify-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer w-10"
                   onClick={() => {
                     setCurrentIconSelection({ id: tool.id, title: tool.title });
                   }}
                 >
-                  <ToolComponent size={24} weight="bold" />
+                  <ToolComponent size={20} weight="bold" />
                 </DropdownMenu.Item>
               );
             })}

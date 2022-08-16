@@ -59,8 +59,8 @@ export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMe
       </div>
       {/* actions on the right side */}
       <div className="flex flex-row gap-4 justify-end">
-        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full" onClick={openOnboarding}>
-          <Question size={24} weight="bold" className="text-darkGrey" />
+        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-14 h-full" onClick={openOnboarding}>
+          <Question size={20} weight="bold" className="text-darkGrey" />
         </div>
         <ColorSelector/>
         <ToolSelector/>

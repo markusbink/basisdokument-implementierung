@@ -32,6 +32,12 @@ body {
   @apply bg-marker-purple;
 }
 
+/* This fix is required for react-beautiful-dnd to work together with radix */
+[data-rbd-draggable-id] {
+  left: auto !important;
+  top: auto !important;
+}
+ 
 @layer components {
   .sm {
     @apply px-3 py-2 text-sm rounded;
