@@ -4,7 +4,13 @@ import { CaretDown, CaretUp, FileArrowDown, FileArrowUp, ListNumbers } from "pho
 
 export const SortingMenu = ({}) => {
   const [showSortingMenu, setShowDownloadMenu] = useState<Boolean>(false);
-  const buttonColor:String = showSortingMenu ? "bg-[#565656]" : "bg-darkGrey"
+  const buttonColor: String = showSortingMenu ? "bg-[#565656]" : "bg-darkGrey";
+
+  const sections = [
+    { id: "27b78210-1d32-11ed-861d-0242ac120002", title_plaintiff: "Beschreibung zum Unfall" },
+    { id: "2b835162-1d32-11ed-861d-0242ac120002", title_plaintiff: "Klärung der Unfallbeteiligten" },
+  ];
+
   return (
     <DropdownMenu.Root
       onOpenChange={() => {
@@ -15,8 +21,11 @@ export const SortingMenu = ({}) => {
         <ListNumbers size={24} className="text-white" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2">
-          <p>Hier werden dann Dinge sortiert...</p>
+        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-5">
+          <div className="flex flex-row gap-4 items-center">
+            <p className="font-bold text-xl">Beiträge sortieren</p>
+            <div className="bg-darkGrey text-white p-0.5 pl-3 pr-3 rounded-full">Privat</div>
+          </div>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>

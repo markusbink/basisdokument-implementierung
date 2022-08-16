@@ -2,6 +2,7 @@ import { CaretDown, CaretUp, MagnifyingGlass, PencilSimpleLine, Question, UserCi
 import { useState } from "react";
 import { DocumentButton } from "../header/DocumentButton";
 import { ColorSelector } from "./ColorSelector";
+import { ToolSelector } from "./ToolSelector";
 
 interface IProps {
   showFoldOutMenu: Boolean;
@@ -19,6 +20,7 @@ export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMe
     console.log("open onboarding");
     
   }
+
   return (
     <div className="flex p-3 pl-8 pr-8 justify-between border-b-[0.5px] border-lightGrey">
       {/* actions on the left side */}
@@ -61,10 +63,7 @@ export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMe
           <Question size={24} weight="bold" className="text-darkGrey" />
         </div>
         <ColorSelector/>
-        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full">
-          <PencilSimpleLine size={24} weight="bold" className="text-darkGrey" />
-          <CaretDown size={12} className="text-darkGrey" weight="fill" />
-        </div>
+        <ToolSelector/>
       </div>
     </div>
   );

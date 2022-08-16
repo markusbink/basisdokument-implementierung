@@ -74,7 +74,7 @@ export const DropdownHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldO
         <p className="font-extrabold tracking-widest text-xs">SORTIERUNGEN</p>
         <div className="flex flex-row items-center mt-2 h-8 gap-1">
           <SortingSelector selectedSorting={selectedSorting} setSelectedSorting={setSelectedSorting} />
-          {selectedSorting === "Private" ? <SortingMenu /> : null}
+          {selectedSorting === "Privat" ? <SortingMenu /> : null}
         </div>
       </div>
       <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>

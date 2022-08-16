@@ -23,10 +23,10 @@ export const SortingSelector: React.FC<IProps> = ({selectedSorting, setSelectedS
       <DropdownMenu.Portal>
         <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2">
           <DropdownMenu.Item className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer" onClick={() => {setSelectedSorting("Original")}}>
-            <div className="text-darkGrey">Originale</div>
+            <div className="text-darkGrey">Original</div>
           </DropdownMenu.Item>
-          <DropdownMenu.Item className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer" onClick={() => {setSelectedSorting("Private")}}>
-            <div className="text-darkGrey">Private</div>
+          <DropdownMenu.Item className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer" onClick={() => {setSelectedSorting("Privat")}}>
+            <div className="text-darkGrey">Privat</div>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
