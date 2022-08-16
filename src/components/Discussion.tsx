@@ -1,3 +1,14 @@
+import styled from "styled-components";
+
+const Button = styled.button`
+  background-color: #3A4342;
+  color: white;
+  padding: 7px 13px;
+  border-radius: 8px;
+  outline: 0;
+  box-shadow: 0px 2px 2px darkGrey;
+`
+
 export const Discussion = () => {
   return (
     <div className="bg-offWhite h-full overflow-y-scroll p-4 space-y-4">
@@ -31,6 +42,12 @@ export const Discussion = () => {
             </div>
           </section>
         ))}
+        <div style={{ borderTop: "1px solid darkGrey ", marginTop: 25, marginBottom: 15}}></div>
+        <div className="flex justify-end">
+          <Button className="text-sm" 
+            > + &nbsp;&nbsp; Gliederungspunkt hinzufügen
+          </Button>
+        </div>
       </div>
     </div>
   );
