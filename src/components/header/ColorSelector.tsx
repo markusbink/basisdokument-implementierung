@@ -6,12 +6,13 @@ export interface IState {
   color: { id: string; colorCode: string };
 }
 
-export const ColorSelector = () => {
+interface IProps {
+  currentColorSelection: IState["color"];
+  setCurrentColorSelection: React.Dispatch<React.SetStateAction<IState["color"]>>;
+}
+
+export const ColorSelector: React.FC<IProps> = ({currentColorSelection, setCurrentColorSelection}) => {
   const [showColorSelectorMenu, setShowColorSelectorMenu] = useState<Boolean>(false);
-  const [currentColorSelection, setCurrentColorSelection] = useState<IState["color"]>({
-    id: "red",
-    colorCode: "bg-marker-red",
-  });
 
   const highlighter_colors = [
     { id: "red", colorCode: "bg-marker-red" },

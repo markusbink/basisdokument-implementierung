@@ -13,7 +13,12 @@ export interface IState {
   tool: { id: string; title: string };
 }
 
-export const ToolSelector = () => {
+interface IProps {
+  getCurrentTool: IState["tool"];
+  setCurrentTool: React.Dispatch<React.SetStateAction<IState["tool"]>>;
+}
+
+export const ToolSelector: React.FC<IProps> = ({ getCurrentTool, setCurrentTool }) => {
   const tools = [
     { id: "cursor", title: "Cursor" },
     { id: "highlighter", title: "PencilSimpleLine" },
@@ -21,10 +26,7 @@ export const ToolSelector = () => {
   ];
 
   const [showToolSelectorMenu, setShowToolSelectorMenu] = useState<Boolean>(false);
-  const [currentIconSelection, setCurrentIconSelection] = useState<IState["tool"]>(tools[0]);
-
-  const CurrentToolComponent = StaticToolList[currentIconSelection.title];
-
+  const CurrentToolComponent = StaticToolList[getCurrentTool.title];
 
   return (
     <DropdownMenu.Root
@@ -48,7 +50,7 @@ export const ToolSelector = () => {
                   key={tool.id}
                   className="flex flex-row items-center justify-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer w-10"
                   onClick={() => {
-                    setCurrentIconSelection({ id: tool.id, title: tool.title });
+                    setCurrentTool({ id: tool.id, title: tool.title });
                   }}
                 >
                   <ToolComponent size={20} weight="bold" />

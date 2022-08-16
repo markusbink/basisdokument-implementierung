@@ -9,8 +9,18 @@ interface IProps {
   setShowFoldOutMenu: React.Dispatch<React.SetStateAction<Boolean>>;
 }
 
+export interface IState {
+  color: { id: string; colorCode: string };
+  tool: { id: string; title: string };
+}
+
 export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMenu }) => {
   const [searchbarValue, setSearchbarValue] = useState<string>("");
+  const [currentColorSelection, setCurrentColorSelection] = useState<IState["color"]>({
+    id: "red",
+    colorCode: "bg-marker-red",
+  });
+  const [getCurrentTool, setCurrentTool] = useState<IState["tool"]>({ id: "cursor", title: "Cursor" });
 
   const onChangeSearchbar = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchbarValue(e.target.value);
@@ -26,15 +36,8 @@ export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMe
       {/* actions on the left side */}
       <div className="flex flex-row gap-4 items-center">
         <DocumentButton />
-        <div style={{ display: "none" }} className="flex flex-row align-middle justify-center items-center gap-2 bg-lightGrey rounded-md pl-2 pr-2 h-full">
-          <UserCircle size={18} className="text-white" />
-          <div className="">
-            <p className="font-extrabold text-xs text-white">Max Mustermann</p>
-            <p className="text-xs text-white">Beklagtenpartei</p>
-          </div>
-        </div>
         <div
-          className="flex flex-row justify-center items-center gap-1 bg-offWhite rounded-full h-8 pl-2 pr-2"
+          className="flex flex-row justify-center items-center gap-1 bg-offWhite rounded-full h-8 pl-2 pr-2 cursor-pointer"
           onClick={() => {
             setShowFoldOutMenu(!showFoldOutMenu);
           }}
@@ -62,8 +65,8 @@ export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMe
         <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-14 h-full" onClick={openOnboarding}>
           <Question size={20} weight="bold" className="text-darkGrey" />
         </div>
-        <ColorSelector/>
-        <ToolSelector/>
+        <ColorSelector currentColorSelection={currentColorSelection} setCurrentColorSelection={setCurrentColorSelection}/>
+        <ToolSelector getCurrentTool={getCurrentTool} setCurrentTool={setCurrentTool}/>
       </div>
     </div>
   );
