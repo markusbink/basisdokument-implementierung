@@ -3,8 +3,10 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp, FileArrowDown, FileArrowUp } from "phosphor-react";
 
 
-export const VersionSelector = () => {
+export const VersionSelector = ({}) => {
+
   const [showVersionMenu, setShowVersionMenu] = useState<Boolean>(false);
+  
   return (
     <DropdownMenu.Root
       onOpenChange={() => {
