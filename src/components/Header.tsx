@@ -4,11 +4,6 @@ import { DropdownHeader } from "./header/DropdownHeader";
 
 export const Context = createContext({});
 
-interface IProps {
-  showDropdownHeader: Boolean;
-  setShowDropdownHeader: React.Dispatch<React.SetStateAction<Boolean>>;
-}
-
 export interface IState {
   color: { id: string; colorCode: string };
   tool: { id: string; title: string };
@@ -39,7 +34,7 @@ export const Header = () => {
     highlighterData,
     hideEntriesHighlighter,
     hideElementsWithoutSpecificVersion,
-    selectedSorting, 
+    selectedSorting,
     setShowColumnView,
     setCaseId,
     setSearchbarValue,
@@ -49,7 +44,7 @@ export const Header = () => {
     setHighlighterData,
     setHideEntriesHighlighter,
     setSelectedSorting,
-    setHideElementsWithoutSpecificVersion
+    setHideElementsWithoutSpecificVersion,
   };
 
   return (

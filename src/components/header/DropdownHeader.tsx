@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import * as Select from "@radix-ui/react-select";
 import cx from "classnames";
 import { HighlighterButton } from "./HighlighterButton";
 import { Checkbox } from "./Checkbox";
-import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { SortingSelector } from "./SortingSelector";
 import { SortingMenu } from "./SortingMenu";
 import { VersionSelector } from "./VersionSelector";

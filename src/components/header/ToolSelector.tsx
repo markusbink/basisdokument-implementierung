@@ -1,7 +1,6 @@
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { CaretDown, CaretUp, Cursor, Eraser, FileArrowDown, FileArrowUp, PencilSimpleLine } from "phosphor-react";
-import { IconProps } from "react-toastify";
+import { CaretDown, CaretUp, Cursor, Eraser, PencilSimpleLine } from "phosphor-react";
 
 const StaticToolList: any = {
   Cursor,

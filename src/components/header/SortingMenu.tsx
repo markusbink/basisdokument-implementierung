@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { CaretDown, CaretUp, DotsSixVertical, FileArrowDown, FileArrowUp, ListNumbers } from "phosphor-react";
+import { DotsSixVertical, ListNumbers } from "phosphor-react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 export const SortingMenu = ({}) => {
