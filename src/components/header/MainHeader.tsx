@@ -1,5 +1,7 @@
 import { CaretDown, CaretUp, MagnifyingGlass, PencilSimpleLine, Question, UserCircle } from "phosphor-react";
+import { useState } from "react";
 import { DocumentButton } from "../header/DocumentButton";
+import { ColorSelector } from "./ColorSelector";
 
 interface IProps {
   showFoldOutMenu: Boolean;
@@ -7,12 +9,22 @@ interface IProps {
 }
 
 export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMenu }) => {
+  const [searchbarValue, setSearchbarValue] = useState<string>("");
+
+  const onChangeSearchbar = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchbarValue(e.target.value);
+  };
+
+  const openOnboarding = () => {
+    console.log("open onboarding");
+    
+  }
   return (
-    <div className="flex p-3 pl-8 pr-8 justify-between">
+    <div className="flex p-3 pl-8 pr-8 justify-between border-b-[0.5px] border-lightGrey">
       {/* actions on the left side */}
       <div className="flex flex-row gap-4 items-center">
         <DocumentButton />
-        <div style={{display: "none"}} className="flex flex-row align-middle justify-center items-center gap-2 bg-darkGrey rounded-md pl-2 pr-2 h-full">
+        <div style={{ display: "none" }} className="flex flex-row align-middle justify-center items-center gap-2 bg-lightGrey rounded-md pl-2 pr-2 h-full">
           <UserCircle size={18} className="text-white" />
           <div className="">
             <p className="font-extrabold text-xs text-white">Max Mustermann</p>
@@ -33,21 +45,25 @@ export const MainHeader: React.FC<IProps> = ({ showFoldOutMenu, setShowFoldOutMe
       {/* searchbar */}
       <div className="flex flex-row gap-2 justify-center items-center">
         <div className="flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-full items-center">
-          <input className="bg-offWhite h-full outline-0 min-w-[300px] max-w-[400px] pl-2" type="text" placeholder="Im Basisdokument suchen..." />
+          <input
+            value={searchbarValue}
+            onChange={(e) => onChangeSearchbar(e)}
+            className="bg-offWhite h-full outline-0 min-w-[300px] max-w-[400px] pl-2"
+            type="text"
+            placeholder="Im Basisdokument suchen..."
+          />
           <MagnifyingGlass size={20} weight="bold" className="text-darkGrey ml-1 mr-1" />
         </div>
       </div>
       {/* actions on the right side */}
       <div className="flex flex-row gap-4 justify-end">
-        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full">
+        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full" onClick={openOnboarding}>
           <Question size={24} weight="bold" className="text-darkGrey" />
         </div>
-        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full">
-          <div className="w-6 h-6 bg-marker-yellow rounded-full border-darkGrey border-2"></div>
-        </div>
+        <ColorSelector/>
         <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-16 h-full">
           <PencilSimpleLine size={24} weight="bold" className="text-darkGrey" />
-          <CaretDown size={12} className="text-darkGrey" weight="fill"/>
+          <CaretDown size={12} className="text-darkGrey" weight="fill" />
         </div>
       </div>
     </div>
