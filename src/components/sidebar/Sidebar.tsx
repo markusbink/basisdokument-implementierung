@@ -5,23 +5,23 @@ import { SidebarNotes } from "./SidebarNotes";
 const sidebars = [
   {
     name: "Notes",
-  }, 
+  },
   {
-    name: "Hints"
-  }, 
+    name: "Hints",
+  },
   {
-    name: "Bookmarks"
-  }, 
-]
+    name: "Bookmarks",
+  },
+];
 
 export const Sidebar = () => {
-  const [activeSidebar, setActiveSidebar] = useState<string>(sidebars[0].name)
+  const [activeSidebar, setActiveSidebar] = useState<string>(sidebars[0].name);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
   return (
-    <aside className="w-[400px] h-full shadow-lg p-4">
-      <SidebarHeader/>
-      <SidebarNotes/>
+    <aside className="w-[400px] h-full shadow-lg p-4 divide-y-[1px] divide-lightGrey">
+      <SidebarHeader />
+      <SidebarNotes />
     </aside>
   );
 };
