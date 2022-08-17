@@ -1,24 +1,20 @@
-import React, { useState, createContext } from "react";
+import { useState, createContext } from "react";
 import { MainHeader } from "./header/MainHeader";
 import { DropdownHeader } from "./header/DropdownHeader";
+import IPropsHeader from "../types";
 
 export const Context = createContext({});
-
-export interface IState {
-  color: { id: string; colorCode: string };
-  tool: { id: string; title: string };
-}
 
 export const Header = () => {
   const [showDropdownHeader, setShowDropdownHeader] = useState<Boolean>(false);
   const [searchbarValue, setSearchbarValue] = useState<string>("");
   const [showColumnView, setShowColumnView] = useState<Boolean>(false);
   const [caseId, setCaseId] = useState<string>("AZ. 8 0 6432/18");
-  const [currentColorSelection, setCurrentColorSelection] = useState<IState["color"]>({
+  const [currentColorSelection, setCurrentColorSelection] = useState<IPropsHeader["color"]>({
     id: "red",
     colorCode: "bg-marker-red",
   });
-  const [getCurrentTool, setCurrentTool] = useState<IState["tool"]>({ id: "cursor", title: "Cursor" });
+  const [getCurrentTool, setCurrentTool] = useState<IPropsHeader["tool"]>({ id: "cursor", title: "Cursor" });
   const [highlighterData, setHighlighterData] = useState({ red: true, orange: true, yellow: true, green: true, blue: true, purple: true });
   const [hideEntriesHighlighter, setHideEntriesHighlighter] = useState(false);
   const [selectedSorting, setSelectedSorting] = useState<string>("Original");

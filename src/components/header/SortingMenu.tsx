@@ -41,15 +41,19 @@ export const SortingMenu = ({}) => {
         <ListNumbers size={24} className="text-white" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-4">
+        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md h-screen rounded-lg p-4 left-0 top-0">
           <div className="flex flex-row gap-4 items-center">
             <p className="font-bold text-xl">Beiträge sortieren</p>
             <div className="bg-darkGrey text-white p-0.5 pl-3 pr-3 rounded-full">Privat</div>
           </div>
           <DragDropContext onDragEnd={handleDrop}>
-            <Droppable droppableId="list-container">
+            <Droppable droppableId="sorting-menu-container">
               {(provided) => (
-                <div className="flex flex-col list-container gap-2 mt-6 relative overflow-hidden overflow-y-scroll h-max-[400px]" {...provided.droppableProps} ref={provided.innerRef}>
+                <div
+                  className="flex flex-col sorting-menu-container gap-2 mt-6 relative overflow-hidden overflow-y-scroll h-max-[400px]"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
                   {sectionList.map((item, index) => (
                     <Draggable key={item.id} draggableId={item.id} index={index}>
                       {(provided) => (

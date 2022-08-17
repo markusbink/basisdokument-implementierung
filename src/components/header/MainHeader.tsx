@@ -3,21 +3,7 @@ import { DocumentButton } from "../header/DocumentButton";
 import { ColorSelector } from "./ColorSelector";
 import { ToolSelector } from "./ToolSelector";
 
-interface IProps {
-  headerContext: {
-    caseId:any,
-    searchbarValue: any;
-    showDropdownHeader: any;
-    currentColorSelection: any;
-    getCurrentTool: any;
-    setSearchbarValue: any;
-    setShowDropdownHeader: any;
-    setCurrentColorSelection: any;
-    setCurrentTool: any;
-  };
-}
-
-export const MainHeader: React.FC<IProps> = ({ headerContext }) => {
+export const MainHeader: React.FC<any> = ({headerContext}) => {
   const onChangeSearchbar = (e: React.ChangeEvent<HTMLInputElement>) => {
     headerContext.setSearchbarValue(e.target.value);
   };

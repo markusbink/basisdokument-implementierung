@@ -6,32 +6,7 @@ import { SortingSelector } from "./SortingSelector";
 import { SortingMenu } from "./SortingMenu";
 import { VersionSelector } from "./VersionSelector";
 
-interface IProps {
-  headerContext: {
-    caseId: string;
-    showDropdownHeader: Boolean;
-    showColumnView: Boolean;
-    getCurrentTool: { id: string; title: string };
-    currentColorSelection: { id: string; colorCode: string };
-    searchbarValue: string;
-    highlighterData: { red: boolean; orange: boolean; yellow: boolean; green: boolean; blue: boolean; purple: boolean };
-    hideEntriesHighlighter: boolean;
-    hideElementsWithoutSpecificVersion: boolean;
-    selectedSorting: any;
-    setShowColumnView: any;
-    setCaseId: any;
-    setSearchbarValue: any;
-    setShowDropdownHeader: any;
-    setCurrentColorSelection: any;
-    setCurrentTool: any;
-    setHighlighterData: any;
-    setHideEntriesHighlighter: any;
-    setSelectedSorting: any;
-    setHideElementsWithoutSpecificVersion: any;
-  };
-}
-
-export const DropdownHeader: React.FC<IProps> = ({ headerContext }) => {
+export const DropdownHeader: React.FC<any> = ({ headerContext }) => {
   return (
     <div className="flex flex-row gap-6 p-4 pl-8 pr-8 bg-lowWhite items-center">
       <div>
@@ -63,6 +38,14 @@ export const DropdownHeader: React.FC<IProps> = ({ headerContext }) => {
       </div>
       <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
+        <p className="font-extrabold tracking-widest text-xs">SORTIERUNGEN</p>
+        <div className="flex flex-row items-center mt-2 h-8 gap-1">
+          <SortingSelector selectedSorting={headerContext.selectedSorting} setSelectedSorting={headerContext.setSelectedSorting} />
+          {headerContext.selectedSorting === "Privat" ? <SortingMenu /> : null}
+        </div>
+      </div>
+      <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
+      <div>
         <p className="font-extrabold tracking-widest text-xs">MARKIERUNGEN</p>
         <div className="flex flex-row items-center mt-2 h-8 gap-1">
           <HighlighterButton highlighterData={headerContext.highlighterData} setHighlighterData={headerContext.setHighlighterData} highlighterColor="red" />
@@ -82,14 +65,6 @@ export const DropdownHeader: React.FC<IProps> = ({ headerContext }) => {
       </div>
       <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
-        <p className="font-extrabold tracking-widest text-xs">SORTIERUNGEN</p>
-        <div className="flex flex-row items-center mt-2 h-8 gap-1">
-          <SortingSelector selectedSorting={headerContext.selectedSorting} setSelectedSorting={headerContext.setSelectedSorting} />
-          {headerContext.selectedSorting === "Privat" ? <SortingMenu /> : null}
-        </div>
-      </div>
-      <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
-      <div>
         <p className="font-extrabold tracking-widest text-xs">ÄNDERUNGEN VON</p>
         <div className="flex flex-row items-center mt-2 h-8 gap-2">
           <input
@@ -99,7 +74,7 @@ export const DropdownHeader: React.FC<IProps> = ({ headerContext }) => {
               headerContext.setHideElementsWithoutSpecificVersion(!headerContext.hideElementsWithoutSpecificVersion);
             }}
           />
-          <VersionSelector/>
+          <VersionSelector />
         </div>
       </div>
     </div>

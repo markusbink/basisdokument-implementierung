@@ -1,5 +1,5 @@
 import { Check } from "phosphor-react";
-import React, { useEffect } from "react";
+import React from "react";
 import cx from "classnames";
 
 interface IProps {

@@ -15,11 +15,11 @@ export const ColorSelector: React.FC<IProps> = ({currentColorSelection, setCurre
 
   const highlighter_colors = [
     { id: "red", colorCode: "bg-marker-red" },
-    { id: "ornage", colorCode: "bg-marker-orange" },
+    { id: "orange", colorCode: "bg-marker-orange" },
     { id: "yellow", colorCode: "bg-marker-yellow" },
     { id: "green", colorCode: "bg-marker-green" },
     { id: "blue", colorCode: "bg-marker-blue" },
-    { id: "pruple", colorCode: "bg-marker-purple" },
+    { id: "purple", colorCode: "bg-marker-purple" },
   ];
   return (
     <DropdownMenu.Root

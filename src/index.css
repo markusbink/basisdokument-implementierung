@@ -33,11 +33,11 @@ body {
 }
 
 /* This fix is required for react-beautiful-dnd to work together with radix */
-[data-rbd-draggable-id] {
-  left: auto !important;
-  top: auto !important;
+
+div[style*="transform: translate3d(286px, 135px, 0px);"]  {
+  transform: none !important;
 }
- 
+
 @layer components {
   .sm {
     @apply px-3 py-2 text-sm rounded;
