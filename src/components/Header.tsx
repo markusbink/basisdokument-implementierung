@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Onboarding } from "./Onboarding";
 
 export const Header = () => {
   const [showFoldOutMenu, setShowFoldOutMenu] = useState<Boolean>(false);
@@ -21,6 +22,7 @@ export const Header = () => {
       {showFoldOutMenu ? (
         <div className="p-4 bg-offWhite">
           <h1>Ausgeklappter Header mit Aktionen und Filter</h1>
+          <Onboarding/>
         </div>
       ) : null}
     </header>
