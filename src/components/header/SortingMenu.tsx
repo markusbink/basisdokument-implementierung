@@ -33,6 +33,7 @@ export const SortingMenu = ({}) => {
 
   return (
     <DropdownMenu.Root
+    modal={false}
       onOpenChange={() => {
         setShowDownloadMenu(!showSortingMenu);
       }}
