@@ -1,13 +1,4 @@
-import styled from "styled-components";
-
-const Button = styled.button`
-  background-color: #3A4342;
-  color: white;
-  padding: 7px 13px;
-  border-radius: 8px;
-  outline: 0;
-  box-shadow: 0px 2px 2px darkGrey;
-`
+import { Button } from "./Button";
 
 export const Discussion = () => {
   return (
@@ -42,9 +33,9 @@ export const Discussion = () => {
             </div>
           </section>
         ))}
-        <div style={{ borderTop: "1px solid darkGrey ", marginTop: 25, marginBottom: 15}}></div>
+        <div className="border-t-[1px] border-darkGrey mt-6 mb-3"></div>
         <div className="flex justify-end">
-          <Button className="text-sm" 
+          <Button size="sm"
             > + &nbsp;&nbsp; Gliederungspunkt hinzufügen
           </Button>
         </div>
