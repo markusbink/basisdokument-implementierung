@@ -4,8 +4,8 @@ import cx from "classnames";
 import { Button } from "../Button";
 
 interface SidebarProps {
-  setActiveSidebar: any;
-  setSidebarOpenForContent: any;
+  setActiveSidebar: () => void;
+  setSidebarOpenForContent: () => void;
 }
 
 const buttons = [
