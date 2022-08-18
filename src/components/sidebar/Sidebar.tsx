@@ -22,7 +22,7 @@ export const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
   return (
-    <aside className="w-[400px] h-full shadow-lg p-4 divide-y-[1px] divide-lightGrey">
+    <aside className="w-[400px] h-full overflow-y-clip shadow-lg p-4 divide-y-[1px] divide-lightGrey">
       <SidebarHeader setActiveSidebar={setActiveSidebar} />
       {sidebars.map(
         (sidebar) => sidebar.name === activeSidebar && sidebar.jsxElem

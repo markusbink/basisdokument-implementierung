@@ -25,7 +25,7 @@ const notes: NoteProps[] = [
 
 export const SidebarNotes = () => {
   return (
-    <div className="flex flex-col gap-7 p-5">
+    <div className="flex flex-col gap-7 p-4 h-full overflow-auto">
       <div className="flex justify-between items-center">
         <div className="text-base font-bold text-darkGrey text-lg">Notizen</div>
         <Button
