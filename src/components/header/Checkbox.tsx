@@ -3,7 +3,7 @@ import React from "react";
 interface IProps {
   label: string;
   value: boolean;
-  onChange: any;
+  onChange: () => void;
 }
 
 export const Checkbox: React.FC<IProps> = ({ label, value, onChange }) => {

@@ -19,7 +19,7 @@ export const VersionSelector: React.FC<IProps> = ({ headerContext }) => {
     >
       <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 pt-1 pb-1 hover:cursor-pointer font-bold">
         <p>
-          Version {headerContext.selectedVersion + 1} <span className="text-mediumGrey font-light">{headerContext.versionHistory[headerContext.selectedVersion].author}</span>
+          Version {headerContext.selectedVersion + 1} <span className="text-mediumGrey font-light ml-2">{headerContext.versionHistory[headerContext.selectedVersion].author}</span>
         </p>
         {showVersionMenu ? <CaretUp size={12} className="text-darkGrey" /> : <CaretDown size={12} className="text-darkGrey" />}
       </DropdownMenu.Trigger>

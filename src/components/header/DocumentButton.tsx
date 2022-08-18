@@ -53,8 +53,8 @@ export const DocumentButton: React.FC<IProps> = ({ headerContext }) => {
       </DropdownMenu.Root>
       <div>
         <ToastContainer
-          className="rounded-md font-light text-sm"
-          toastStyle={{ backgroundColor: "#3A4342", color: "#fff", width: "300px" }}
+          className="font-semibold text-sm"
+          toastStyle={{ backgroundColor: "#3A4342", color: "#fff", width: "300px", borderRadius: "8px" }}
           position="top-right"
           autoClose={2000000}
           closeButton={false}
@@ -92,7 +92,9 @@ export const DocumentButton: React.FC<IProps> = ({ headerContext }) => {
                 <button className="bg-lightRed text-center text-darkRed font-bold p-2 rounded-md" onClick={headerContext.reloadPageAndDoNotSave}>
                   Fortfahren und nicht speichern
                 </button>
-                <button className="bg-offWhite text-center font-bold p-2 rounded-md" onClick={headerContext.reloadPageAndSave}>Fortfahren und speichern</button>
+                <button className="bg-offWhite text-center font-bold p-2 rounded-md" onClick={headerContext.reloadPageAndSave}>
+                  Fortfahren und speichern
+                </button>
                 <AlertDialog.Cancel
                   className="bg-offWhite text-center font-bold p-2 rounded-md"
                   onClick={() => {

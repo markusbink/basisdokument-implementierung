@@ -1,5 +1,7 @@
+import React from "react";
+
 interface ButtonProps {
-  icon?: any;
+  icon?: React.ReactNode;
   bgColor?: string;
   textColor?: string;
   size?: "sm" | "md" | "lg";

@@ -1,3 +1,5 @@
+import { MouseEventHandler } from "react";
+
 export enum UserRole {
   Plaintiff = "Kläger",
   Defendant = "Beklagter",
@@ -33,11 +35,11 @@ export default interface IPropsHeader {
     versionHistory: { author: string; role: string; timestamp: string }[];
     selectedVersion: number;
     sectionList: { id: string; title_plaintiff: string }[];
-    resetPrivateSorting: any;
-    openOnboarding: any;
-    downloadBasisdokument: any,
-    reloadPageAndSave: any,
-    reloadPageAndDoNotSave: any,
+    resetPrivateSorting: void;
+    openOnboarding: void;
+    downloadBasisdokument: MouseEventHandler<HTMLDivElement> | undefined,
+    reloadPageAndSave: MouseEventHandler<HTMLButtonElement> | undefined,
+    reloadPageAndDoNotSave: MouseEventHandler<HTMLButtonElement> | undefined,
     setUserParty: React.Dispatch<React.SetStateAction<string>>;
     setUsername: React.Dispatch<React.SetStateAction<string>>;
     setSectionList: React.Dispatch<React.SetStateAction<{ id: string; title_plaintiff: string }[]>>;

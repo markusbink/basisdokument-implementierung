@@ -4,7 +4,7 @@ import { ClockClockwise, DotsSixVertical, ListNumbers } from "phosphor-react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 export const SortingMenu: React.FC<any> = ({ headerContext }) => {
-  const [showSortingMenu, setShowDownloadMenu] = useState<Boolean>(false);
+  const [showSortingMenu, setShowSortingdMenu] = useState<Boolean>(false);
   const buttonColor: String = showSortingMenu ? "bg-[#565656]" : "bg-darkGrey";
 
   const handleDrop = (droppedItem: any) => {
@@ -23,10 +23,12 @@ export const SortingMenu: React.FC<any> = ({ headerContext }) => {
     <DropdownMenu.Root
       modal={false}
       onOpenChange={() => {
-        setShowDownloadMenu(!showSortingMenu);
+        setShowSortingdMenu(!showSortingMenu);
       }}
     >
-      <DropdownMenu.Trigger className={`${buttonColor} flex flex-row justify-between bg-darkGrey hover:bg-mediumGrey items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer font-bold h-8`}>
+      <DropdownMenu.Trigger
+        className={`${buttonColor} flex flex-row justify-between bg-darkGrey hover:bg-mediumGrey items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer font-bold h-8`}
+      >
         <ListNumbers size={24} className="text-white" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
@@ -38,7 +40,11 @@ export const SortingMenu: React.FC<any> = ({ headerContext }) => {
           <DragDropContext onDragEnd={handleDrop}>
             <Droppable droppableId="sorting-menu-container">
               {(provided) => (
-                <div className="flex flex-col sorting-menu-container gap-2 mt-6 relative overflow-hidden overflow-y-scroll h-max-[400px]" {...provided.droppableProps} ref={provided.innerRef}>
+                <div
+                  className="sorting-menu flex flex-col sorting-menu-container gap-2 mt-6 relative overflow-hidden overflow-y-scroll h-max-[400px]"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
                   {headerContext.sectionList.map((item: any, index: any) => (
                     <Draggable key={item.id} draggableId={item.id} index={index}>
                       {(provided) => (
@@ -56,9 +62,12 @@ export const SortingMenu: React.FC<any> = ({ headerContext }) => {
                   ))}
                   {provided.placeholder}
                   <div className="flex justify-end mt-2">
-                    <div className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey text-white text-sm font-bold p-2 rounded-md" onClick={() => {
-                      headerContext.resetPrivateSorting();
-                    }}>
+                    <div
+                      className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey text-white text-[12px] font-bold p-2 rounded-md"
+                      onClick={() => {
+                        headerContext.resetPrivateSorting();
+                      }}
+                    >
                       <ClockClockwise size={20} />
                       <p>Sortierung zurücksetzen</p>
                     </div>
