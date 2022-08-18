@@ -32,11 +32,18 @@ body {
   @apply bg-marker-purple;
 }
 
-/* This fix is required for react-beautiful-dnd to work together with radix */
-
-div[style*="transform: translate3d(286px, 135px, 0px);"]  {
-  transform: none !important;
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* This fix is required for react-beautiful-dnd to work together with radix */
 
 @layer components {
   .sm {

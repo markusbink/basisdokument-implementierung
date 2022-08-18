@@ -1,50 +1,52 @@
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { EditText } from "react-edit-text";
+import "react-edit-text/dist/index.css";
+import IPropsHeader from "../../types";
+import { SyntheticEvent } from "react-draft-wysiwyg";
 
-export interface IState {
-  color: { id: string; colorCode: string };
-}
 
 interface IProps {
-  currentColorSelection: IState["color"];
-  setCurrentColorSelection: React.Dispatch<React.SetStateAction<IState["color"]>>;
+  headerContext: IPropsHeader["headerContext"];
 }
 
-export const ColorSelector: React.FC<IProps> = ({currentColorSelection, setCurrentColorSelection}) => {
+export const ColorSelector: React.FC<IProps> = ({ headerContext }) => {
   const [showColorSelectorMenu, setShowColorSelectorMenu] = useState<Boolean>(false);
 
-  const highlighter_colors = [
-    { id: "red", colorCode: "bg-marker-red" },
-    { id: "orange", colorCode: "bg-marker-orange" },
-    { id: "yellow", colorCode: "bg-marker-yellow" },
-    { id: "green", colorCode: "bg-marker-green" },
-    { id: "blue", colorCode: "bg-marker-blue" },
-    { id: "purple", colorCode: "bg-marker-purple" },
-  ];
+  const handleChange = (e: React.BaseSyntheticEvent, id: string) => {
+    console.log("event",e);
+    
+    headerContext.setColorSelection(headerContext.colorSelection.map((item) => (item.id === id ? { ...item, label: e.target.value } : item)));
+    console.log(e.target.value);
+  };
+
   return (
     <DropdownMenu.Root
+      modal={false}
       onOpenChange={() => {
         setShowColorSelectorMenu(!showColorSelectorMenu);
       }}
     >
       <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-14 h-full cursor-pointer">
-        <div className={`w-5 h-5 ${currentColorSelection.colorCode} rounded-full border-darkGrey border-2`}></div>
+        <div className={`w-5 h-5 ${headerContext.currentColorSelection.colorCode} rounded-full border-darkGrey border-2`}></div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg w-14 p-2 gap-1">
+        <DropdownMenu.Content side="left" align="start" className="flex flex-col bg-white shadow-md rounded-lg p-4 gap-1">
           {/* Iterate through list with this element */}
-          {highlighter_colors &&
-            highlighter_colors.length > 0 &&
-            highlighter_colors.map((highlighter) => (
-              <DropdownMenu.Item
-                key={highlighter.id}
-                className="flex flex-row items-center justify-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer w-10"
-                onClick={() => {
-                  setCurrentColorSelection({ id: highlighter.id, colorCode: highlighter.colorCode });
-                }}
-              >
-                <div className={`w-5 h-5 ${highlighter.colorCode} rounded-full border-darkGrey border-2`}></div>
-              </DropdownMenu.Item>
+          {headerContext.colorSelection &&
+            headerContext.colorSelection.length > 0 &&
+            headerContext.colorSelection.map((highlighter) => (
+              <div className="flex flex-row" key={highlighter.id}>
+                <DropdownMenu.Item
+                  className="flex flex-row items-center justify-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
+                  onClick={() => {
+                    headerContext.setCurrentColorSelection({ id: highlighter.id, colorCode: highlighter.colorCode });
+                  }}
+                >
+                  <div className={`w-5 h-5 ${highlighter.colorCode} rounded-full border-darkGrey border-2`}></div>
+                </DropdownMenu.Item>
+                <EditText className="rounded-md pl-2 pr-2" value={highlighter.label} onChange={(e) => handleChange(e, highlighter.id)} />
+              </div>
             ))}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>

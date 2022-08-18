@@ -41,7 +41,7 @@ export const DropdownHeader: React.FC<any> = ({ headerContext }) => {
         <p className="font-extrabold tracking-widest text-xs">SORTIERUNGEN</p>
         <div className="flex flex-row items-center mt-2 h-8 gap-1">
           <SortingSelector selectedSorting={headerContext.selectedSorting} setSelectedSorting={headerContext.setSelectedSorting} />
-          {headerContext.selectedSorting === "Privat" ? <SortingMenu /> : null}
+          {headerContext.selectedSorting === "Privat" ? <SortingMenu headerContext={headerContext}/> : null}
         </div>
       </div>
       <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
@@ -74,7 +74,7 @@ export const DropdownHeader: React.FC<any> = ({ headerContext }) => {
               headerContext.setHideElementsWithoutSpecificVersion(!headerContext.hideElementsWithoutSpecificVersion);
             }}
           />
-          <VersionSelector />
+          <VersionSelector headerContext={headerContext}/>
         </div>
       </div>
     </div>

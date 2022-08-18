@@ -8,9 +8,6 @@ export const MainHeader: React.FC<any> = ({headerContext}) => {
     headerContext.setSearchbarValue(e.target.value);
   };
 
-  const openOnboarding = () => {
-    console.log("open onboarding");
-  };
 
   return (
     <div className="flex p-3 pl-8 pr-8 justify-between border-b-[0.5px] border-lightGrey">
@@ -43,10 +40,10 @@ export const MainHeader: React.FC<any> = ({headerContext}) => {
       </div>
       {/* actions on the right side */}
       <div className="flex flex-row gap-4 justify-end">
-        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-14 h-full" onClick={openOnboarding}>
+        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-14 h-full" onClick={headerContext.openOnboarding}>
           <Question size={20} weight="bold" className="text-darkGrey" />
         </div>
-        <ColorSelector currentColorSelection={headerContext.currentColorSelection} setCurrentColorSelection={headerContext.setCurrentColorSelection} />
+        <ColorSelector headerContext={headerContext} />
         <ToolSelector getCurrentTool={headerContext.getCurrentTool} setCurrentTool={headerContext.setCurrentTool} />
       </div>
     </div>
