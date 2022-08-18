@@ -42,10 +42,6 @@ export const SidebarHeader: React.FC<SidebarProps> = ({
           "rotate-90": sidebarOpen,
           "rotate-0": !sidebarOpen,
         })}
-        onClick={() => {
-          setSidebarOpen(!sidebarOpen);
-          setSidebarOpenForContent(!sidebarOpen);
-        }}
       >
         <Button
           key={"sidebarActive"}
@@ -55,6 +51,10 @@ export const SidebarHeader: React.FC<SidebarProps> = ({
           hasText={false}
           alternativePadding="py-1.5 px-1.5"
           icon={<List size={18} />}
+          onClick={() => {
+            setSidebarOpen(!sidebarOpen);
+            setSidebarOpenForContent(!sidebarOpen);
+          }}
         />
       </div>
 
