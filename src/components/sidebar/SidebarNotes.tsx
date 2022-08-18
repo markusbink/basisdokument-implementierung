@@ -35,7 +35,7 @@ export const SidebarNotes = () => {
           textColor="text-white"
           hasText={false}
           alternativePadding="p-1"
-          icon={<Plus size={18} />}
+          icon={<Plus size={18} weight="bold" />}
         ></Button>
       </div>
       {notes.length <= 0 && (

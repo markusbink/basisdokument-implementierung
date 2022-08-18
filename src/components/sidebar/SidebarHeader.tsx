@@ -5,7 +5,8 @@ import { Button } from "../Button";
 
 interface SidebarProps {
   setActiveSidebar: Dispatch<SetStateAction<string>>;
-  setSidebarOpenForContent: Dispatch<SetStateAction<boolean>>;
+  sidebarOpen: boolean;
+  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const buttons = [
@@ -25,14 +26,14 @@ const buttons = [
 
 export const SidebarHeader: React.FC<SidebarProps> = ({
   setActiveSidebar,
-  setSidebarOpenForContent,
+  sidebarOpen,
+  setSidebarOpen,
 }) => {
   const [activeButton, setActiveButton] = useState<string>(buttons[0].name);
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
   return (
     <div
-      className={cx("flex flex-row mb-1", {
+      className={cx("flex flex-row mb-1 pt-4 pb-1 px-4", {
         "justify-between": sidebarOpen,
         "justify-end": !sidebarOpen,
       })}
@@ -53,7 +54,6 @@ export const SidebarHeader: React.FC<SidebarProps> = ({
           icon={<List size={18} />}
           onClick={() => {
             setSidebarOpen(!sidebarOpen);
-            setSidebarOpenForContent(!sidebarOpen);
           }}
         />
       </div>
