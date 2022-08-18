@@ -5,6 +5,7 @@ import { Button } from "../Button";
 
 interface SidebarProps {
   setActiveSidebar: any;
+  setSidebarOpenForContent: any;
 }
 
 const buttons = [
@@ -22,7 +23,10 @@ const buttons = [
   },
 ];
 
-export const SidebarHeader: React.FC<SidebarProps> = ({ setActiveSidebar }) => {
+export const SidebarHeader: React.FC<SidebarProps> = ({
+  setActiveSidebar,
+  setSidebarOpenForContent,
+}) => {
   const [activeButton, setActiveButton] = useState<string>(buttons[0].name);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
@@ -38,7 +42,10 @@ export const SidebarHeader: React.FC<SidebarProps> = ({ setActiveSidebar }) => {
           "rotate-90": sidebarOpen,
           "rotate-0": !sidebarOpen,
         })}
-        onClick={() => setSidebarOpen(!sidebarOpen)}
+        onClick={() => {
+          setSidebarOpen(!sidebarOpen);
+          setSidebarOpenForContent(!sidebarOpen);
+        }}
       >
         <Button
           key={"sidebarActive"}
@@ -46,7 +53,7 @@ export const SidebarHeader: React.FC<SidebarProps> = ({ setActiveSidebar }) => {
           size="sm"
           textColor="font-bold text-darkGrey"
           hasText={false}
-          alternativePadding="p-2"
+          alternativePadding="py-1.5 px-1.5"
           icon={<List size={18} />}
         />
       </div>

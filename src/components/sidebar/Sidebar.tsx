@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarNotes } from "./SidebarNotes";
+import cx from "classnames";
 
 const sidebars = [
   {
@@ -22,10 +23,22 @@ export const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
   return (
-    <aside className="w-[400px] h-full overflow-y-clip shadow-lg p-4 divide-y-[1px] divide-lightGrey">
-      <SidebarHeader setActiveSidebar={setActiveSidebar} />
+    <aside
+      className={cx(
+        "h-full overflow-y-clip shadow-lg divide-y-[1px] divide-lightGrey transition-width duration-300",
+        {
+          "w-[40px] pt-4 px-1 overflow-hidden": !sidebarOpen,
+          "w-[400px] p-4": sidebarOpen,
+        }
+      )}
+    >
+      <SidebarHeader
+        setActiveSidebar={setActiveSidebar}
+        setSidebarOpenForContent={setSidebarOpen}
+      />
       {sidebars.map(
-        (sidebar) => sidebar.name === activeSidebar && sidebar.jsxElem
+        (sidebar) =>
+          sidebar.name === activeSidebar && sidebarOpen && sidebar.jsxElem
       )}
     </aside>
   );
