@@ -45,23 +45,15 @@ export const SidebarNotes = () => {
       )}
       <div className="text-mediumGrey font-bold text-sm">
         OHNE BEZUG AUF BEITRAG
-        {notes
-          .filter((note) => {
-            return !note.referenceTo;
-          })
-          .map((note) => (
-            <Note key={note.id} {...note}></Note>
-          ))}
+        {notes.map(
+          (note) => !note.referenceTo && <Note key={note.id} {...note}></Note>
+        )}
       </div>
       <div className="text-mediumGrey font-bold text-sm">
         MIT BEZUG AUF BEITRAG
-        {notes
-          .filter((note) => {
-            return note.referenceTo;
-          })
-          .map((note) => (
-            <Note key={note.id} {...note}></Note>
-          ))}
+        {notes.map(
+          (note) => note.referenceTo && <Note key={note.id} {...note}></Note>
+        )}
       </div>
     </div>
   );
