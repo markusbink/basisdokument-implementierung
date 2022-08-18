@@ -33,7 +33,7 @@ export const Button: React.FC<ButtonProps> = ({
         { "rounded-lg": !hasText }
       )}
     >
-      <span className="text-extrabold">{icon}</span>
+      <span>{icon}</span>
       {children}
     </button>
   );

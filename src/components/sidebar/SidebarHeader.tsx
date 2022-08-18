@@ -1,11 +1,11 @@
 import { Bookmarks, List, Notepad, Scales } from "phosphor-react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import cx from "classnames";
 import { Button } from "../Button";
 
 interface SidebarProps {
-  setActiveSidebar: () => void;
-  setSidebarOpenForContent: () => void;
+  setActiveSidebar: Dispatch<SetStateAction<string>>;
+  setSidebarOpenForContent: Dispatch<SetStateAction<boolean>>;
 }
 
 const buttons = [
