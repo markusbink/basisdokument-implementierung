@@ -3,9 +3,13 @@ import { useState } from "react";
 import cx from "classnames";
 import { Button } from "../Button";
 
+interface SidebarProps {
+  setActiveSidebar: any;
+}
+
 const buttons = [
   {
-    name: "Notepad",
+    name: "Notes",
     icon: <Notepad size={18} />,
   },
   {
@@ -18,7 +22,7 @@ const buttons = [
   },
 ];
 
-export const SidebarHeader = () => {
+export const SidebarHeader: React.FC<SidebarProps> = ({ setActiveSidebar }) => {
   const [activeButton, setActiveButton] = useState<string>(buttons[0].name);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
@@ -65,6 +69,7 @@ export const SidebarHeader = () => {
             alternativePadding="py-1.5 px-2"
             onClick={() => {
               setActiveButton(button.name);
+              setActiveSidebar(button.name);
             }}
           />
         ))}

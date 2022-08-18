@@ -50,7 +50,7 @@ export const SidebarNotes = () => {
             return !note.referenceTo;
           })
           .map((note) => (
-            <Note {...note}></Note>
+            <Note key={note.id} {...note}></Note>
           ))}
       </div>
       <div className="text-mediumGrey font-bold text-sm">
@@ -60,7 +60,7 @@ export const SidebarNotes = () => {
             return note.referenceTo;
           })
           .map((note) => (
-            <Note {...note}></Note>
+            <Note key={note.id} {...note}></Note>
           ))}
       </div>
     </div>
