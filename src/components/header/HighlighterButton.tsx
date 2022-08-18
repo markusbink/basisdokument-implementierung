@@ -2,27 +2,24 @@ import { Check } from "phosphor-react";
 import React from "react";
 import cx from "classnames";
 
-interface IProps {
-  highlighterData: any;
-  setHighlighterData: React.Dispatch<React.SetStateAction<any>>;
-  highlighterColor: string;
-}
 
-export const HighlighterButton: React.FC<IProps> = ({ highlighterData, highlighterColor, setHighlighterData }) => {
+export const HighlighterButton: React.FC<any> = ({ headerContext, id })=> {
+
+  const color = headerContext.colorSelection[id].id
   
   return (
     <div
-      className={cx(`marker-${highlighterColor} flex justify-center items-center text-white h-6 w-6 rounded-full border-2 border-darkGrey`, {
-        "opacity-50": !highlighterData[highlighterColor],
+      className={cx(`marker-${headerContext.colorSelection[id].id} flex justify-center items-center text-white h-6 w-6 rounded-full hover:border-2 hover:border-darkGrey`, {
+        "opacity-50": !headerContext.highlighterData[color],
       })}
       onClick={() => {
-        setHighlighterData({
-          ...highlighterData,
-          [highlighterColor]: !highlighterData[highlighterColor],
+        headerContext.setHighlighterData({
+          ...headerContext.highlighterData,
+          [color]: !headerContext.highlighterData[color],
         });
       }}
     >
-      {highlighterData[highlighterColor] ? <Check size={16} weight="bold" className="text-darkGrey" /> : null}
+      {headerContext.highlighterData[color] ? <Check size={16} weight="bold" className="text-darkGrey" /> : null}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp } from "phosphor-react";
 import IPropsHeader from "../../types";
@@ -17,7 +17,7 @@ export const VersionSelector: React.FC<IProps> = ({ headerContext }) => {
         setShowVersionMenu(!showVersionMenu);
       }}
     >
-      <DropdownMenu.Trigger className="flex flex-row justify-between bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 pt-1 pb-1 hover:cursor-pointer font-bold">
+      <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 pt-1 pb-1 hover:cursor-pointer font-bold">
         <p>
           Version {headerContext.selectedVersion + 1} <span className="text-mediumGrey font-light">{headerContext.versionHistory[headerContext.selectedVersion].author}</span>
         </p>

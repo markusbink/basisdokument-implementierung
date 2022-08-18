@@ -3,19 +3,18 @@ import { DocumentButton } from "../header/DocumentButton";
 import { ColorSelector } from "./ColorSelector";
 import { ToolSelector } from "./ToolSelector";
 
-export const MainHeader: React.FC<any> = ({headerContext}) => {
+export const MainHeader: React.FC<any> = ({ headerContext }) => {
   const onChangeSearchbar = (e: React.ChangeEvent<HTMLInputElement>) => {
     headerContext.setSearchbarValue(e.target.value);
   };
-
 
   return (
     <div className="flex p-3 pl-8 pr-8 justify-between border-b-[0.5px] border-lightGrey">
       {/* actions on the left side */}
       <div className="flex flex-row gap-4 items-center">
-        <DocumentButton />
+        <DocumentButton headerContext={headerContext} />
         <div
-          className="flex flex-row justify-center items-center gap-1 bg-offWhite rounded-full h-8 pl-2 pr-2 cursor-pointer"
+          className="flex flex-row justify-center items-center gap-1 bg-offWhite hover:bg-lightGrey rounded-full h-8 pl-2 pr-2 cursor-pointer"
           onClick={() => {
             headerContext.setShowDropdownHeader(!headerContext.showDropdownHeader);
           }}
@@ -40,7 +39,7 @@ export const MainHeader: React.FC<any> = ({headerContext}) => {
       </div>
       {/* actions on the right side */}
       <div className="flex flex-row gap-4 justify-end">
-        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-14 h-full" onClick={headerContext.openOnboarding}>
+        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-full cursor-pointer" onClick={headerContext.openOnboarding}>
           <Question size={20} weight="bold" className="text-darkGrey" />
         </div>
         <ColorSelector headerContext={headerContext} />

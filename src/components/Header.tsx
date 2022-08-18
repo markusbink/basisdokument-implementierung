@@ -2,11 +2,14 @@ import { useState, createContext } from "react";
 import { MainHeader } from "./header/MainHeader";
 import { DropdownHeader } from "./header/DropdownHeader";
 import IPropsHeader from "../types";
+import { toast } from "react-toastify";
 
 export const Context = createContext({});
 
 export const Header = () => {
   const [showDropdownHeader, setShowDropdownHeader] = useState<Boolean>(false);
+  const [username, setUsername] = useState<String>("Max Mustermann");
+  const [userParty, setUserParty] = useState<String>("Beklagtenpartei");
   const [searchbarValue, setSearchbarValue] = useState<string>("");
   const [showColumnView, setShowColumnView] = useState<Boolean>(false);
   const [caseId, setCaseId] = useState<string>("AZ. 8 0 6432/18");
@@ -29,16 +32,16 @@ export const Header = () => {
     { id: "blue", colorCode: "bg-marker-blue", label: "Markierung 5" },
     { id: "purple", colorCode: "bg-marker-purple", label: "Markierung 6" },
   ];
-  const versionHistoryExample = [
+  const versionHistoryExample: IPropsHeader["headerContext"]["versionHistory"] = [
     {
       author: "Max Mustermann",
       role: "Kläger",
       timestamp: "06/05/2022 14:09:24",
     },
     {
-      author: "Marta Braun",
-      role: "Richter",
-      timestamp: "07/05/2022 19:45:39",
+      author: "Michael Bauer",
+      role: "Beklagter",
+      timestamp: "07/05/2022 14:09:24",
     },
   ];
   const sectionsExample = [
@@ -64,8 +67,25 @@ export const Header = () => {
     console.log("open onboarding");
   };
 
+  const downloadBasisdokument = () => {
+    toast("Basisokument wurde heruntergeladen!");
+  };
+
+  // If a new base document is to be opened and the user is taken to the home page, the page can also simply be reloaded.
+  // Then the state of the components of the entire application is reset and there are no complications.
+  const reloadPageAndSave = () => {
+    console.log("reload page and save!");
+  };
+
+  const reloadPageAndDoNotSave = () => {
+    console.log("reload page and do not save!");
+    window.location.reload();
+  };
+
   var headerContext = {
     caseId,
+    username,
+    userParty,
     showDropdownHeader,
     showColumnView,
     getCurrentTool,
@@ -80,6 +100,11 @@ export const Header = () => {
     sectionList,
     resetPrivateSorting,
     openOnboarding,
+    downloadBasisdokument,
+    reloadPageAndSave,
+    reloadPageAndDoNotSave,
+    setUserParty,
+    setUsername,
     setSectionList,
     setSelectedVersion,
     setVersionHistory,

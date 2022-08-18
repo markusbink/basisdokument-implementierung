@@ -1,50 +1,42 @@
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp, FileArrowDown, FileArrowUp, UserCircle, Warning } from "phosphor-react";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
+import IPropsHeader from "../../types";
+import { ToastContainer } from "react-toastify";
 
-export const DocumentButton = () => {
+interface IProps {
+  headerContext: IPropsHeader["headerContext"];
+}
+
+export const DocumentButton: React.FC<IProps> = ({ headerContext }) => {
   const [showDownloadMenu, setShowDownloadMenu] = useState<Boolean>(false);
   const [showPopupUpload, setShowPopupUpload] = useState<boolean | undefined>(false);
-
-  const downloadBasisdokument = () => {
-    toast("Basisokument wurde heruntergeladen!");
-  };
-
-  // If a new base document is to be opened and the user is taken to the home page, the page can also simply be reloaded.
-  // Then the state of the components of the entire application is reset and there are no complications.
-  const reload_page_and_save = () => {
-    console.log("reload page and save!");
-  };
-
-  const reload_page_and_do_not_save = () => {
-    console.log("reload page and do not save!");
-  };
 
   return (
     <div>
       <DropdownMenu.Root
+        modal={false}
         onOpenChange={() => {
           setShowDownloadMenu(!showDownloadMenu);
         }}
       >
-        <DropdownMenu.Trigger className="flex flex-row bg-darkGrey justify-center items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer">
+        <DropdownMenu.Trigger className="flex flex-row bg-darkGrey hover:bg-mediumGrey justify-center items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer">
           <img src={`${process.env.PUBLIC_URL}/icons/document.svg`} alt="document icon"></img>
           {showDownloadMenu ? <CaretUp size={12} color={"white"} /> : <CaretDown size={12} color={"white"} />}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
           <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 gap-4">
             <div className="flex flex-col align-middle justify-center items-center gap-2 bg-offWhite rounded-md p-5 pl-2 pr-2 h-full">
-              <UserCircle size={32} className="text-darkGrey" weight="fill"/>
+              <UserCircle size={32} className="text-darkGrey" weight="fill" />
               <div className="text-center">
-                <p className="font-extrabold text-xl text-darkGrey">Max Mustermann</p>
-                <p className="text-md text-darkGrey">Beklagtenpartei</p>
+                <p className="font-extrabold text-xl text-darkGrey">{headerContext.username}</p>
+                <p className="text-md text-darkGrey">{headerContext.userParty}</p>
               </div>
             </div>
-            <DropdownMenu.Item className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer" onClick={downloadBasisdokument}>
-              <FileArrowDown size={18} className="text-darkGrey" weight="fill"/>
+            <DropdownMenu.Item className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer" onClick={headerContext.downloadBasisdokument}>
+              <FileArrowDown size={18} className="text-darkGrey" weight="fill" />
               <div className="text-darkGrey">Basisdokument herunterladen</div>
             </DropdownMenu.Item>
             <DropdownMenu.Item
@@ -53,7 +45,7 @@ export const DocumentButton = () => {
               }}
               className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
             >
-              <FileArrowUp size={18} className="text-darkGrey" weight="fill"/>
+              <FileArrowUp size={18} className="text-darkGrey" weight="fill" />
               <div className="text-darkGrey">Neues Basisdokument erstellen/hochladen</div>
             </DropdownMenu.Item>
           </DropdownMenu.Content>
@@ -97,10 +89,10 @@ export const DocumentButton = () => {
                 arbeiten, zu speichern.
               </p>
               <div className="flex flex-col gap-2">
-                <button className="bg-lightRed text-center text-darkRed font-bold p-2 rounded-md" onClick={() => {}}>
+                <button className="bg-lightRed text-center text-darkRed font-bold p-2 rounded-md" onClick={headerContext.reloadPageAndDoNotSave}>
                   Fortfahren und nicht speichern
                 </button>
-                <button className="bg-offWhite text-center font-bold p-2 rounded-md">Fortfahren und speichern</button>
+                <button className="bg-offWhite text-center font-bold p-2 rounded-md" onClick={headerContext.reloadPageAndSave}>Fortfahren und speichern</button>
                 <AlertDialog.Cancel
                   className="bg-offWhite text-center font-bold p-2 rounded-md"
                   onClick={() => {

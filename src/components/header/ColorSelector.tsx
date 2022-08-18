@@ -3,8 +3,6 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { EditText } from "react-edit-text";
 import "react-edit-text/dist/index.css";
 import IPropsHeader from "../../types";
-import { SyntheticEvent } from "react-draft-wysiwyg";
-
 
 interface IProps {
   headerContext: IPropsHeader["headerContext"];
@@ -14,8 +12,8 @@ export const ColorSelector: React.FC<IProps> = ({ headerContext }) => {
   const [showColorSelectorMenu, setShowColorSelectorMenu] = useState<Boolean>(false);
 
   const handleChange = (e: React.BaseSyntheticEvent, id: string) => {
-    console.log("event",e);
-    
+    console.log("event", e);
+
     headerContext.setColorSelection(headerContext.colorSelection.map((item) => (item.id === id ? { ...item, label: e.target.value } : item)));
     console.log(e.target.value);
   };
@@ -27,8 +25,8 @@ export const ColorSelector: React.FC<IProps> = ({ headerContext }) => {
         setShowColorSelectorMenu(!showColorSelectorMenu);
       }}
     >
-      <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite rounded-md w-14 h-full cursor-pointer">
-        <div className={`w-5 h-5 ${headerContext.currentColorSelection.colorCode} rounded-full border-darkGrey border-2`}></div>
+      <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-full cursor-pointer">
+        <div className={`w-5 h-5 ${headerContext.currentColorSelection.colorCode} rounded-full `}></div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content side="left" align="start" className="flex flex-col bg-white shadow-md rounded-lg p-4 gap-1">
@@ -43,7 +41,7 @@ export const ColorSelector: React.FC<IProps> = ({ headerContext }) => {
                     headerContext.setCurrentColorSelection({ id: highlighter.id, colorCode: highlighter.colorCode });
                   }}
                 >
-                  <div className={`w-5 h-5 ${highlighter.colorCode} rounded-full border-darkGrey border-2`}></div>
+                  <div className={`w-5 h-5 ${highlighter.colorCode} rounded-full `}></div>
                 </DropdownMenu.Item>
                 <EditText className="rounded-md pl-2 pr-2" value={highlighter.label} onChange={(e) => handleChange(e, highlighter.id)} />
               </div>
