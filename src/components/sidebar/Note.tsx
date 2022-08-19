@@ -1,5 +1,6 @@
 import { DotsThree, Eye, Plus } from "phosphor-react";
 import { Button } from "../Button";
+import cx from "classnames";
 
 export interface NoteProps {
   id: string;
@@ -12,12 +13,14 @@ export interface NoteProps {
 
 export const Note: React.FC<NoteProps> = (note: NoteProps) => (
   <div className="flex flex-col bg-offWhite mt-4 rounded-xl text-darkGrey text-xs">
-    <div className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 text-[10px] bg-darkGrey text-lightGrey rounded-xl self-end w-fit">
-      <Eye size={16} weight="bold" className="inline"></Eye>
-      {`${note.referenceTo}`}
-    </div>
+    {note.referenceTo && (
+      <div className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 text-[10px] bg-darkGrey text-lightGrey rounded-xl self-end w-fit">
+        <Eye size={16} weight="bold" className="inline"></Eye>
+        {`${note.referenceTo}`}
+      </div>
+    )}
 
-    <div className="mx-3">
+    <div className={cx("mx-3", { "mt-3": !note.referenceTo })}>
       <div className="mb-2 text-[13px]">{note.title}</div>
       <div className="mb-2 font-normal">{note.content}</div>
 

@@ -14,6 +14,15 @@ const notes: NoteProps[] = [
     referenceTo: "K-2-1",
   },
   {
+    id: "3",
+    title: "Test Titel mit Bezug",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
+    author: "Max Muster",
+    timestamp: new Date(),
+    referenceTo: "K-3-1",
+  },
+  {
     id: "2",
     title: "Test Titel ohne Bezug",
     content:
