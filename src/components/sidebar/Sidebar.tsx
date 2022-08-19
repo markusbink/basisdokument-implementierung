@@ -3,6 +3,7 @@ import { SidebarHeader } from "./SidebarHeader";
 import { SidebarNotes } from "./SidebarNotes";
 import cx from "classnames";
 import { SidebarHints } from "./SidebarHints";
+import { SidebarBookmarks } from "./SidebarBookmarks";
 
 const sidebars = [
   {
@@ -15,7 +16,7 @@ const sidebars = [
   },
   {
     name: "Bookmarks",
-    jsxElem: <div key="Bookmarks">Bookmarks</div>,
+    jsxElem: <SidebarBookmarks key="Bookmarks"></SidebarBookmarks>,
   },
 ];
 
