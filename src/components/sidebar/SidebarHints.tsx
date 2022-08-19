@@ -7,16 +7,33 @@ const isJudge = true;
 const hints: HintProps[] = [
   {
     id: "1",
-    title: "Hinweis Test Titel mit Bezug",
+    title: "1 Hinweis Test Titel mit Bezug",
     content:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
     author: "Max Muster",
     timestamp: new Date(),
-    referenceTo: "12345",
+    referenceTo: "K-2-4",
   },
   {
     id: "2",
-    title: "Hinweis Test Titel ohne Bezug",
+    title: "2 Hinweis Test Titel mit Bezug",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
+    author: "Max Muster",
+    timestamp: new Date(),
+    referenceTo: "K-3-1",
+  },
+  {
+    id: "3",
+    title: "3 Hinweis Test Titel ohne Bezug",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
+    author: "Max Muster",
+    timestamp: new Date(),
+  },
+  {
+    id: "4",
+    title: "4 Hinweis Test Titel ohne Bezug",
     content:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
     author: "Max Muster",
@@ -26,14 +43,14 @@ const hints: HintProps[] = [
 
 export const SidebarHints = () => {
   return (
-    <div className="flex flex-col gap-7 p-4 h-full overflow-auto">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col gap-3 h-full overflow-hidden">
+      <div className="flex justify-between items-center pt-4 px-4">
         <div className="text-base font-bold text-darkGrey text-lg">
           Hinweise (nach §139 ZPO)
         </div>
         <Button
-          key="createNote"
-          bgColor="bg-darkGrey"
+          key="createHint"
+          bgColor="bg-darkGrey hover:bg-mediumGrey"
           size="sm"
           textColor="text-white"
           hasText={false}
@@ -48,17 +65,19 @@ export const SidebarHints = () => {
             : "Hinweise nach §139 ZPO erscheinen in dieser Ansicht, sobald der Richter oder die Richterin welche verfasst hat."}
         </div>
       )}
-      <div className="text-mediumGrey font-bold text-sm">
-        OHNE BEZUG AUF BEITRAG
-        {hints.map(
-          (hint) => !hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
-        )}
-      </div>
-      <div className="text-mediumGrey font-bold text-sm">
-        MIT BEZUG AUF BEITRAG
-        {hints.map(
-          (hint) => hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
-        )}
+      <div className="flex flex-col gap-7 p-4 overflow-auto text-mediumGrey font-extrabold text-sm">
+        <div>
+          OHNE BEZUG AUF BEITRAG
+          {hints.map(
+            (hint) => !hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
+          )}
+        </div>
+        <div>
+          MIT BEZUG AUF BEITRAG
+          {hints.map(
+            (hint) => hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
+          )}
+        </div>
       </div>
     </div>
   );
