@@ -42,7 +42,7 @@ export const SidebarNotes = () => {
         <div className="text-base font-bold text-darkGrey text-lg">Notizen</div>
         <Button
           key="createNote"
-          bgColor="bg-darkGrey"
+          bgColor="bg-darkGrey hover:bg-mediumGrey"
           size="sm"
           textColor="text-white"
           hasText={false}

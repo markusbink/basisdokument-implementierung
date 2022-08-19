@@ -33,7 +33,7 @@ export const SidebarHints = () => {
         </div>
         <Button
           key="createNote"
-          bgColor="bg-darkGrey"
+          bgColor="bg-darkGrey hover:bg-mediumGrey"
           size="sm"
           textColor="text-white"
           hasText={false}
