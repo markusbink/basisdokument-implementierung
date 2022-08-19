@@ -55,7 +55,10 @@ export const Hint: React.FC<HintProps> = (hint: HintProps) => {
               </div>
             </div>
 
-            <div className="self-end relative">
+            <div
+              className="self-end relative"
+              onBlur={() => setIsMenuOpen(false)}
+            >
               <Button
                 key="createHint"
                 bgColor={
