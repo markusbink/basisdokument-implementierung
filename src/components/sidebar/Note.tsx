@@ -30,7 +30,7 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => (
           <div className="font-normal opacity-40">
             {`${String(note.timestamp.getDate()).padStart(2, "0")}.
             ${String(note.timestamp.getMonth()).padStart(2, "0")}.
-            ${String(note.timestamp.getFullYear()).padStart(2, "0")}`}
+            ${note.timestamp.getFullYear()}`}
           </div>
         </div>
         <div className="self-end">
