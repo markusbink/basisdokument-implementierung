@@ -6,12 +6,12 @@ import { Note, NoteProps } from "./Note";
 const notes: NoteProps[] = [
   {
     id: "1",
-    title: "Test Titel mit Bezug",
+    title: "Test Titel mit Bezug ganz ganz ganz lang",
     content:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
     author: "Max Muster",
     timestamp: new Date(),
-    referenceTo: "12345",
+    referenceTo: "K-2-1",
   },
   {
     id: "2",
