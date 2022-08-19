@@ -48,15 +48,17 @@ export const SidebarHints = () => {
         <div className="text-base font-bold text-darkGrey text-lg">
           Hinweise (nach §139 ZPO)
         </div>
-        <Button
-          key="createHint"
-          bgColor="bg-darkGrey hover:bg-mediumGrey"
-          size="sm"
-          textColor="text-white"
-          hasText={false}
-          alternativePadding="p-1"
-          icon={<Plus size={18} weight="bold" />}
-        ></Button>
+        {isJudge && (
+          <Button
+            key="createHint"
+            bgColor="bg-darkGrey hover:bg-mediumGrey"
+            size="sm"
+            textColor="text-white"
+            hasText={false}
+            alternativePadding="p-1"
+            icon={<Plus size={18} weight="bold" />}
+          ></Button>
+        )}
       </div>
       {hints.length <= 0 && (
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm">
