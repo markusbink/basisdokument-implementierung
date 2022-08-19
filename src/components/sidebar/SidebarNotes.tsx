@@ -32,10 +32,13 @@ const notes: NoteProps[] = [
   },
 ];
 
+// const notes: NoteProps[] = [];
+
 export const SidebarNotes = () => {
   return (
-    <div className="flex flex-col gap-7 p-4 h-full overflow-auto">
-      <div className="flex justify-between items-center">
+    // TODO: Hide overflow here to make sure "Notizen" and the Add-Button are always visible...but now the buttom gets cut off...how to fix this?
+    <div className="flex flex-col gap-3 h-full overflow-hidden">
+      <div className="flex justify-between items-center pt-3 px-4">
         <div className="text-base font-bold text-darkGrey text-lg">Notizen</div>
         <Button
           key="createNote"
@@ -47,23 +50,32 @@ export const SidebarNotes = () => {
           icon={<Plus size={18} weight="bold" />}
         ></Button>
       </div>
+
       {notes.length <= 0 && (
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm">
           Notizen, die Sie zu Beiträgen verfassen, erscheinen in dieser Ansicht.
         </div>
       )}
-      <div className="text-mediumGrey font-bold text-sm">
-        OHNE BEZUG AUF BEITRAG
-        {notes.map(
-          (note) => !note.referenceTo && <Note key={note.id} {...note}></Note>
-        )}
-      </div>
-      <div className="text-mediumGrey font-bold text-sm">
-        MIT BEZUG AUF BEITRAG
-        {notes.map(
-          (note) => note.referenceTo && <Note key={note.id} {...note}></Note>
-        )}
-      </div>
+
+      {notes.length > 0 && (
+        // Problem with overflow (see comment above)
+        <div className="flex flex-col gap-7 p-4 overflow-auto">
+          <div className="text-mediumGrey font-bold text-sm">
+            OHNE BEZUG AUF BEITRAG
+            {notes.map(
+              (note) =>
+                !note.referenceTo && <Note key={note.id} {...note}></Note>
+            )}
+          </div>
+          <div className="text-mediumGrey font-bold text-sm">
+            MIT BEZUG AUF BEITRAG
+            {notes.map(
+              (note) =>
+                note.referenceTo && <Note key={note.id} {...note}></Note>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

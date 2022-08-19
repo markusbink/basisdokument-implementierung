@@ -1,4 +1,4 @@
-import { DotsThree, Eye, Plus } from "phosphor-react";
+import { DotsThree, Eye } from "phosphor-react";
 import { Button } from "../Button";
 import cx from "classnames";
 
