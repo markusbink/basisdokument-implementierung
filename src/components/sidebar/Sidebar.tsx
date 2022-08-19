@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarNotes } from "./SidebarNotes";
 import cx from "classnames";
+import { SidebarHints } from "./SidebarHints";
 
 const sidebars = [
   {
@@ -10,7 +11,7 @@ const sidebars = [
   },
   {
     name: "Hints",
-    jsxElem: <div key="Hints">Hints</div>,
+    jsxElem: <SidebarHints key="Hints"></SidebarHints>,
   },
   {
     name: "Bookmarks",
