@@ -16,7 +16,6 @@ export const DropdownHeader: React.FC<any> = ({ headerContext }) => {
           <div
             className={cx("rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-lightGrey", {
               "bg-offWhite": !headerContext.showColumnView,
-              "": headerContext.showColumnView,
             })}
             onClick={() => {
               headerContext.setShowColumnView(false);
@@ -27,7 +26,6 @@ export const DropdownHeader: React.FC<any> = ({ headerContext }) => {
           <div
             className={cx("rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-lightGrey", {
               "bg-offWhite": headerContext.showColumnView,
-              "": !headerContext.showColumnView,
             })}
             onClick={() => {
               headerContext.setShowColumnView(true);
