@@ -10,8 +10,8 @@ interface AuthProps {
 interface IStateUserInput {
   usage: "open" | "create" | undefined;
   party: "defendant" | "plaintiff" | "judge" | undefined;
-  prename: string | undefined;
-  surname: string | undefined;
+  prename: string;
+  surname: string;
   basisdokumentFile: string;
   editFile: string;
   basisdokumentFilename: string;
@@ -23,12 +23,12 @@ interface IStateUserInput {
 export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [usage, setUsage] = useState<IStateUserInput["usage"]>();
   const [party, setParty] = useState<IStateUserInput["party"]>();
-  const [prename, setPrename] = useState<IStateUserInput["prename"]>();
-  const [surname, setSurname] = useState<IStateUserInput["surname"]>();
+  const [prename, setPrename] = useState<IStateUserInput["prename"]>("");
+  const [surname, setSurname] = useState<IStateUserInput["surname"]>("");
   const [basisdokumentFile, setBasisdokumentFile] = useState<IStateUserInput["basisdokumentFile"]>();
   const [editFile, setEditFile] = useState<IStateUserInput["editFile"]>();
   const [basisdokumentFilename, setBasisdokumentFilename] = useState<IStateUserInput["basisdokumentFile"]>("");
-  const [editFilename, setEditFilename] = useState<IStateUserInput["editFile"]>();
+  const [editFilename, setEditFilename] = useState<IStateUserInput["editFile"]>("");
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
   const [newVersionMode, setNewVersionMode] = useState<IStateUserInput["newVersionMode"]>(false);
 
@@ -61,6 +61,39 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       const result = e.target.result;
       setEditFile(e.target.result);
     };
+  };
+
+  const validateUserInput = () => {
+    // Before checking every user input we set the validation state to true.
+    var inputIsValid: boolean = true;
+
+    // check if file exists and validate
+    if (basisdokumentFilename.endsWith(".json")) {
+    } else {
+      setErrorText("Bitte laden Sie eine valide Bearbeitungs-Datei (.json) hoch!");
+      inputIsValid = false;
+    }
+    if (editFilename.endsWith(".json")) {
+    } else {
+      setErrorText("Bitte laden Sie eine valide Basisdokument-Datei (.json) hoch!");
+      inputIsValid = false;
+    }
+    if (prename === "" && surname === "") {
+      setErrorText("Bitte geben Sie sowohl Ihren Vornamen als auch einen Nachnamen an!");
+      inputIsValid = false;
+    }
+    if (party === undefined) {
+      setErrorText("Bitte spezifizieren Sie, ob Sie das Basidokument als Klagepartei, Beklagtenpartei, Richter:in bearbeiten möchten!");
+      inputIsValid = false;
+    }
+    if (usage === undefined) {
+      setErrorText("Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder schließen möchten!");
+      inputIsValid = false;
+    }
+
+    if (inputIsValid === true) {
+      setIsAuthenticated(true);
+    }
   };
 
   return (
@@ -173,19 +206,23 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       <div className="flex flex-row items-center gap-4">
         <input className="w-20 accent-darkGrey" type="checkbox" defaultChecked={newVersionMode} onChange={() => setNewVersionMode(!newVersionMode)} />
         <div>
-          <p className="font-extrabold">Ich möchte eine neue Version auf Basis der hochgeladenen Version erstellen.</p>
+          <p className="font-extrabold">
+            Ich möchte eine neue Version auf Basis der hochgeladenen Version erstellen. <span className="text-darkRed">*</span>
+          </p>
           <p className="font-light text-mediumGrey">
             Setzen Sie hier einen Haken, wenn Sie die Version des Basisdokuments, die Sie hochladen, zuvor von einer anderen Partei erhalten und noch nicht editiert haben.
           </p>
         </div>
       </div>
       {errorText !== "" ? (
-        <div className="bg-lightRed p-4 rounded-md">
-          <p className="text-darkRed font-bold">Fehler: {errorText}</p>
+        <div className="flex bg-lightRed p-4 rounded-md">
+          <p className="text-darkRed">
+            <span className="font-bold">Fehler:</span> {errorText}
+          </p>
         </div>
       ) : null}
       <div className="space-y-2">
-        <Button onClick={() => setIsAuthenticated(true)}>Basisdokument erstellen</Button>
+        <Button onClick={validateUserInput}>Basisdokument erstellen</Button>
       </div>
     </div>
   );
