@@ -16,6 +16,8 @@ interface IStateUserInput {
   editFile: string;
   basisdokumentFilename: string;
   editFilename: string;
+  errorText: string;
+  newVersionMode: boolean;
 }
 
 export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
@@ -27,6 +29,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [editFile, setEditFile] = useState<IStateUserInput["editFile"]>();
   const [basisdokumentFilename, setBasisdokumentFilename] = useState<IStateUserInput["basisdokumentFile"]>("");
   const [editFilename, setEditFilename] = useState<IStateUserInput["editFile"]>();
+  const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
+  const [newVersionMode, setNewVersionMode] = useState<IStateUserInput["newVersionMode"]>(false);
 
   const onChangePrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -60,7 +64,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex flex-col justify-center h-full">
+    <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex flex-col justify-center h-full overflow-scroll pt-32 no-scrollbar">
       <h1 className="text-3xl font-bold">Das Basisdokument</h1>
       <p className="text-md text-mediumGrey">
         Diese Anwendung erlaubt Ihnen das Editieren des Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments in Form einer .json-Datei hoch, falls Sie an einer Version weiterarbeiten
@@ -166,6 +170,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           </div>
         </div>
       </div>
+      <div className="flex flex-row items-center gap-4">
+        <input className="w-20 accent-darkGrey" type="checkbox" defaultChecked={newVersionMode} onChange={() => setNewVersionMode(!newVersionMode)} />
+        <div>
+          <p className="font-extrabold">Ich möchte eine neue Version auf Basis der hochgeladenen Version erstellen.</p>
+          <p className="font-light text-mediumGrey">
+            Setzen Sie hier einen Haken, wenn Sie die Version des Basisdokuments, die Sie hochladen, zuvor von einer anderen Partei erhalten und noch nicht editiert haben.
+          </p>
+        </div>
+      </div>
+      {errorText !== "" ? (
+        <div className="bg-lightRed p-4 rounded-md">
+          <p className="text-darkRed font-bold">Fehler: {errorText}</p>
+        </div>
+      ) : null}
       <div className="space-y-2">
         <Button onClick={() => setIsAuthenticated(true)}>Basisdokument erstellen</Button>
       </div>
