@@ -185,7 +185,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             <p className="font-semibold">Basisdokument:</p>
             <label className="flex items-center justify-center gap-2 cursor-pointer">
               <input type="file" onChange={handleBasisdokumentFileUploadChange} />
-              <div className="bg-darkGrey rounded-md pl-2 pr-2 p-1">
+              <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
                 <Upload size={24} color={"white"} />
               </div>
               <p className="text-black">{basisdokumentFilename}</p>
@@ -195,7 +195,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             <p className="font-semibold">Bearbeitungsdatei:</p>
             <label className="flex items-center justify-center gap-2 cursor-pointer">
               <input type="file" onChange={handleEditFileUploadChange} />
-              <div className="bg-darkGrey rounded-md pl-2 pr-2 p-1">
+              <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
                 <Upload size={24} color={"white"} />
               </div>
               <p className="text-black">{editFilename}</p>
