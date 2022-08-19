@@ -11,7 +11,7 @@ interface IProps {
 }
 
 export const DocumentButton: React.FC<IProps> = ({ headerContext }) => {
-  const [showDownloadMenu, setShowDownloadMenu] = useState<Boolean>(false);
+  const [showDownloadMenu, setShowDownloadMenu] = useState<boolean>(false);
   const [showPopupUpload, setShowPopupUpload] = useState<boolean | undefined>(false);
 
   return (

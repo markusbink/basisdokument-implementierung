@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export const SortingSelector: React.FC<IProps> = ({selectedSorting, setSelectedSorting}) => {
-  const [showSelectMenu, setShowDownloadMenu] = useState<Boolean>(false);
+  const [showSelectMenu, setShowDownloadMenu] = useState<boolean>(false);
   return (
     <DropdownMenu.Root
       onOpenChange={() => {

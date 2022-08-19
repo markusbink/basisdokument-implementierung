@@ -24,7 +24,7 @@ export const ToolSelector: React.FC<IProps> = ({ getCurrentTool, setCurrentTool 
     { id: "eraser", title: "Eraser" },
   ];
 
-  const [showToolSelectorMenu, setShowToolSelectorMenu] = useState<Boolean>(false);
+  const [showToolSelectorMenu, setShowToolSelectorMenu] = useState<boolean>(false);
   const CurrentToolComponent = StaticToolList[getCurrentTool.title];
 
   return (

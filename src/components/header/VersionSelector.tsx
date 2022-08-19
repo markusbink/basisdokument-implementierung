@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export const VersionSelector: React.FC<IProps> = ({ headerContext }) => {
-  const [showVersionMenu, setShowVersionMenu] = useState<Boolean>(false);
+  const [showVersionMenu, setShowVersionMenu] = useState<boolean>(false);
 
   return (
     <DropdownMenu.Root
@@ -32,8 +32,6 @@ export const VersionSelector: React.FC<IProps> = ({ headerContext }) => {
               className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
               key={index}
               onClick={() => {
-                console.log("enter");
-
                 headerContext.setSelectedVersion(index);
               }}
             >

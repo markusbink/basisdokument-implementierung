@@ -9,13 +9,10 @@ interface IProps {
 }
 
 export const ColorSelector: React.FC<IProps> = ({ headerContext }) => {
-  const [showColorSelectorMenu, setShowColorSelectorMenu] = useState<Boolean>(false);
+  const [showColorSelectorMenu, setShowColorSelectorMenu] = useState<boolean>(false);
 
   const handleChange = (e: React.BaseSyntheticEvent, id: string) => {
-    console.log("event", e);
-
     headerContext.setColorSelection(headerContext.colorSelection.map((item) => (item.id === id ? { ...item, label: e.target.value } : item)));
-    console.log(e.target.value);
   };
 
   return (

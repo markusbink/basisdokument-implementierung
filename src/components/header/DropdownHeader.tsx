@@ -54,7 +54,7 @@ export const DropdownHeader: React.FC<any> = ({ headerContext }) => {
           ))}
           <Checkbox
             label="Beiträge ausblenden"
-            value={headerContext.hideEntriesHighlighter}
+            isChecked={headerContext.hideEntriesHighlighter}
             onChange={() => {
               headerContext.setHideEntriesHighlighter(!headerContext.hideEntriesHighlighter);
             }}

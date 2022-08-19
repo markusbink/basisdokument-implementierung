@@ -7,11 +7,11 @@ import { toast } from "react-toastify";
 export const Context = createContext({});
 
 export const Header = () => {
-  const [showDropdownHeader, setShowDropdownHeader] = useState<Boolean>(false);
+  const [showDropdownHeader, setShowDropdownHeader] = useState<boolean>(false);
   const [username, setUsername] = useState<String>("Max Mustermann");
   const [userParty, setUserParty] = useState<String>("Beklagtenpartei");
   const [searchbarValue, setSearchbarValue] = useState<string>("");
-  const [showColumnView, setShowColumnView] = useState<Boolean>(false);
+  const [showColumnView, setShowColumnView] = useState<boolean>(false);
   const [caseId, setCaseId] = useState<string>("AZ. 8 0 6432/18");
   const [currentColorSelection, setCurrentColorSelection] = useState<IPropsHeader["color"]>({
     id: "red",
@@ -126,7 +126,7 @@ export const Header = () => {
     <Context.Provider value={headerContext}>
       <header className="text-darkGrey">
         {/* main part of the header */}
-        <MainHeader headerContext={headerContext} />
+        <MainHeader />
         {/* fold-out part of the header */}
         {showDropdownHeader ? <DropdownHeader headerContext={headerContext} /> : null}
       </header>

@@ -1,4 +1,5 @@
 import { CaretDown, CaretUp, MagnifyingGlass, PencilSimpleLine, Question, UserCircle } from "phosphor-react";
+import React, { createContext, useContext } from "react";
 import { DocumentButton } from "../header/DocumentButton";
 import { ColorSelector } from "./ColorSelector";
 import { ToolSelector } from "./ToolSelector";
