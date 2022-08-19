@@ -2,20 +2,20 @@ import { BookmarkSimple } from "phosphor-react";
 import { Bookmark, BookmarkProps } from "./Bookmark";
 
 //TODO: remove this, this is for testing
-// const bookmarks: BookmarkProps[] = [
-//   {
-//     id: "1",
-//     title: "Lesezeichen 1",
-//     referenceTo: "12345",
-//   },
-//   {
-//     id: "2",
-//     title: "Lesezeichen 2",
-//     referenceTo: "12345",
-//   },
-// ];
+const bookmarks: BookmarkProps[] = [
+  {
+    id: "1",
+    title: "Lesezeichen 1",
+    referenceTo: "12345",
+  },
+  {
+    id: "2",
+    title: "Lesezeichen 2",
+    referenceTo: "12345",
+  },
+];
 
-const bookmarks: BookmarkProps[] = [];
+// const bookmarks: BookmarkProps[] = [];
 
 export const SidebarBookmarks = () => {
   return (
