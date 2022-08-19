@@ -97,7 +97,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex flex-col justify-center h-full overflow-scroll pt-32 no-scrollbar">
+    <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex flex-col justify-center h-auto overflow-scroll no-scrollbar">
       <h1 className="text-3xl font-bold">Das Basisdokument</h1>
       <p className="text-md text-mediumGrey">
         Diese Anwendung erlaubt Ihnen das Editieren des Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments in Form einer .json-Datei hoch, falls Sie an einer Version weiterarbeiten
