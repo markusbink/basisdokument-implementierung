@@ -55,7 +55,10 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => {
               </div>
             </div>
 
-            <div className="self-end relative">
+            <div
+              className="self-end relative"
+              onBlur={() => setIsMenuOpen(false)}
+            >
               <Button
                 key="createNote"
                 bgColor={
