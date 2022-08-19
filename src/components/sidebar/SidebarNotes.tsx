@@ -38,7 +38,7 @@ export const SidebarNotes = () => {
   return (
     // TODO: Hide overflow here to make sure "Notizen" and the Add-Button are always visible...but now the buttom gets cut off...how to fix this?
     <div className="flex flex-col gap-3 h-full overflow-hidden">
-      <div className="flex justify-between items-center pt-3 px-4">
+      <div className="flex justify-between items-center pt-4 px-4">
         <div className="text-base font-bold text-darkGrey text-lg">Notizen</div>
         <Button
           key="createNote"
@@ -59,15 +59,15 @@ export const SidebarNotes = () => {
 
       {notes.length > 0 && (
         // Problem with overflow (see comment above)
-        <div className="flex flex-col gap-7 p-4 overflow-auto">
-          <div className="text-mediumGrey font-bold text-sm">
+        <div className="flex flex-col gap-7 p-4 overflow-auto text-mediumGrey font-extrabold text-sm">
+          <div>
             OHNE BEZUG AUF BEITRAG
             {notes.map(
               (note) =>
                 !note.referenceTo && <Note key={note.id} {...note}></Note>
             )}
           </div>
-          <div className="text-mediumGrey font-bold text-sm">
+          <div>
             MIT BEZUG AUF BEITRAG
             {notes.map(
               (note) =>

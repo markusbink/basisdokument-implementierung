@@ -48,13 +48,13 @@ export const SidebarHints = () => {
             : "Hinweise nach §139 ZPO erscheinen in dieser Ansicht, sobald der Richter oder die Richterin welche verfasst hat."}
         </div>
       )}
-      <div className="text-mediumGrey font-bold text-sm">
+      <div className="text-mediumGrey font-extrabold text-sm">
         OHNE BEZUG AUF BEITRAG
         {hints.map(
           (hint) => !hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
         )}
       </div>
-      <div className="text-mediumGrey font-bold text-sm">
+      <div className="text-mediumGrey font-extrabold text-sm">
         MIT BEZUG AUF BEITRAG
         {hints.map(
           (hint) => hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>

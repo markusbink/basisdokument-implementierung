@@ -12,22 +12,22 @@ export interface NoteProps {
 }
 
 export const Note: React.FC<NoteProps> = (note: NoteProps) => (
-  <div className="flex flex-col bg-offWhite mt-4 rounded-xl text-darkGrey text-xs">
+  <div className="flex flex-col bg-offWhite mt-4 rounded-xl text-darkGrey text-xs font-medium">
     {note.referenceTo && (
-      <div className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 text-[10px] bg-darkGrey text-lightGrey rounded-xl self-end w-fit">
+      <div className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 bg-darkGrey text-lightGrey text-[10px] font-semibold rounded-xl self-end w-fit">
         <Eye size={16} weight="bold" className="inline"></Eye>
         {`${note.referenceTo}`}
       </div>
     )}
 
     <div className={cx("mx-3", { "mt-3": !note.referenceTo })}>
-      <div className="mb-2 text-[13px]">{note.title}</div>
-      <div className="mb-2 font-normal">{note.content}</div>
+      <div className="mb-2 text-sm font-extrabold">{note.title}</div>
+      <div className="mb-2">{note.content}</div>
 
       <div className="flex justify-between items-center mb-3">
         <div className="">
-          <div>{note.author}</div>
-          <div className="font-normal opacity-40">
+          <div className="font-bold">{note.author}</div>
+          <div className="opacity-40">
             {`${String(note.timestamp.getDate()).padStart(2, "0")}.
             ${String(note.timestamp.getMonth()).padStart(2, "0")}.
             ${note.timestamp.getFullYear()}`}
