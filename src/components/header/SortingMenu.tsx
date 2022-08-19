@@ -10,7 +10,7 @@ export const SortingMenu: React.FC<any> = ({ headerContext }) => {
   const handleDrop = (droppedItem: any) => {
     // Ignore drop outside droppable container
     if (!droppedItem.destination) return;
-    var updatedList = [...headerContext.sectionList];
+    const updatedList = [...headerContext.sectionList];
     // Remove dragged item
     const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
     // Add dropped item

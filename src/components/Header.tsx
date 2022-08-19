@@ -82,7 +82,7 @@ export const Header = () => {
     window.location.reload();
   };
 
-  var headerContext = {
+  const headerContext = {
     caseId,
     username,
     userParty,
