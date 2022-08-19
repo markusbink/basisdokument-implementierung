@@ -19,8 +19,8 @@ const bookmarks: BookmarkProps[] = [
 
 export const SidebarBookmarks = () => {
   return (
-    <div className="flex flex-col gap-7 p-4 h-full overflow-auto">
-      <div className="text-base font-bold text-darkGrey text-lg">
+    <div className="flex flex-col gap-3 h-full overflow-hidden">
+      <div className="text-base font-bold text-darkGrey text-lg pt-4 px-4">
         Lesezeichen
       </div>
       {bookmarks.length <= 0 && (
@@ -31,7 +31,7 @@ export const SidebarBookmarks = () => {
           sind nur für Sie sichtbar.
         </span>
       )}
-      <div className="text-mediumGrey font-bold text-sm">
+      <div className="text-mediumGrey font-bold text-sm p-4">
         {bookmarks.map((hint) => (
           <Bookmark key={hint.id} {...hint}></Bookmark>
         ))}
