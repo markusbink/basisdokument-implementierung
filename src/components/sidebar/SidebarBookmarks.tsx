@@ -32,8 +32,8 @@ export const SidebarBookmarks = () => {
         </span>
       )}
       <div className="text-mediumGrey font-bold text-sm p-4">
-        {bookmarks.map((hint) => (
-          <Bookmark key={hint.id} {...hint}></Bookmark>
+        {bookmarks.map((bookmark) => (
+          <Bookmark key={bookmark.id} {...bookmark}></Bookmark>
         ))}
       </div>
     </div>
