@@ -40,7 +40,11 @@ export const ColorSelector: React.FC<IProps> = ({ headerContext }) => {
                 >
                   <div className={`w-5 h-5 ${highlighter.colorCode} rounded-full `}></div>
                 </DropdownMenu.Item>
-                <EditText className="rounded-md pl-2 pr-2" value={highlighter.label} onChange={(e) => handleChange(e, highlighter.id)} />
+                <EditText
+                  className="rounded-md pl-2 pr-2"
+                  value={highlighter.label}
+                  onChange={(e) => handleChange(e, highlighter.id)}
+                />
               </div>
             ))}
         </DropdownMenu.Content>
