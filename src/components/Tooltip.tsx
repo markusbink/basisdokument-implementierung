@@ -1,5 +1,4 @@
 import * as RadixTooltip from "@radix-ui/react-tooltip";
-import { motion } from "framer-motion";
 
 interface TooltipProps {
   children?: React.ReactNode;
