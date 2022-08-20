@@ -1,4 +1,5 @@
-import { Plus } from "phosphor-react";
+import { CaretDown, CaretRight, Plus } from "phosphor-react";
+import { useState } from "react";
 import { Button } from "../Button";
 import { HintProps, Hint } from "./Hint";
 
@@ -42,6 +43,11 @@ const hints: HintProps[] = [
 ];
 
 export const SidebarHints = () => {
+  const [hintsWithReferenceOpen, setHintsWithReferenceOpen] =
+    useState<boolean>(true);
+  const [hintsWithoutReferenceOpen, setHintsWithoutReferenceOpen] =
+    useState<boolean>(true);
+
   return (
     <div className="flex flex-col gap-3 h-full overflow-hidden">
       <div className="flex justify-between items-center pt-4 px-4">
@@ -69,16 +75,54 @@ export const SidebarHints = () => {
       )}
       <div className="flex flex-col gap-7 p-4 overflow-auto text-mediumGrey font-extrabold text-sm">
         <div>
-          OHNE BEZUG AUF BEITRAG
-          {hints.map(
-            (hint) => !hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
+          {hintsWithoutReferenceOpen ? (
+            <CaretDown
+              size={14}
+              className="inline mr-1"
+              weight="bold"
+              onClick={() =>
+                setHintsWithoutReferenceOpen(!hintsWithoutReferenceOpen)
+              }
+            />
+          ) : (
+            <CaretRight
+              size={14}
+              className="inline mr-1"
+              weight="bold"
+              onClick={() =>
+                setHintsWithoutReferenceOpen(!hintsWithoutReferenceOpen)
+              }
+            />
           )}
+          OHNE BEZUG AUF BEITRAG
+          {hintsWithoutReferenceOpen &&
+            hints.map(
+              (hint) =>
+                !hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
+            )}
         </div>
         <div>
-          MIT BEZUG AUF BEITRAG
-          {hints.map(
-            (hint) => hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
+          {hintsWithReferenceOpen ? (
+            <CaretDown
+              size={14}
+              className="inline mr-1"
+              weight="bold"
+              onClick={() => setHintsWithReferenceOpen(!hintsWithReferenceOpen)}
+            />
+          ) : (
+            <CaretRight
+              size={14}
+              className="inline mr-1"
+              weight="bold"
+              onClick={() => setHintsWithReferenceOpen(!hintsWithReferenceOpen)}
+            />
           )}
+          MIT BEZUG AUF BEITRAG
+          {hintsWithReferenceOpen &&
+            hints.map(
+              (hint) =>
+                hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
+            )}
         </div>
       </div>
     </div>
