@@ -83,13 +83,11 @@ export const Entry: React.FC<EntryProps> = ({
   const bookmarkEntry = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
-    console.log(`bookmark entry ${entry.id}`);
   };
 
   const addNote = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
-    console.log(`add note to entry ${entry.id}`);
   };
 
   const toggleMenu = (e: React.MouseEvent) => {
@@ -98,23 +96,17 @@ export const Entry: React.FC<EntryProps> = ({
   };
 
   const editEntry = (e: React.MouseEvent) => {
-    console.log(`edit entry ${entry.id}`);
-    setIsEditing(true);
+    setIsEditing(!isEditing);
     setIsBodyOpen(true);
   };
 
-  const deleteEntry = (e: React.MouseEvent) => {
-    console.log(`delete entry ${entry.id}`);
-  };
+  const deleteEntry = (e: React.MouseEvent) => {};
 
   const updateEntry = () => {
-    console.log(`update entry ${entry.id}`);
     setIsEditing(false);
   };
 
-  const addHint = () => {
-    console.log(`add hint to entry ${entry.id}`);
-  };
+  const addHint = () => {};
 
   return (
     <div
