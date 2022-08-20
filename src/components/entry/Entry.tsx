@@ -71,6 +71,11 @@ export const Entry: React.FC<EntryProps> = ({
   }, [isMenuOpen]);
 
   const toggleBody = (e: React.MouseEvent) => {
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+      return;
+    }
+    setIsEditing(false);
     setIsBodyOpen(!isBodyOpen);
   };
 
@@ -80,12 +85,12 @@ export const Entry: React.FC<EntryProps> = ({
 
   const bookmarkEntry = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log(`bookmark entry ${entry.id}`);
+    setIsMenuOpen(false);
   };
 
   const addNote = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log(`add note to entry ${entry.id}`);
+    setIsMenuOpen(false);
   };
 
   const toggleMenu = (e: React.MouseEvent) => {
@@ -94,23 +99,17 @@ export const Entry: React.FC<EntryProps> = ({
   };
 
   const editEntry = (e: React.MouseEvent) => {
-    console.log(`edit entry ${entry.id}`);
-    setIsEditing(true);
+    setIsEditing(!isEditing);
     setIsBodyOpen(true);
   };
 
-  const deleteEntry = (e: React.MouseEvent) => {
-    console.log(`delete entry ${entry.id}`);
-  };
+  const deleteEntry = (e: React.MouseEvent) => {};
 
   const updateEntry = () => {
-    console.log(`update entry ${entry.id}`);
     setIsEditing(false);
   };
 
-  const addHint = () => {
-    console.log(`add hint to entry ${entry.id}`);
-  };
+  const addHint = () => {};
 
   return (
     <>
@@ -149,20 +148,22 @@ export const Entry: React.FC<EntryProps> = ({
                 isBodyOpen={isBodyOpen}
                 toggleBody={toggleBody}
               >
-                <div className="flex gap-2 overflow-x-scroll">
-                  <span
-                    className={cx(
-                      "rounded-full px-3 py-1 text-xs font-semibold",
-                      {
-                        "bg-darkPurple text-lightPurple": isPlaintiff,
-                        "bg-darkPetrol text-lightPetrol": !isPlaintiff,
-                      }
-                    )}
-                  >
-                    K-1-1
-                  </span>
-                  <span className="font-bold">{entry.author}</span>
-                  <span>25.08.2022</span>
+                <div className="overflow-auto max-w-[350px] whitespace-nowrap">
+                  <div className="flex gap-2">
+                    <span
+                      className={cx(
+                        "rounded-full px-3 py-1 text-xs font-semibold",
+                        {
+                          "bg-darkPurple text-lightPurple": isPlaintiff,
+                          "bg-darkPetrol text-lightPetrol": !isPlaintiff,
+                        }
+                      )}
+                    >
+                      K-1-1
+                    </span>
+                    <span className="font-bold">{entry.author}</span>
+                    <span>25.08.2022</span>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Tooltip text="Zu Lesezeichen hinzufügen">

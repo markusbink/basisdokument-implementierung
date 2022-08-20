@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useEntries } from "../../contexts";
 import { Button } from "../Button";
@@ -37,6 +37,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   onSave,
   defaultContent,
 }) => {
+  const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
     const blocksFromHTML = convertFromHTML(defaultContent || "");
     const contentState = ContentState.createFromBlockArray(
@@ -48,12 +49,20 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   });
 
   const { displayAsColumn } = useEntries();
+  const contentState = editorState.getCurrentContent();
+
+  useEffect(() => {
+    setHidePlaceholder(
+      () => contentState.getBlockMap().first().getType() !== "unstyled"
+    );
+  }, [contentState]);
 
   return (
     <div
       className={cx("border border-t-0 rounded-b-lg", {
         "border-lightPurple": isPlaintiff,
         "border-lightPetrol": !isPlaintiff,
+        "RichEditor-hidePlaceholder": hidePlaceholder,
       })}
     >
       <Editor
@@ -63,13 +72,13 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         editorClassName="p-6 "
         placeholder="Text eingeben..."
         toolbarClassName={cx(
-          "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey"
+          "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"
         )}
         toolbar={toolbarOptions}
         toolbarCustomButtons={
           displayAsColumn
             ? [
-                <span className="absolute right-2 top-1/2 -translate-y-1/2">
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 leading-[0]">
                   <Tooltip
                     position="top"
                     text={isExpanded ? "Minimieren" : "Maximieren"}
