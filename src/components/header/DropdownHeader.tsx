@@ -6,6 +6,10 @@ import { SortingSelector } from "./SortingSelector";
 import { SortingMenu } from "./SortingMenu";
 import { VersionSelector } from "./VersionSelector";
 
+export enum Sorting {
+  Privat,
+  Original
+}
 
 export const DropdownHeader: React.FC<any> = ({ headerContext }) => {
   return (
@@ -40,7 +44,7 @@ export const DropdownHeader: React.FC<any> = ({ headerContext }) => {
         <p className="font-extrabold tracking-widest text-xs">SORTIERUNGEN</p>
         <div className="flex flex-row items-center mt-2 h-8 gap-1">
           <SortingSelector selectedSorting={headerContext.selectedSorting} setSelectedSorting={headerContext.setSelectedSorting} />
-          {headerContext.selectedSorting === "Privat" ? <SortingMenu headerContext={headerContext} /> : null}
+          {headerContext.selectedSorting === Sorting.Privat ? <SortingMenu headerContext={headerContext} /> : null}
         </div>
       </div>
       <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>

@@ -6,6 +6,11 @@ export enum UserRole {
   Judge = "Richter",
 }
 
+export enum Sorting {
+  Privat,
+  Original
+}
+
 export interface IEntry {
   id: string;
   version: number;
@@ -45,7 +50,7 @@ export default interface IPropsHeader {
     setSectionList: React.Dispatch<React.SetStateAction<{ id: string; title_plaintiff: string }[]>>;
     setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
     setVersionHistory: React.Dispatch<React.SetStateAction<{ author: string; role: string; timestamp: string }[]>>;
-    selectedSorting: string;
+    selectedSorting: Sorting;
     setColorSelection: React.Dispatch<React.SetStateAction<{ id: string; colorCode: string; label: string }[]>>;
     setShowColumnView: React.Dispatch<React.SetStateAction<Boolean>>;
     setCaseId: React.Dispatch<React.SetStateAction<string>>;
@@ -53,7 +58,7 @@ export default interface IPropsHeader {
     setShowDropdownHeader: React.Dispatch<React.SetStateAction<Boolean>>;
     setHighlighterData: React.Dispatch<React.SetStateAction<{ red: boolean; orange: boolean; yellow: boolean; green: boolean; blue: boolean; purple: boolean }>>;
     setHideEntriesHighlighter: React.Dispatch<React.SetStateAction<boolean>>;
-    setSelectedSorting: React.Dispatch<React.SetStateAction<string>>;
+    setSelectedSorting: React.Dispatch<React.SetStateAction<Sorting>>;
     setHideElementsWithoutSpecificVersion: React.Dispatch<React.SetStateAction<boolean>>;
     setCurrentColorSelection: React.Dispatch<React.SetStateAction<{ id: string; colorCode: string }>>;
     setCurrentTool: React.Dispatch<React.SetStateAction<{ id: string; title: string }>>;

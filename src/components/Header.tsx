@@ -126,7 +126,7 @@ export const Header = () => {
     <Context.Provider value={headerContext}>
       <header className="text-darkGrey">
         {/* main part of the header */}
-        <MainHeader />
+        <MainHeader headerContext={headerContext}/>
         {/* fold-out part of the header */}
         {showDropdownHeader ? <DropdownHeader headerContext={headerContext} /> : null}
       </header>
