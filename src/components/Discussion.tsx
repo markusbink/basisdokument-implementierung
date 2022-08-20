@@ -1,4 +1,5 @@
 import { Button } from "./Button";
+import { DotsThree, CaretUp, CaretDown } from "phosphor-react"
 
 export const Discussion = () => {
   return (
@@ -6,8 +7,32 @@ export const Discussion = () => {
       <div className="max-w-[1200px] m-auto">
         {Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map((i) => (
           <section key={i}>
-            <div className="text-xl font-bold">
-              <span>{i}.</span> Gliederungspunkt
+            <div className="text-xl font-bold grid grid-cols-10 w-1/2 place-items-center">
+              <div className="col-start-1 col-end-2 scale-75">
+                  <Button
+                      bgColor="bg-lightGrey"
+                      textColor="darkGrey"
+                      size="sm"
+                      icon={<CaretUp size={18} />}
+                  />
+                  <Button
+                      bgColor="bg-lightGrey"
+                      textColor="darkGrey"
+                      size="sm"
+                      icon={<CaretDown size={18} />}
+                  />
+              </div>
+              <div className="bg-darkGrey box-border w-10 h-10 p-4 rounded-lg rotate-45 col-start-2 col-end-3">
+              <span className="text-white" >{i}</span>
+              </div> 
+              <p className="">Gliederungspunkt</p>
+              <div className="">
+                <Button 
+                  icon={<DotsThree size={18} />}
+                  bgColor="offwhite"
+                  textColor="lightGrey"
+                />
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-lightPurple text-black p-4 border border-darkPurple rounded-lg">
