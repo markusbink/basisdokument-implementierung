@@ -2,6 +2,7 @@ import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ClockClockwise, DotsSixVertical, ListNumbers } from "phosphor-react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import IPropsHeader from "../../types";
 
 export const SortingMenu: React.FC<any> = ({ headerContext }) => {
   const [showSortingMenu, setShowSortingdMenu] = useState<Boolean>(false);
@@ -44,7 +45,7 @@ export const SortingMenu: React.FC<any> = ({ headerContext }) => {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {headerContext.sectionList.map((item: any, index: any) => (
+                  {headerContext.sectionList.map((item: IPropsHeader["sectionItem"], index: number) => (
                     <Draggable key={item.id} draggableId={item.id} index={index}>
                       {(provided) => (
                         <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>

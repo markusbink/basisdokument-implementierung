@@ -8,7 +8,7 @@ export enum UserRole {
 
 export enum Sorting {
   Privat,
-  Original
+  Original,
 }
 
 export interface IEntry {
@@ -17,13 +17,14 @@ export interface IEntry {
   text: string;
   author: string;
   role: "Kläger" | "Beklagter";
-  section_id: string;
+  sectionI: string;
   associated_entry?: string;
 }
 
 export default interface IPropsHeader {
   color: { id: string; colorCode: string; label: string };
   tool: { id: string; title: string };
+  sectionItem: { id: string; title_plaintiff: string };
   headerContext: {
     caseId: string;
     username: string;
@@ -42,9 +43,9 @@ export default interface IPropsHeader {
     sectionList: { id: string; title_plaintiff: string }[];
     resetPrivateSorting: void;
     openOnboarding: void;
-    downloadBasisdokument: MouseEventHandler<HTMLDivElement> | undefined,
-    reloadPageAndSave: MouseEventHandler<HTMLButtonElement> | undefined,
-    reloadPageAndDoNotSave: MouseEventHandler<HTMLButtonElement> | undefined,
+    downloadBasisdokument: MouseEventHandler<HTMLDivElement> | undefined;
+    reloadPageAndSave: MouseEventHandler<HTMLButtonElement> | undefined;
+    reloadPageAndDoNotSave: MouseEventHandler<HTMLButtonElement> | undefined;
     setUserParty: React.Dispatch<React.SetStateAction<string>>;
     setUsername: React.Dispatch<React.SetStateAction<string>>;
     setSectionList: React.Dispatch<React.SetStateAction<{ id: string; title_plaintiff: string }[]>>;
