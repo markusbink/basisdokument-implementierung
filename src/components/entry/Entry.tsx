@@ -147,20 +147,22 @@ export const Entry: React.FC<EntryProps> = ({
               toggleBody={toggleBody}
             >
               {/* Meta-Data */}
-              <div className="flex gap-2 overflow-x-scroll w-[350px]">
-                <span
-                  className={cx(
-                    "rounded-full px-3 py-1 text-xs font-semibold",
-                    {
-                      "bg-darkPurple text-lightPurple": isPlaintiff,
-                      "bg-darkPetrol text-lightPetrol": !isPlaintiff,
-                    }
-                  )}
-                >
-                  K-1-1
-                </span>
-                <span className="font-bold">{entry.author}</span>
-                <span>25.05.2022</span>
+              <div className="overflow-auto max-w-[350px] whitespace-nowrap">
+                <div className="flex gap-2">
+                  <span
+                    className={cx(
+                      "rounded-full px-3 py-1 text-xs font-semibold",
+                      {
+                        "bg-darkPurple text-lightPurple": isPlaintiff,
+                        "bg-darkPetrol text-lightPetrol": !isPlaintiff,
+                      }
+                    )}
+                  >
+                    K-1-1
+                  </span>
+                  <span className="font-bold">{entry.author}</span>
+                  <span>25.05.2022</span>
+                </div>
               </div>
               {/* Actions */}
               <div className="flex gap-2">
