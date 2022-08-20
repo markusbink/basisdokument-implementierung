@@ -41,3 +41,6 @@ body {
 .public-DraftStyleDefault-block {
   @apply my-0;
 }
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  @apply hidden;
+}

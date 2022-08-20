@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
@@ -36,6 +36,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   onSave,
   defaultContent,
 }) => {
+  const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
     const blocksFromHTML = convertFromHTML(defaultContent || "");
     const contentState = ContentState.createFromBlockArray(
@@ -45,18 +46,27 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
 
     return EditorState.createWithContent(contentState);
   });
+  const contentState = editorState.getCurrentContent();
+
+  useEffect(() => {
+    setHidePlaceholder(
+      () => contentState.getBlockMap().first().getType() !== "unstyled"
+    );
+  }, [contentState]);
+
   return (
     <div
       className={cx("border border-t-0 rounded-b-lg", {
         "border-lightPurple": isPlaintiff,
         "border-lightPetrol": !isPlaintiff,
+        "RichEditor-hidePlaceholder": hidePlaceholder,
       })}
     >
       <Editor
         defaultEditorState={editorState}
         onEditorStateChange={setEditorState}
         wrapperClassName={cx("min-h-[140px] w-full focus:outline-none")}
-        editorClassName="p-6 "
+        editorClassName={cx("p-6")}
         placeholder="Text eingeben..."
         toolbarClassName={cx(
           "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey"
