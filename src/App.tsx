@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Note from "./components/note/Note";
+import Note from "./components/create-note-popup/NotePopup";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 
