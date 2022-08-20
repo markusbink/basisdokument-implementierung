@@ -9,7 +9,7 @@ const registerKeyListener = (e: KeyboardEvent) => {
 };
 
 export const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<Boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<Boolean>(true);
 
   useEffect(() => {
     window.addEventListener("keydown", registerKeyListener);

@@ -28,3 +28,19 @@ body {
     @apply opacity-50 cursor-not-allowed;
   }
 }
+
+/* React DraftJS WYSIWYG Editor Customizations */
+.rdw-option-wrapper {
+  @apply w-7 h-7 rounded bg-offWhite hover:shadow-none hover:border-lightGrey;
+}
+
+.rdw-option-active {
+  @apply shadow-none border-mediumGrey box-border hover:border-mediumGrey;
+}
+
+.public-DraftStyleDefault-block {
+  @apply my-0;
+}
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  @apply hidden;
+}
