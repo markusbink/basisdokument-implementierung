@@ -17,7 +17,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       <RadixTooltip.Root>
         <RadixTooltip.Trigger>{children}</RadixTooltip.Trigger>
         <RadixTooltip.Content
-          className="bg-darkGrey text-offWhite text-[12px] rounded px-2 py-1"
+          className="bg-darkGrey text-offWhite text-[12px] rounded px-2 py-1 leading-none"
           side={position}
           sideOffset={5}
         >
