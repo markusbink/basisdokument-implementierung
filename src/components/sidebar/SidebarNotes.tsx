@@ -1,4 +1,5 @@
-import { Plus } from "phosphor-react";
+import { CaretDown, CaretRight, Plus } from "phosphor-react";
+import { useState } from "react";
 import { Button } from "../Button";
 import { Note, NoteProps } from "./Note";
 
@@ -35,6 +36,11 @@ const notes: NoteProps[] = [
 // const notes: NoteProps[] = [];
 
 export const SidebarNotes = () => {
+  const [notesWithoutReferenceOpen, setNotesWithoutReferenceOpen] =
+    useState<boolean>(true);
+  const [notesWithReferenceOpen, setNotesWithReferenceOpen] =
+    useState<boolean>(true);
+
   return (
     // TODO: Hide overflow here to make sure "Notizen" and the Add-Button are always visible...but now the buttom gets cut off...how to fix this?
     <div className="flex flex-col gap-3 h-full overflow-hidden">
@@ -61,18 +67,58 @@ export const SidebarNotes = () => {
         // Problem with overflow (see comment above)
         <div className="flex flex-col gap-7 p-4 overflow-auto text-mediumGrey font-extrabold text-sm">
           <div>
-            OHNE BEZUG AUF BEITRAG
-            {notes.map(
-              (note) =>
-                !note.referenceTo && <Note key={note.id} {...note}></Note>
+            {notesWithoutReferenceOpen ? (
+              <CaretDown
+                size={14}
+                className="inline mr-1"
+                weight="bold"
+                onClick={() =>
+                  setNotesWithoutReferenceOpen(!notesWithoutReferenceOpen)
+                }
+              />
+            ) : (
+              <CaretRight
+                size={14}
+                className="inline mr-1"
+                weight="bold"
+                onClick={() =>
+                  setNotesWithoutReferenceOpen(!notesWithoutReferenceOpen)
+                }
+              />
             )}
+            OHNE BEZUG AUF BEITRAG
+            {notesWithoutReferenceOpen &&
+              notes.map(
+                (note) =>
+                  !note.referenceTo && <Note key={note.id} {...note}></Note>
+              )}
           </div>
           <div>
-            MIT BEZUG AUF BEITRAG
-            {notes.map(
-              (note) =>
-                note.referenceTo && <Note key={note.id} {...note}></Note>
+            {notesWithReferenceOpen ? (
+              <CaretDown
+                size={14}
+                className="inline mr-1"
+                weight="bold"
+                onClick={() =>
+                  setNotesWithReferenceOpen(!notesWithReferenceOpen)
+                }
+              />
+            ) : (
+              <CaretRight
+                size={14}
+                className="inline mr-1"
+                weight="bold"
+                onClick={() =>
+                  setNotesWithReferenceOpen(!notesWithReferenceOpen)
+                }
+              />
             )}
+            MIT BEZUG AUF BEITRAG
+            {notesWithReferenceOpen &&
+              notes.map(
+                (note) =>
+                  note.referenceTo && <Note key={note.id} {...note}></Note>
+              )}
           </div>
         </div>
       )}
