@@ -69,6 +69,10 @@ export const Entry: React.FC<EntryProps> = ({
   }, [isMenuOpen]);
 
   const toggleBody = (e: React.MouseEvent) => {
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+      return;
+    }
     setIsBodyOpen(!isBodyOpen);
   };
 
@@ -78,11 +82,13 @@ export const Entry: React.FC<EntryProps> = ({
 
   const bookmarkEntry = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setIsMenuOpen(false);
     console.log(`bookmark entry ${entry.id}`);
   };
 
   const addNote = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setIsMenuOpen(false);
     console.log(`add note to entry ${entry.id}`);
   };
 
