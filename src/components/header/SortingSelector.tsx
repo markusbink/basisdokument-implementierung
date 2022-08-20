@@ -16,7 +16,7 @@ export const SortingSelector: React.FC<IProps> = ({ selectedSorting, setSelected
         setShowDownloadMenu(!showSelectMenu);
       }}
     >
-      <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 pt-1 pb-1 hover:cursor-pointer w-[100px] font-bold">
+      <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 px-2 py-1 pb-1 hover:cursor-pointer w-[100px] font-bold">
         {selectedSorting === Sorting.Original ? <p>Original</p> : <p>Privat</p>}
         {showSelectMenu ? <CaretUp size={12} className="text-darkGrey" /> : <CaretDown size={12} className="text-darkGrey" />}
       </DropdownMenu.Trigger>

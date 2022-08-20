@@ -40,8 +40,7 @@ export const ToolSelector: React.FC<IProps> = ({ getCurrentTool, setCurrentTool 
       <DropdownMenu.Portal>
         <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg w-14 p-2 gap-2">
           {/* Iterate through list with this element */}
-          {tools &&
-            tools.length > 0 &&
+          {tools?.length > 0 &&
             tools.map((tool) => {
               const ToolComponent = StaticToolList[tool.title];
               return (
