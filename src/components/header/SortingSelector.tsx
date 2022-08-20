@@ -1,7 +1,11 @@
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp } from "phosphor-react";
-import { Sorting } from "../../types";
+
+enum Sorting {
+  Privat,
+  Original,
+}
 
 interface IProps {
   selectedSorting: Sorting;

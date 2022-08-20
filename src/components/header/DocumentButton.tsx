@@ -3,14 +3,12 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp, FileArrowDown, FileArrowUp, UserCircle, Warning } from "phosphor-react";
 import "react-toastify/dist/ReactToastify.css";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import IPropsHeader from "../../types";
 import { ToastContainer } from "react-toastify";
+import { useHeaderContext } from "../../contexts/HeaderContext";
 
-interface IProps {
-  headerContext: IPropsHeader["headerContext"];
-}
 
-export const DocumentButton: React.FC<IProps> = ({ headerContext }) => {
+export const DocumentButton = () => {
+  const { username, userParty, downloadBasisdokument, reloadPageAndDoNotSave, reloadPageAndSave } = useHeaderContext();
   const [showDownloadMenu, setShowDownloadMenu] = useState<boolean>(false);
   const [showPopupUpload, setShowPopupUpload] = useState<boolean | undefined>(false);
 
@@ -31,11 +29,11 @@ export const DocumentButton: React.FC<IProps> = ({ headerContext }) => {
             <div className="flex flex-col align-middle justify-center items-center gap-2 bg-offWhite rounded-md p-5 pl-2 pr-2 h-full">
               <UserCircle size={32} className="text-darkGrey" weight="fill" />
               <div className="text-center">
-                <p className="font-extrabold text-xl text-darkGrey">{headerContext.username}</p>
-                <p className="text-md text-darkGrey">{headerContext.userParty}</p>
+                <p className="font-extrabold text-xl text-darkGrey">{username}</p>
+                <p className="text-md text-darkGrey">{userParty}</p>
               </div>
             </div>
-            <DropdownMenu.Item className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer" onClick={headerContext.downloadBasisdokument}>
+            <DropdownMenu.Item className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer" onClick={downloadBasisdokument}>
               <FileArrowDown size={18} className="text-darkGrey" weight="fill" />
               <div className="text-darkGrey">Basisdokument herunterladen</div>
             </DropdownMenu.Item>
@@ -89,10 +87,10 @@ export const DocumentButton: React.FC<IProps> = ({ headerContext }) => {
                 arbeiten, zu speichern.
               </p>
               <div className="flex flex-col gap-2">
-                <button className="bg-lightRed text-center text-darkRed font-bold p-2 rounded-md" onClick={headerContext.reloadPageAndDoNotSave}>
+                <button className="bg-lightRed text-center text-darkRed font-bold p-2 rounded-md" onClick={reloadPageAndDoNotSave}>
                   Fortfahren und nicht speichern
                 </button>
-                <button className="bg-offWhite text-center font-bold p-2 rounded-md" onClick={headerContext.reloadPageAndSave}>
+                <button className="bg-offWhite text-center font-bold p-2 rounded-md" onClick={reloadPageAndSave}>
                   Fortfahren und speichern
                 </button>
                 <AlertDialog.Cancel

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
+import { HeaderProvider } from "./contexts/HeaderContext";
 
 const registerKeyListener = (e: KeyboardEvent) => {
   if (e.key === "r" && e.metaKey) {
@@ -21,7 +22,9 @@ export const App = () => {
   return (
     <div className="App h-screen">
       {isAuthenticated ? (
-        <Main />
+        <HeaderProvider>
+          <Main />
+        </HeaderProvider>
       ) : (
         <Auth setIsAuthenticated={setIsAuthenticated} />
       )}
