@@ -3,6 +3,7 @@ import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
+import { useEntries } from "../../contexts";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
@@ -46,6 +47,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
 
     return EditorState.createWithContent(contentState);
   });
+
+  const { displayAsColumn } = useEntries();
   const contentState = editorState.getCurrentContent();
 
   useEffect(() => {
@@ -65,29 +68,33 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       <Editor
         defaultEditorState={editorState}
         onEditorStateChange={setEditorState}
-        wrapperClassName={cx("min-h-[140px] w-full focus:outline-none")}
-        editorClassName={cx("p-6")}
+        wrapperClassName={cx("min-h-[200px] w-full focus:outline-none")}
+        editorClassName="p-6 "
         placeholder="Text eingeben..."
         toolbarClassName={cx(
           "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"
         )}
         toolbar={toolbarOptions}
-        toolbarCustomButtons={[
-          <span className="absolute right-2 top-1/2 -translate-y-1/2 leading-[0]">
-            <Tooltip
-              position="top"
-              text={isExpanded ? "Minimieren" : "Maximieren"}
-            >
-              <Action
-                className="text-base"
-                onClick={() => setIsExpanded()}
-                isPlaintiff={isPlaintiff}
-              >
-                {isExpanded ? <CornersIn /> : <CornersOut />}
-              </Action>
-            </Tooltip>
-          </span>,
-        ]}
+        toolbarCustomButtons={
+          displayAsColumn
+            ? [
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 leading-[0]">
+                  <Tooltip
+                    position="top"
+                    text={isExpanded ? "Minimieren" : "Maximieren"}
+                  >
+                    <Action
+                      className="text-base"
+                      onClick={() => setIsExpanded()}
+                      isPlaintiff={isPlaintiff}
+                    >
+                      {isExpanded ? <CornersIn /> : <CornersOut />}
+                    </Action>
+                  </Tooltip>
+                </span>,
+              ]
+            : []
+        }
       />
       <div className="flex justify-end gap-2 p-3 pt-2 border-t border-lightGrey">
         <Button
