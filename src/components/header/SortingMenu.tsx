@@ -5,7 +5,6 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 export const SortingMenu: React.FC<any> = ({ headerContext }) => {
   const [showSortingMenu, setShowSortingdMenu] = useState<Boolean>(false);
-  const buttonColor: String = showSortingMenu ? "bg-[#565656]" : "bg-darkGrey";
 
   const handleDrop = (droppedItem: any) => {
     // Ignore drop outside droppable container
@@ -27,7 +26,7 @@ export const SortingMenu: React.FC<any> = ({ headerContext }) => {
       }}
     >
       <DropdownMenu.Trigger
-        className={`${buttonColor} flex flex-row justify-between bg-darkGrey hover:bg-mediumGrey items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer font-bold h-8`}
+        className={`flex flex-row justify-between bg-darkGrey hover:bg-mediumGrey items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer font-bold h-8`}
       >
         <ListNumbers size={24} className="text-white" />
       </DropdownMenu.Trigger>
