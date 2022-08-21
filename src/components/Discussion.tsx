@@ -1,4 +1,5 @@
 import { Button } from "./Button";
+import { Plus } from "phosphor-react"
 
 export const Discussion = () => {
   return (
@@ -36,7 +37,8 @@ export const Discussion = () => {
         <div className="border-t-[1px] border-darkGrey mt-6 mb-3"></div>
         <div className="flex justify-end">
           <Button size="sm"
-            > + &nbsp;&nbsp; Gliederungspunkt hinzufügen
+          icon={<Plus size={18} />}
+            > Gliederungspunkt hinzufügen
           </Button>
         </div>
       </div>
