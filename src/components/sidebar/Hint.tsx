@@ -6,11 +6,12 @@ import {
   FloppyDisk,
   X,
 } from "phosphor-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "../Button";
 import cx from "classnames";
 import { Editor } from "react-draft-wysiwyg";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
+import { useOutsideClick } from "../../hooks/use-outside-click";
 
 export interface HintProps {
   id: string;
@@ -45,6 +46,8 @@ export const Hint: React.FC<HintProps> = (hint: HintProps) => {
 
     return EditorState.createWithContent(contentState);
   });
+  const ref = useRef(null);
+  useOutsideClick(ref, () => setIsMenuOpen(false));
 
   const showReference = (e: React.MouseEvent) => {
     //TODO
@@ -142,10 +145,7 @@ export const Hint: React.FC<HintProps> = (hint: HintProps) => {
               </div>
             </div>
 
-            <div
-              className="self-end relative"
-              // onBlur={() => setIsMenuOpen(false)}
-            >
+            <div ref={ref} className="self-end relative">
               <Button
                 key="createHint"
                 bgColor={
