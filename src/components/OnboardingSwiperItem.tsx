@@ -1,4 +1,4 @@
-export type OnboardingSliderItemType = {
+interface OnboardingSliderItemType {
     imageSrc: string;
     imageAlt: string;
     title: string;

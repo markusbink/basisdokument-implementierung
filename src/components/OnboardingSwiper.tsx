@@ -1,12 +1,10 @@
-import { OnboardingSliderItem, OnboardingSliderItemType } from "./OnboardingSwiperItem";
+import { OnboardingSliderItem } from "./OnboardingSwiperItem";
 import { Navigation, Pagination } from "swiper";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/bundle";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useState } from "react";
-import { title } from "process";
 
 
 export const OnboardingSwiper = () => {
