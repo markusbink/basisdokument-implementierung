@@ -1,10 +1,10 @@
-import {XCircle, WarningCircle, Quotes} from "phosphor-react";
-import { Button } from "../Button";
+import { XCircle, WarningCircle, Quotes } from "phosphor-react";
+import { Button } from "./Button";
 import cx from "classnames";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const toolbarOptions = {
   options: ["inline", "list", "textAlign"],
@@ -25,56 +25,62 @@ const toolbarOptions = {
 // TODO: Exchange the button that opens the modal with the actual button
 
 export const NotePopup = () => {
-    const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
-    const [showModal, setShowModal] = useState(false);
-    const [editorState, setEditorState] = useState(() => {
-      const blocksFromHTML = convertFromHTML("");
-      const contentState = ContentState.createFromBlockArray(
-        blocksFromHTML.contentBlocks,
-        blocksFromHTML.entityMap
-      );
-      return EditorState.createWithContent(contentState);
-    });
+  const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState(false);
+  const [editorState, setEditorState] = useState(() => {
+    const blocksFromHTML = convertFromHTML("");
+    const contentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    return EditorState.createWithContent(contentState);
+  });
 
-    const contentState = editorState.getCurrentContent();
+  const contentState = editorState.getCurrentContent();
 
-    useEffect(() => {
-      setHidePlaceholder(
-        () => contentState.getBlockMap().first().getType() !== "unstyled"
-      );
-    }, [contentState]);
-    
-    return (
-      <>
-        <button
-          className="bg-pink-500 text-mediumGrey active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-          type="button"
-          onClick={() => setShowModal(true)}
-        >
-          Open regular modal
-        </button>
-        {showModal ? (
-          <>
-            <div
-              className={cx("justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none", {
+  useEffect(() => {
+    setHidePlaceholder(
+      () => contentState.getBlockMap().first().getType() !== "unstyled"
+    );
+  }, [contentState]);
+
+  return (
+    <>
+      <button
+        className="bg-pink-500 text-mediumGrey active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button"
+        onClick={() => setShowModal(true)}
+      >
+        Open regular modal
+      </button>
+      {showModal ? (
+        <>
+          <div
+            className={cx(
+              "justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none",
+              {
                 "RichEditor-hidePlaceholder": hidePlaceholder,
-              })}
-            >
-              <div className="w-auto my-6 mx-auto max-w-3xl">
-                {/*content*/}
-                <div className="p-2 border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none">
-                  {/*header*/}
-                  <div className="flex items-start justify-between rounded-lg ">
-                    <h3 className="text-2xl font-bold text-darkGrey pb-6 pt-4 pl-3">
-                      Neue Notiz verfassen
-                    </h3>
-                    <div>
-                    <button onClick={() => setShowModal(false)} className="text-darkGrey">
+              }
+            )}
+          >
+            <div className="w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="p-6 space-y-4 border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-between rounded-lg ">
+                  <h3 className="text-2xl font-bold text-darkGrey">
+                    Neue Notiz verfassen
+                  </h3>
+                  <div>
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="text-darkGrey"
+                    >
                       <XCircle size={29} weight="fill" />
                     </button>
-                    </div>
                   </div>
-                  <div className="flex gap-2 mx-20 p-3 bg-lightOrange rounded-lg font-bold text-darkOrange">
+                </div>
+                <div className="flex gap-2 mx-20 p-3 bg-lightOrange rounded-lg font-bold text-darkOrange">
                   <span>
                     <WarningCircle size={40} />
                   </span>
@@ -84,13 +90,20 @@ export const NotePopup = () => {
                     Zeitpunkt bearbeiten und löschen.
                   </p>
                 </div>
-                  {/*body*/}
-                  <div className="p-3 space-y-4">
+                {/*body*/}
+                <div className="space-y-4">
                   <div className="space-y-2">
-                    <label htmlFor="note_popup_input" className="text-slate-500 leading-relaxed text-lg font-bold text-darkGrey">
+                    <label
+                      htmlFor="note_popup_input"
+                      className="text-slate-500 leading-relaxed text-lg font-bold text-darkGrey"
+                    >
                       Titel
                     </label>
-                    <input id="note_popup_input" className="w-full px-2 py-3 bg-offWhite block rounded text-mediumGrey focus:outline-none" placeholder="Titel eingeben..."></input>
+                    <input
+                      id="note_popup_input"
+                      className="w-full px-2 py-3 bg-offWhite block rounded text-mediumGrey focus:outline-none"
+                      placeholder="Titel eingeben..."
+                    ></input>
                   </div>
                   <div>
                     <label className="my-4 text-slate-500 text-lg leading-relaxed font-bold text-darkGrey">
@@ -99,16 +112,16 @@ export const NotePopup = () => {
                     <Editor
                       defaultEditorState={editorState}
                       onEditorStateChange={setEditorState}
-                      wrapperClassName={cx("min-h-[140px] w-full focus:outline-none")}
-                      editorClassName="px-1 bg-offWhite text-mediumGrey rounded"
+                      wrapperClassName={cx("w-full focus:outline-none")}
+                      editorClassName="px-1 bg-offWhite text-mediumGrey rounded min-h-[140px]"
                       placeholder="Text eingeben..."
-                      toolbarClassName={cx("p-2 relative rounded-none border-white")}
+                      toolbarClassName={cx(
+                        "p-2 relative rounded-none border-white"
+                      )}
                       toolbar={toolbarOptions}
                     />
                   </div>
-                  </div>
-                  {/*footer*/}
-                  <div className="p-3 space-y-2">
+                  <div className="space-y-2">
                     <label className="my-4 text-slate-500 text-lg leading-relaxed font-bold text-darkGrey">
                       Verweis auf einen Beitrag hinzufügen
                     </label>
@@ -125,19 +138,20 @@ export const NotePopup = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-end p-6 rounded-b">
-                    <Button
-                      onClick={() => setShowModal(false)}
-                    >
-                      Notiz hinzufügen
-                    </Button>
-                  </div>
+                </div>
+                {/*footer*/}
+
+                <div className="flex items-center justify-end">
+                  <Button onClick={() => setShowModal(false)}>
+                    Notiz hinzufügen
+                  </Button>
                 </div>
               </div>
             </div>
-            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-          </>
-        ) : null}
-      </>
-    );
-  }
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
+    </>
+  );
+};
