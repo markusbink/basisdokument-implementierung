@@ -68,8 +68,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       <Editor
         defaultEditorState={editorState}
         onEditorStateChange={setEditorState}
-        wrapperClassName={cx("min-h-[200px] w-full focus:outline-none")}
-        editorClassName="p-6 "
+        wrapperClassName={cx("w-full focus:outline-none")}
+        editorClassName="p-6 min-h-[160px]"
         placeholder="Text eingeben..."
         toolbarClassName={cx(
           "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"
