@@ -67,7 +67,8 @@ export const SidebarNotes = () => {
 
       {notes.length <= 0 && (
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm">
-          Notizen, die Sie zu Beiträgen verfassen, erscheinen in dieser Ansicht.
+          Notizen, die Sie zu Beiträgen verfassen, erscheinen in dieser Ansicht
+          und sind nur für Sie sichtbar.
         </div>
       )}
 
