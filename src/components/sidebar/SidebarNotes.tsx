@@ -31,6 +31,14 @@ const notes: NoteProps[] = [
     author: "Max Muster",
     timestamp: new Date(),
   },
+  {
+    id: "4",
+    title: "Test Titel ohne Bezug",
+    content:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
+    author: "Max Muster",
+    timestamp: new Date(),
+  },
 ];
 
 // const notes: NoteProps[] = [];
