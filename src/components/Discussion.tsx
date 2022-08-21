@@ -1,36 +1,37 @@
+import { useEntries } from "../contexts";
+import { EntryList } from "./entry";
+
+const mockSections: string[] = ["d990191e-13fc-11ed-861d-0242ac120002"];
+
 export const Discussion = () => {
+  const { groupedEntries, displayAsColumn, setDisplayAsColumn } = useEntries();
+
   return (
-    <div className="bg-offWhite h-full overflow-y-scroll p-4 space-y-4">
+    <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4">
       <div className="max-w-[1200px] m-auto">
-        {Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map((i) => (
-          <section key={i}>
-            <div className="text-xl font-bold">
-              <span>{i}.</span> Gliederungspunkt
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-lightPurple text-black p-4 border border-darkPurple rounded-lg">
-                <h3>Beitrag Kläger</h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Consequuntur dolorum earum dolores omnis odit, voluptas
-                  ratione? Praesentium reprehenderit perspiciatis repudiandae
-                  officia veniam qui facere at deserunt, harum ab pariatur
-                  beatae?
-                </p>
+        <label className="inline-flex items-center gap-2 cursor-pointer select-none mb-4">
+          <input
+            id="default-checkbox"
+            type="checkbox"
+            value=""
+            onChange={() => setDisplayAsColumn(!displayAsColumn)}
+            className="w-4 h-4 "
+          />
+          View as Thread?
+        </label>
+        {mockSections.map((sectionId) => {
+          const sectionEntries = groupedEntries[sectionId];
+          return (
+            <section key={sectionId} className="space-y-8">
+              <div className="text-xl font-bold">
+                <span>1.</span> Gliederungspunkt
               </div>
-              <div className="bg-lightPetrol text-black p-4 border border-darkPetrol rounded-lg">
-                <h3>Beitrag Beklagter</h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Consequuntur dolorum earum dolores omnis odit, voluptas
-                  ratione? Praesentium reprehenderit perspiciatis repudiandae
-                  officia veniam qui facere at deserunt, harum ab pariatur
-                  beatae?
-                </p>
+              <div className="space-y-8">
+                <EntryList entries={sectionEntries["parent"]} />
               </div>
-            </div>
-          </section>
-        ))}
+            </section>
+          );
+        })}
       </div>
     </div>
   );
