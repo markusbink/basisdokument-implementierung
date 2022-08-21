@@ -37,7 +37,7 @@ export const Bookmark: React.FC<BookmarkProps> = (bookmark: BookmarkProps) => {
           <input
             autoFocus={true}
             type="text"
-            className="w-4/5 px-1 focus:border-[1px] rounded-md focus:border-lightGrey"
+            className="w-4/5 px-1 rounded-md focus:outline focus:outline-lightGrey"
             value={bookmark.title}
             onBlur={setTitle}
             onChange={handleChange}
