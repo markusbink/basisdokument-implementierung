@@ -20,7 +20,7 @@ const bookmarks: BookmarkProps[] = [
 export const SidebarBookmarks = () => {
   return (
     <div className="flex flex-col gap-3 h-full overflow-hidden">
-      <div className="text-base font-bold text-darkGrey text-lg pt-4 px-4">
+      <div className="font-bold text-darkGrey text-lg pt-4 px-4">
         Lesezeichen
       </div>
       {bookmarks.length <= 0 && (

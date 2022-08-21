@@ -32,7 +32,7 @@ export const Bookmark: React.FC<BookmarkProps> = (bookmark: BookmarkProps) => {
   return (
     <div className="flex justify-between gap-2 items-center bg-offWhite rounded-lg mb-2 p-2 font-medium">
       <div className="flex items-center gap-2">
-        <BookmarkSimple size={18} weight="bold" className="fill-darkGrey" />
+        <BookmarkSimple size={18} weight="fill" className="fill-darkGrey" />
         {doubleClicked ? (
           <input
             autoFocus={true}
