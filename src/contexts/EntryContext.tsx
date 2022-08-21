@@ -1,10 +1,17 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import { IEntry } from "../types";
 
 interface IEntryContext {
   displayAsColumn: boolean;
   setDisplayAsColumn: (displayAsColumn: boolean) => void;
   entries: IEntry[];
+  setEntries: Dispatch<SetStateAction<IEntry[]>>;
   groupedEntries: { [key: string]: { [key: string]: IEntry[] } };
   updateEntry: (entry: IEntry) => void;
 }
@@ -97,6 +104,7 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
     <EntryContext.Provider
       value={{
         entries,
+        setEntries,
         groupedEntries,
         updateEntry,
         displayAsColumn,

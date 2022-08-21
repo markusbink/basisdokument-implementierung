@@ -9,6 +9,7 @@ import {
   Trash,
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
+import { setSyntheticTrailingComments } from "typescript";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useEntries } from "../../contexts";
 import { IEntry, UserRole } from "../../types";
@@ -35,7 +36,7 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { groupedEntries, displayAsColumn } = useEntries();
+  const { groupedEntries, displayAsColumn, setEntries } = useEntries();
   const thread = groupedEntries[entry.section_id][entry.id];
 
   // State of current entry
@@ -105,8 +106,16 @@ export const Entry: React.FC<EntryProps> = ({
 
   const deleteEntry = (e: React.MouseEvent) => {};
 
-  const updateEntry = () => {
+  const updateEntry = (text: string) => {
     setIsEditing(false);
+    setEntries((oldEntries) => {
+      const newEntries = [...oldEntries];
+      const entryIndex = newEntries.findIndex(
+        (newEntry) => newEntry.id === entry.id
+      );
+      newEntries[entryIndex].text = text;
+      return newEntries;
+    });
   };
 
   const addHint = () => {};
@@ -246,8 +255,8 @@ export const Entry: React.FC<EntryProps> = ({
                     setIsEditing(false);
                     setIsExpanded(false);
                   }}
-                  onSave={() => {
-                    updateEntry();
+                  onSave={(text: string) => {
+                    updateEntry(text);
                     setIsExpanded(false);
                   }}
                 />
