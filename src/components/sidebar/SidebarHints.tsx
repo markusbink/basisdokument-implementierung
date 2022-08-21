@@ -49,9 +49,9 @@ export const SidebarHints = () => {
     useState<boolean>(true);
 
   return (
-    <div className="flex flex-col gap-3 h-full overflow-hidden">
+    <div className="flex flex-col gap-3 flex-1 overflow-hidden">
       <div className="flex justify-between items-center pt-4 px-4">
-        <div className="text-base font-bold text-darkGrey text-lg">
+        <div className="font-bold text-darkGrey text-lg">
           Hinweise (nach §139 ZPO)
         </div>
         {isJudge && (
