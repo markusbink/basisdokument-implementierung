@@ -1,5 +1,5 @@
 import {XCircle, WarningCircle, Quotes} from "phosphor-react";
-import { Button } from "./Button";
+import { Button } from "../Button";
 import cx from "classnames";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { useEffect, useState } from "react";
