@@ -8,9 +8,10 @@ import {
 } from "phosphor-react";
 import { Button } from "../Button";
 import cx from "classnames";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
+import { useOutsideClick } from "../../hooks/use-outside-click";
 
 export interface NoteProps {
   id: string;
@@ -45,6 +46,8 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => {
 
     return EditorState.createWithContent(contentState);
   });
+  const ref = useRef(null);
+  useOutsideClick(ref, () => setIsMenuOpen(false));
 
   const showReference = (e: React.MouseEvent) => {
     //TODO
@@ -71,7 +74,7 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => {
   };
 
   return (
-    <div>
+    <div ref={ref}>
       <div className="flex flex-col bg-offWhite mt-4 rounded-xl text-darkGrey text-xs font-medium">
         {note.referenceTo && (
           <div
@@ -141,10 +144,7 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => {
               </div>
             </div>
 
-            <div
-              className="self-end relative"
-              //{onBlur={() => setIsMenuOpen(false)}
-            >
+            <div className="self-end relative">
               <Button
                 key="createNote"
                 bgColor={
