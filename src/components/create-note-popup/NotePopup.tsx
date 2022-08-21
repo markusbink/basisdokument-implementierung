@@ -23,6 +23,8 @@ const toolbarOptions = {
   },
 };
 
+// TODO: Exchange the button that opens the modal with the actual button
+
 export default function Note() {
     const [showModal, setShowModal] = React.useState(false);
     const [editorState, setEditorState] = useState(() => {
