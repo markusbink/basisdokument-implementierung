@@ -2,10 +2,9 @@ import { useState } from "react";
 import { Button } from "./Button";
 import { OnboardingSwiper } from "./OnboardingSwiper";
 
-
 export const Onboarding = () => {
 
-    const [onboarding, setOnboarding] = useState(false);
+    const [onboarding, setOnboarding] = useState(true);
 
     const toggleOnboarding = () => {
         setOnboarding(!onboarding)
@@ -16,21 +15,15 @@ export const Onboarding = () => {
     } else {
         document.body.classList.remove('overflow-y-hidden')
     }
-
-
     return (
         <>
-            <Button onClick={toggleOnboarding}>
-                ?
-            </Button>
             {onboarding && (
-                <div>
-                    <div className="w-screen h-screen  inset-0 fixed opacity-75  bg-darkGrey"
+                <div className="z-10 fixed container mx-auto my-3">
+                    <div className="w-screen h-screen  inset-0 fixed opacity-75 bg-darkGrey"
                         onClick={toggleOnboarding}>
-
                     </div>
                     <div
-                        className="top-1/2 left-1/4 relative bg-white max-w-5xl min-w-4xl px-14 py-3 rounded" >
+                        className="container mx-auto my-3 relative bg-white max-w-5xl min-w-4xl px-14 py-3 rounded" >
 
                         <OnboardingSwiper></OnboardingSwiper>
 
@@ -44,5 +37,4 @@ export const Onboarding = () => {
 
         </>
     )
-
 }
