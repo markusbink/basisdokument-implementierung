@@ -24,9 +24,8 @@ const toolbarOptions = {
 
 // TODO: Exchange the button that opens the modal with the actual button
 
-export const NotePopup = () => {
+export const NotePopup = ({ children, visible, onClose }: any) => {
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState(false);
   const [editorState, setEditorState] = useState(() => {
     const blocksFromHTML = convertFromHTML("");
     const contentState = ContentState.createFromBlockArray(
@@ -44,16 +43,9 @@ export const NotePopup = () => {
     );
   }, [contentState]);
 
+  if (!visible) return null;
+
   return (
-    <>
-      <button
-        className="bg-pink-500 text-mediumGrey active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button"
-        onClick={() => setShowModal(true)}
-      >
-        Open regular modal
-      </button>
-      {showModal ? (
         <>
           <div
             className={cx(
@@ -73,7 +65,7 @@ export const NotePopup = () => {
                   </h3>
                   <div>
                     <button
-                      onClick={() => setShowModal(false)}
+                      onClick={onClose}
                       className="text-darkGrey"
                     >
                       <XCircle size={29} weight="fill" />
@@ -95,7 +87,7 @@ export const NotePopup = () => {
                   <div className="space-y-2">
                     <label
                       htmlFor="note_popup_input"
-                      className="text-slate-500 leading-relaxed text-lg font-bold text-darkGrey"
+                      className="leading-relaxed text-lg font-bold text-darkGrey"
                     >
                       Titel
                     </label>
@@ -106,7 +98,7 @@ export const NotePopup = () => {
                     ></input>
                   </div>
                   <div>
-                    <label className="my-4 text-slate-500 text-lg leading-relaxed font-bold text-darkGrey">
+                    <label className="my-4 text-lg leading-relaxed font-bold text-darkGrey">
                       Text
                     </label>
                     <Editor
@@ -122,7 +114,7 @@ export const NotePopup = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="my-4 text-slate-500 text-lg leading-relaxed font-bold text-darkGrey">
+                    <label className="my-4 text-lg leading-relaxed font-bold text-darkGrey">
                       Verweis auf einen Beitrag hinzufügen
                     </label>
                     <div className="flex p-3 items-center justify-content w-fit rounded-lg bg-offWhite text-darkGrey gap-3">
@@ -140,9 +132,8 @@ export const NotePopup = () => {
                   </div>
                 </div>
                 {/*footer*/}
-
                 <div className="flex items-center justify-end">
-                  <Button onClick={() => setShowModal(false)}>
+                  <Button onClick={onClose}>
                     Notiz hinzufügen
                   </Button>
                 </div>
@@ -150,8 +141,6 @@ export const NotePopup = () => {
             </div>
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-        </>
-      ) : null}
     </>
   );
 };

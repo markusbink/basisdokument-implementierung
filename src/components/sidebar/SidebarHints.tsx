@@ -1,9 +1,8 @@
 import { Plus } from "phosphor-react";
 import { Button } from "../Button";
 import { HintProps, Hint } from "./Hint";
-
 import { useState } from "react";
-import { Test } from "../Test";
+import { JudgeHintPopup } from "../JudgeHintPopup";
 
 //TODO: remove this, this is for testing
 const isJudge = true;
@@ -65,9 +64,7 @@ export const SidebarHints = () => {
           (hint) => hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
         )}
       </div>
-      
-      <Test visible={showModal} onClose={() => setShowModal(false)}></Test>
-      
+      {showModal ? <JudgeHintPopup visible={showModal} onClose={() => setShowModal(false)} children={undefined} /> : null}
     </div>
   );
 };
