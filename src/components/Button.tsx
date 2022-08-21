@@ -1,3 +1,5 @@
+import cx from "classnames";
+
 interface ButtonProps {
   icon?: any;
   bgColor?: string;
@@ -6,6 +8,8 @@ interface ButtonProps {
   onClick?: () => void;
   children?: React.ReactNode;
   disabled?: boolean;
+  hasText?: boolean;
+  alternativePadding?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -14,15 +18,20 @@ export const Button: React.FC<ButtonProps> = ({
   textColor = "text-white",
   size = "md",
   disabled = false,
+  hasText = true,
+  alternativePadding = "",
   onClick,
   children,
 }) => {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center ${
-        icon && "gap-3"
-      } ${size} ${bgColor} ${textColor} ${disabled && "disabled"} font`}
+      className={cx(
+        `flex items-center
+        ${icon && "gap-3"} ${size} ${bgColor} ${alternativePadding}
+        ${textColor} ${disabled && "disabled"} font`,
+        { "rounded-lg": !hasText }
+      )}
     >
       <span>{icon}</span>
       {children}
