@@ -30,6 +30,9 @@ module.exports = {
         blue: "#93C5FD",
         purple: "#D8B4FE",
       },
+      container: {
+        center: true,
+      },
     },
   },
   plugins: [],
