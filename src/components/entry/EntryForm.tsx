@@ -48,7 +48,12 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     return EditorState.createWithContent(contentState);
   });
 
-  const { displayAsColumn } = useEntries();
+  const { displayAsColumn, entries } = useEntries();
+  const suggestions = entries.map((entry) => ({
+    text: entry.entryCode,
+    value: entry.entryCode,
+    url: `#${entry.entryCode}`,
+  }));
   const contentState = editorState.getCurrentContent();
 
   useEffect(() => {
@@ -66,10 +71,15 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       })}
     >
       <Editor
+        mention={{
+          separator: " ",
+          trigger: "#",
+          suggestions,
+        }}
         defaultEditorState={editorState}
         onEditorStateChange={setEditorState}
         wrapperClassName={cx("w-full focus:outline-none")}
-        editorClassName="p-6 min-h-[160px]"
+        editorClassName="p-6 min-h-[160px] overflow-visible"
         placeholder="Text eingeben..."
         toolbarClassName={cx(
           "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"

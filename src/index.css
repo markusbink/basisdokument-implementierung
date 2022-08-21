@@ -8,6 +8,12 @@ body {
   font-family: "Manrope", sans-serif;
 }
 
+@layer base {
+  a {
+    @apply font-bold text-blue-600;
+  }
+}
+
 @layer components {
   .sm {
     @apply px-3 py-2 text-sm rounded;
@@ -41,6 +47,15 @@ body {
 .public-DraftStyleDefault-block {
   @apply my-0;
 }
+
 .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
   @apply hidden;
+}
+
+.rdw-suggestion-dropdown {
+  @apply shadow-lg rounded-lg p-1;
+}
+
+.rdw-suggestion-option {
+  @apply p-2 rounded border-none hover:bg-offWhite;
 }
