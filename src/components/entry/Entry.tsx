@@ -114,6 +114,7 @@ export const Entry: React.FC<EntryProps> = ({
   return (
     <>
       <div
+        id={entry.entryCode}
         className={cx({
           "opacity-50": isHidden,
           "pointer-events-none": isHidden,
@@ -159,7 +160,7 @@ export const Entry: React.FC<EntryProps> = ({
                         }
                       )}
                     >
-                      K-1-1
+                      {entry.entryCode}
                     </span>
                     <span className="font-bold">{entry.author}</span>
                     <span>25.08.2022</span>

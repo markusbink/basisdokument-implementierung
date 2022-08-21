@@ -5,6 +5,7 @@ export enum UserRole {
 }
 
 export interface IEntry {
+  entryCode: string;
   id: string;
   version: number;
   text: string;
