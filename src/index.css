@@ -56,15 +56,24 @@ body {
   @apply bg-marker-purple;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-*::-webkit-scrollbar {
-  display: none;
+/* width */
+::-webkit-scrollbar {
+  @apply w-2;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-* {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-lightGrey border-solid border border-gray-300 rounded-full w-3;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-mediumGrey;
 }
 
 /* This fix is required for react-beautiful-dnd to work together with radix */
