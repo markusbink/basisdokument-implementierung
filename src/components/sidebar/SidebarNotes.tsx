@@ -2,6 +2,8 @@ import { CaretDown, CaretRight, Plus } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../Button";
 import { Note, NoteProps } from "./Note";
+import { useState } from "react";
+import { NotePopup } from "../NotePopup";
 
 //TODO: remove this, this is for testing
 const notes: NoteProps[] = [
@@ -48,6 +50,7 @@ export const SidebarNotes = () => {
     useState<boolean>(true);
   const [notesWithReferenceOpen, setNotesWithReferenceOpen] =
     useState<boolean>(true);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     // TODO: Hide overflow here to make sure "Notizen" and the Add-Button are always visible...but now the buttom gets cut off...how to fix this?
@@ -56,7 +59,8 @@ export const SidebarNotes = () => {
         <div className="font-bold text-darkGrey text-lg">Notizen</div>
         <Button
           key="createNote"
-          bgColor="bg-darkGrey hover:bg-mediumGrey"
+          onClick={() => setShowModal(true)}
+          bgColor="bg-darkGrey"
           size="sm"
           textColor="text-white"
           hasText={false}
@@ -115,6 +119,7 @@ export const SidebarNotes = () => {
           </div>
         </div>
       )}
+      {showModal ? <NotePopup isVisible={showModal} onClose={() => setShowModal(false)} /> : null}
     </div>
   );
 };
