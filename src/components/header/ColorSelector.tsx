@@ -38,7 +38,7 @@ export const ColorSelector = () => {
         setShowColorSelectorMenu(!showColorSelectorMenu);
       }}
     >
-      <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-full cursor-pointer">
+      <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-10 cursor-pointer">
         <div className={`w-5 h-5 ${getColorCode(currentColorSelection.id)} rounded-full `}></div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>

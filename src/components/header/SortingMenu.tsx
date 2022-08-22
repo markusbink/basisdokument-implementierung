@@ -50,7 +50,7 @@ export const SortingMenu = () => {
                         <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
                           <div className="flex flex-row items-center">
                             <DotsSixVertical size={32} />
-                            <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container">
+                            <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite cursor-default font-bold w-full item-container">
                               <p>{index + 1}.</p>
                               <p>{item.title_plaintiff}</p>
                             </div>

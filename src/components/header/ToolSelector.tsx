@@ -34,7 +34,7 @@ export const ToolSelector: React.FC<IProps> = ({ getCurrentTool, setCurrentTool 
         setShowToolSelectorMenu(!showToolSelectorMenu);
       }}
     >
-      <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-full cursor-pointer">
+      <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-10 cursor-pointer">
         <div className={`flex flex-row items-center rounded-full gap-2`}>
           <CurrentToolComponent size={20} weight="bold" className="text-darkGrey" />
           {showToolSelectorMenu ? <CaretUp size={12} className="text-darkGrey" weight="fill" /> : <CaretDown size={12} className="text-darkGrey" weight="fill" />}

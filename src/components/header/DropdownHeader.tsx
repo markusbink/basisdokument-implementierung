@@ -31,8 +31,8 @@ export const DropdownHeader: React.FC<any> = () => {
         <p className="font-extrabold tracking-widest text-xs">DARSTELLUNG</p>
         <div className="flex flex-row gap-2 h-8 mt-2">
           <div
-            className={cx("rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-lightGrey", {
-              "bg-offWhite": !showColumnView,
+            className={cx("rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite", {
+              "bg-lightGrey": !showColumnView,
             })}
             onClick={() => {
               setShowColumnView(false);
@@ -41,8 +41,8 @@ export const DropdownHeader: React.FC<any> = () => {
             <img className="w-4" src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`} alt="column view icon"></img>
           </div>
           <div
-            className={cx("rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-lightGrey", {
-              "bg-offWhite": showColumnView,
+            className={cx("rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite", {
+              "bg-lightGrey": showColumnView,
             })}
             onClick={() => {
               setShowColumnView(true);

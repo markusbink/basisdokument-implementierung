@@ -13,7 +13,7 @@ export const MainHeader = () => {
   };
 
   return (
-    <div className="flex p-3 pl-8 pr-8 justify-between border-b-[0.5px] border-lightGrey">
+    <div className="flex h-14 pl-8 pr-8 justify-between border-b-[0.5px] border-lightGrey">
       {/* actions on the left side */}
       <div className="flex flex-row gap-4 items-center">
         <DocumentButton />
@@ -30,11 +30,11 @@ export const MainHeader = () => {
       </div>
       {/* searchbar */}
       <div className="flex flex-row gap-2 justify-center items-center">
-        <div className="flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-full items-center">
+        <div className="flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-10 items-center">
           <input
             value={searchbarValue}
             onChange={(e) => onChangeSearchbar(e)}
-            className="bg-offWhite h-full outline-0 min-w-[300px] max-w-[400px] pl-2"
+            className="bg-offWhite outline-0 min-w-[300px] max-w-[400px] pl-2"
             type="text"
             placeholder="Im Basisdokument suchen..."
           />
@@ -42,8 +42,8 @@ export const MainHeader = () => {
         </div>
       </div>
       {/* actions on the right side */}
-      <div className="flex flex-row gap-4 justify-end">
-        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-full cursor-pointer" onClick={openOnboarding}>
+      <div className="flex flex-row gap-4 justify-end items-center">
+        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-10 cursor-pointer" onClick={openOnboarding}>
           <Question size={20} weight="bold" className="text-darkGrey" />
         </div>
         <ColorSelector />
