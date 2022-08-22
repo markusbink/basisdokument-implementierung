@@ -9,16 +9,18 @@ export interface BookmarkProps {
   referenceTo: string;
 }
 
-export const Bookmark: React.FC<BookmarkProps> = (bookmark: BookmarkProps) => {
+export const Bookmark: React.FC<BookmarkProps> = (bookmark) => {
   const [doubleClicked, setDoubleClicked] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>(bookmark.title);
 
-  const setTitle = () => {
-    //TODO
-    setDoubleClicked(false);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(bookmark.title);
+    setTitle(e.target.value);
   };
 
-  const handleChange = () => {
-    //TODO
+  const saveTitle = () => {
+    console.log("bookmark: ", bookmark.title);
+    setDoubleClicked(false);
   };
 
   const showReference = (e: React.MouseEvent) => {
@@ -37,12 +39,11 @@ export const Bookmark: React.FC<BookmarkProps> = (bookmark: BookmarkProps) => {
           <input
             autoFocus={true}
             type="text"
+            name="title"
             className="w-4/5 px-1 rounded-md focus:outline focus:outline-lightGrey"
-            value={bookmark.title}
-            onBlur={setTitle}
-            onChange={(e) => {
-              // TODO: @ME
-            }}
+            value={title}
+            onBlur={saveTitle}
+            onChange={handleChange}
           />
         ) : (
           <div
