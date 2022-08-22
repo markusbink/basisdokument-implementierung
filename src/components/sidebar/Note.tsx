@@ -46,8 +46,8 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => {
         )}
 
         <div className={cx("mx-3", { "mt-3": !note.referenceTo })}>
-          <div className="mb-2 text-sm font-bold">{note.title}</div>
-          <div className="mb-2">{note.content}</div>
+          <h3 className="mb-2 text-sm font-bold">{note.title}</h3>
+          <p className="mb-2">{note.content}</p>
 
           <div className="flex justify-between items-center mb-3">
             <div className="">
