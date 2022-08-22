@@ -1,5 +1,5 @@
 import { Button } from "./Button"
-import { DotsThree, Notepad} from "phosphor-react";
+import { DotsThree, Notepad, X, FloppyDisk} from "phosphor-react";
 
 export const Meta = () => {
     return (
@@ -76,6 +76,18 @@ export const Meta = () => {
                             officia veniam qui facere at deserunt, harum ab pariatur
                             beatae?
                         </p>
+                        <span className="flex gap-2 font-bold mt-8 justify-end">
+                            <Button
+                                bgColor="bg-lightRed"
+                                size="sm"
+                                textColor="text-darkRed"
+                                icon={<X size={14} />}>Verwerfen</Button>
+                            <Button
+                                bgColor="bg-lightGreen"
+                                size="sm"
+                                textColor="text-darkGreen"
+                                icon={<FloppyDisk size={14} />}>Speichern</Button>
+                        </span>
                     </div>
                 </div>
         </div>
