@@ -7,29 +7,29 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const toolbarOptions = {
-  options: ["inline", "list", "textAlign"],
-  inline: {
-    className: ["!mb-0"],
-    options: ["bold", "italic", "underline", "strikethrough"],
-  },
-  list: {
-    className: ["!mb-0"],
-    options: ["unordered", "ordered"],
-  },
-  textAlign: {
-    className: ["!mb-0"],
-    options: ["left", "center", "right", "justify"],
-  },
-};
+    options: ["inline", "list", "textAlign"],
+    inline: {
+      className: ["!mb-0"],
+      options: ["bold", "italic", "underline", "strikethrough"],
+    },
+    list: {
+      className: ["!mb-0"],
+      options: ["unordered", "ordered"],
+    },
+    textAlign: {
+      className: ["!mb-0"],
+      options: ["left", "center", "right", "justify"],
+    },
+  };
 
-interface NotePopupProps{
+interface JudgeHintPopupProps{
   isVisible: boolean;
   onClose: any;
 }
 
-export const NotePopup = ({ isVisible, onClose }: NotePopupProps) => {
-  const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
-  const [editorState, setEditorState] = useState(() => {
+export const JudgeHintPopup = ({ isVisible, onClose }: JudgeHintPopupProps) => {
+    const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
+    const [editorState, setEditorState] = useState(() => {
     const blocksFromHTML = convertFromHTML("");
     const contentState = ContentState.createFromBlockArray(
       blocksFromHTML.contentBlocks,
@@ -39,7 +39,6 @@ export const NotePopup = ({ isVisible, onClose }: NotePopupProps) => {
   });
 
   const contentState = editorState.getCurrentContent();
-
   useEffect(() => {
     setHidePlaceholder(
       () => contentState.getBlockMap().first().getType() !== "unstyled"
@@ -47,8 +46,9 @@ export const NotePopup = ({ isVisible, onClose }: NotePopupProps) => {
   }, [contentState]);
 
   if (!isVisible) return null;
-
-  return (
+  
+    return(
+        <div>
         <>
           <div
             className={cx(
@@ -64,7 +64,7 @@ export const NotePopup = ({ isVisible, onClose }: NotePopupProps) => {
                 {/*header*/}
                 <div className="flex items-start justify-between rounded-lg ">
                   <h3 className="text-2xl font-bold text-darkGrey">
-                    Neue Notiz verfassen
+                    Neuen Hinweis an Parteien verfassen
                   </h3>
                   <div>
                     <button
@@ -80,9 +80,8 @@ export const NotePopup = ({ isVisible, onClose }: NotePopupProps) => {
                     <WarningCircle size={40} />
                   </span>
                   <p className="text-sm">
-                    Alle Notizen sind privat und können nicht von den anderen
-                    Parteien eingesehen werden. Sie können die Notitz zu jedem
-                    Zeitpunkt bearbeiten und löschen.
+                    Hinweise von Richter:innen sind öffentlich und können von den anderen Parteien eingesehen werden. 
+                    Sie können einen Hinweis nachträglich bearbeiten und löschen, bis zu dem Zeitpunkt der Übermittlung dieser Version des Basisdokuments. 
                   </p>
                 </div>
                 {/*body*/}
@@ -144,6 +143,7 @@ export const NotePopup = ({ isVisible, onClose }: NotePopupProps) => {
             </div>
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-    </>
-  );
-};
+        </>
+        </div>
+    )
+}

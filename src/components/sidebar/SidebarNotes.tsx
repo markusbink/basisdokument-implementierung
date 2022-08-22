@@ -1,6 +1,8 @@
 import { Plus } from "phosphor-react";
 import { Button } from "../Button";
 import { Note, NoteProps } from "./Note";
+import { useState } from "react";
+import { NotePopup } from "../NotePopup";
 
 //TODO: remove this, this is for testing
 const notes: NoteProps[] = [
@@ -24,12 +26,14 @@ const notes: NoteProps[] = [
 ];
 
 export const SidebarNotes = () => {
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="flex flex-col gap-7 p-4 h-full overflow-auto">
       <div className="flex justify-between items-center">
         <div className="text-base font-bold text-darkGrey text-lg">Notizen</div>
         <Button
           key="createNote"
+          onClick={() => setShowModal(true)}
           bgColor="bg-darkGrey"
           size="sm"
           textColor="text-white"
@@ -56,6 +60,7 @@ export const SidebarNotes = () => {
           (note) => note.referenceTo && <Note key={note.id} {...note}></Note>
         )}
       </div>
+      {showModal ? <NotePopup isVisible={showModal} onClose={() => setShowModal(false)} /> : null}
     </div>
   );
 };
