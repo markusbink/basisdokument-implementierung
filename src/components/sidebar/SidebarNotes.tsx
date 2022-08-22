@@ -2,7 +2,6 @@ import { CaretDown, CaretRight, Plus } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../Button";
 import { Note, NoteProps } from "./Note";
-import { useState } from "react";
 import { NotePopup } from "../NotePopup";
 
 //TODO: remove this, this is for testing
@@ -119,7 +118,9 @@ export const SidebarNotes = () => {
           </div>
         </div>
       )}
-      {showModal ? <NotePopup isVisible={showModal} onClose={() => setShowModal(false)} /> : null}
+      {showModal ? (
+        <NotePopup isVisible={showModal} onClose={() => setShowModal(false)} />
+      ) : null}
     </div>
   );
 };

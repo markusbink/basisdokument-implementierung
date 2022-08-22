@@ -79,7 +79,7 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => {
                   <li
                     tabIndex={0}
                     onClick={editNote}
-                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none  cursor-pointer"
                   >
                     <PencilSimple size={16} />
                     Bearbeiten
@@ -87,7 +87,7 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => {
                   <li
                     tabIndex={0}
                     onClick={deleteNote}
-                    className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                    className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none  cursor-pointer"
                   >
                     <Trash size={16} />
                     Löschen
