@@ -219,13 +219,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         </div>
       ) : null}
 
-      {errorText !== "" ? (
-        <div className="flex bg-lightRed p-4 rounded-md">
-          <p className="text-darkRed">
-            <span className="font-bold">Fehler:</span> {errorText}
-          </p>
-        </div>
-      ) : null}
+      <div>
+        {errorText !== "" ? (
+          <div className="flex bg-lightRed p-4 rounded-md">
+            <p className="text-darkRed">
+              <span className="font-bold">Fehler:</span> {errorText}
+            </p>
+          </div>
+        ) : null}
+      </div>
+
       <div className="space-y-2">
         <Button onClick={validateUserInput}>Basisdokument erstellen</Button>
       </div>
