@@ -24,7 +24,7 @@ export const ColorSelector = () => {
         <div className={`w-5 h-5 ${currentColorSelection.colorCode} rounded-full `}></div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content side="left" align="start" className="flex flex-col bg-white shadow-md rounded-lg p-4 gap-1">
+        <DropdownMenu.Content align="end" className="flex flex-col bg-white shadow-md rounded-lg p-4 gap-1">
           {/* Iterate through list with this element */}
           {colorSelection &&
             colorSelection.length > 0 &&
