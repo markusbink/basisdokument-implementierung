@@ -40,7 +40,9 @@ export const Bookmark: React.FC<BookmarkProps> = (bookmark: BookmarkProps) => {
             className="w-4/5 px-1 rounded-md focus:outline focus:outline-lightGrey"
             value={bookmark.title}
             onBlur={setTitle}
-            onChange={handleChange}
+            onChange={(e) => {
+              // TODO: @ME
+            }}
           />
         ) : (
           <div
