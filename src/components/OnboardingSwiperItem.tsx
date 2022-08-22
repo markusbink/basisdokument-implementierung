@@ -1,15 +1,15 @@
-interface OnboardingSliderItemType {
+interface OnboardingSliderItemProps {
     imageSrc: string;
     imageAlt: string;
     title: string;
     desc: string;
 };
 
-export const OnboardingSliderItem = ({ imageSrc, imageAlt, title, desc }: OnboardingSliderItemType) => {
+export const OnboardingSliderItem = ({ imageSrc, imageAlt, title, desc }: OnboardingSliderItemProps) => {
 
     return (
         <div>
-            <img className="px-10 w-auto h-auto flex item-center"
+            <img className="px-10 w-auto h-auto flex item-center drop-shadow-xl"
                 src={imageSrc}
                 alt={imageAlt}>
             </img>
