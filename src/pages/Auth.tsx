@@ -1,4 +1,4 @@
-import { ChangeEvent, SetStateAction, useRef, useState } from "react";
+import { useState } from "react";
 import { Button } from "../components/Button";
 import cx from "classnames";
 import { Upload } from "phosphor-react";
@@ -32,12 +32,12 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
   const [newVersionMode, setNewVersionMode] = useState<IStateUserInput["newVersionMode"]>(false);
 
-  const onChangePrename = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setPrename(newValue);
   };
 
-  const onChangeSurname = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeGivenSurname = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSurname(newValue);
   };
@@ -49,7 +49,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setBasisdokumentFilename(e.target.files[0].name);
     fileReader.onload = (e: any) => {
       const result = e.target.result;
-      setBasisdokumentFile(e.target.result);
+      setBasisdokumentFile(result);
     };
   };
 
@@ -59,7 +59,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setEditFilename(e.target.files[0].name);
     fileReader.onload = (e: any) => {
       const result = e.target.result;
-      setEditFile(e.target.result);
+      setEditFile(result);
     };
   };
 
@@ -68,13 +68,11 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     var inputIsValid: boolean = true;
 
     // check if file exists and validate
-    if (basisdokumentFilename.endsWith(".json")) {
-    } else {
+    if (!basisdokumentFilename.endsWith(".json")) {
       setErrorText("Bitte laden Sie eine valide Bearbeitungs-Datei (.json) hoch!");
       inputIsValid = false;
     }
-    if (editFilename.endsWith(".json")) {
-    } else {
+    if (!editFilename.endsWith(".json")) {
       setErrorText("Bitte laden Sie eine valide Basisdokument-Datei (.json) hoch!");
       inputIsValid = false;
     }
@@ -172,8 +170,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           Ich möchte das Basisdokument bearbeiten als: <span className="text-darkRed">*</span>
         </p>
         <div className="flex flex-row w-auto mt-4 gap-4">
-          <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Vorname..." value={prename} onChange={onChangePrename} />
-          <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Nachname..." value={surname} onChange={onChangeSurname} />
+          <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Vorname..." value={prename} onChange={onChangeGivenPrename} />
+          <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Nachname..." value={surname} onChange={onChangeGivenSurname} />
         </div>
       </div>
       <div>
