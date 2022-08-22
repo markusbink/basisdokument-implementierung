@@ -29,13 +29,16 @@ export const ToolSelector: React.FC<IProps> = ({ getCurrentTool, setCurrentTool 
 
   return (
     <DropdownMenu.Root
+      modal={false}
       onOpenChange={() => {
         setShowToolSelectorMenu(!showToolSelectorMenu);
       }}
     >
       <DropdownMenu.Trigger className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-full cursor-pointer">
-        <CurrentToolComponent size={20} weight="bold" className="text-darkGrey" />
-        {showToolSelectorMenu ? <CaretUp size={12} className="text-darkGrey" weight="fill" /> : <CaretDown size={12} className="text-darkGrey" weight="fill" />}
+        <div className={`flex flex-row items-center rounded-full gap-2`}>
+          <CurrentToolComponent size={20} weight="bold" className="text-darkGrey" />
+          {showToolSelectorMenu ? <CaretUp size={12} className="text-darkGrey" weight="fill" /> : <CaretDown size={12} className="text-darkGrey" weight="fill" />}
+        </div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg w-14 p-2 gap-2">
