@@ -60,7 +60,7 @@ export const SidebarNotes = () => {
           (note) => note.referenceTo && <Note key={note.id} {...note}></Note>
         )}
       </div>
-      {showModal ? <NotePopup visible={showModal} onClose={() => setShowModal(false)} children={undefined} /> : null}
+      {showModal ? <NotePopup isVisible={showModal} onClose={() => setShowModal(false)} /> : null}
     </div>
   );
 };

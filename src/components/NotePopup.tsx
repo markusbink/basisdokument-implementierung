@@ -22,9 +22,12 @@ const toolbarOptions = {
   },
 };
 
-// TODO: Exchange the button that opens the modal with the actual button
+interface NotePopupProps{
+  isVisible: boolean;
+  onClose: any;
+}
 
-export const NotePopup = ({ children, visible, onClose }: any) => {
+export const NotePopup = ({ isVisible, onClose }: NotePopupProps) => {
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
     const blocksFromHTML = convertFromHTML("");
@@ -43,7 +46,7 @@ export const NotePopup = ({ children, visible, onClose }: any) => {
     );
   }, [contentState]);
 
-  if (!visible) return null;
+  if (!isVisible) return null;
 
   return (
         <>
@@ -105,10 +108,10 @@ export const NotePopup = ({ children, visible, onClose }: any) => {
                       defaultEditorState={editorState}
                       onEditorStateChange={setEditorState}
                       wrapperClassName={cx("w-full focus:outline-none")}
-                      editorClassName="px-1 bg-offWhite text-mediumGrey rounded min-h-[140px]"
+                      editorClassName="p-3 bg-offWhite text-mediumGrey rounded min-h-[140px]"
                       placeholder="Text eingeben..."
                       toolbarClassName={cx(
-                        "p-2 relative rounded-none border-white"
+                        "p-2 border-none border-white"
                       )}
                       toolbar={toolbarOptions}
                     />

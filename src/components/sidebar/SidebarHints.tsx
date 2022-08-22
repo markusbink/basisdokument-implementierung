@@ -64,7 +64,7 @@ export const SidebarHints = () => {
           (hint) => hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
         )}
       </div>
-      {showModal ? <JudgeHintPopup visible={showModal} onClose={() => setShowModal(false)} children={undefined} /> : null}
+      {showModal ? <JudgeHintPopup isVisible={showModal} onClose={() => setShowModal(false)} /> : null}
     </div>
   );
 };

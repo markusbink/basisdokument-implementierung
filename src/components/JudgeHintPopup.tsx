@@ -22,8 +22,12 @@ const toolbarOptions = {
     },
   };
 
-export const JudgeHintPopup = ({ children, visible, onClose }: any) => {
-    
+interface JudgeHintPopupProps{
+  isVisible: boolean;
+  onClose: any;
+}
+
+export const JudgeHintPopup = ({ isVisible, onClose }: JudgeHintPopupProps) => {
     const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
     const [editorState, setEditorState] = useState(() => {
     const blocksFromHTML = convertFromHTML("");
@@ -41,7 +45,7 @@ export const JudgeHintPopup = ({ children, visible, onClose }: any) => {
     );
   }, [contentState]);
 
-  if (!visible) return null;
+  if (!isVisible) return null;
   
     return(
         <div>
@@ -103,10 +107,10 @@ export const JudgeHintPopup = ({ children, visible, onClose }: any) => {
                       defaultEditorState={editorState}
                       onEditorStateChange={setEditorState}
                       wrapperClassName={cx("w-full focus:outline-none")}
-                      editorClassName="px-1 bg-offWhite text-mediumGrey rounded min-h-[140px]"
+                      editorClassName="p-3 bg-offWhite text-mediumGrey rounded min-h-[140px]"
                       placeholder="Text eingeben..."
                       toolbarClassName={cx(
-                        "p-2 relative rounded-none border-white"
+                        "p-2 border-none border-white"
                       )}
                       toolbar={toolbarOptions}
                     />
@@ -140,7 +144,6 @@ export const JudgeHintPopup = ({ children, visible, onClose }: any) => {
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
-        {children}
         </div>
     )
 }
