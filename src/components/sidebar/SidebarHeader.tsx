@@ -33,10 +33,13 @@ export const SidebarHeader: React.FC<SidebarProps> = ({
 
   return (
     <div
-      className={cx("flex flex-row mb-1 pt-4 pb-1 px-4", {
-        "justify-between": sidebarOpen,
-        "justify-end": !sidebarOpen,
-      })}
+      className={cx(
+        "flex flex-row h-14 border-b-[0.5px] border-lightGrey pt-3 pb-2 px-4",
+        {
+          "justify-between": sidebarOpen,
+          "justify-end": !sidebarOpen,
+        }
+      )}
     >
       <div
         className={cx("transition duration-300", {
