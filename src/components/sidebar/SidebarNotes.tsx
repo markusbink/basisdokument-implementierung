@@ -73,55 +73,40 @@ export const SidebarNotes = () => {
       )}
 
       {notes.length > 0 && (
-        <div className="flex flex-col gap-7 p-4 text-mediumGrey font-extrabold text-sm overflow-y-scroll">
-          <div>
+        <div className="flex flex-col p-4 text-mediumGrey font-extrabold text-sm overflow-y-scroll">
+          <div
+            className="cursor-pointer flex items-center"
+            onClick={() =>
+              setNotesWithoutReferenceOpen(!notesWithoutReferenceOpen)
+            }
+          >
             {notesWithoutReferenceOpen ? (
-              <CaretDown
-                size={14}
-                className="inline mr-1 cursor-pointer"
-                weight="bold"
-                onClick={() =>
-                  setNotesWithoutReferenceOpen(!notesWithoutReferenceOpen)
-                }
-              />
+              <CaretDown size={14} className="inline mr-1" weight="bold" />
             ) : (
-              <CaretRight
-                size={14}
-                className="inline mr-1 cursor-pointer"
-                weight="bold"
-                onClick={() =>
-                  setNotesWithoutReferenceOpen(!notesWithoutReferenceOpen)
-                }
-              />
+              <CaretRight size={14} className="inline mr-1" weight="bold" />
             )}
             OHNE BEZUG AUF BEITRAG
+          </div>
+          <div>
             {notesWithoutReferenceOpen &&
               notes.map(
                 (note) =>
                   !note.referenceTo && <Note key={note.id} {...note}></Note>
               )}
           </div>
-          <div>
+
+          <div
+            className="cursor-pointer mt-7"
+            onClick={() => setNotesWithReferenceOpen(!notesWithReferenceOpen)}
+          >
             {notesWithReferenceOpen ? (
-              <CaretDown
-                size={14}
-                className="inline mr-1 cursor-pointer"
-                weight="bold"
-                onClick={() =>
-                  setNotesWithReferenceOpen(!notesWithReferenceOpen)
-                }
-              />
+              <CaretDown size={14} className="inline mr-1" weight="bold" />
             ) : (
-              <CaretRight
-                size={14}
-                className="inline mr-1 cursor-pointer"
-                weight="bold"
-                onClick={() =>
-                  setNotesWithReferenceOpen(!notesWithReferenceOpen)
-                }
-              />
+              <CaretRight size={14} className="inline mr-1" weight="bold" />
             )}
             MIT BEZUG AUF BEITRAG
+          </div>
+          <div>
             {notesWithReferenceOpen &&
               notes.map(
                 (note) =>
