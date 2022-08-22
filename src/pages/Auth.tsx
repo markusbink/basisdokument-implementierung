@@ -111,7 +111,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               setUsage("open");
             }}
             className={cx("flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2": usage === "open",
+              "border-2 border-darkGrey": usage === "open",
             })}
           >
             Öffnen
@@ -121,7 +121,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               setUsage("create");
             }}
             className={cx("flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2": usage === "create",
+              "border-2 border-darkGrey": usage === "create",
             })}
           >
             Erstellen
@@ -138,7 +138,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               setParty("plaintiff");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2": party === "plaintiff",
+              "border-2 border-darkGrey": party === "plaintiff",
             })}
           >
             Klagepartei
@@ -148,7 +148,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               setParty("defendant");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2": party === "defendant",
+              "border-2 border-darkGrey": party === "defendant",
             })}
           >
             Beklatenpartei
@@ -158,7 +158,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               setParty("judge");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2": party === "judge",
+              "border-2 border-darkGrey": party === "judge",
             })}
           >
             Richter:in
@@ -174,44 +174,49 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Nachname..." value={surname} onChange={onChangeGivenSurname} />
         </div>
       </div>
-      <div>
-        <p className="font-light">
-          Basisdokument-Dateien hochladen: <span className="text-darkRed">*</span>
-        </p>
-        <div className="flex flex-col items-start w-auto mt-4 gap-4">
-          <div className="flex flex-row items-center justify-center gap-4">
-            <p className="font-semibold">Basisdokument:</p>
-            <label className="flex items-center justify-center gap-2 cursor-pointer">
-              <input type="file" onChange={handleBasisdokumentFileUploadChange} />
-              <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
-                <Upload size={24} color={"white"} />
+      {usage === "open" ? (
+        <div className="flex flex-col gap-4">
+          <div>
+            <p className="font-light">
+              Basisdokument-Dateien hochladen: <span className="text-darkRed">*</span>
+            </p>
+            <div className="flex flex-col items-start w-auto mt-8 mb-8 gap-4">
+              <div className="flex flex-row items-center justify-center gap-4">
+                <p className="font-semibold">Basisdokument:</p>
+                <label className="flex items-center justify-center gap-2 cursor-pointer">
+                  <input type="file" onChange={handleBasisdokumentFileUploadChange} />
+                  <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                    <Upload size={24} color={"white"} />
+                  </div>
+                  <p className="text-black">{basisdokumentFilename}</p>
+                </label>
               </div>
-              <p className="text-black">{basisdokumentFilename}</p>
-            </label>
+              <div className="flex flex-row items-center justify-center gap-4">
+                <p className="font-semibold">Bearbeitungsdatei:</p>
+                <label className="flex items-center justify-center gap-2 cursor-pointer">
+                  <input type="file" onChange={handleEditFileUploadChange} />
+                  <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                    <Upload size={24} color={"white"} />
+                  </div>
+                  <p className="text-black">{editFilename}</p>
+                </label>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-row items-center justify-center gap-4">
-            <p className="font-semibold">Bearbeitungsdatei:</p>
-            <label className="flex items-center justify-center gap-2 cursor-pointer">
-              <input type="file" onChange={handleEditFileUploadChange} />
-              <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
-                <Upload size={24} color={"white"} />
-              </div>
-              <p className="text-black">{editFilename}</p>
-            </label>
+          <div className="flex flex-row items-center gap-4">
+            <input className="w-20 accent-darkGrey" type="checkbox" defaultChecked={newVersionMode} onChange={() => setNewVersionMode(!newVersionMode)} />
+            <div>
+              <p className="font-extrabold">
+                Ich möchte eine neue Version auf Basis der hochgeladenen Version erstellen. <span className="text-darkRed">*</span>
+              </p>
+              <p className="font-light text-mediumGrey">
+                Setzen Sie hier einen Haken, wenn Sie die Version des Basisdokuments, die Sie hochladen, zuvor von einer anderen Partei erhalten und noch nicht editiert haben.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="flex flex-row items-center gap-4">
-        <input className="w-20 accent-darkGrey" type="checkbox" defaultChecked={newVersionMode} onChange={() => setNewVersionMode(!newVersionMode)} />
-        <div>
-          <p className="font-extrabold">
-            Ich möchte eine neue Version auf Basis der hochgeladenen Version erstellen. <span className="text-darkRed">*</span>
-          </p>
-          <p className="font-light text-mediumGrey">
-            Setzen Sie hier einen Haken, wenn Sie die Version des Basisdokuments, die Sie hochladen, zuvor von einer anderen Partei erhalten und noch nicht editiert haben.
-          </p>
-        </div>
-      </div>
+      ) : null}
+
       {errorText !== "" ? (
         <div className="flex bg-lightRed p-4 rounded-md">
           <p className="text-darkRed">
