@@ -1,6 +1,7 @@
 import { OnboardingSliderItem } from "./OnboardingSwiperItem";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { ArrowSquareLeft, ArrowSquareRight } from "phosphor-react";
 import "swiper/css/bundle";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -47,18 +48,15 @@ const sliderItems = [
 
 const SwiperButtonNext = () => {
   const swiper = useSwiper();
-  return <button className="nextEl mx-20 select-all w-10 h-10"><img src="/arrowIcon.png" alt="arrowIcon" className="rounded-lg" onClick={() => swiper.slideNext()} /></button>
+  return <button className="nextEl mx-20 select-all w-10 h-10" onClick={() => swiper.slideNext()}><ArrowSquareRight size={42} className="fill-darkGrey" weight="fill" /></button>
 }
 
 const SwiperButtonPrev = () => {
   const swiper = useSwiper();
-  return <button className="prevEl mx-20 select-all w-10 h-10" ><img src="/arrowIcon.png" alt="arrowIcon" className="rotate-180 rounded-lg" onClick={() => { swiper.slidePrev() }} /></button>
+  return <button className="prevEl mx-20 select-all w-10 h-10" onClick={() => swiper.slidePrev()}><ArrowSquareLeft size={42} className="fill-darkGrey" weight="fill" /></button>
 }
 
 export const OnboardingSwiper = () => {
-
-  const swiper = useSwiper();
-
   return (
     <>
       <Swiper

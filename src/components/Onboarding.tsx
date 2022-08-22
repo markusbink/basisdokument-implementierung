@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "./Button";
 import { OnboardingSwiper } from "./OnboardingSwiper";
+import {XCircle} from "phosphor-react";
 
 export const Onboarding = () => {
 
@@ -25,7 +26,7 @@ export const Onboarding = () => {
 
                     <div
                         className="container mx-auto my-3 relative bg-white max-w-5xl min-w-4xl px-14 py-3 rounded">
-                        <button className="absolute top-0 right-0 p-3 select-all" onClick={toggleOnboarding}><img src="/closeIcon.png" alt="close Button" className="rounded-full w-8 h-8"/></button>
+                        <button className="absolute top-0 right-0 p-3 select-all" onClick={toggleOnboarding}><XCircle size={32} className="fill-darkGrey" weight="fill" /></button>
 
                         <OnboardingSwiper />
 
