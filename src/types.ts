@@ -43,3 +43,16 @@ export interface Tool {
   id: string;
   title: string;
 }
+
+export interface IStateUserInput {
+  usage: "open" | "create" | undefined;
+  party: "Klagepartei" | "Beklagtenpartei" | "Richter:in" | undefined;
+  prename: string;
+  surname: string;
+  basisdokumentFile: string;
+  editFile: string;
+  basisdokumentFilename: string;
+  editFilename: string;
+  errorText: string;
+  newVersionMode: boolean;
+}

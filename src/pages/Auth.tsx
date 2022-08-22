@@ -2,22 +2,11 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import cx from "classnames";
 import { Upload } from "phosphor-react";
+import {loadBasisdokument, loadBearbeitungsdatei } from "../data-validation/data-validator";
+import { IStateUserInput } from "../types";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
-}
-
-interface IStateUserInput {
-  usage: "open" | "create" | undefined;
-  party: "defendant" | "plaintiff" | "judge" | undefined;
-  prename: string;
-  surname: string;
-  basisdokumentFile: string;
-  editFile: string;
-  basisdokumentFilename: string;
-  editFilename: string;
-  errorText: string;
-  newVersionMode: boolean;
 }
 
 export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
@@ -50,7 +39,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     fileReader.onload = (e: any) => {
       const result = e.target.result;
       setBasisdokumentFile(result);
-      console.log(basisdokumentFile);
     };
   };
 
@@ -91,6 +79,11 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     if (usage === undefined) {
       setErrorText("Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder schließen möchten!");
       inputIsValid = false;
+    }
+
+    if (typeof basisdokumentFile === "string" && usage === "open" && typeof editFile === "string" && usage === "open") {
+      loadBasisdokument(basisdokumentFile, newVersionMode, prename, surname, party);
+      loadBearbeitungsdatei(basisdokumentFile, editFile, newVersionMode, prename, surname, party);
     }
 
     if (inputIsValid === true) {
@@ -139,30 +132,30 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         <div className="flex flex-row w-auto mt-4 gap-4">
           <div
             onClick={() => {
-              setParty("plaintiff");
+              setParty("Klagepartei");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2 border-darkGrey": party === "plaintiff",
+              "border-2 border-darkGrey": party === "Klagepartei",
             })}
           >
             Klagepartei
           </div>
           <div
             onClick={() => {
-              setParty("defendant");
+              setParty("Beklagtenpartei");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2 border-darkGrey": party === "defendant",
+              "border-2 border-darkGrey": party === "Beklagtenpartei",
             })}
           >
             Beklatenpartei
           </div>
           <div
             onClick={() => {
-              setParty("judge");
+              setParty("Richter:in");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2 border-darkGrey": party === "judge",
+              "border-2 border-darkGrey": party === "Richter:in",
             })}
           >
             Richter:in
