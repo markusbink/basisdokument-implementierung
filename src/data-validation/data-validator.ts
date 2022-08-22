@@ -10,24 +10,34 @@ function addVersionToVersionHistory(object: any, prename: IStateUserInput["prena
 }
 
 function updateSortingsIfVersionIsDifferent(basisdokumentObject: any, editFileObject: any) {
-  console.log("sections bd file", basisdokumentObject["sections"]);
-  console.log("sections edit file", editFileObject["individualSorting"]);
+  // console.log("sections bd file", basisdokumentObject["sections"]);
+  // console.log("sections edit file", editFileObject["individualSorting"]);
 
-  // we need to delete sections from the edit file that are not in the uploaded basisdokument
-  var sortingsOriginalOrderFromBasisdokumentFile = new Set();
-  var sortingsFromEditFile = new Set();
+  var sortingsOriginalOrderFromBasisdokumentFile: string[] = [];
+  var sortingsFromEditFile: string[] = [];
 
   for (const i in editFileObject["individualSorting"]) {
-    sortingsOriginalOrderFromBasisdokumentFile.add(editFileObject["individualSorting"][i]);
+    sortingsFromEditFile.push(editFileObject["individualSorting"][i]);
   }
 
   for (const i in basisdokumentObject["sections"]) {
-    sortingsFromEditFile.add(basisdokumentObject["sections"][i].id);
+    sortingsOriginalOrderFromBasisdokumentFile.push(basisdokumentObject["sections"][i].id);
   }
 
+  // we need to add sections in the edit file that are in the uploaded basisdokument but not in the edit file
+  sortingsOriginalOrderFromBasisdokumentFile.forEach((key) => {
+    if (!sortingsFromEditFile.includes(key)) {
+      sortingsFromEditFile.push(key);
+    }
+  });
+  // we need to delete sections from the edit file that are not in the uploaded basisdokument
+  sortingsFromEditFile.forEach((key) => {
+    if (!sortingsOriginalOrderFromBasisdokumentFile.includes(key)) {
+      sortingsFromEditFile = sortingsFromEditFile.filter((e) => e !== key);
+    }
+  });
+
   console.log(sortingsOriginalOrderFromBasisdokumentFile, sortingsFromEditFile);
-  
-  
 
   return editFileObject;
 }
@@ -47,16 +57,13 @@ export function loadBasisdokument(
   return basisdokumentObject;
 }
 
-export function loadBearbeitungsdatei(
+export function loadEditFile(
   jsonStringBasisdokument: string,
-  jsonStringBearbeitungdatei: string,
+  jsonStringEditFile: string,
   newVersionMode: IStateUserInput["newVersionMode"],
-  prename: IStateUserInput["prename"],
-  surname: IStateUserInput["surname"],
-  party: IStateUserInput["party"]
 ) {
   let basisdokumentObject: any = JSON.parse(jsonStringBasisdokument);
-  let editFileObject: any = JSON.parse(jsonStringBearbeitungdatei);
+  let editFileObject: any = JSON.parse(jsonStringEditFile);
   if (newVersionMode) {
     editFileObject = updateVersion(editFileObject);
   }
@@ -66,4 +73,13 @@ export function loadBearbeitungsdatei(
   }
 
   return editFileObject;
+}
+
+
+export function createNewBasisdokument(prename: IStateUserInput["prename"], surname:IStateUserInput["surname"], party: IStateUserInput["party"]) {
+
+}
+
+export function createEditFile(prename: IStateUserInput["prename"], surname:IStateUserInput["surname"], party: IStateUserInput["party"]) {
+
 }
