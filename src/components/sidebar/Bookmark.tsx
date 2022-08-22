@@ -1,21 +1,31 @@
 import { BookmarkSimple, Eye, Trash } from "phosphor-react";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Button } from "../Button";
 import { useState } from "react";
+import { IBookmark } from "../../types";
 
 export interface BookmarkProps {
-  id: string;
-  title: string;
-  referenceTo: string;
+  bookmark: IBookmark;
+  setBookmarks: Dispatch<SetStateAction<IBookmark[]>>;
 }
 
-export const Bookmark: React.FC<BookmarkProps> = (bookmark) => {
+export const Bookmark: React.FC<BookmarkProps> = ({
+  bookmark,
+  setBookmarks,
+}) => {
   const [doubleClicked, setDoubleClicked] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>(bookmark.title);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(bookmark.title);
-    setTitle(e.target.value);
+    const { value } = e.target;
+    setBookmarks((bookmarks) => {
+      const updatedBoomarks = bookmarks.map((oldBoomark) => {
+        if (oldBoomark.id === bookmark.id) {
+          return { ...oldBoomark, title: value };
+        }
+        return oldBoomark;
+      });
+      return updatedBoomarks;
+    });
   };
 
   const saveTitle = () => {
@@ -41,7 +51,7 @@ export const Bookmark: React.FC<BookmarkProps> = (bookmark) => {
             type="text"
             name="title"
             className="w-4/5 px-1 rounded-md focus:outline focus:outline-lightGrey"
-            value={title}
+            value={bookmark.title}
             onBlur={saveTitle}
             onChange={handleChange}
           />
