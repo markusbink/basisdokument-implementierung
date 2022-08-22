@@ -50,6 +50,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     fileReader.onload = (e: any) => {
       const result = e.target.result;
       setBasisdokumentFile(result);
+      console.log(basisdokumentFile);
+      
     };
   };
 
@@ -60,6 +62,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     fileReader.onload = (e: any) => {
       const result = e.target.result;
       setEditFile(result);
+      console.log(editFile);
     };
   };
 
