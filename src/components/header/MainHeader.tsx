@@ -1,4 +1,4 @@
-import { CaretDown, CaretUp, MagnifyingGlass, PencilSimpleLine, Question, UserCircle } from "phosphor-react";
+import { CaretDown, CaretUp, MagnifyingGlass, Question } from "phosphor-react";
 import React from "react";
 import { useHeaderContext } from "../../contexts/HeaderContext";
 import { DocumentButton } from "../header/DocumentButton";

@@ -5,7 +5,8 @@ import { useHeaderContext } from "../../contexts/HeaderContext";
 
 export const HighlighterButton: React.FC<{ id: number }> = ({ id }) => {
   const { colorSelection, highlighterData, setHighlighterData} = useHeaderContext();
-  const color = colorSelection[id].id;
+  const color:string = colorSelection[id].id;
+  
 
   return (
     <div

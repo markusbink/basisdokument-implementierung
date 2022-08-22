@@ -1,5 +1,6 @@
 import { createContext, MouseEventHandler, useContext, useState } from "react";
 import { toast } from "react-toastify";
+import { IHighlighter, IVersion, Tool } from "../types";
 
 // Define Interfaces
 interface HeaderProviderProps {
@@ -17,14 +18,14 @@ export default interface IHeaderContext {
   userParty: string;
   showDropdownHeader: boolean;
   showColumnView: boolean;
-  getCurrentTool: { id: string; title: string };
-  currentColorSelection: { id: string; colorCode: string; label: string };
+  getCurrentTool: Tool;
+  currentColorSelection: IHighlighter;
   searchbarValue: string;
   highlighterData: any;
   hideEntriesHighlighter: boolean;
   hideElementsWithoutSpecificVersion: boolean;
-  colorSelection: { id: string; colorCode: string; label: string }[];
-  versionHistory: { author: string; role: string; timestamp: string }[];
+  colorSelection: IHighlighter[];
+  versionHistory: IVersion[];
   selectedVersion: number;
   sectionList: { id: string; title_plaintiff: string }[];
   resetPrivateSorting: () => void;
@@ -36,9 +37,9 @@ export default interface IHeaderContext {
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   setSectionList: React.Dispatch<React.SetStateAction<{ id: string; title_plaintiff: string }[]>>;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
-  setVersionHistory: React.Dispatch<React.SetStateAction<{ author: string; role: string; timestamp: string }[]>>;
+  setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
   selectedSorting: Sorting;
-  setColorSelection: React.Dispatch<React.SetStateAction<{ id: string; colorCode: string; label: string }[]>>;
+  setColorSelection: React.Dispatch<React.SetStateAction<IHighlighter[]>>;
   setShowColumnView: React.Dispatch<React.SetStateAction<boolean>>;
   setCaseId: React.Dispatch<React.SetStateAction<string>>;
   setSearchbarValue: React.Dispatch<React.SetStateAction<string>>;
@@ -47,38 +48,37 @@ export default interface IHeaderContext {
   setHideEntriesHighlighter: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedSorting: React.Dispatch<React.SetStateAction<Sorting>>;
   setHideElementsWithoutSpecificVersion: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentColorSelection: React.Dispatch<React.SetStateAction<{ id: string; colorCode: string; label: string }>>;
-  setCurrentTool: React.Dispatch<React.SetStateAction<{ id: string; title: string }>>;
+  setCurrentColorSelection: React.Dispatch<React.SetStateAction<IHighlighter>>;
+  setCurrentTool: React.Dispatch<React.SetStateAction<Tool>>;
 }
 
 export const HeaderContext = createContext<IHeaderContext | null>(null);
 
 export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   // Define States
-  const [showDropdownHeader, setShowDropdownHeader] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>("Max Mustermann");
-  const [userParty, setUserParty] = useState<string>("Beklagtenpartei");
-  const [searchbarValue, setSearchbarValue] = useState<string>("");
-  const [showColumnView, setShowColumnView] = useState<boolean>(false);
-  const [caseId, setCaseId] = useState<string>("AZ. 8 0 6432/18");
-  const [currentColorSelection, setCurrentColorSelection] = useState<{ id: string; colorCode: string; label: string }>({
+  const [showDropdownHeader, setShowDropdownHeader] = useState<IHeaderContext["showDropdownHeader"]>(false);
+  const [username, setUsername] = useState<IHeaderContext["username"]>("Max Mustermann");
+  const [userParty, setUserParty] = useState<IHeaderContext["userParty"]>("Beklagtenpartei");
+  const [searchbarValue, setSearchbarValue] = useState<IHeaderContext["searchbarValue"]>("");
+  const [showColumnView, setShowColumnView] = useState<IHeaderContext["showColumnView"]>(false);
+  const [caseId, setCaseId] = useState<IHeaderContext["caseId"]>("AZ. 8 0 6432/18");
+  const [currentColorSelection, setCurrentColorSelection] = useState<IHighlighter>({
     id: "red",
-    colorCode: "bg-marker-red",
     label: "Markierung 1",
   });
-  const [getCurrentTool, setCurrentTool] = useState<{ id: string; title: string }>({ id: "cursor", title: "Cursor" });
+  const [getCurrentTool, setCurrentTool] = useState<Tool>({ id: "cursor", title: "Cursor" });
   const [highlighterData, setHighlighterData] = useState({ red: true, orange: true, yellow: true, green: true, blue: true, purple: true });
-  const [hideEntriesHighlighter, setHideEntriesHighlighter] = useState(false);
+  const [hideEntriesHighlighter, setHideEntriesHighlighter] = useState<IHeaderContext["hideEntriesHighlighter"]>(false);
   const [selectedSorting, setSelectedSorting] = useState<Sorting>(Sorting.Original);
-  const [hideElementsWithoutSpecificVersion, setHideElementsWithoutSpecificVersion] = useState(false);
+  const [hideElementsWithoutSpecificVersion, setHideElementsWithoutSpecificVersion] = useState<IHeaderContext["hideElementsWithoutSpecificVersion"]>(false);
   // This data needs to be extracted from the json later
   const highlighterColorsExample = [
-    { id: "red", colorCode: "bg-marker-red", label: "Markierung A" },
-    { id: "orange", colorCode: "bg-marker-orange", label: "Markierung 2" },
-    { id: "yellow", colorCode: "bg-marker-yellow", label: "Markierung 3" },
-    { id: "green", colorCode: "bg-marker-green", label: "Markierung 4" },
-    { id: "blue", colorCode: "bg-marker-blue", label: "Markierung 5" },
-    { id: "purple", colorCode: "bg-marker-purple", label: "Markierung 6" },
+    { id: "red", label: "Markierung A" },
+    { id: "orange", label: "Markierung 2" },
+    { id: "yellow", label: "Markierung 3" },
+    { id: "green", label: "Markierung 4" },
+    { id: "blue", label: "Markierung 5" },
+    { id: "purple", label: "Markierung 6" },
   ];
   const versionHistoryExample: IHeaderContext["versionHistory"] = [
     {
