@@ -59,7 +59,7 @@ export const SidebarNotes = () => {
         <Button
           key="createNote"
           onClick={() => setShowModal(true)}
-          bgColor="bg-darkGrey"
+          bgColor="bg-darkGrey hover:bg-mediumGrey"
           size="sm"
           textColor="text-white"
           hasText={false}
@@ -99,7 +99,7 @@ export const SidebarNotes = () => {
           </div>
 
           <div
-            className="cursor-pointer mt-7"
+            className="cursor-pointer mt-7 items-center"
             onClick={() => setNotesWithReferenceOpen(!notesWithReferenceOpen)}
           >
             {notesWithReferenceOpen ? (
