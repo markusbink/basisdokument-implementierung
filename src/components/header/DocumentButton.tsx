@@ -87,14 +87,14 @@ export const DocumentButton = () => {
                 arbeiten, zu speichern.
               </p>
               <div className="flex flex-col gap-2">
-                <button className="bg-lightRed text-center text-darkRed font-bold p-2 rounded-md" onClick={reloadPageAndDoNotSave}>
+                <button className="bg-lightRed hover:bg-mediumRed text-center text-darkRed font-bold p-2 rounded-md" onClick={reloadPageAndDoNotSave}>
                   Fortfahren und nicht speichern
                 </button>
-                <button className="bg-offWhite text-center font-bold p-2 rounded-md" onClick={reloadPageAndSave}>
+                <button className="bg-offWhite hover:bg-lightGrey text-center font-bold p-2 rounded-md" onClick={reloadPageAndSave}>
                   Fortfahren und speichern
                 </button>
                 <AlertDialog.Cancel
-                  className="bg-offWhite text-center font-bold p-2 rounded-md"
+                  className="bg-offWhite hover:bg-lightGrey text-center font-bold p-2 rounded-md"
                   onClick={() => {
                     setShowPopupUpload(false);
                   }}
