@@ -16,7 +16,7 @@ export const SortingSelector: React.FC<IProps> = ({ selectedSorting, setSelected
   const [showSelectMenu, setShowDownloadMenu] = useState<boolean>(false);
   return (
     <DropdownMenu.Root
-    modal={true}
+    modal={false}
       onOpenChange={() => {
         setShowDownloadMenu(!showSelectMenu);
       }}
