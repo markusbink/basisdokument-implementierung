@@ -79,7 +79,7 @@ export const SidebarNotes = () => {
             {notesWithoutReferenceOpen ? (
               <CaretDown
                 size={14}
-                className="inline mr-1"
+                className="inline mr-1 cursor-pointer"
                 weight="bold"
                 onClick={() =>
                   setNotesWithoutReferenceOpen(!notesWithoutReferenceOpen)
@@ -88,7 +88,7 @@ export const SidebarNotes = () => {
             ) : (
               <CaretRight
                 size={14}
-                className="inline mr-1"
+                className="inline mr-1 cursor-pointer"
                 weight="bold"
                 onClick={() =>
                   setNotesWithoutReferenceOpen(!notesWithoutReferenceOpen)
@@ -106,7 +106,7 @@ export const SidebarNotes = () => {
             {notesWithReferenceOpen ? (
               <CaretDown
                 size={14}
-                className="inline mr-1"
+                className="inline mr-1 cursor-pointer"
                 weight="bold"
                 onClick={() =>
                   setNotesWithReferenceOpen(!notesWithReferenceOpen)
@@ -115,7 +115,7 @@ export const SidebarNotes = () => {
             ) : (
               <CaretRight
                 size={14}
-                className="inline mr-1"
+                className="inline mr-1 cursor-pointer"
                 weight="bold"
                 onClick={() =>
                   setNotesWithReferenceOpen(!notesWithReferenceOpen)

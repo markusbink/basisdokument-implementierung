@@ -36,7 +36,7 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => {
       <div className="flex flex-col bg-offWhite mt-4 rounded-xl text-darkGrey text-xs font-medium">
         {note.referenceTo && (
           <div
-            className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit
+            className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer
               bg-darkGrey hover:bg-mediumGrey text-lightGrey text-[10px] font-semibold rounded-xl"
             onClick={showReference}
           >
