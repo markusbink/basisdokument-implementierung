@@ -28,11 +28,6 @@ export const Bookmark: React.FC<BookmarkProps> = ({
     });
   };
 
-  const saveTitle = () => {
-    console.log("bookmark: ", bookmark.title);
-    setDoubleClicked(false);
-  };
-
   const showReference = (e: React.MouseEvent) => {
     //TODO
   };
@@ -52,7 +47,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({
             name="title"
             className="w-4/5 px-1 rounded-md focus:outline focus:outline-lightGrey"
             value={bookmark.title}
-            onBlur={saveTitle}
+            onBlur={() => setDoubleClicked(false)}
             onChange={handleChange}
           />
         ) : (
