@@ -23,7 +23,7 @@ export const SidebarBookmarks = () => {
   const [bookmarks, setBookmarks] = useState<IBookmark[]>(mockBookmarks);
 
   return (
-    <div className="flex flex-col gap-3 h-full overflow-hidden">
+    <div className="flex flex-col gap-3 flex-1 overflow-hidden">
       <div className="font-bold text-darkGrey text-lg pt-4 px-4">
         Lesezeichen
       </div>
