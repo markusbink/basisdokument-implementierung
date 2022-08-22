@@ -51,7 +51,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       const result = e.target.result;
       setBasisdokumentFile(result);
       console.log(basisdokumentFile);
-      
     };
   };
 
@@ -71,13 +70,15 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     var inputIsValid: boolean = true;
 
     // check if file exists and validate
-    if (!basisdokumentFilename.endsWith(".json")) {
-      setErrorText("Bitte laden Sie eine valide Bearbeitungs-Datei (.json) hoch!");
-      inputIsValid = false;
-    }
-    if (!editFilename.endsWith(".json")) {
-      setErrorText("Bitte laden Sie eine valide Basisdokument-Datei (.json) hoch!");
-      inputIsValid = false;
+    if (usage === "open") {
+      if (!basisdokumentFilename.endsWith(".json")) {
+        setErrorText("Bitte laden Sie eine valide Bearbeitungs-Datei (.json) hoch!");
+        inputIsValid = false;
+      }
+      if (!editFilename.endsWith(".json")) {
+        setErrorText("Bitte laden Sie eine valide Basisdokument-Datei (.json) hoch!");
+        inputIsValid = false;
+      }
     }
     if (prename === "" && surname === "") {
       setErrorText("Bitte geben Sie sowohl Ihren Vornamen als auch einen Nachnamen an!");
