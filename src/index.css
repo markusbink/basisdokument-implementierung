@@ -4,9 +4,70 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
 
+input[type="file"] {
+  display: none;
+}
+
+input[type="checkbox"] {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.5); /* IE */
+  -moz-transform: scale(1.5); /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */
+  -o-transform: scale(1.5); /* Opera */
+  transform: scale(1.5);
+  padding: 10px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 body {
   font-family: "Manrope", sans-serif;
 }
+
+.marker-red {
+  @apply bg-marker-red;
+}
+
+.marker-orange {
+  @apply bg-marker-orange;
+}
+
+.marker-yellow {
+  @apply bg-marker-yellow;
+}
+
+.marker-green {
+  @apply bg-marker-green;
+}
+
+.marker-blue {
+  @apply bg-marker-blue;
+}
+
+.marker-purple {
+  @apply bg-marker-purple;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* This fix is required for react-beautiful-dnd to work together with radix */
 
 @layer components {
   .sm {
@@ -27,4 +88,20 @@ body {
   .disabled:hover {
     @apply opacity-50 cursor-not-allowed;
   }
+}
+
+/* React DraftJS WYSIWYG Editor Customizations */
+.rdw-option-wrapper {
+  @apply w-7 h-7 rounded bg-offWhite hover:shadow-none hover:border-lightGrey;
+}
+
+.rdw-option-active {
+  @apply shadow-none border-mediumGrey box-border hover:border-mediumGrey;
+}
+
+.public-DraftStyleDefault-block {
+  @apply my-0;
+}
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  @apply hidden;
 }
