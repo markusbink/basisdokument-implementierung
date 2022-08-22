@@ -56,6 +56,12 @@ body {
   @apply bg-marker-purple;
 }
 
+/* Scrollbar for Mozilla */
+:root * {
+  scrollbar-color: rgb(228 228 228) transparent;
+  scrollbar-width: thin;
+}
+
 /* width */
 ::-webkit-scrollbar {
   @apply w-2;
