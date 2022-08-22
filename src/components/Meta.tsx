@@ -6,7 +6,16 @@ export const Meta = () => {
         <div className="bg-offWhite h-full overflow-y-scroll p-4 space-y-4">
             <div className="max-w-[1200px] m-auto"></div>
                 <div className="grid grid-cols-2 gap-4">
-                    <div className="col-start-1 col-span-1 ">Klägerpartei</div>
+                    <div className="col-start-1 col-span-1 font-bold ">
+                        <Button
+                            bgColor="bg-lightGrey"
+                            textColor="text-darkGrey"
+                            size="sm"
+                            alternativePadding="p-1">
+                            KLAGEPARTEI
+                        </Button>
+                        
+                    </div>
                     <div className="bg-lightPurple text-black p-4 rounded-lg col-start-1 col-span-1">
                         <div className="flex justify-between">
                             <h3 className="font-bold">Kurt Huber</h3>
@@ -33,12 +42,15 @@ export const Meta = () => {
                             beatae?
                         </p>
                     </div>
-                    <div className="col-start-2 col-span-1 row-start-1 row-span-1">
+                    <div className="col-start-2 col-span-1 row-start-1 row-span-1 font-bold">
                         <Button
-                            bgColor="lightPetrol"
-                            textColor="text-darkGrey" />
-                             Beklagtenpartei
-                            </div>
+                            bgColor="bg-lightPetrol"
+                            textColor="text-darkGrey"
+                            size="sm"
+                            alternativePadding="p-1"
+                            >BEKLAGTENPARTEI
+                        </Button>
+                    </div>
                     <div className="bg-lightPetrol text-black p-4 rounded-lg col-start-2 col-span-1">
                         <div className="flex justify-between">
                             <h3 className="font-bold">Kurt Huber</h3>
