@@ -46,8 +46,8 @@ export const Hint: React.FC<HintProps> = (hint: HintProps) => {
         )}
 
         <div className={cx("mx-3", { "mt-3": !hint.referenceTo })}>
-          <div className="mb-2 text-sm font-bold">{hint.title}</div>
-          <div className="mb-2">{hint.content}</div>
+          <h3 className="mb-2 text-sm font-bold">{hint.title}</h3>
+          <p className="mb-2">{hint.content}</p>
 
           <div className="flex justify-between items-center mb-3">
             <div className="">
