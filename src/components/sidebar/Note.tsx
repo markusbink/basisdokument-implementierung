@@ -72,7 +72,7 @@ export const Note: React.FC<NoteProps> = (note: NoteProps) => {
                 onClick={() => {
                   setIsMenuOpen(!isMenuOpen);
                 }}
-                icon={<DotsThree size={16} weight="bold" />}
+                icon={<DotsThree size={20} weight="bold" />}
               ></Button>{" "}
               {isMenuOpen ? (
                 <ul className="absolute right-7 top-0 p-2 bg-lightGrey text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
