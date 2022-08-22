@@ -73,7 +73,6 @@ export const SidebarNotes = () => {
       )}
 
       {notes.length > 0 && (
-        // Problem with overflow (see comment above)
         <div className="flex flex-col gap-7 p-4 text-mediumGrey font-extrabold text-sm overflow-y-scroll">
           <div>
             {notesWithoutReferenceOpen ? (
