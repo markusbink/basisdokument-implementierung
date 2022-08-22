@@ -2,6 +2,7 @@ import { CaretDown, CaretRight, Plus } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../Button";
 import { HintProps, Hint } from "./Hint";
+import { JudgeHintPopup } from "../JudgeHintPopup";
 
 //TODO: remove this, this is for testing
 const isJudge = true;
@@ -47,6 +48,7 @@ export const SidebarHints = () => {
     useState<boolean>(true);
   const [hintsWithoutReferenceOpen, setHintsWithoutReferenceOpen] =
     useState<boolean>(true);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="flex flex-col gap-3 flex-1 overflow-hidden">
@@ -57,6 +59,7 @@ export const SidebarHints = () => {
         {isJudge && (
           <Button
             key="createHint"
+            onClick={() => setShowModal(true)}
             bgColor="bg-darkGrey hover:bg-mediumGrey"
             size="sm"
             textColor="text-white"
@@ -113,6 +116,12 @@ export const SidebarHints = () => {
             )}
         </div>
       </div>
+      {showModal ? (
+        <JudgeHintPopup
+          isVisible={showModal}
+          onClose={() => setShowModal(false)}
+        />
+      ) : null}
     </div>
   );
 };

@@ -30,8 +30,8 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       className={cx(
         `flex items-center
-        ${icon && gap} ${size} ${bgColor} ${alternativePadding}
-        ${textColor} ${disabled && "disabled"} font rounded-lg`
+        ${icon && gap} ${size} text-${size} ${bgColor} ${alternativePadding}
+        ${textColor} ${disabled && "disabled"} rounded-lg`
       )}
     >
       <span>{icon}</span>

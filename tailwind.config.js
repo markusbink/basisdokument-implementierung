@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         transparent: "transparent",
         white: "#fff",
+        lowWhite: "#FCFCFC",
         offWhite: "#F5F5F5",
         lightGrey: "#E4E4E4",
         mediumGrey: "#565656",
@@ -17,6 +18,7 @@ module.exports = {
         lightPetrol: "#C2E3E9",
         vibrantRed: "#FF3939",
         darkRed: "#810000",
+        mediumRed: "#FFCACA",
         lightRed: "#FFEDED",
         darkOrange: "#894200",
         lightOrange: "#FFF1E3",
@@ -31,11 +33,11 @@ module.exports = {
           blue: "#93C5FD",
           purple: "#D8B4FE",
         },
-      transitionProperty: {
-        'width': 'width'
-      }
+        transitionProperty: {
+          width: "width",
+        },
+      },
     },
+    plugins: [],
   },
-  plugins: [],
-}
 };

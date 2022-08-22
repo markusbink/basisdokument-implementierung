@@ -27,7 +27,7 @@ export const Sidebar = () => {
   return (
     <aside
       className={cx(
-        "flex flex-col h-full shadow-lg divide-y-[1px] divide-lightGrey transition-width duration-300",
+        "h-full shadow-lg divide-y-[1px] divide-lightGrey transition-width duration-300 flex flex-col",
         {
           "w-[65px] overflow-hidden": !sidebarOpen,
           "w-[400px]": sidebarOpen,
