@@ -69,10 +69,10 @@ export const OnboardingSwiper = () => {
         pagination={{ clickable: true }}
       >
         <div className="flex justify-center">
-          <SwiperButtonPrev />
-          <SwiperButtonNext />
+          <SwiperButtonPrev/>
+          <SwiperButtonNext/>
         </div>
-        {sliderItems.map((sliderItem) => <SwiperSlide><OnboardingSliderItem imageSrc={sliderItem.imageSrc} imageAlt={sliderItem.imageAlt} title={sliderItem.title} desc={sliderItem.desc} /> </SwiperSlide>)}
+        {sliderItems.map((sliderItem) => <SwiperSlide className="bg-gradient-to-r from-{#dddde6}"><OnboardingSliderItem imageSrc={sliderItem.imageSrc} imageAlt={sliderItem.imageAlt} title={sliderItem.title} desc={sliderItem.desc}/></SwiperSlide>)}
 
       </Swiper>
 
