@@ -21,7 +21,7 @@ export const App = () => {
   }, []);
 
   return (
-    <div className="App h-screen">
+    <div className="App h-screen overflow-hidden">
       {isAuthenticated ? (
         <HeaderProvider>
           <EntryProvider>
