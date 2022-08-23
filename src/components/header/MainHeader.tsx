@@ -22,7 +22,7 @@ export const MainHeader = () => {
   };
 
   return (
-    <div className="flex h-14 pl-8 pr-8 justify-between border-b-[0.5px] border-lightGrey">
+    <div className="flex h-14 pl-8 pr-8 gap-2 justify-between border-b-[0.5px] border-lightGrey">
       {/* actions on the left side */}
       <div className="flex flex-row gap-4 items-center">
         <DocumentButton />
