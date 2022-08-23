@@ -1,7 +1,7 @@
 import { IStateUserInput } from "../types";
 
 export function createBasisdokument(prename: IStateUserInput["prename"], surname: IStateUserInput["surname"], role: IStateUserInput["role"], caseId: IStateUserInput["caseId"]) {
-  var basisdokumentObject: any = {};
+  const basisdokumentObject: any = {};
   basisdokumentObject["caseId"] = caseId;
   basisdokumentObject["currentVersion"] = 1;
   basisdokumentObject["versions"] = [];
@@ -15,7 +15,7 @@ export function createBasisdokument(prename: IStateUserInput["prename"], surname
 }
 
 export function createEditFile(prename: IStateUserInput["prename"], surname: IStateUserInput["surname"], role: IStateUserInput["role"], caseId: IStateUserInput["caseId"]) {
-  var editFileObject: any = {};
+  const editFileObject: any = {};
   editFileObject["caseId"] = caseId;
   editFileObject["currentVersion"] = 1;
   editFileObject["highlightedEntries"] = [];

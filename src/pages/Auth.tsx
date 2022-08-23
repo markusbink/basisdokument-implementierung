@@ -45,7 +45,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       setBasisdokumentFilename(e.target.files[0].name);
       fileReader.onload = (e: any) => {
-        const result = e.target.result;
+        let result = e.target.result;
         setBasisdokumentFile(result);
       };
     } catch (error) {}
@@ -57,7 +57,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       setEditFilename(e.target.files[0].name);
       fileReader.onload = (e: any) => {
-        const result = e.target.result;
+        let result = e.target.result;
         setEditFile(result);
       };
     } catch (error) {}
@@ -82,15 +82,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       setErrorText("Bitte geben Sie ein gültiges Aktenzeichen an!");
       inputIsValid = false;
     }
-    if (prename === "" && surname === "") {
+    
+    if (prename === "" || surname === "") {
       setErrorText("Bitte geben Sie sowohl Ihren Vornamen als auch einen Nachnamen an!");
       inputIsValid = false;
     }
-    if (role === undefined) {
+    if (!role) {
       setErrorText("Bitte spezifizieren Sie, ob Sie das Basisdokument als Kläger, Beklagter oder Richter bearbeiten möchten!");
       inputIsValid = false;
     }
-    if (usage === undefined) {
+    if (!usage) {
       setErrorText("Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder erstellen möchten!");
       inputIsValid = false;
     }
