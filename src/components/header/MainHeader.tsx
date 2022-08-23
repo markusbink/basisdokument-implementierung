@@ -42,12 +42,12 @@ export const MainHeader = () => {
         <p className="font-extralight text-sm">{caseId}</p>
       </div>
       {/* searchbar */}
-      <div className="flex flex-row gap-2 justify-center items-center">
-        <div className="flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-8 items-center">
+      <div className="flex flex-row gap-2 justify-center items-center w-full max-w-[300px]">
+        <div className="flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-8 items-center w-full max-w-[300px]">
           <input
             value={searchbarValue}
             onChange={(e) => onChangeSearchbar(e)}
-            className="bg-offWhite outline-0 min-w-[300px] max-w-[400px] pl-2 text-sm"
+            className="bg-offWhite outline-0 w-full max-w-[300px] pl-2 text-sm"
             type="text"
             placeholder="Im Basisdokument suchen..."
           />

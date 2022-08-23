@@ -47,7 +47,7 @@ export const ColorSelector = () => {
     <div ref={dropdownRef} className="relative z-10">
       <div
         onClick={() => setShowColorSelectorMenu(!showColorSelectorMenu)}
-        className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite  rounded-md w-12 h-8 cursor-pointer"
+        className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8 cursor-pointer"
       >
         <div
           className={`w-4 h-4 ${getColorCode(

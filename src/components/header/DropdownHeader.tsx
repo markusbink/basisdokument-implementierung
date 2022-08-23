@@ -62,7 +62,7 @@ export const DropdownHeader: React.FC<any> = () => {
       <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
         <p className="font-extrabold tracking-widest text-xs">MARKIERUNGEN</p>
-        <div className="flex flex-row items-center mt-2 h-8 gap-4 text-sm font-medium">
+        <div className="flex flex-col lg:flex-row items-center mt-2 h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium">
           <div className="flex flex-row gap-2">
             {colorSelection.map((item: any, id: number) => (
               <HighlighterButton key={id} id={id} />
