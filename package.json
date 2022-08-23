@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^1.0.0",
     "@types/draftjs-to-html": "^0.8.1",
     "@types/node": "^16.11.47",
     "@types/react": "^18.0.17",

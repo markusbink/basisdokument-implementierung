@@ -1,5 +1,5 @@
-import { Button } from "./Button";
 import { SectionHeader } from "./SectionHeader";
+import { AddEntry } from "./AddEntry";
 
 export const Discussion = () => {
   return (
@@ -36,10 +36,7 @@ export const Discussion = () => {
             </div>
           </section>
         ))}
-        <div className="border-t-[1px] border-darkGrey mt-6 mb-3"></div>
-        <div className="flex justify-end">
-          <Button size="sm"> + &nbsp;&nbsp; Gliederungspunkt hinzufügen</Button>
-        </div>
+        <AddEntry></AddEntry>
       </div>
     </div>
   );

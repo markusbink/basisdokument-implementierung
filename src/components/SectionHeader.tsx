@@ -1,5 +1,6 @@
 import { CaretDown, CaretUp, DotsThree } from "phosphor-react";
 import { Button } from "./Button";
+import { DropdownSection} from "./DropdownSection";
 
 interface SectionHeaderProps {
   sectionId: number;
@@ -38,14 +39,13 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         <div className="bg-darkGrey w-10 h-10 rounded-lg rotate-45 flex items-center justify-center">
           <span className="text-white -rotate-45">{sectionId}</span>
         </div>
+        <div className="flex flex-col">
+        <span className="bg-lightPurple text-xs rounded-md p-1 w-fit">KLAGEPARTEI</span>
         <h2 className="">Gliederungspunkt</h2>
+        </div>
       </div>
       <div className="">
-        <Button
-          icon={<DotsThree size={18} weight="bold" />}
-          bgColor="offwhite"
-          textColor="lightGrey"
-        />
+        <DropdownSection></DropdownSection>
       </div>
     </div>
   );
