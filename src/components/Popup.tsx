@@ -4,8 +4,8 @@ import { useState } from "react"
 
 
 export const Popup = () => {
-    const [popupOpen, setPopupOpen] = useState<boolean>(false);
-    const onClick = () => setPopupOpen(true)
+    const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+    const onClick = () => setIsPopupOpen(true)
 
     return(
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
