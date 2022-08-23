@@ -99,7 +99,7 @@ export const SidebarNotes = () => {
           </div>
 
           <div
-            className="cursor-pointer mt-7 items-center"
+            className="cursor-pointer mt-7 flex items-center"
             onClick={() => setNotesWithReferenceOpen(!notesWithReferenceOpen)}
           >
             {notesWithReferenceOpen ? (
