@@ -46,9 +46,10 @@ export interface Tool {
 
 export interface IStateUserInput {
   usage: "open" | "create" | undefined;
-  party: "Kläger" | "Beklagter" | "Richter" | undefined;
+  role: "Kläger" | "Beklagter" | "Richter" | undefined;
   prename: string;
   surname: string;
+  caseId: string;
   basisdokumentFile: string;
   editFile: string;
   basisdokumentFilename: string;

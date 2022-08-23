@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import cx from "classnames";
 import { Upload } from "phosphor-react";
-import { createEditFile, createNewBasisdokument, loadBasisdokument, loadEditFile } from "../data-validation/data-validator";
 import { IStateUserInput } from "../types";
+import { openBasisdokument, openEditFile } from "../data-management/opening-handler";
+import { createBasisdokument, createEditFile } from "../data-management/creating-handler";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -11,7 +12,8 @@ interface AuthProps {
 
 export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [usage, setUsage] = useState<IStateUserInput["usage"]>();
-  const [party, setParty] = useState<IStateUserInput["party"]>();
+  const [caseId, setCaseId] = useState<IStateUserInput["caseId"]>("");
+  const [role, setRole] = useState<IStateUserInput["role"]>();
   const [prename, setPrename] = useState<IStateUserInput["prename"]>("");
   const [surname, setSurname] = useState<IStateUserInput["surname"]>("");
   const [basisdokumentFile, setBasisdokumentFile] = useState<IStateUserInput["basisdokumentFile"]>();
@@ -29,6 +31,11 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const onChangeGivenSurname = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSurname(newValue);
+  };
+
+  const onChangeGivenCaseId = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setCaseId(newValue);
   };
 
   // Source: https://stackoverflow.com/questions/71991961/how-to-read-content-of-uploaded-json-file-on-react-next-js
@@ -59,20 +66,24 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
     // check if file exists and validate
     if (usage === "open") {
-      if (!basisdokumentFilename.endsWith(".json")) {
+      if (!basisdokumentFilename.endsWith(".json") && typeof basisdokumentFile == "string") {
         setErrorText("Bitte laden Sie eine valide Bearbeitungs-Datei (.json) hoch!");
         inputIsValid = false;
       }
-      if (!editFilename.endsWith(".json")) {
+      if (!editFilename.endsWith(".json") && typeof editFile == "string") {
         setErrorText("Bitte laden Sie eine valide Basisdokument-Datei (.json) hoch!");
         inputIsValid = false;
       }
+    }
+    if (caseId === "" && usage === "create") {
+      setErrorText("Bitte geben Sie ein gültiges Aktenzeichen an!");
+      inputIsValid = false;
     }
     if (prename === "" && surname === "") {
       setErrorText("Bitte geben Sie sowohl Ihren Vornamen als auch einen Nachnamen an!");
       inputIsValid = false;
     }
-    if (party === undefined) {
+    if (role === undefined) {
       setErrorText("Bitte spezifizieren Sie, ob Sie das Basisdokument als Kläger, Beklagter oder Richter bearbeiten möchten!");
       inputIsValid = false;
     }
@@ -81,17 +92,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       inputIsValid = false;
     }
 
-    if (typeof basisdokumentFile === "string" && usage === "open" && typeof editFile === "string" && usage === "open") {
-      loadBasisdokument(basisdokumentFile, newVersionMode, prename, surname, party);
-      loadEditFile(basisdokumentFile, editFile, newVersionMode);
-    }
-
-    if (typeof basisdokumentFile === "string" && usage === "create" && typeof editFile === "string" && usage === "create") {
-      createNewBasisdokument(prename, surname, party);
-      createEditFile(prename, surname, party);
-    }
-
     if (inputIsValid === true) {
+      var basisdokumentObject, editFileObject;
+      if (usage === "open" && typeof basisdokumentFile == "string" && typeof editFile == "string") {
+        basisdokumentObject = openBasisdokument(basisdokumentFile, newVersionMode, prename, surname, role);
+        editFileObject = openEditFile(basisdokumentFile, editFile, newVersionMode);
+      }
+
+      if (usage === "create") {
+        basisdokumentObject = createBasisdokument(prename, surname, role, caseId);
+        editFileObject = createEditFile(prename, surname, role, caseId);
+      }
+      console.log(basisdokumentObject);
+      console.log(editFileObject);
+
       setIsAuthenticated(true);
     }
   };
@@ -100,8 +114,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex flex-col justify-center h-auto overflow-scroll no-scrollbar">
       <h1 className="text-3xl font-bold">Das Basisdokument</h1>
       <p className="text-md text-mediumGrey">
-        Diese Anwendung erlaubt Ihnen das Editieren des Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments in Form einer .json-Datei hoch, falls Sie an einer Version weiterarbeiten
-        wollen. Um persönliche Daten wie Markierungen, Sortierungen und Lesezeichen zu speichern, ist es notwendig, dass Sie auch Ihre persönliche Bearbeitungsdatei hochladen.
+        Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments in Form einer .json-Datei hoch, falls Sie an einer
+        Version weiterarbeiten wollen. Um persönliche Daten wie Markierungen, Sortierungen und Lesezeichen zu speichern, ist es notwendig, dass Sie auch Ihre persönliche Bearbeitungsdatei hochladen.
       </p>
       <div>
         <p className="font-light">
@@ -130,6 +144,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           </div>
         </div>
       </div>
+
       <div>
         <p className="font-light">
           Ich möchte das Basisdokument bearbeiten in der Funktion: <span className="text-darkRed">*</span>
@@ -137,30 +152,30 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         <div className="flex flex-row w-auto mt-4 gap-4">
           <div
             onClick={() => {
-              setParty("Kläger");
+              setRole("Kläger");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2 border-darkGrey": party === "Kläger",
+              "border-2 border-darkGrey": role === "Kläger",
             })}
           >
             Kläger
           </div>
           <div
             onClick={() => {
-              setParty("Beklagter");
+              setRole("Beklagter");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2 border-darkGrey": party === "Beklagter",
+              "border-2 border-darkGrey": role === "Beklagter",
             })}
           >
             Beklagter
           </div>
           <div
             onClick={() => {
-              setParty("Richter");
+              setRole("Richter");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2 border-darkGrey": party === "Richter",
+              "border-2 border-darkGrey": role === "Richter",
             })}
           >
             Richter
@@ -176,6 +191,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Nachname..." value={surname} onChange={onChangeGivenSurname} />
         </div>
       </div>
+      {usage === "create" ? (
+        <div>
+          <p className="font-light">
+            Aktenzeichen diese Basisdokuments: <span className="text-darkRed">*</span>
+          </p>
+          <div className="flex flex-row w-auto mt-4 gap-4">
+            <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Aktenzeichen..." value={caseId} onChange={onChangeGivenCaseId} />
+          </div>
+        </div>
+      ) : null}
       {usage === "open" ? (
         <div className="flex flex-col gap-4">
           <div>

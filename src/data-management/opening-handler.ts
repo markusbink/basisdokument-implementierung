@@ -1,14 +1,5 @@
 import { IStateUserInput } from "../types";
 
-function updateVersion(object: any) {
-  object["currentVersion"] = object["currentVersion"] += 1;
-  return object;
-}
-
-function addVersionToVersionHistory(object: any, prename: IStateUserInput["prename"], surname: IStateUserInput["surname"], party: IStateUserInput["party"]) {
-  return object.push({ author: prename + " " + surname, role: party, timestamp: "" });
-}
-
 function updateSortingsIfVersionIsDifferent(basisdokumentObject: any, editFileObject: any) {
   // console.log("sections bd file", basisdokumentObject["sections"]);
   // console.log("sections edit file", editFileObject["individualSorting"]);
@@ -42,30 +33,31 @@ function updateSortingsIfVersionIsDifferent(basisdokumentObject: any, editFileOb
   return editFileObject;
 }
 
-export function loadBasisdokument(
+export function openBasisdokument(
   jsonStringBasisdokument: string,
   newVersionMode: IStateUserInput["newVersionMode"],
   prename: IStateUserInput["prename"],
   surname: IStateUserInput["surname"],
-  party: IStateUserInput["party"]
+  role: IStateUserInput["role"]
 ) {
   let basisdokumentObject: any = JSON.parse(jsonStringBasisdokument);
   if (newVersionMode) {
-    basisdokumentObject = updateVersion(basisdokumentObject);
-    basisdokumentObject = addVersionToVersionHistory(basisdokumentObject, prename, surname, party);
+    basisdokumentObject["currentVersion"] = basisdokumentObject["currentVersion"] += 1;
+    basisdokumentObject["versions"].push({ author: prename + " " + surname, role: role, timestamp: "" });
+  } else {
+    basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1]["author"] = prename + " " + surname;
   }
   return basisdokumentObject;
 }
 
-export function loadEditFile(
-  jsonStringBasisdokument: string,
-  jsonStringEditFile: string,
-  newVersionMode: IStateUserInput["newVersionMode"],
-) {
+export function openEditFile(jsonStringBasisdokument: string, jsonStringEditFile: string, newVersionMode: IStateUserInput["newVersionMode"]) {
   let basisdokumentObject: any = JSON.parse(jsonStringBasisdokument);
   let editFileObject: any = JSON.parse(jsonStringEditFile);
+
   if (newVersionMode) {
-    editFileObject = updateVersion(editFileObject);
+    editFileObject["currentVersion"] = basisdokumentObject["currentVersion"] += 1;
+  } else {
+    editFileObject["currentVersion"] = basisdokumentObject["currentVersion"];
   }
 
   if (basisdokumentObject["currentVersion"] !== editFileObject["currentVersion"]) {
@@ -73,13 +65,4 @@ export function loadEditFile(
   }
 
   return editFileObject;
-}
-
-
-export function createNewBasisdokument(prename: IStateUserInput["prename"], surname:IStateUserInput["surname"], party: IStateUserInput["party"]) {
-
-}
-
-export function createEditFile(prename: IStateUserInput["prename"], surname:IStateUserInput["surname"], party: IStateUserInput["party"]) {
-
 }
