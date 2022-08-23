@@ -41,5 +41,6 @@ export interface IVersion {
 
 export interface Tool {
   id: string;
-  title: string;
+  iconNode: string;
+  germanTitle: string;
 }

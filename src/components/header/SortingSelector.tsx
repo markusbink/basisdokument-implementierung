@@ -21,19 +21,19 @@ export const SortingSelector: React.FC<IProps> = ({ selectedSorting, setSelected
         setShowDownloadMenu(!showSelectMenu);
       }}
     >
-      <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 px-2 py-1 pb-1 hover:cursor-pointer w-[100px] font-bold">
-        {selectedSorting === Sorting.Original ? <p>Original</p> : <p>Privat</p>}
+      <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 px-2 h-8 hover:cursor-pointer w-[100px] font-bold">
+        {selectedSorting === Sorting.Original ? <p className="text-sm">Original</p> : <p className="text-sm">Privat</p>}
         {showSelectMenu ? <CaretUp size={12} className="text-darkGrey" /> : <CaretDown size={12} className="text-darkGrey" />}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2">
+        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 w-[100px]">
           <DropdownMenu.Item
             className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
             onClick={() => {
               setSelectedSorting(Sorting.Original);
             }}
           >
-            <div className="text-darkGrey">Original</div>
+            <div className="text-darkGrey text-sm font-medium">Original</div>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
@@ -41,7 +41,7 @@ export const SortingSelector: React.FC<IProps> = ({ selectedSorting, setSelected
               setSelectedSorting(Sorting.Privat);
             }}
           >
-            <div className="text-darkGrey">Privat</div>
+            <div className="text-darkGrey text-sm font-medium">Privat</div>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
