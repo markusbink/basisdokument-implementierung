@@ -13,9 +13,9 @@ export const OnboardingSliderItem = ({
 }: OnboardingSliderItemProps) => {
   return (
     <div>
-      <div className="bg-gradient-to-tr from-lightPetrol to-lightPurple lg:p-16 md:p-8 p-4">
+      <div className="bg-gradient-to-tr from-lightPetrol to-lightPurple lg:p-8 p-4">
         <img
-          className=" overflow-hidden rounded-md shadow-xl max-h-[400px] mx-auto"
+          className="overflow-hidden rounded-md shadow-xl w-full max-w-xl h-auto mx-auto"
           src={imageSrc}
           alt={imageAlt}
         />
