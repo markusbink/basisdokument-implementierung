@@ -17,8 +17,6 @@ const mockBookmarks: IBookmark[] = [
   },
 ];
 
-// const bookmarks: BookmarkProps[] = [];
-
 export const SidebarBookmarks = () => {
   const [bookmarks, setBookmarks] = useState<IBookmark[]>(mockBookmarks);
 
