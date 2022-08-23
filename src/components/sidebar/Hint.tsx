@@ -75,7 +75,7 @@ export const Hint: React.FC<HintProps> = (hint: HintProps) => {
                 icon={<DotsThree size={20} weight="bold" />}
               ></Button>{" "}
               {isMenuOpen ? (
-                <ul className="absolute right-7 top-0 p-2 bg-lightGrey text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
+                <ul className="absolute right-0 bottom-8 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
                   <li
                     tabIndex={0}
                     onClick={editHint}
