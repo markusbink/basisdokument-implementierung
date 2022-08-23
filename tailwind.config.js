@@ -30,9 +30,6 @@ module.exports = {
         blue: "#93C5FD",
         purple: "#D8B4FE",
       },
-      container: {
-        center: true,
-      },
       extend: {
         colors: {
           transparent: "transparent",
@@ -63,11 +60,11 @@ module.exports = {
             purple: "#D8B4FE",
           },
           transitionProperty: {
-            'width': 'width'
-          }
+            width: "width",
+          },
         },
       },
       plugins: [],
-    }
-  }
-}
+    },
+  },
+};

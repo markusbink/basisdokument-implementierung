@@ -44,3 +44,13 @@ body {
 .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
   @apply hidden;
 }
+
+/* SwiperJS Pagination Dots */
+
+.swiper-pagination-bullet {
+  @apply bg-mediumGrey;
+}
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  @apply bg-mediumGrey;
+}

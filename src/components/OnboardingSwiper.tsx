@@ -6,7 +6,6 @@ import "swiper/css/bundle";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-
 const sliderItems = [
   {
     imageSrc: "/mainscreenBD.png",
@@ -43,18 +42,32 @@ const sliderItems = [
     imageAlt: "blibla",
     title: "TODO:Onboarding Themen besprechen",
     desc: "Die Themen für das Onboarding sollten wir nochmal besprechen!!",
-  }
-]
+  },
+];
 
 const SwiperButtonNext = () => {
   const swiper = useSwiper();
-  return <button className="nextEl mx-20 select-all w-10 h-10" onClick={() => swiper.slideNext()}><ArrowSquareRight size={42} className="fill-darkGrey" weight="fill" /></button>
-}
+  return (
+    <button
+      className="nextEl mx-20 select-all w-10 h-10"
+      onClick={() => swiper.slideNext()}
+    >
+      <ArrowSquareRight size={42} className="fill-darkGrey" weight="fill" />
+    </button>
+  );
+};
 
 const SwiperButtonPrev = () => {
   const swiper = useSwiper();
-  return <button className="prevEl mx-20 select-all w-10 h-10" onClick={() => swiper.slidePrev()}><ArrowSquareLeft size={42} className="fill-darkGrey" weight="fill" /></button>
-}
+  return (
+    <button
+      className="prevEl mx-20 select-all w-10 h-10"
+      onClick={() => swiper.slidePrev()}
+    >
+      <ArrowSquareLeft size={42} className="fill-darkGrey" weight="fill" />
+    </button>
+  );
+};
 
 export const OnboardingSwiper = () => {
   return (
@@ -68,14 +81,21 @@ export const OnboardingSwiper = () => {
         setWrapperSize={true}
         pagination={{ clickable: true }}
       >
-        <div className="flex justify-center">
-          <SwiperButtonPrev/>
-          <SwiperButtonNext/>
+        {sliderItems.map((sliderItem) => (
+          <SwiperSlide>
+            <OnboardingSliderItem
+              imageSrc={sliderItem.imageSrc}
+              imageAlt={sliderItem.imageAlt}
+              title={sliderItem.title}
+              desc={sliderItem.desc}
+            />
+          </SwiperSlide>
+        ))}
+        <div className="relative flex justify-center z-10">
+          <SwiperButtonPrev />
+          <SwiperButtonNext />
         </div>
-        {sliderItems.map((sliderItem) => <SwiperSlide className="bg-gradient-to-r from-{#dddde6}"><OnboardingSliderItem imageSrc={sliderItem.imageSrc} imageAlt={sliderItem.imageAlt} title={sliderItem.title} desc={sliderItem.desc}/></SwiperSlide>)}
-
       </Swiper>
-
     </>
   );
 };

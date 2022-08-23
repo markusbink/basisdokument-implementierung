@@ -1,20 +1,31 @@
 interface OnboardingSliderItemProps {
-    imageSrc: string;
-    imageAlt: string;
-    title: string;
-    desc: string;
-};
-
-export const OnboardingSliderItem = ({ imageSrc, imageAlt, title, desc }: OnboardingSliderItemProps) => {
-
-    return (
-        <div>
-            <img className="px-10 w-auto h-auto flex item-center drop-shadow-xl"
-                src={imageSrc}
-                alt={imageAlt}>
-            </img>
-            <h1 className="leading-loose pt-5 text-xl font-bold text-center">{title}</h1>
-            <p className="text-justify p-3">{desc}</p>
-        </div>
-    );
+  imageSrc: string;
+  imageAlt: string;
+  title: string;
+  desc: string;
 }
+
+export const OnboardingSliderItem = ({
+  imageSrc,
+  imageAlt,
+  title,
+  desc,
+}: OnboardingSliderItemProps) => {
+  return (
+    <div>
+      <div className="bg-gradient-to-tr from-lightPetrol to-lightPurple lg:p-16 md:p-8 p-4">
+        <img
+          className=" overflow-hidden rounded-md shadow-xl max-h-[400px] mx-auto"
+          src={imageSrc}
+          alt={imageAlt}
+        />
+      </div>
+      <div className="p-4 max-w-[800px] m-auto">
+        <h3 className="leading-loose text-xl text-center text-darkGrey font-semibold ">
+          {title}
+        </h3>
+        <p className="text-center text-mediumGrey">{desc}</p>
+      </div>
+    </div>
+  );
+};
