@@ -58,13 +58,13 @@ body {
 
 /* Scrollbar for Mozilla */
 :root * {
-  scrollbar-color: rgb(228 228 228) transparent;
+  scrollbar-color: rgba(58, 67, 66, 0.15) transparent;
   scrollbar-width: thin;
 }
 
 /* width */
 ::-webkit-scrollbar {
-  @apply w-2;
+  @apply w-[6px] h-[6px];
 }
 
 /* Track */
@@ -74,12 +74,13 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  @apply bg-lightGrey border-solid border border-gray-300 rounded-full w-3;
+  @apply rounded-full w-3 h-3;
+  background-color: rgba(58, 67, 66, 0.15);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-mediumGrey;
+  background-color: rgba(58, 67, 66, 0.4);
 }
 
 /* This fix is required for react-beautiful-dnd to work together with radix */
