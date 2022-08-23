@@ -41,23 +41,26 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   // Source: https://stackoverflow.com/questions/71991961/how-to-read-content-of-uploaded-json-file-on-react-next-js
   const handleBasisdokumentFileUploadChange = (e: any) => {
     const fileReader = new FileReader();
-    fileReader.readAsText(e.target.files[0], "UTF-8");
-    setBasisdokumentFilename(e.target.files[0].name);
-    fileReader.onload = (e: any) => {
-      const result = e.target.result;
-      setBasisdokumentFile(result);
-    };
+    try {
+      fileReader.readAsText(e.target.files[0], "UTF-8");
+      setBasisdokumentFilename(e.target.files[0].name);
+      fileReader.onload = (e: any) => {
+        const result = e.target.result;
+        setBasisdokumentFile(result);
+      };
+    } catch (error) {}
   };
 
   const handleEditFileUploadChange = (e: any) => {
     const fileReader = new FileReader();
-    fileReader.readAsText(e.target.files[0], "UTF-8");
-    setEditFilename(e.target.files[0].name);
-    fileReader.onload = (e: any) => {
-      const result = e.target.result;
-      setEditFile(result);
-      console.log(editFile);
-    };
+    try {
+      fileReader.readAsText(e.target.files[0], "UTF-8");
+      setEditFilename(e.target.files[0].name);
+      fileReader.onload = (e: any) => {
+        const result = e.target.result;
+        setEditFile(result);
+      };
+    } catch (error) {}
   };
 
   const validateUserInput = () => {
@@ -116,6 +119,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       <p className="text-md text-mediumGrey">
         Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments in Form einer .json-Datei hoch, falls Sie an einer
         Version weiterarbeiten wollen. Um persönliche Daten wie Markierungen, Sortierungen und Lesezeichen zu speichern, ist es notwendig, dass Sie auch Ihre persönliche Bearbeitungsdatei hochladen.
+        Das Basisdokument verwendet keinen externen Server, um Daten zu speichern. Alle Daten, die Sie hochladen, bleiben <b>im Browser Ihres Computers</b>. Das Basisdokument kann schließlich als
+        .json und .pdf exportiert werden und somit an Dritte weitergegeben werden.
       </p>
       <div>
         <p className="font-light">
