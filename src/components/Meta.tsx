@@ -1,7 +1,7 @@
 import { Button } from "./Button"
-import { DotsThree, Notepad, X, FloppyDisk, PencilSimpleLine, Scales, Trash, TextBolder, TextStrikethrough, TextUnderline,
-TextAlignCenter, TextAlignJustify, TextAlignLeft, TextAlignRight, TextItalic, ListBullets, ListNumbers, CaretUp} from "phosphor-react";
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { Notepad, X, FloppyDisk, CaretUp} from "phosphor-react";
+import { Dropdown } from "./meta/MetaDropdown";
+import { Toolbar } from "./meta/MetaToolbar";
 
 export const Meta = () => {
     return (
@@ -19,8 +19,6 @@ export const Meta = () => {
                             position="end">
                             KLAGEPARTEI
                         </Button>
-                        
-                        
                     </div>
                     <div className="bg-lightPurple text-black p-4 rounded-lg col-start-1 col-span-1">
                         <div className="flex justify-between">
@@ -33,51 +31,7 @@ export const Meta = () => {
                                     alternativePadding="p-1"
                                     onClick={() => void {}}
                                 />
-                                <DropdownMenu.Root>
-                                    <DropdownMenu.Trigger>
-                                <Button 
-                                    bgColor="transparent"
-                                    textColor="text-darkGrey"
-                                    icon={<DotsThree size={18} />}
-                                    alternativePadding="p-1"
-                                    onClick={() => void {}}
-                                />
-                                </DropdownMenu.Trigger>
-                                <DropdownMenu.Portal>
-                                    <DropdownMenu.Content className="bg-white rounded-lg shadow-md">
-                                        <DropdownMenu.Item>
-                                            <Button
-                                                bgColor="bg-white"
-                                                size="sm"
-                                                textColor="text-darkGrey"
-                                                icon={<PencilSimpleLine size={12} />}>
-                                                Bearbeiten
-                                            </Button>
-                                        </DropdownMenu.Item>
-                                        <DropdownMenu.Separator/>
-                                        <DropdownMenu.Item className="pb-1 border-b-2 border-lightGrey">
-                                            <Button
-                                                bgColor="bg-white"
-                                                size="sm"
-                                                textColor="text-darkGrey"
-                                                icon={<Scales size={12} />}
-                                                onClick={() => void {}}>
-                                                Hinweis hinzufügen
-                                            </Button>
-                                        </DropdownMenu.Item>
-                                        <DropdownMenu.Item>
-                                            <Button
-                                                bgColor="bg-white"
-                                                size="sm"
-                                                textColor="text-vibrantRed"
-                                                icon={<Trash size={12} />}
-                                                onClick={() => void {}}>
-                                                Beschreibung löschen
-                                            </Button>
-                                        </DropdownMenu.Item>
-                                    </DropdownMenu.Content>
-                                </DropdownMenu.Portal>
-                                </DropdownMenu.Root>
+                                <Dropdown></Dropdown>
                             </span>
                         </div>
                         <p className="mt-8">
@@ -110,142 +64,10 @@ export const Meta = () => {
                                         alternativePadding="p-1"
                                         onClick={() => void {}}
                                     />
-                                    <DropdownMenu.Root>
-                                    <DropdownMenu.Trigger>
-                                <Button 
-                                    bgColor="transparent"
-                                    textColor="text-darkGrey"
-                                    icon={<DotsThree size={18} />}
-                                    alternativePadding="p-1"
-                                    onClick={() => void {}}
-                                />
-                                </DropdownMenu.Trigger>
-                                <DropdownMenu.Portal>
-                                    <DropdownMenu.Content className="bg-white rounded-lg shadow-md">
-                                        <DropdownMenu.Item>
-                                            <Button
-                                                bgColor="bg-white"
-                                                size="sm"
-                                                textColor="text-darkGrey"
-                                                icon={<PencilSimpleLine size={12} />}
-                                                onClick={() => void {}}>
-                                                Bearbeiten
-                                            </Button>
-                                        </DropdownMenu.Item>
-                                        <DropdownMenu.Separator/>
-                                        <DropdownMenu.Item className="pb-1 border-b-2 border-lightGrey">
-                                            <Button
-                                                bgColor="bg-white"
-                                                size="sm"
-                                                textColor="text-darkGrey"
-                                                icon={<Scales size={12} />}
-                                                onClick={() => void {}}>
-                                                Hinweis hinzufügen
-                                            </Button>
-                                        </DropdownMenu.Item>
-                                        <DropdownMenu.Item>
-                                            <Button
-                                                bgColor="bg-white"
-                                                size="sm"
-                                                textColor="text-vibrantRed"
-                                                icon={<Trash size={12} />}
-                                                onClick={() => void {}}>
-                                                Beschreibung löschen
-                                            </Button>
-                                        </DropdownMenu.Item>
-                                    </DropdownMenu.Content>
-                                </DropdownMenu.Portal>
-                                </DropdownMenu.Root>
+                                    <Dropdown></Dropdown>
                             </span>
                     </div>
-                    <div className="flex inline-flex my-2 gap-4">
-                    <span className="inline-flex gap-1">
-                        <Button
-                            icon={<TextBolder size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                        <Button
-                            icon={<TextItalic size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                        <Button
-                            icon={<TextUnderline size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                        <Button
-                            icon={<TextStrikethrough size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                    </span>
-                    <span className="inline-flex gap-1">
-                        <Button
-                            icon={<ListBullets size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                        <Button
-                            icon={<ListNumbers size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                    </span>
-                    <span className="inline-flex gap-1">
-                        <Button
-                            icon={<TextAlignLeft size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                        <Button
-                            icon={<TextAlignCenter size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                        <Button
-                            icon={<TextAlignRight size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                        <Button
-                            icon={<TextAlignJustify size={18} />}
-                            bgColor="bg-offWhite"
-                            textColor="text-black"
-                            size="sm"
-                            alternativePadding="p-1"
-                            onClick={() => void {}}
-                        />
-                    </span>
-                    </div>
+                    <Toolbar></Toolbar>
                         <p className="">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             Consequuntur dolorum earum dolores omnis odit, voluptas
