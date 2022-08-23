@@ -2,27 +2,18 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import cx from "classnames";
 import { Upload } from "phosphor-react";
+import { IStateUserInput } from "../types";
+import { openBasisdokument, openEditFile } from "../data-management/opening-handler";
+import { createBasisdokument, createEditFile } from "../data-management/creating-handler";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
 }
 
-interface IStateUserInput {
-  usage: "open" | "create" | undefined;
-  party: "defendant" | "plaintiff" | "judge" | undefined;
-  prename: string;
-  surname: string;
-  basisdokumentFile: string;
-  editFile: string;
-  basisdokumentFilename: string;
-  editFilename: string;
-  errorText: string;
-  newVersionMode: boolean;
-}
-
 export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [usage, setUsage] = useState<IStateUserInput["usage"]>();
-  const [party, setParty] = useState<IStateUserInput["party"]>();
+  const [caseId, setCaseId] = useState<IStateUserInput["caseId"]>("");
+  const [role, setRole] = useState<IStateUserInput["role"]>();
   const [prename, setPrename] = useState<IStateUserInput["prename"]>("");
   const [surname, setSurname] = useState<IStateUserInput["surname"]>("");
   const [basisdokumentFile, setBasisdokumentFile] = useState<IStateUserInput["basisdokumentFile"]>();
@@ -42,28 +33,34 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setSurname(newValue);
   };
 
+  const onChangeGivenCaseId = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setCaseId(newValue);
+  };
+
   // Source: https://stackoverflow.com/questions/71991961/how-to-read-content-of-uploaded-json-file-on-react-next-js
   const handleBasisdokumentFileUploadChange = (e: any) => {
     const fileReader = new FileReader();
-    fileReader.readAsText(e.target.files[0], "UTF-8");
-    setBasisdokumentFilename(e.target.files[0].name);
-    fileReader.onload = (e: any) => {
-      const result = e.target.result;
-      setBasisdokumentFile(result);
-      console.log(basisdokumentFile);
-      
-    };
+    try {
+      fileReader.readAsText(e.target.files[0], "UTF-8");
+      setBasisdokumentFilename(e.target.files[0].name);
+      fileReader.onload = (e: any) => {
+        let result = e.target.result;
+        setBasisdokumentFile(result);
+      };
+    } catch (error) {}
   };
 
   const handleEditFileUploadChange = (e: any) => {
     const fileReader = new FileReader();
-    fileReader.readAsText(e.target.files[0], "UTF-8");
-    setEditFilename(e.target.files[0].name);
-    fileReader.onload = (e: any) => {
-      const result = e.target.result;
-      setEditFile(result);
-      console.log(editFile);
-    };
+    try {
+      fileReader.readAsText(e.target.files[0], "UTF-8");
+      setEditFilename(e.target.files[0].name);
+      fileReader.onload = (e: any) => {
+        let result = e.target.result;
+        setEditFile(result);
+      };
+    } catch (error) {}
   };
 
   const validateUserInput = () => {
@@ -71,28 +68,48 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     var inputIsValid: boolean = true;
 
     // check if file exists and validate
-    if (!basisdokumentFilename.endsWith(".json")) {
-      setErrorText("Bitte laden Sie eine valide Bearbeitungs-Datei (.json) hoch!");
+    if (usage === "open") {
+      if (!basisdokumentFilename.endsWith(".json") && typeof basisdokumentFile == "string") {
+        setErrorText("Bitte laden Sie eine valide Bearbeitungs-Datei (.json) hoch!");
+        inputIsValid = false;
+      }
+      if (!editFilename.endsWith(".json") && typeof editFile == "string") {
+        setErrorText("Bitte laden Sie eine valide Basisdokument-Datei (.json) hoch!");
+        inputIsValid = false;
+      }
+    }
+    if (caseId === "" && usage === "create") {
+      setErrorText("Bitte geben Sie ein gültiges Aktenzeichen an!");
       inputIsValid = false;
     }
-    if (!editFilename.endsWith(".json")) {
-      setErrorText("Bitte laden Sie eine valide Basisdokument-Datei (.json) hoch!");
-      inputIsValid = false;
-    }
-    if (prename === "" && surname === "") {
+    
+    if (prename === "" || surname === "") {
       setErrorText("Bitte geben Sie sowohl Ihren Vornamen als auch einen Nachnamen an!");
       inputIsValid = false;
     }
-    if (party === undefined) {
-      setErrorText("Bitte spezifizieren Sie, ob Sie das Basidokument als Klagepartei, Beklagtenpartei, Richter:in bearbeiten möchten!");
+    if (!role) {
+      setErrorText("Bitte spezifizieren Sie, ob Sie das Basisdokument als Kläger, Beklagter oder Richter bearbeiten möchten!");
       inputIsValid = false;
     }
-    if (usage === undefined) {
-      setErrorText("Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder schließen möchten!");
+    if (!usage) {
+      setErrorText("Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder erstellen möchten!");
       inputIsValid = false;
     }
 
     if (inputIsValid === true) {
+      var basisdokumentObject, editFileObject;
+      if (usage === "open" && typeof basisdokumentFile == "string" && typeof editFile == "string") {
+        basisdokumentObject = openBasisdokument(basisdokumentFile, newVersionMode, prename, surname, role);
+        editFileObject = openEditFile(basisdokumentFile, editFile, newVersionMode);
+      }
+
+      if (usage === "create") {
+        basisdokumentObject = createBasisdokument(prename, surname, role, caseId);
+        editFileObject = createEditFile(prename, surname, role, caseId);
+      }
+      console.log(basisdokumentObject);
+      console.log(editFileObject);
+
       setIsAuthenticated(true);
     }
   };
@@ -101,8 +118,10 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex flex-col justify-center h-auto overflow-scroll no-scrollbar">
       <h1 className="text-3xl font-bold">Das Basisdokument</h1>
       <p className="text-md text-mediumGrey">
-        Diese Anwendung erlaubt Ihnen das Editieren des Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments in Form einer .json-Datei hoch, falls Sie an einer Version weiterarbeiten
-        wollen. Um persönliche Daten wie Markierungen, Sortierungen und Lesezeichen zu speichern, ist es notwendig, dass Sie auch Ihre persönliche Bearbeitungsdatei hochladen.
+        Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments in Form einer .json-Datei hoch, falls Sie an einer
+        Version weiterarbeiten wollen. Um persönliche Daten wie Markierungen, Sortierungen und Lesezeichen zu speichern, ist es notwendig, dass Sie auch Ihre persönliche Bearbeitungsdatei hochladen.
+        Das Basisdokument verwendet keinen externen Server, um Daten zu speichern. Alle Daten, die Sie hochladen, bleiben <b>im Browser Ihres Computers</b>. Das Basisdokument kann schließlich als
+        .json und .pdf exportiert werden und somit an Dritte weitergegeben werden.
       </p>
       <div>
         <p className="font-light">
@@ -131,6 +150,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           </div>
         </div>
       </div>
+
       <div>
         <p className="font-light">
           Ich möchte das Basisdokument bearbeiten in der Funktion: <span className="text-darkRed">*</span>
@@ -138,33 +158,33 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         <div className="flex flex-row w-auto mt-4 gap-4">
           <div
             onClick={() => {
-              setParty("plaintiff");
+              setRole("Kläger");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2 border-darkGrey": party === "plaintiff",
+              "border-2 border-darkGrey": role === "Kläger",
             })}
           >
-            Klagepartei
+            Kläger
           </div>
           <div
             onClick={() => {
-              setParty("defendant");
+              setRole("Beklagter");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2 border-darkGrey": party === "defendant",
+              "border-2 border-darkGrey": role === "Beklagter",
             })}
           >
-            Beklatenpartei
+            Beklagter
           </div>
           <div
             onClick={() => {
-              setParty("judge");
+              setRole("Richter");
             }}
             className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-              "border-2 border-darkGrey": party === "judge",
+              "border-2 border-darkGrey": role === "Richter",
             })}
           >
-            Richter:in
+            Richter
           </div>
         </div>
       </div>
@@ -177,6 +197,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Nachname..." value={surname} onChange={onChangeGivenSurname} />
         </div>
       </div>
+      {usage === "create" ? (
+        <div>
+          <p className="font-light">
+            Aktenzeichen diese Basisdokuments: <span className="text-darkRed">*</span>
+          </p>
+          <div className="flex flex-row w-auto mt-4 gap-4">
+            <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Aktenzeichen..." value={caseId} onChange={onChangeGivenCaseId} />
+          </div>
+        </div>
+      ) : null}
       {usage === "open" ? (
         <div className="flex flex-col gap-4">
           <div>
@@ -220,13 +250,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         </div>
       ) : null}
 
-      {errorText !== "" ? (
-        <div className="flex bg-lightRed p-4 rounded-md">
-          <p className="text-darkRed">
-            <span className="font-bold">Fehler:</span> {errorText}
-          </p>
-        </div>
-      ) : null}
+      <div>
+        {errorText !== "" ? (
+          <div className="flex bg-lightRed p-4 rounded-md">
+            <p className="text-darkRed">
+              <span className="font-bold">Fehler:</span> {errorText}
+            </p>
+          </div>
+        ) : null}
+      </div>
+
       <div className="space-y-2">
         <Button onClick={validateUserInput}>Basisdokument erstellen</Button>
       </div>

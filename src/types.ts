@@ -50,3 +50,17 @@ export interface Tool {
   iconNode: string;
   germanTitle: string;
 }
+
+export interface IStateUserInput {
+  usage: "open" | "create" | undefined;
+  role: "Kläger" | "Beklagter" | "Richter" | undefined;
+  prename: string;
+  surname: string;
+  caseId: string;
+  basisdokumentFile: string;
+  editFile: string;
+  basisdokumentFilename: string;
+  editFilename: string;
+  errorText: string;
+  newVersionMode: boolean;
+}
