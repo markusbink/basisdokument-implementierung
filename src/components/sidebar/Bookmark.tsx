@@ -64,7 +64,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({
       <div className="flex items-center gap-2">
         <div
           className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey hover:bg-mediumGrey
-          text-lightGrey text-[10px] font-semibold "
+          text-lightGrey text-[10px] font-semibold cursor-pointer"
           onClick={showReference}
         >
           <Eye size={16} weight="bold" className="inline"></Eye>
@@ -73,7 +73,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({
 
         <Button
           key="createNote"
-          bgColor="bg-marker-red"
+          bgColor="bg-lightRed hover:bg-marker-red"
           size="sm"
           textColor="text-darkRed"
           hasText={false}
