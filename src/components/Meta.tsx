@@ -1,5 +1,7 @@
 import { Button } from "./Button"
-import { DotsThree, Notepad, X, FloppyDisk} from "phosphor-react";
+import { DotsThree, Notepad, X, FloppyDisk, PencilSimpleLine, Scales, Trash, TextBolder, TextStrikethrough, TextUnderline,
+TextAlignCenter, TextAlignJustify, TextAlignLeft, TextAlignRight, TextItalic, ListBullets, ListNumbers} from "phosphor-react";
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 export const Meta = () => {
     return (
@@ -26,12 +28,48 @@ export const Meta = () => {
                                     icon={<Notepad size={18} />}
                                     alternativePadding="p-1"
                                 />
+                                <DropdownMenu.Root>
+                                    <DropdownMenu.Trigger>
                                 <Button 
                                     bgColor="transparent"
                                     textColor="text-darkGrey"
                                     icon={<DotsThree size={18} />}
                                     alternativePadding="p-1"
                                 />
+                                </DropdownMenu.Trigger>
+                                <DropdownMenu.Portal>
+                                    <DropdownMenu.Content className="bg-white rounded-lg shadow-md">
+                                        <DropdownMenu.Item>
+                                            <Button
+                                                bgColor="bg-white"
+                                                size="sm"
+                                                textColor="text-darkGrey"
+                                                icon={<PencilSimpleLine size={12} />}>
+                                                Bearbeiten
+                                            </Button>
+                                        </DropdownMenu.Item>
+                                        <DropdownMenu.Separator/>
+                                        <DropdownMenu.Item className="pb-1 border-b-2 border-lightGrey">
+                                            <Button
+                                                bgColor="bg-white"
+                                                size="sm"
+                                                textColor="text-darkGrey"
+                                                icon={<Scales size={12} />}>
+                                                Hinweis hinzufügen
+                                            </Button>
+                                        </DropdownMenu.Item>
+                                        <DropdownMenu.Item>
+                                            <Button
+                                                bgColor="bg-white"
+                                                size="sm"
+                                                textColor="text-vibrantRed"
+                                                icon={<Trash size={12} />}>
+                                                Beschreibung löschen
+                                            </Button>
+                                        </DropdownMenu.Item>
+                                    </DropdownMenu.Content>
+                                </DropdownMenu.Portal>
+                                </DropdownMenu.Root>
                             </span>
                         </div>
                         <p className="mt-8">
@@ -61,20 +99,138 @@ export const Meta = () => {
                                         icon={<Notepad size={18} />}
                                         alternativePadding="p-1"
                                     />
-                                    <Button 
-                                        bgColor="transparent"
-                                        textColor="text-darkGrey"
-                                        icon={<DotsThree size={18} />}
-                                        alternativePadding="p-1"
-                                    />
+                                    <DropdownMenu.Root>
+                                    <DropdownMenu.Trigger>
+                                <Button 
+                                    bgColor="transparent"
+                                    textColor="text-darkGrey"
+                                    icon={<DotsThree size={18} />}
+                                    alternativePadding="p-1"
+                                />
+                                </DropdownMenu.Trigger>
+                                <DropdownMenu.Portal>
+                                    <DropdownMenu.Content className="bg-white rounded-lg shadow-md">
+                                        <DropdownMenu.Item>
+                                            <Button
+                                                bgColor="bg-white"
+                                                size="sm"
+                                                textColor="text-darkGrey"
+                                                icon={<PencilSimpleLine size={12} />}>
+                                                Bearbeiten
+                                            </Button>
+                                        </DropdownMenu.Item>
+                                        <DropdownMenu.Separator/>
+                                        <DropdownMenu.Item className="pb-1 border-b-2 border-lightGrey">
+                                            <Button
+                                                bgColor="bg-white"
+                                                size="sm"
+                                                textColor="text-darkGrey"
+                                                icon={<Scales size={12} />}>
+                                                Hinweis hinzufügen
+                                            </Button>
+                                        </DropdownMenu.Item>
+                                        <DropdownMenu.Item>
+                                            <Button
+                                                bgColor="bg-white"
+                                                size="sm"
+                                                textColor="text-vibrantRed"
+                                                icon={<Trash size={12} />}>
+                                                Beschreibung löschen
+                                            </Button>
+                                        </DropdownMenu.Item>
+                                    </DropdownMenu.Content>
+                                </DropdownMenu.Portal>
+                                </DropdownMenu.Root>
                             </span>
                     </div>
-                        <p className="mt-8">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    <div className="flex inline-flex my-2 gap-4">
+                    <span className="inline-flex gap-1">
+                        <Button
+                            icon={<TextBolder size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                        <Button
+                            icon={<TextItalic size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                        <Button
+                            icon={<TextUnderline size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                        <Button
+                            icon={<TextStrikethrough size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                    </span>
+                    <span className="inline-flex gap-1">
+                        <Button
+                            icon={<ListBullets size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                        <Button
+                            icon={<ListNumbers size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                    </span>
+                    <span className="inline-flex gap-1">
+                        <Button
+                            icon={<TextAlignLeft size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                        <Button
+                            icon={<TextAlignCenter size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                        <Button
+                            icon={<TextAlignRight size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                        <Button
+                            icon={<TextAlignJustify size={18} />}
+                            bgColor="bg-offWhite"
+                            textColor="text-black"
+                            size="sm"
+                            alternativePadding="p-1"
+                        />
+                    </span>
+                    </div>
+                        <p className="">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             Consequuntur dolorum earum dolores omnis odit, voluptas
                             ratione? Praesentium reprehenderit perspiciatis repudiandae
                             officia veniam qui facere at deserunt, harum ab pariatur
-                            beatae?
+                            beatae?Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Consequuntur dolorum earum dolores omnis odit, voluptas
+                            ratione? Praesentium reprehenderit perspiciatis repudiandae
+                            officia veniam qui facere at deserunt, harum ab pariatur
+                            beatae? 
                         </p>
                         <span className="flex gap-2 font-bold mt-8 justify-end">
                             <Button
