@@ -88,7 +88,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       inputIsValid = false;
     }
     if (usage === undefined) {
-      setErrorText("Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder schließen möchten!");
+      setErrorText("Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder erstellen möchten!");
       inputIsValid = false;
     }
 
