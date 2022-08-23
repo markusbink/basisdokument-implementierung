@@ -5,7 +5,7 @@ import { useHeaderContext } from "../contexts/HeaderContext";
 export const Header = () => {
    const { showDropdownHeader } = useHeaderContext();
   return (
-    <header className="text-darkGrey">
+    <header className="text-darkGrey border-b border-offWhite">
       {/* main part of the header */}
       <MainHeader />
       {/* fold-out part of the header */}
