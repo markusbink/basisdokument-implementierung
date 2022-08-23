@@ -12,15 +12,15 @@ interface SidebarProps {
 const buttons = [
   {
     name: "Notes",
-    icon: <Notepad size={18} />,
+    icon: <Notepad size={20} />,
   },
   {
     name: "Hints",
-    icon: <Scales size={18} />,
+    icon: <Scales size={20} />,
   },
   {
     name: "Bookmarks",
-    icon: <Bookmarks size={18} />,
+    icon: <Bookmarks size={20} />,
   },
 ];
 
@@ -34,7 +34,7 @@ export const SidebarHeader: React.FC<SidebarProps> = ({
   return (
     <div
       className={cx(
-        "flex flex-row h-14 border-b-[0.5px] border-lightGrey pt-3 pb-2 px-4",
+        "flex flex-row items-center h-14 border-b-[0.5px] border-lightGrey px-4",
         {
           "justify-between": sidebarOpen,
           "justify-end": !sidebarOpen,
@@ -54,7 +54,7 @@ export const SidebarHeader: React.FC<SidebarProps> = ({
           textColor="font-bold text-darkGrey"
           hasText={false}
           alternativePadding="py-1.5 px-1.5"
-          icon={<List size={18} />}
+          icon={<List size={20} />}
           onClick={() => {
             setSidebarOpen(!sidebarOpen);
           }}

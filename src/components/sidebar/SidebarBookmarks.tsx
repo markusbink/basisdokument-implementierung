@@ -1,26 +1,28 @@
 import { BookmarkSimple } from "phosphor-react";
-import { Bookmark, BookmarkProps } from "./Bookmark";
+import { useState } from "react";
+import { IBookmark } from "../../types";
+import { Bookmark } from "./Bookmark";
 
 //TODO: remove this, this is for testing
-// const bookmarks: BookmarkProps[] = [
-//   {
-//     id: "1",
-//     title: "Lesezeichen 1",
-//     referenceTo: "12345",
-//   },
-//   {
-//     id: "2",
-//     title: "Lesezeichen 2",
-//     referenceTo: "12345",
-//   },
-// ];
-
-const bookmarks: BookmarkProps[] = [];
+const mockBookmarks: IBookmark[] = [
+  {
+    id: "1",
+    title: "Lesezeichen 1",
+    referenceTo: "12345",
+  },
+  {
+    id: "2",
+    title: "Lesezeichen 2",
+    referenceTo: "12345",
+  },
+];
 
 export const SidebarBookmarks = () => {
+  const [bookmarks, setBookmarks] = useState<IBookmark[]>(mockBookmarks);
+
   return (
-    <div className="flex flex-col gap-7 p-4 h-full overflow-auto">
-      <div className="text-base font-bold text-darkGrey text-lg">
+    <div className="flex flex-col gap-3 flex-1 overflow-hidden">
+      <div className="font-bold text-darkGrey text-lg pt-4 px-4">
         Lesezeichen
       </div>
       {bookmarks.length <= 0 && (
@@ -31,9 +33,13 @@ export const SidebarBookmarks = () => {
           sind nur für Sie sichtbar.
         </span>
       )}
-      <div className="text-mediumGrey font-bold text-sm">
-        {bookmarks.map((hint) => (
-          <Bookmark key={hint.id} {...hint}></Bookmark>
+      <div className="text-mediumGrey font-bold text-sm p-4">
+        {bookmarks.map((bookmark) => (
+          <Bookmark
+            key={bookmark.id}
+            bookmark={bookmark}
+            setBookmarks={setBookmarks}
+          />
         ))}
       </div>
     </div>

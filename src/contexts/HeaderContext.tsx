@@ -66,7 +66,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     id: "red",
     label: "Markierung 1",
   });
-  const [getCurrentTool, setCurrentTool] = useState<Tool>({ id: "cursor", title: "Cursor" });
+  const [getCurrentTool, setCurrentTool] = useState<Tool>({ id: "cursor", iconNode: "Cursor", germanTitle: "Maus" });
   const [highlighterData, setHighlighterData] = useState({ red: true, orange: true, yellow: true, green: true, blue: true, purple: true });
   const [hideEntriesHighlighter, setHideEntriesHighlighter] = useState<IHeaderContext["hideEntriesHighlighter"]>(false);
   const [selectedSorting, setSelectedSorting] = useState<Sorting>(Sorting.Original);

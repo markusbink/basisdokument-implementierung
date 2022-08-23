@@ -1,3 +1,9 @@
+export interface IBookmark {
+  id: string;
+  title: string;
+  referenceTo: string;
+}
+
 export enum UserRole {
   Plaintiff = "Kläger",
   Defendant = "Beklagter",
@@ -41,5 +47,20 @@ export interface IVersion {
 
 export interface Tool {
   id: string;
-  title: string;
+  iconNode: string;
+  germanTitle: string;
+}
+
+export interface IStateUserInput {
+  usage: "open" | "create" | undefined;
+  role: "Kläger" | "Beklagter" | "Richter" | undefined;
+  prename: string;
+  surname: string;
+  caseId: string;
+  basisdokumentFile: string;
+  editFile: string;
+  basisdokumentFilename: string;
+  editFilename: string;
+  errorText: string;
+  newVersionMode: boolean;
 }

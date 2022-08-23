@@ -32,27 +32,27 @@ export const MainHeader = () => {
             setShowDropdownHeader(!showDropdownHeader);
           }}
         >
-          <p className="text-sm font-bold">Ansicht</p>
+          <p className="text-xs font-bold">Ansicht</p>
           {showDropdownHeader ? (
             <CaretUp size={12} className="text-darkGrey" />
           ) : (
             <CaretDown size={12} className="text-darkGrey" />
           )}
         </div>
-        <p className="font-extralight">{caseId}</p>
+        <p className="font-extralight text-sm">{caseId}</p>
       </div>
       {/* searchbar */}
       <div className="flex flex-row gap-2 justify-center items-center">
-        <div className="flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-10 items-center">
+        <div className="flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-8 items-center">
           <input
             value={searchbarValue}
             onChange={(e) => onChangeSearchbar(e)}
-            className="bg-offWhite outline-0 min-w-[300px] max-w-[400px] pl-2"
+            className="bg-offWhite outline-0 min-w-[300px] max-w-[400px] pl-2 text-sm"
             type="text"
             placeholder="Im Basisdokument suchen..."
           />
           <MagnifyingGlass
-            size={20}
+            size={16}
             weight="bold"
             className="text-darkGrey ml-1 mr-1"
           />
@@ -61,10 +61,10 @@ export const MainHeader = () => {
       {/* actions on the right side */}
       <div className="flex flex-row gap-4 justify-end items-center">
         <div
-          className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-14 h-10 cursor-pointer"
+          className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8 cursor-pointer"
           onClick={openOnboarding}
         >
-          <Question size={20} weight="bold" className="text-darkGrey" />
+          <Question size={16} className="text-darkGrey" />
         </div>
         <ColorSelector />
         <ToolSelector

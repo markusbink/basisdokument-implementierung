@@ -20,22 +20,22 @@ export const DocumentButton = () => {
           setShowDownloadMenu(!showDownloadMenu);
         }}
       >
-        <DropdownMenu.Trigger className="flex flex-row bg-darkGrey hover:bg-mediumGrey justify-center items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer">
-          <img src={`${process.env.PUBLIC_URL}/icons/document.svg`} alt="document icon"></img>
+        <DropdownMenu.Trigger className="flex flex-row bg-darkGrey hover:bg-mediumGrey justify-center items-center rounded-md gap-2 pl-2 pr-2 h-8 hover:cursor-pointer">
+          <img src={`${process.env.PUBLIC_URL}/icons/document.svg`} alt="document icon" className="h-4"></img>
           {showDownloadMenu ? <CaretUp size={12} color={"white"} /> : <CaretDown size={12} color={"white"} />}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
           <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 gap-4">
-            <div className="flex flex-col align-middle justify-center items-center gap-2 bg-offWhite rounded-md p-5 pl-2 pr-2 h-full">
-              <UserCircle size={32} className="text-darkGrey" weight="fill" />
+            <div className="flex flex-col align-middle justify-center items-center gap-2 bg-offWhite rounded-md p-3 pl-2 pr-2 h-full">
+              <UserCircle size={24} className="text-darkGrey" weight="fill" />
               <div className="text-center">
-                <p className="font-extrabold text-xl text-darkGrey">{username}</p>
-                <p className="text-md text-darkGrey">{userParty}</p>
+                <p className="font-extrabold text-base text-darkGrey">{username}</p>
+                <p className="text-sm text-darkGrey">{userParty}</p>
               </div>
             </div>
             <DropdownMenu.Item className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer" onClick={downloadBasisdokument}>
               <FileArrowDown size={18} className="text-darkGrey" weight="fill" />
-              <div className="text-darkGrey">Basisdokument herunterladen</div>
+              <div className="text-darkGrey text-sm">Basisdokument herunterladen</div>
             </DropdownMenu.Item>
             <DropdownMenu.Item
               onClick={() => {
@@ -44,7 +44,7 @@ export const DocumentButton = () => {
               className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
             >
               <FileArrowUp size={18} className="text-darkGrey" weight="fill" />
-              <div className="text-darkGrey">Neues Basisdokument erstellen/hochladen</div>
+              <div className="text-darkGrey text-sm">Neues Basisdokument erstellen/hochladen</div>
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
