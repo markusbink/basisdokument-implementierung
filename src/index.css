@@ -27,4 +27,8 @@ body {
   .disabled:hover {
     @apply opacity-50 cursor-not-allowed;
   }
+
+  .end {
+    @apply flex-row-reverse;
+  }
 }

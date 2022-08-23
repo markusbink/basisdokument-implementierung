@@ -10,6 +10,7 @@ interface ButtonProps {
   disabled?: boolean;
   hasText?: boolean;
   alternativePadding?: string;
+  position?: "end";
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -20,6 +21,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
   hasText = true,
   alternativePadding = "",
+  position = "",
   onClick,
   children,
 }) => {
@@ -29,7 +31,7 @@ export const Button: React.FC<ButtonProps> = ({
       className={cx(
         `flex items-center
         ${icon && "gap-3"} ${size} ${bgColor} ${alternativePadding}
-        ${textColor} ${disabled && "disabled"} font`,
+        ${textColor} ${position} ${disabled && "disabled"} font`,
         { "rounded-lg": !hasText }
       )}
     >
