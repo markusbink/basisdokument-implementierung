@@ -81,8 +81,8 @@ export const OnboardingSwiper = () => {
         setWrapperSize={true}
         pagination={{ clickable: true }}
       >
-        {sliderItems.map((sliderItem) => (
-          <SwiperSlide>
+        {sliderItems.map((sliderItem, index) => (
+          <SwiperSlide key={index}>
             <OnboardingSliderItem
               imageSrc={sliderItem.imageSrc}
               imageAlt={sliderItem.imageAlt}
