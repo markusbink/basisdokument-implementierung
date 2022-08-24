@@ -14,8 +14,6 @@ enum Sorting {
 
 export default interface IHeaderContext {
   caseId: string;
-  username: string;
-  userParty: string;
   showDropdownHeader: boolean;
   showColumnView: boolean;
   getCurrentTool: Tool;
@@ -33,8 +31,6 @@ export default interface IHeaderContext {
   downloadBasisdokument: MouseEventHandler<HTMLDivElement> | undefined;
   reloadPageAndSave: MouseEventHandler<HTMLButtonElement> | undefined;
   reloadPageAndDoNotSave: MouseEventHandler<HTMLButtonElement> | undefined;
-  setUserParty: React.Dispatch<React.SetStateAction<string>>;
-  setUsername: React.Dispatch<React.SetStateAction<string>>;
   setSectionList: React.Dispatch<React.SetStateAction<ISection[]>>;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
@@ -69,10 +65,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   // Define States
   const [showDropdownHeader, setShowDropdownHeader] =
     useState<IHeaderContext["showDropdownHeader"]>(false);
-  const [username, setUsername] =
-    useState<IHeaderContext["username"]>("Max Mustermann");
-  const [userParty, setUserParty] =
-    useState<IHeaderContext["userParty"]>("Beklagtenpartei");
   const [searchbarValue, setSearchbarValue] =
     useState<IHeaderContext["searchbarValue"]>("");
   const [showColumnView, setShowColumnView] =
@@ -106,7 +98,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     hideElementsWithoutSpecificVersion,
     setHideElementsWithoutSpecificVersion,
   ] = useState<IHeaderContext["hideElementsWithoutSpecificVersion"]>(false);
-  // This data needs to be extracted from the json later
+
   const highlighterColorsExample = [
     { id: "red", label: "Markierung A" },
     { id: "orange", label: "Markierung 2" },
@@ -115,25 +107,13 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     { id: "blue", label: "Markierung 5" },
     { id: "purple", label: "Markierung 6" },
   ];
-  const versionHistoryExample: IHeaderContext["versionHistory"] = [
-    {
-      author: "Max Mustermann",
-      role: "Kläger",
-      timestamp: "06/05/2022 14:09:24",
-    },
-    {
-      author: "Michael Bauer",
-      role: "Beklagter",
-      timestamp: "07/05/2022 14:09:24",
-    },
-  ];
 
   const [colorSelection, setColorSelection] = useState<
     IHeaderContext["colorSelection"]
   >(highlighterColorsExample);
   const [versionHistory, setVersionHistory] = useState<
     IHeaderContext["versionHistory"]
-  >(versionHistoryExample);
+  >([]);
   const [selectedVersion, setSelectedVersion] =
     useState<IHeaderContext["selectedVersion"]>(1);
   const [sectionList, setSectionList] = useState<ISection[]>([]);
@@ -165,8 +145,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     <HeaderContext.Provider
       value={{
         caseId,
-        username,
-        userParty,
         showDropdownHeader,
         showColumnView,
         getCurrentTool,
@@ -184,8 +162,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         downloadBasisdokument,
         reloadPageAndSave,
         reloadPageAndDoNotSave,
-        setUserParty,
-        setUsername,
         setSectionList,
         setSelectedVersion,
         setVersionHistory,
