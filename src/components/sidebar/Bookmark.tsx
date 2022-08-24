@@ -1,19 +1,21 @@
 import { BookmarkSimple, Eye, Trash } from "phosphor-react";
-import React, { Dispatch, SetStateAction } from "react";
-import { Button } from "../Button";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useEntries } from "../../contexts";
+import { useBookmarks } from "../../contexts/BookmarkContext";
 import { IBookmark } from "../../types";
+import { getEntryCode } from "../../util/get-entry-code";
+import { Button } from "../Button";
 
 export interface BookmarkProps {
   bookmark: IBookmark;
-  setBookmarks: Dispatch<SetStateAction<IBookmark[]>>;
 }
 
-export const Bookmark: React.FC<BookmarkProps> = ({
-  bookmark,
-  setBookmarks,
-}) => {
+export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
   const [doubleClicked, setDoubleClicked] = useState<boolean>(false);
+
+  const { setBookmarks } = useBookmarks();
+  const { entries } = useEntries();
+  const entryCode = getEntryCode(entries, bookmark.associatedEntry);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -26,10 +28,6 @@ export const Bookmark: React.FC<BookmarkProps> = ({
       });
       return updatedBoomarks;
     });
-  };
-
-  const showReference = (e: React.MouseEvent) => {
-    //TODO
   };
 
   const deleteBookmark = () => {
@@ -62,14 +60,14 @@ export const Bookmark: React.FC<BookmarkProps> = ({
       </div>
 
       <div className="flex items-center gap-2">
-        <div
+        <a
+          href={`#${entryCode}`}
           className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey hover:bg-mediumGrey
           text-lightGrey text-[10px] font-semibold cursor-pointer"
-          onClick={showReference}
         >
           <Eye size={16} weight="bold" className="inline"></Eye>
-          {`${bookmark.referenceTo}`}
-        </div>
+          {`${entryCode}`}
+        </a>
 
         <Button
           key="createNote"

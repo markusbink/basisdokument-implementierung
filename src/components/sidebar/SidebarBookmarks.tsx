@@ -1,24 +1,9 @@
 import { BookmarkSimple } from "phosphor-react";
-import { useState } from "react";
-import { IBookmark } from "../../types";
+import { useBookmarks } from "../../contexts/BookmarkContext";
 import { Bookmark } from "./Bookmark";
 
-//TODO: remove this, this is for testing
-const mockBookmarks: IBookmark[] = [
-  {
-    id: "1",
-    title: "Lesezeichen 1",
-    referenceTo: "12345",
-  },
-  {
-    id: "2",
-    title: "Lesezeichen 2",
-    referenceTo: "12345",
-  },
-];
-
 export const SidebarBookmarks = () => {
-  const [bookmarks, setBookmarks] = useState<IBookmark[]>(mockBookmarks);
+  const { bookmarks } = useBookmarks();
 
   return (
     <div className="flex flex-col gap-3 flex-1 overflow-hidden">
@@ -35,11 +20,7 @@ export const SidebarBookmarks = () => {
       )}
       <div className="text-mediumGrey font-bold text-sm p-4">
         {bookmarks.map((bookmark) => (
-          <Bookmark
-            key={bookmark.id}
-            bookmark={bookmark}
-            setBookmarks={setBookmarks}
-          />
+          <Bookmark key={bookmark.id} bookmark={bookmark} />
         ))}
       </div>
     </div>
