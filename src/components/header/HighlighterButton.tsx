@@ -20,7 +20,7 @@ export const HighlighterButton: React.FC<{ id: number }> = ({ id }) => {
       }}
     >
       {highlighterData[color] ? (
-        <div className="border-white w-4 h-4 bg-transparent rounded-full bg-transparent border-[2px]" />
+        <div className="border-white w-4 h-4 bg-transparent rounded-full bg-transparent border-[3px]" />
       ) : null}
     </div>
   );
