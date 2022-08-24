@@ -4,12 +4,13 @@ interface ButtonProps {
   icon?: any;
   bgColor?: string;
   textColor?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   onClick?: () => void;
   children?: React.ReactNode;
   disabled?: boolean;
   hasText?: boolean;
   alternativePadding?: string;
+  gap?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -20,6 +21,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
   hasText = true,
   alternativePadding = "",
+  gap = "gap-3",
   onClick,
   children,
 }) => {
@@ -28,9 +30,8 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       className={cx(
         `flex items-center
-        ${icon && "gap-3"} ${size} ${bgColor} ${alternativePadding}
-        ${textColor} ${disabled && "disabled"} font`,
-        { "rounded-lg": !hasText }
+        ${icon && gap} ${size} text-${size} ${bgColor} ${alternativePadding}
+        ${textColor} ${disabled && "disabled"} rounded-lg`
       )}
     >
       <span>{icon}</span>

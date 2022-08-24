@@ -9,7 +9,6 @@ import {
   Trash,
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
-import { setSyntheticTrailingComments } from "typescript";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useEntries } from "../../contexts";
 import { IEntry, UserRole } from "../../types";
@@ -105,6 +104,7 @@ export const Entry: React.FC<EntryProps> = ({
   };
 
   const deleteEntry = (e: React.MouseEvent) => {};
+
 
   const updateEntry = (text: string) => {
     setIsEditing(false);
