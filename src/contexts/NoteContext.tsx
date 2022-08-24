@@ -15,11 +15,11 @@ interface INoteContext {
 
 export const NoteContext = createContext<INoteContext | null>(null);
 
-interface noteProviderProps {
+interface NoteProviderProps {
   children: React.ReactNode;
 }
 
-export const NoteProvider: React.FC<noteProviderProps> = ({ children }) => {
+export const NoteProvider: React.FC<NoteProviderProps> = ({ children }) => {
   const [notes, setNotes] = useState<INote[]>([]);
 
   const updateNote = (note: INote) => {

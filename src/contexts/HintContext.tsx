@@ -15,11 +15,11 @@ interface IHintContext {
 
 export const HintContext = createContext<IHintContext | null>(null);
 
-interface hintProviderProps {
+interface HintProviderProps {
   children: React.ReactNode;
 }
 
-export const HintProvider: React.FC<hintProviderProps> = ({ children }) => {
+export const HintProvider: React.FC<HintProviderProps> = ({ children }) => {
   const [hints, setHints] = useState<IHint[]>([]);
 
   const updateHint = (hint: IHint) => {

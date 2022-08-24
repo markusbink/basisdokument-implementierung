@@ -15,11 +15,11 @@ interface IBookmarkContext {
 
 export const BookmarkContext = createContext<IBookmarkContext | null>(null);
 
-interface bookmarkProviderProps {
+interface BookmarkProviderProps {
   children: React.ReactNode;
 }
 
-export const BookmarkProvider: React.FC<bookmarkProviderProps> = ({
+export const BookmarkProvider: React.FC<BookmarkProviderProps> = ({
   children,
 }) => {
   const [bookmarks, setBookmarks] = useState<IBookmark[]>([]);
