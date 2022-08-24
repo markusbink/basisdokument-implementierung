@@ -54,7 +54,7 @@ export const DocumentButton = () => {
           className="font-semibold text-sm"
           toastStyle={{ backgroundColor: "#3A4342", color: "#fff", width: "300px", borderRadius: "8px" }}
           position="top-right"
-          autoClose={2000000}
+          autoClose={2000}
           closeButton={false}
           hideProgressBar={true}
           newestOnTop={false}
