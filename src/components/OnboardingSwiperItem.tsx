@@ -16,7 +16,7 @@ export const OnboardingSliderItem = ({
       <div className="bg-gradient-to-tr from-lightPetrol to-lightPurple lg:p-8 p-4">
         <img
           className="overflow-hidden rounded-md shadow-xl w-full max-w-xl h-auto mx-auto"
-          src={imageSrc}
+          src={`${process.env.PUBLIC_URL}/${imageSrc}`}
           alt={imageAlt}
         />
       </div>
