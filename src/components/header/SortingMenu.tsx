@@ -47,34 +47,29 @@ export const SortingMenu = () => {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {sectionList.map(
-                    (
-                      item: { id: string; title_plaintiff: string },
-                      index: number
-                    ) => (
-                      <Draggable
-                        key={item.id}
-                        draggableId={item.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                            {...provided.draggableProps}
-                          >
-                            <div className="flex flex-row items-center select-none group">
-                              <DotsSixVertical size={24} />
-                              <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
-                                <span>{index + 1}.</span>
-                                <span>{item.title_plaintiff}</span>
-                              </div>
+                  {sectionList.map((section, index) => (
+                    <Draggable
+                      key={section.id}
+                      draggableId={section.id}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                        >
+                          <div className="flex flex-row items-center select-none group">
+                            <DotsSixVertical size={24} />
+                            <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
+                              <span>{index + 1}.</span>
+                              <span>{section.titlePlaintiff}</span>
                             </div>
                           </div>
-                        )}
-                      </Draggable>
-                    )
-                  )}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
                   {provided.placeholder}
                 </div>
               )}

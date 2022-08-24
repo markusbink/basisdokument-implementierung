@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Button } from "../components/Button";
 import cx from "classnames";
 import { Upload } from "phosphor-react";
-import { IStateUserInput } from "../types";
-import {
-  openBasisdokument,
-  openEditFile,
-} from "../data-management/opening-handler";
+import { useState } from "react";
+import { Button } from "../components/Button";
+import { useEntries, useHeaderContext } from "../contexts";
 import {
   createBasisdokument,
   createEditFile,
 } from "../data-management/creating-handler";
-import { useEntries } from "../contexts";
+import {
+  openBasisdokument,
+  openEditFile,
+} from "../data-management/opening-handler";
+import { IStateUserInput, UserRole } from "../types";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -37,6 +37,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   // Contexts to set the state globally
   const { setEntries } = useEntries();
+  const { setSectionList } = useHeaderContext();
 
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -166,6 +167,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   const setContextFromBasisdokument = (basisdokument: any) => {
     setEntries(basisdokument.entries);
+    setSectionList(basisdokument.sections);
   };
 
   return (
@@ -227,7 +229,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <div className="flex flex-row w-auto mt-4 gap-4">
             <div
               onClick={() => {
-                setRole("Kläger");
+                setRole(UserRole.Plaintiff);
               }}
               className={cx(
                 "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
@@ -240,7 +242,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             </div>
             <div
               onClick={() => {
-                setRole("Beklagter");
+                setRole(UserRole.Defendant);
               }}
               className={cx(
                 "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
@@ -253,7 +255,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             </div>
             <div
               onClick={() => {
-                setRole("Richter");
+                setRole(UserRole.Judge);
               }}
               className={cx(
                 "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",

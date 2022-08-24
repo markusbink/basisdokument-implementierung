@@ -15,6 +15,13 @@ export enum Sorting {
   Original,
 }
 
+export interface ISection {
+  id: string;
+  version: number;
+  titlePlaintiff: string;
+  titleDefendant: string;
+}
+
 export interface IEntry {
   id: string;
   entryCode: string;
@@ -54,7 +61,7 @@ export interface Tool {
 
 export interface IStateUserInput {
   usage: "open" | "create" | undefined;
-  role: "Kläger" | "Beklagter" | "Richter" | undefined;
+  role: UserRole | undefined;
   prename: string;
   surname: string;
   caseId: string;

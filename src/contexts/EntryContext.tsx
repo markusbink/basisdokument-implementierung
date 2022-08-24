@@ -41,56 +41,7 @@ const groupEntriesBySectionAndParent = (entries: IEntry[]) => {
 };
 
 export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
-  const [entries, setEntries] = useState<IEntry[]>([
-    // {
-    //   id: "1f1f2fa4-13fa-11ed-861d-0242ac120002",
-    //   entryCode: "K-1-1",
-    //   version: 1,
-    //   text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <a href='#K-1-5'>#K-1-5</a> At vero eos et accusam et justo duo dolores et ea rebum.",
-    //   author: "Stefan Schneider",
-    //   role: "Kläger",
-    //   sectionId: "d990191e-13fc-11ed-861d-0242ac120002",
-    // },
-    // {
-    //   id: "257550a4-13fa-11ed-861d-0242ac120002",
-    //   entryCode: "B-1-2",
-    //   version: 2,
-    //   text: "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.",
-    //   author: "Michael Bauer",
-    //   role: "Beklagter",
-    //   sectionId: "d990191e-13fc-11ed-861d-0242ac120002",
-    //   associatedEntry: "1f1f2fa4-13fa-11ed-861d-0242ac120002",
-    // },
-    // {
-    //   id: "3e8773e8-a1f8-4983-bbc8-3a53e024062e",
-    //   entryCode: "B-1-3",
-    //   version: 2,
-    //   text: "tet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
-    //   author: "Michael Bauer",
-    //   role: "Beklagter",
-    //   sectionId: "d990191e-13fc-11ed-861d-0242ac120002",
-    // },
-    // {
-    //   id: "727f8829-aef3-4053-bbe8-a08444a79d15",
-    //   entryCode: "K-1-4",
-    //   version: 3,
-    //   text: "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ",
-    //   author: "Stefan Schneider",
-    //   role: "Kläger",
-    //   sectionId: "d990191e-13fc-11ed-861d-0242ac120002",
-    //   associatedEntry: "1f1f2fa4-13fa-11ed-861d-0242ac120002",
-    // },
-    // {
-    //   id: "190d567e-3971-4122-b658-31ec8e07650f",
-    //   entryCode: "K-1-5",
-    //   version: 3,
-    //   text: "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.",
-    //   author: "Stefan Schneider",
-    //   role: "Kläger",
-    //   sectionId: "d990191e-13fc-11ed-861d-0242ac120002",
-    //   associatedEntry: "3e8773e8-a1f8-4983-bbc8-3a53e024062e",
-    // },
-  ]);
+  const [entries, setEntries] = useState<IEntry[]>([]);
   const groupedEntries = groupEntriesBySectionAndParent(entries);
 
   const updateEntry = (entry: IEntry) => {

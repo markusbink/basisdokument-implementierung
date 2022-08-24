@@ -1,6 +1,6 @@
 import { createContext, MouseEventHandler, useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { IHighlighter, IVersion, Tool } from "../types";
+import { IHighlighter, ISection, IVersion, Tool } from "../types";
 
 // Define Interfaces
 interface HeaderProviderProps {
@@ -27,7 +27,7 @@ export default interface IHeaderContext {
   colorSelection: IHighlighter[];
   versionHistory: IVersion[];
   selectedVersion: number;
-  sectionList: { id: string; title_plaintiff: string }[];
+  sectionList: ISection[];
   resetPrivateSorting: () => void;
   openOnboarding: () => void;
   downloadBasisdokument: MouseEventHandler<HTMLDivElement> | undefined;
@@ -35,9 +35,7 @@ export default interface IHeaderContext {
   reloadPageAndDoNotSave: MouseEventHandler<HTMLButtonElement> | undefined;
   setUserParty: React.Dispatch<React.SetStateAction<string>>;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
-  setSectionList: React.Dispatch<
-    React.SetStateAction<{ id: string; title_plaintiff: string }[]>
-  >;
+  setSectionList: React.Dispatch<React.SetStateAction<ISection[]>>;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
   selectedSorting: Sorting;
@@ -129,36 +127,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
       timestamp: "07/05/2022 14:09:24",
     },
   ];
-  const sectionsExample = [
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120001",
-      title_plaintiff: "Verstoß gegen §113",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120002",
-      title_plaintiff: "Verstoß gegen §323",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120003",
-      title_plaintiff: "Verstoß gegen §14",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120004",
-      title_plaintiff: "Verstoß gegen §44",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120005",
-      title_plaintiff: "Verstoß gegen §86",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120006",
-      title_plaintiff: "Verstoß gegen §32",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120007",
-      title_plaintiff: "Verstoß gegen §13",
-    },
-  ];
 
   const [colorSelection, setColorSelection] = useState<
     IHeaderContext["colorSelection"]
@@ -168,8 +136,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   >(versionHistoryExample);
   const [selectedVersion, setSelectedVersion] =
     useState<IHeaderContext["selectedVersion"]>(1);
-  const [sectionList, setSectionList] =
-    useState<IHeaderContext["sectionList"]>(sectionsExample);
+  const [sectionList, setSectionList] = useState<ISection[]>([]);
 
   const resetPrivateSorting = () => {
     console.log("reset");
