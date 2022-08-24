@@ -5,8 +5,7 @@ import { useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 
 export const SortingMenu = () => {
-  const { sectionList, setSectionList, resetPrivateSorting } =
-    useHeaderContext();
+  const { sectionList, setSectionList, resetPrivateSorting } = useHeaderContext();
   const [showSortingMenu, setShowSortingMenu] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   useOutsideClick(dropdownRef, () => setShowSortingMenu(false));
@@ -32,49 +31,34 @@ export const SortingMenu = () => {
         <ListNumbers size={24} className="text-white" />
       </button>
       {showSortingMenu ? (
-        <div className="absolute top-full flex flex-col bg-white shadow-md rounded-lg p-4 left-0 mt-6 w-[300px] z-50">
+        <div className="absolute top-full flex flex-col bg-white shadow-md rounded-lg p-3 left-0 mt-6 w-[300px] z-50">
           <div className="flex gap-4 items-center justify-between">
-            <p className="font-bold text-lg">Beiträge sortieren</p>
-            <span className="bg-darkGrey text-white text-sm p-0.5 pl-3 pr-3 rounded-full">
-              Privat
-            </span>
+            <p className="font-bold text-base">Beiträge sortieren</p>
+            <span className="bg-darkGrey text-white text-xs p-0.5 pl-2 pr-2 rounded-full">Privat</span>
           </div>
           <DragDropContext onDragEnd={handleDrop}>
             <Droppable droppableId="sorting-menu-container">
               {(provided) => (
                 <div
-                  className="sorting-menu flex flex-col sorting-menu-container gap-2 mt-6 relative overflow-hidden overflow-y-scroll max-h-[350px]"
+                  className="sorting-menu flex flex-col sorting-menu-container gap-2 mt-4 relative overflow-hidden overflow-y-scroll max-h-[300px]"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {sectionList.map(
-                    (
-                      item: { id: string; title_plaintiff: string },
-                      index: number
-                    ) => (
-                      <Draggable
-                        key={item.id}
-                        draggableId={item.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                            {...provided.draggableProps}
-                          >
-                            <div className="flex flex-row items-center select-none group">
-                              <DotsSixVertical size={32} />
-                              <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey">
-                                <p>{index + 1}.</p>
-                                <p>{item.title_plaintiff}</p>
-                              </div>
+                  {sectionList.map((item: { id: string; title_plaintiff: string }, index: number) => (
+                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                      {(provided) => (
+                        <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+                          <div className="flex flex-row items-center select-none group">
+                            <DotsSixVertical size={24}/>
+                            <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
+                              <p>{index + 1}.</p>
+                              <p>{item.title_plaintiff}</p>
                             </div>
                           </div>
-                        )}
-                      </Draggable>
-                    )
-                  )}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
                   {provided.placeholder}
                 </div>
               )}
@@ -82,12 +66,12 @@ export const SortingMenu = () => {
           </DragDropContext>
           <div className="flex justify-end mt-2">
             <div
-              className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey text-white text-[12px] font-bold p-2 rounded-md"
+              className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey hover:bg-mediumGrey text-white text-[10px] font-bold p-1 rounded-md"
               onClick={() => {
                 resetPrivateSorting();
               }}
             >
-              <ClockClockwise size={20} />
+              <ClockClockwise size={16} />
               <p>Sortierung zurücksetzen</p>
             </div>
           </div>
