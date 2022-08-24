@@ -54,7 +54,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     return EditorState.createWithContent(contentState);
   });
 
-  const { displayAsColumn, entries, setEntries } = useEntries();
+  const { displayAsColumn, entries } = useEntries();
   const suggestions = entries.map((entry) => ({
     text: entry.entryCode,
     value: entry.entryCode,
