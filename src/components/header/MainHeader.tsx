@@ -32,14 +32,14 @@ export const MainHeader = () => {
             setShowDropdownHeader(!showDropdownHeader);
           }}
         >
-          <p className="text-xs font-bold">Ansicht</p>
+          <span className="text-xs font-bold">Ansicht</span>
           {showDropdownHeader ? (
             <CaretUp size={12} className="text-darkGrey" />
           ) : (
             <CaretDown size={12} className="text-darkGrey" />
           )}
         </div>
-        <p className="font-extralight text-sm">{caseId}</p>
+        <span className="font-extralight text-sm">{caseId}</span>
       </div>
       {/* searchbar */}
       <div className="flex flex-row gap-2 justify-center items-center w-full max-w-[300px]">

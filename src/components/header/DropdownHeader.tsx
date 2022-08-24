@@ -30,38 +30,59 @@ export const DropdownHeader: React.FC<any> = () => {
         <p className="font-extrabold tracking-widest text-xs">DARSTELLUNG</p>
         <div className="flex flex-row gap-2 h-8 mt-2">
           <div
-            className={cx("rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite", {
-              "bg-lightGrey": !showColumnView,
-            })}
+            className={cx(
+              "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
+              {
+                "bg-lightGrey": !showColumnView,
+              }
+            )}
             onClick={() => {
               setShowColumnView(false);
             }}
           >
-            <img className="w-4" src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`} alt="column view icon"></img>
+            <img
+              className="w-4"
+              src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`}
+              alt="column view icon"
+            ></img>
           </div>
           <div
-            className={cx("rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite", {
-              "bg-lightGrey": showColumnView,
-            })}
+            className={cx(
+              "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
+              {
+                "bg-lightGrey": showColumnView,
+              }
+            )}
             onClick={() => {
               setShowColumnView(true);
             }}
           >
-            <img className="w-4" src={`${process.env.PUBLIC_URL}/icons/row-view-icon.svg`} alt="row view icon"></img>
+            <img
+              className="w-4"
+              src={`${process.env.PUBLIC_URL}/icons/row-view-icon.svg`}
+              alt="row view icon"
+            ></img>
           </div>
         </div>
       </div>
       <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
-        <p className="font-extrabold tracking-widest text-xs">SORTIERUNGEN</p>
+        <span className="font-extrabold tracking-widest text-xs">
+          SORTIERUNGEN
+        </span>
         <div className="flex flex-row items-center mt-2 h-8 gap-2">
-          <SortingSelector selectedSorting={selectedSorting} setSelectedSorting={setSelectedSorting} />
+          <SortingSelector
+            selectedSorting={selectedSorting}
+            setSelectedSorting={setSelectedSorting}
+          />
           {selectedSorting === Sorting.Privat ? <SortingMenu /> : null}
         </div>
       </div>
       <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
-        <p className="font-extrabold tracking-widest text-xs">MARKIERUNGEN</p>
+        <span className="font-extrabold tracking-widest text-xs">
+          MARKIERUNGEN
+        </span>
         <div className="flex flex-col lg:flex-row items-center mt-2 h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium">
           <div className="flex flex-row gap-2">
             {colorSelection.map((item: any, id: number) => (
@@ -69,27 +90,40 @@ export const DropdownHeader: React.FC<any> = () => {
             ))}
           </div>
           <div className="flex flex-row items-center gap-2">
-            <input className="accent-darkGrey cursor-pointer" type="checkbox" checked={hideEntriesHighlighter} onChange={() => setHideEntriesHighlighter(!hideEntriesHighlighter)} />
-            <p
+            <input
+              className="accent-darkGrey cursor-pointer"
+              type="checkbox"
+              checked={hideEntriesHighlighter}
+              onChange={() =>
+                setHideEntriesHighlighter(!hideEntriesHighlighter)
+              }
+            />
+            <span
               className="text-clip overflow-hidden whitespace-nowrap cursor-pointer"
               onClick={() => {
                 setHideEntriesHighlighter(!hideEntriesHighlighter);
               }}
             >
               Beiträge ausblenden
-            </p>
+            </span>
           </div>
         </div>
       </div>
       <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
-        <p className="font-extrabold tracking-widest text-xs">ÄNDERUNGEN VON</p>
+        <span className="font-extrabold tracking-widest text-xs">
+          ÄNDERUNGEN VON
+        </span>
         <div className="flex flex-row items-center mt-2 h-8 gap-2">
           <input
             className="accent-darkGrey cursor-pointer"
             type="checkbox"
             defaultChecked={hideElementsWithoutSpecificVersion}
-            onChange={() => setHideElementsWithoutSpecificVersion(!hideElementsWithoutSpecificVersion)}
+            onChange={() =>
+              setHideElementsWithoutSpecificVersion(
+                !hideElementsWithoutSpecificVersion
+              )
+            }
           />
           <VersionSelector />
         </div>
