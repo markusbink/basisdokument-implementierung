@@ -65,17 +65,19 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   // Define States
   const [showDropdownHeader, setShowDropdownHeader] =
     useState<IHeaderContext["showDropdownHeader"]>(false);
+
   const [searchbarValue, setSearchbarValue] =
     useState<IHeaderContext["searchbarValue"]>("");
+
   const [showColumnView, setShowColumnView] =
     useState<IHeaderContext["showColumnView"]>(true);
   const [caseId, setCaseId] =
     useState<IHeaderContext["caseId"]>("AZ. 8 0 6432/18");
+  const [colorSelection, setColorSelection] = useState<
+    IHeaderContext["colorSelection"]
+  >([]);
   const [currentColorSelection, setCurrentColorSelection] =
-    useState<IHighlighter>({
-      id: "red",
-      label: "Markierung 1",
-    });
+    useState<IHighlighter>(colorSelection[0]);
   const [getCurrentTool, setCurrentTool] = useState<Tool>({
     id: "cursor",
     iconNode: "Cursor",
@@ -99,18 +101,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     setHideElementsWithoutSpecificVersion,
   ] = useState<IHeaderContext["hideElementsWithoutSpecificVersion"]>(false);
 
-  const highlighterColorsExample = [
-    { id: "red", label: "Markierung A" },
-    { id: "orange", label: "Markierung 2" },
-    { id: "yellow", label: "Markierung 3" },
-    { id: "green", label: "Markierung 4" },
-    { id: "blue", label: "Markierung 5" },
-    { id: "purple", label: "Markierung 6" },
-  ];
-
-  const [colorSelection, setColorSelection] = useState<
-    IHeaderContext["colorSelection"]
-  >(highlighterColorsExample);
   const [versionHistory, setVersionHistory] = useState<
     IHeaderContext["versionHistory"]
   >([]);

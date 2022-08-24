@@ -45,6 +45,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setSectionList,
     setVersionHistory,
     setCaseId: setCaseIdContext,
+    setColorSelection,
+    setCurrentColorSelection,
   } = useHeaderContext();
   const { setNotes } = useNotes();
   const { setHints } = useHints();
@@ -195,6 +197,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setNotes(editFile.notes);
     setBookmarks(editFile.bookmarks);
     setCaseIdContext(editFile.caseId);
+    setColorSelection(editFile.highlighter);
+    setCurrentColorSelection(editFile.highlighter[0]);
   };
 
   return (

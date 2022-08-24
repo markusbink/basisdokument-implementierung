@@ -66,7 +66,7 @@ export interface UserData {
 }
 
 export interface IHighlighter {
-  id: string;
+  color: string;
   label: string;
 }
 

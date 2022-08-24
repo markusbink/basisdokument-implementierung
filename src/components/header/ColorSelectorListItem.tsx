@@ -27,7 +27,7 @@ export const ColorSelectorListItem: React.FC<IProps> = ({
         onClick={(e) => {
           if (!inputSelected) {
             setCurrentColorSelection({
-              id: highlighter.id,
+              color: highlighter.color,
               label: highlighter.label,
             });
             setShowColorSelectorMenu(false);
@@ -37,7 +37,9 @@ export const ColorSelectorListItem: React.FC<IProps> = ({
         {/*Color Circle*/}
         <div className="flex flex-row items-center justify-center p-2 gap-2">
           <div
-            className={`w-4 h-4 ${getColorCode(highlighter.id)} rounded-full `}
+            className={`w-4 h-4 ${getColorCode(
+              highlighter.color
+            )} rounded-full `}
           />
         </div>
         {/*Name of Marker*/}
@@ -56,7 +58,7 @@ export const ColorSelectorListItem: React.FC<IProps> = ({
             }}
             onChange={(e) => {
               e.preventDefault();
-              handleChange(e, highlighter.id);
+              handleChange(e, highlighter.color);
             }}
           />
         ) : (
