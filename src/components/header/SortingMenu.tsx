@@ -1,4 +1,4 @@
-import { ClockClockwise, DotsSixVertical, ListNumbers, SortAscending } from "phosphor-react";
+import { ClockClockwise, DotsSixVertical, SortAscending } from "phosphor-react";
 import { useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useHeaderContext } from "../../contexts";
