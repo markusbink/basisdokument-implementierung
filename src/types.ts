@@ -1,7 +1,25 @@
 export interface IBookmark {
   id: string;
   title: string;
-  referenceTo: string;
+  associatedEntry: string;
+}
+
+export interface IHint {
+  id: string;
+  version: number;
+  title: string;
+  text: string;
+  author: string;
+  associatedEntry?: string;
+}
+
+export interface INote {
+  id: string;
+  title: string;
+  text: string;
+  author: string;
+  timestamp: Date;
+  associatedEntry?: string;
 }
 
 export enum UserRole {

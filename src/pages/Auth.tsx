@@ -1,8 +1,12 @@
 import cx from "classnames";
+import { parseISO } from "date-fns";
 import { Upload } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../components/Button";
 import { useEntries, useHeaderContext } from "../contexts";
+import { useBookmarks } from "../contexts/BookmarkContext";
+import { useHints } from "../contexts/HintContext";
+import { useNotes } from "../contexts/NoteContext";
 import {
   createBasisdokument,
   createEditFile,
@@ -11,7 +15,7 @@ import {
   openBasisdokument,
   openEditFile,
 } from "../data-management/opening-handler";
-import { IStateUserInput, UserRole } from "../types";
+import { INote, IStateUserInput, UserRole } from "../types";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -38,6 +42,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   // Contexts to set the state globally
   const { setEntries } = useEntries();
   const { setSectionList } = useHeaderContext();
+  const { setNotes } = useNotes();
+  const { setHints } = useHints();
+  const { setBookmarks } = useBookmarks();
 
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -160,6 +167,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       console.log(editFileObject);
 
       setContextFromBasisdokument(basisdokumentObject);
+      setContextFromEditFile(editFileObject);
 
       setIsAuthenticated(true);
     }
@@ -168,6 +176,12 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const setContextFromBasisdokument = (basisdokument: any) => {
     setEntries(basisdokument.entries);
     setSectionList(basisdokument.sections);
+    setHints(basisdokument.judgeHints);
+  };
+
+  const setContextFromEditFile = (editFile: any) => {
+    setNotes(editFile.notes);
+    setBookmarks(editFile.bookmarks);
   };
 
   return (

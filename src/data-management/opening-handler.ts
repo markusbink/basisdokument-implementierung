@@ -51,8 +51,6 @@ export function openBasisdokument(
       timestamp: "",
     });
   } else {
-    console.log({ basisdokumentObject });
-
     basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1][
       "author"
     ] = prename + " " + surname;
