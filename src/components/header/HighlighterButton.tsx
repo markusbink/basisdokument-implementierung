@@ -9,8 +9,8 @@ export const HighlighterButton: React.FC<{ id: number }> = ({ id }) => {
 
   return (
     <div
-      className={cx(`bg-marker-${colorSelection[id].id} flex justify-center items-center text-white h-5 w-5 rounded-full hover:border-2 cursor-pointer hover:border-darkGrey`, {
-        "bg-opacity-40": !highlighterData[color],
+      className={cx(`marker-${colorSelection[id].id} flex justify-center items-center text-white h-5 w-5 rounded-full hover:border-2 cursor-pointer hover:border-darkGrey`, {
+        "marker-button-opacity": !highlighterData[color],
       })}
       onClick={() => {
         setHighlighterData({

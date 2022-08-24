@@ -19,11 +19,11 @@ input[type="checkbox"] {
 }
 
 .small-checkbox {
-  -ms-transform: scale(1.0) !important; /* IE */
-  -moz-transform: scale(1.0) !important; /* FF */
-  -webkit-transform: scale(1.0) !important; /* Safari and Chrome */
-  -o-transform: scale(1.0) !important; /* Opera */
-  transform: scale(1.0) !important;
+  -ms-transform: scale(1) !important; /* IE */
+  -moz-transform: scale(1) !important; /* FF */
+  -webkit-transform: scale(1) !important; /* Safari and Chrome */
+  -o-transform: scale(1) !important; /* Opera */
+  transform: scale(1) !important;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -68,6 +68,15 @@ body {
 
 .marker-purple {
   @apply bg-marker-purple;
+}
+
+.marker-icon-opacity {
+  @apply bg-opacity-20;
+}
+
+.marker-icon-opacity:hover,
+.marker-button-opacity {
+  @apply bg-opacity-40;
 }
 
 /* Scrollbar for Mozilla */
