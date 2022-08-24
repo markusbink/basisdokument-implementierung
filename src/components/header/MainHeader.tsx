@@ -1,13 +1,12 @@
 import { CaretDown, CaretUp, MagnifyingGlass, Question } from "phosphor-react";
 import React from "react";
-import { useHeaderContext } from "../../contexts";
+import { useCase, useHeaderContext } from "../../contexts";
 import { DocumentButton } from "../header/DocumentButton";
 import { ColorSelector } from "./ColorSelector";
 import { ToolSelector } from "./ToolSelector";
 
 export const MainHeader = () => {
   const {
-    caseId,
     searchbarValue,
     setSearchbarValue,
     setShowDropdownHeader,
@@ -16,6 +15,7 @@ export const MainHeader = () => {
     setCurrentTool,
     openOnboarding,
   } = useHeaderContext();
+  const { caseId } = useCase();
 
   const onChangeSearchbar = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchbarValue(e.target.value);

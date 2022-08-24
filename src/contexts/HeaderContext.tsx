@@ -13,7 +13,6 @@ enum Sorting {
 }
 
 export default interface IHeaderContext {
-  caseId: string;
   showDropdownHeader: boolean;
   showColumnView: boolean;
   getCurrentTool: Tool;
@@ -37,7 +36,6 @@ export default interface IHeaderContext {
   selectedSorting: Sorting;
   setColorSelection: React.Dispatch<React.SetStateAction<IHighlighter[]>>;
   setShowColumnView: React.Dispatch<React.SetStateAction<boolean>>;
-  setCaseId: React.Dispatch<React.SetStateAction<string>>;
   setSearchbarValue: React.Dispatch<React.SetStateAction<string>>;
   setShowDropdownHeader: React.Dispatch<React.SetStateAction<boolean>>;
   setHighlighterData: React.Dispatch<
@@ -71,8 +69,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
 
   const [showColumnView, setShowColumnView] =
     useState<IHeaderContext["showColumnView"]>(true);
-  const [caseId, setCaseId] =
-    useState<IHeaderContext["caseId"]>("AZ. 8 0 6432/18");
   const [colorSelection, setColorSelection] = useState<
     IHeaderContext["colorSelection"]
   >([]);
@@ -134,7 +130,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   return (
     <HeaderContext.Provider
       value={{
-        caseId,
         showDropdownHeader,
         showColumnView,
         getCurrentTool,
@@ -158,7 +153,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         selectedSorting,
         setColorSelection,
         setShowColumnView,
-        setCaseId,
         setSearchbarValue,
         setShowDropdownHeader,
         setCurrentColorSelection,

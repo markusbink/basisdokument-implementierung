@@ -43,11 +43,10 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     useState<IStateUserInput["newVersionMode"]>(false);
 
   // Contexts to set the state globally
-  const { setEntries } = useCase();
+  const { setCaseId: setCaseIdContext, setEntries, setMetaData } = useCase();
   const {
     setSectionList,
     setVersionHistory,
-    setCaseId: setCaseIdContext,
     setColorSelection,
     setCurrentColorSelection,
   } = useHeaderContext();
@@ -194,6 +193,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setEntries(basisdokument.entries);
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
+    setMetaData(basisdokument.metadata);
   };
 
   const setContextFromEditFile = (editFile: any) => {

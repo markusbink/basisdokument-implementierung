@@ -5,11 +5,13 @@ import {
   useContext,
   useState,
 } from "react";
-import { IEntry } from "../types";
+import { IEntry, IMetaData } from "../types";
 
 interface ICaseContext {
   caseId: string;
   setCaseId: Dispatch<SetStateAction<string>>;
+  metaData: IMetaData | null;
+  setMetaData: Dispatch<SetStateAction<IMetaData | null>>;
   entries: IEntry[];
   setEntries: Dispatch<SetStateAction<IEntry[]>>;
   groupedEntries: { [key: string]: { [key: string]: IEntry[] } };
@@ -45,6 +47,7 @@ const groupEntriesBySectionAndParent = (entries: IEntry[]) => {
 export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
   const [entries, setEntries] = useState<IEntry[]>([]);
   const [caseId, setCaseId] = useState<string>("");
+  const [metaData, setMetaData] = useState<IMetaData | null>(null);
   const groupedEntries = groupEntriesBySectionAndParent(entries);
 
   const updateEntry = (entry: IEntry) => {
@@ -56,6 +59,8 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
       value={{
         caseId,
         setCaseId,
+        metaData,
+        setMetaData,
         entries,
         setEntries,
         groupedEntries,

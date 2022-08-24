@@ -70,6 +70,11 @@ export interface IHighlighter {
   label: string;
 }
 
+export interface IMetaData {
+  plaintiff: string;
+  defendant: string;
+}
+
 export interface IVersion {
   author: string;
   role: string;
