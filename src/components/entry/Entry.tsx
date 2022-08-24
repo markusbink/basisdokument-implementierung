@@ -35,7 +35,7 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { groupedEntries, displayAsColumn } = useEntries();
+  const { groupedEntries, displayAsColumn, setEntries } = useEntries();
   const thread = groupedEntries[entry.section_id][entry.id];
 
   // State of current entry
@@ -105,8 +105,17 @@ export const Entry: React.FC<EntryProps> = ({
 
   const deleteEntry = (e: React.MouseEvent) => {};
 
-  const updateEntry = () => {
+
+  const updateEntry = (text: string) => {
     setIsEditing(false);
+    setEntries((oldEntries) => {
+      const newEntries = [...oldEntries];
+      const entryIndex = newEntries.findIndex(
+        (newEntry) => newEntry.id === entry.id
+      );
+      newEntries[entryIndex].text = text;
+      return newEntries;
+    });
   };
 
   const addHint = () => {};
@@ -114,6 +123,7 @@ export const Entry: React.FC<EntryProps> = ({
   return (
     <>
       <div
+        id={entry.entryCode}
         className={cx({
           "opacity-50": isHidden,
           "pointer-events-none": isHidden,
@@ -159,7 +169,7 @@ export const Entry: React.FC<EntryProps> = ({
                         }
                       )}
                     >
-                      K-1-1
+                      {entry.entryCode}
                     </span>
                     <span className="font-bold">{entry.author}</span>
                     <span>25.08.2022</span>
@@ -245,8 +255,8 @@ export const Entry: React.FC<EntryProps> = ({
                     setIsEditing(false);
                     setIsExpanded(false);
                   }}
-                  onSave={() => {
-                    updateEntry();
+                  onSave={(text: string) => {
+                    updateEntry(text);
                     setIsExpanded(false);
                   }}
                 />

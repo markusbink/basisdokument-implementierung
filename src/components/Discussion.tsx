@@ -7,7 +7,7 @@ export const Discussion = () => {
   const { groupedEntries, displayAsColumn, setDisplayAsColumn } = useEntries();
 
   return (
-    <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4">
+    <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4 scroll-smooth">
       <div className="max-w-[1200px] m-auto">
         <label className="inline-flex items-center gap-2 cursor-pointer select-none mb-4">
           <input

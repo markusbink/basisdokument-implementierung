@@ -17,6 +17,7 @@ export enum Sorting {
 
 export interface IEntry {
   id: string;
+  entryCode: string;
   version: number;
   text: string;
   author: string;
@@ -24,6 +25,7 @@ export interface IEntry {
   section_id: string;
   associated_entry?: string;
 }
+
 
 export interface BasisdokumentData {
   caseId: string;

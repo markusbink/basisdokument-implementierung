@@ -32,6 +32,13 @@ body {
   font-family: "Manrope", sans-serif;
 }
 
+
+@layer base {
+  a {
+    @apply font-bold text-blue-600;
+  }
+}
+
 .marker-red {
   @apply bg-marker-red;
 }
@@ -118,8 +125,17 @@ body {
 .public-DraftStyleDefault-block {
   @apply my-0;
 }
+
 .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
   @apply hidden;
+}
+
+.rdw-suggestion-dropdown {
+  @apply shadow-lg rounded-lg p-1;
+}
+
+.rdw-suggestion-option {
+  @apply p-2 rounded border-none hover:bg-offWhite;
 }
 
 /* SwiperJS Pagination Dots */

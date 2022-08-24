@@ -1,5 +1,10 @@
 import cx from "classnames";
-import { ContentState, convertFromHTML, EditorState } from "draft-js";
+import {
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+  EditorState,
+} from "draft-js";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
@@ -7,6 +12,7 @@ import { useEntries } from "../../contexts";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
+import draftToHtml from "draftjs-to-html";
 
 const toolbarOptions = {
   options: ["inline", "list"],
@@ -25,7 +31,7 @@ interface EntryBodyProps {
   isExpanded: boolean;
   setIsExpanded: () => void;
   onAbort: () => void;
-  onSave: () => void;
+  onSave: (x: any) => void;
   defaultContent?: string;
 }
 
@@ -48,7 +54,12 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     return EditorState.createWithContent(contentState);
   });
 
-  const { displayAsColumn } = useEntries();
+  const { displayAsColumn, entries, setEntries } = useEntries();
+  const suggestions = entries.map((entry) => ({
+    text: entry.entryCode,
+    value: entry.entryCode,
+    url: `#${entry.entryCode}`,
+  }));
   const contentState = editorState.getCurrentContent();
 
   useEffect(() => {
@@ -66,10 +77,15 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       })}
     >
       <Editor
+        mention={{
+          separator: " ",
+          trigger: "#",
+          suggestions,
+        }}
         defaultEditorState={editorState}
         onEditorStateChange={setEditorState}
-        wrapperClassName={cx("min-h-[200px] w-full focus:outline-none")}
-        editorClassName="p-6 "
+        wrapperClassName={cx("w-full focus:outline-none")}
+        editorClassName="p-6 min-h-[160px] overflow-visible"
         placeholder="Text eingeben..."
         toolbarClassName={cx(
           "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"
@@ -108,7 +124,13 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         </Button>
         <Button
           icon={<FloppyDisk size={20} />}
-          onClick={() => onSave()}
+          onClick={() => {
+            const newHtml = draftToHtml(
+              convertToRaw(editorState.getCurrentContent())
+            );
+
+            onSave(newHtml);
+          }}
           size="sm"
           bgColor="bg-lightGreen"
           textColor="font-bold text-darkGreen"
