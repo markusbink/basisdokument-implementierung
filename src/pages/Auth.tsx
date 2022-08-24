@@ -43,12 +43,19 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     useState<IStateUserInput["newVersionMode"]>(false);
 
   // Contexts to set the state globally
-  const { setCaseId: setCaseIdContext, setEntries, setMetaData } = useCase();
+  const {
+    setCaseId: setCaseIdContext,
+    setEntries,
+    setMetaData,
+    setLitigiousChecks,
+    setCurrentVersion,
+  } = useCase();
   const {
     setSectionList,
     setVersionHistory,
     setColorSelection,
     setCurrentColorSelection,
+    setIndividualSorting,
   } = useHeaderContext();
   const { setNotes } = useNotes();
   const { setHints } = useHints();
@@ -194,6 +201,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
     setMetaData(basisdokument.metadata);
+    setLitigiousChecks(basisdokument.litigiousChecks);
+    setCurrentVersion(basisdokument.currentVersion);
   };
 
   const setContextFromEditFile = (editFile: any) => {
@@ -202,6 +211,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setCaseIdContext(editFile.caseId);
     setColorSelection(editFile.highlighter);
     setCurrentColorSelection(editFile.highlighter[0]);
+    setIndividualSorting(editFile.individualSorting);
   };
 
   return (

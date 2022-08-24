@@ -75,6 +75,16 @@ export interface IMetaData {
   defendant: string;
 }
 
+export interface ILitigiousCheck {
+  entryId: string;
+  isLitigious: boolean;
+}
+
+export interface IHighlightedEntry {
+  entryId: string;
+  highlightedText: string;
+}
+
 export interface IVersion {
   author: string;
   role: string;

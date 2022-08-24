@@ -55,6 +55,8 @@ export default interface IHeaderContext {
   >;
   setCurrentColorSelection: React.Dispatch<React.SetStateAction<IHighlighter>>;
   setCurrentTool: React.Dispatch<React.SetStateAction<Tool>>;
+  individualSorting: string[];
+  setIndividualSorting: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const HeaderContext = createContext<IHeaderContext | null>(null);
@@ -92,6 +94,9 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const [selectedSorting, setSelectedSorting] = useState<Sorting>(
     Sorting.Original
   );
+
+  const [individualSorting, setIndividualSorting] = useState<string[]>([]);
+
   const [
     hideElementsWithoutSpecificVersion,
     setHideElementsWithoutSpecificVersion,
@@ -161,6 +166,8 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         setHideEntriesHighlighter,
         setSelectedSorting,
         setHideElementsWithoutSpecificVersion,
+        individualSorting,
+        setIndividualSorting,
       }}
     >
       {children}

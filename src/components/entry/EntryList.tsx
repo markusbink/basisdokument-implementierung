@@ -1,3 +1,4 @@
+import { useCase } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
 import { IEntry } from "../../types";
 import { Entry } from "./";
@@ -8,6 +9,7 @@ interface EntryListProps {
 
 export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
   const { user } = useUser();
+  const { currentVersion } = useCase();
 
   return (
     <div className="space-y-4 w-full">
@@ -15,7 +17,7 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
         <Entry
           key={entry.id}
           entry={entry}
-          isOld={entry.version !== 3}
+          isOld={entry.version <= currentVersion}
           viewedBy={user!.role}
         />
       ))}
