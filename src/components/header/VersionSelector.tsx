@@ -15,8 +15,8 @@ export const VersionSelector = () => {
         setShowVersionMenu(!showVersionMenu);
       }}
     >
-      <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 h-8 hover:cursor-pointer font-bold text-sm">
-        <span>
+      <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 h-8 hover:cursor-pointer font-bold text-sm max-w-[200px]">
+        <span className="truncate">
           Version {selectedVersion + 1}{" "}
           <span className="text-mediumGrey font-light ml-2">
             {versionHistory[selectedVersion].author}

@@ -18,6 +18,14 @@ input[type="checkbox"] {
   padding: 10px;
 }
 
+.small-checkbox {
+  -ms-transform: scale(1.0) !important; /* IE */
+  -moz-transform: scale(1.0) !important; /* FF */
+  -webkit-transform: scale(1.0) !important; /* Safari and Chrome */
+  -o-transform: scale(1.0) !important; /* Opera */
+  transform: scale(1.0) !important;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
