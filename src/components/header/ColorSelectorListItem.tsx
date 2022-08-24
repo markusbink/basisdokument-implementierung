@@ -60,9 +60,9 @@ export const ColorSelectorListItem: React.FC<IProps> = ({
             }}
           />
         ) : (
-          <p className="w-[150px] text-clip overflow-hidden whitespace-nowrap">
+          <span className="w-[150px] text-sm font-medium text-clip overflow-hidden whitespace-nowrap">
             {highlighter.label}
-          </p>
+          </span>
         )}
       </div>
       <Tooltip text="Markierung umbenennen">

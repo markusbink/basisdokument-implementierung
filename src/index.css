@@ -32,7 +32,6 @@ body {
   font-family: "Manrope", sans-serif;
 }
 
-
 @layer base {
   a {
     @apply font-bold text-blue-600;
@@ -139,11 +138,40 @@ body {
 }
 
 /* SwiperJS Pagination Dots */
-
 .swiper-pagination-bullet {
   @apply bg-mediumGrey;
 }
 
 .swiper-pagination-bullet.swiper-pagination-bullet-active {
   @apply bg-mediumGrey;
+}
+
+/* Bulletpoints */
+ul,
+ol {
+  @apply space-y-2 my-6 ml-8;
+}
+
+:is(ul, ol) > :is(ul, ol) {
+  @apply ml-4;
+}
+
+ul {
+  @apply list-disc;
+}
+
+ol {
+  @apply list-decimal;
+}
+
+ul > ul {
+  list-style-type: circle;
+}
+
+ul > ul > ul {
+  list-style-type: square;
+}
+
+p {
+  @apply mb-2;
 }

@@ -12,21 +12,34 @@ interface IProps {
   setSelectedSorting: React.Dispatch<React.SetStateAction<Sorting>>;
 }
 
-export const SortingSelector: React.FC<IProps> = ({ selectedSorting, setSelectedSorting }) => {
+export const SortingSelector: React.FC<IProps> = ({
+  selectedSorting,
+  setSelectedSorting,
+}) => {
   const [showSelectMenu, setShowDownloadMenu] = useState<boolean>(false);
   return (
     <DropdownMenu.Root
-    modal={false}
+      modal={false}
       onOpenChange={() => {
         setShowDownloadMenu(!showSelectMenu);
       }}
     >
       <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 px-2 h-8 hover:cursor-pointer w-[100px] font-bold">
-        {selectedSorting === Sorting.Original ? <p className="text-sm">Original</p> : <p className="text-sm">Privat</p>}
-        {showSelectMenu ? <CaretUp size={12} className="text-darkGrey" /> : <CaretDown size={12} className="text-darkGrey" />}
+        <span className="text-sm">
+          {selectedSorting === Sorting.Original ? "Original" : "Privat"}
+        </span>
+        {showSelectMenu ? (
+          <CaretUp size={12} className="text-darkGrey" />
+        ) : (
+          <CaretDown size={12} className="text-darkGrey" />
+        )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 w-[100px]">
+        <DropdownMenu.Content
+          side="bottom"
+          align="start"
+          className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 w-[100px]"
+        >
           <DropdownMenu.Item
             className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
             onClick={() => {

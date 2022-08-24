@@ -8,7 +8,7 @@ import {
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { useEntries } from "../../contexts";
+import { useEntries, useHeaderContext } from "../../contexts";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
@@ -54,7 +54,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     return EditorState.createWithContent(contentState);
   });
 
-  const { displayAsColumn, entries } = useEntries();
+  const { showColumnView } = useHeaderContext();
+  const { entries } = useEntries();
   const suggestions = entries.map((entry) => ({
     text: entry.entryCode,
     value: entry.entryCode,
@@ -92,7 +93,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         )}
         toolbar={toolbarOptions}
         toolbarCustomButtons={
-          displayAsColumn
+          showColumnView
             ? [
                 <span className="absolute right-2 top-1/2 -translate-y-1/2 leading-[0]">
                   <Tooltip

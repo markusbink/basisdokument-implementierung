@@ -81,7 +81,9 @@ export const ToolSelector: React.FC<IProps> = ({
                   }}
                 >
                   <ToolComponent size={16} />
-                  <p className="text-sm font-medium">{tool.germanTitle}</p>
+                  <span className="text-sm font-medium">
+                    {tool.germanTitle}
+                  </span>
                 </div>
               );
             })}
