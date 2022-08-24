@@ -1,47 +1,12 @@
 import { CaretDown, CaretRight, Plus } from "phosphor-react";
 import { useState } from "react";
+import { useHints } from "../../contexts/HintContext";
 import { Button } from "../Button";
-import { HintProps, Hint } from "./Hint";
 import { JudgeHintPopup } from "../JudgeHintPopup";
+import { Hint } from "./Hint";
 
 //TODO: remove this, this is for testing
 const isJudge = true;
-const hints: HintProps[] = [
-  {
-    id: "1",
-    title: "1 Hinweis Test Titel mit Bezug",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
-    author: "Max Muster",
-    timestamp: new Date(),
-    referenceTo: "K-2-4",
-  },
-  {
-    id: "2",
-    title: "2 Hinweis Test Titel mit Bezug",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
-    author: "Max Muster",
-    timestamp: new Date(),
-    referenceTo: "K-3-1",
-  },
-  {
-    id: "3",
-    title: "3 Hinweis Test Titel ohne Bezug",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
-    author: "Max Muster",
-    timestamp: new Date(),
-  },
-  {
-    id: "4",
-    title: "4 Hinweis Test Titel ohne Bezug",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
-    author: "Max Muster",
-    timestamp: new Date(),
-  },
-];
 
 export const SidebarHints = () => {
   const [hintsWithReferenceOpen, setHintsWithReferenceOpen] =
@@ -49,6 +14,8 @@ export const SidebarHints = () => {
   const [hintsWithoutReferenceOpen, setHintsWithoutReferenceOpen] =
     useState<boolean>(true);
   const [showModal, setShowModal] = useState(false);
+
+  const { hints } = useHints();
 
   return (
     <div className="flex flex-col gap-3 flex-1 overflow-hidden">
@@ -94,7 +61,7 @@ export const SidebarHints = () => {
           {hintsWithoutReferenceOpen &&
             hints.map(
               (hint) =>
-                !hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
+                !hint.associatedEntry && <Hint key={hint.id} hint={hint} />
             )}
         </div>
         <div
@@ -112,7 +79,7 @@ export const SidebarHints = () => {
           {hintsWithReferenceOpen &&
             hints.map(
               (hint) =>
-                hint.referenceTo && <Hint key={hint.id} {...hint}></Hint>
+                hint.associatedEntry && <Hint key={hint.id} hint={hint} />
             )}
         </div>
       </div>

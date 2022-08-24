@@ -1,5 +1,4 @@
 import cx from "classnames";
-import { parseISO } from "date-fns";
 import { Upload } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../components/Button";
@@ -15,7 +14,7 @@ import {
   openBasisdokument,
   openEditFile,
 } from "../data-management/opening-handler";
-import { INote, IStateUserInput, UserRole } from "../types";
+import { IStateUserInput, UserRole } from "../types";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;

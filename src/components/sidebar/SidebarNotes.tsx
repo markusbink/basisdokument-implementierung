@@ -39,7 +39,7 @@ export const SidebarNotes = () => {
       )}
 
       {notes.length > 0 && (
-        <div className="flex flex-col p-4 text-mediumGrey font-extrabold text-sm overflow-y-scroll">
+        <div className="flex flex-col p-4 text-mediumGrey font-extrabold text-sm overflow-auto">
           <div
             className="cursor-pointer flex items-center"
             onClick={() =>

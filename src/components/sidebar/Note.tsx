@@ -4,23 +4,19 @@ import React, { useRef, useState } from "react";
 import { useEntries } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEntry, INote } from "../../types";
+import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
 
 export interface NoteProps {
   note: INote;
 }
 
-const getEntryCodeFromEntryId = (entries: IEntry[], entryId: string = "") => {
-  const entry = entries.find((entry) => entry.id === entryId);
-  return entry ? entry.entryCode : "";
-};
-
 export const Note: React.FC<NoteProps> = ({ note }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries } = useEntries();
-  const entryCode = getEntryCodeFromEntryId(entries, note.associatedEntry);
+  const entryCode = getEntryCode(entries, note.associatedEntry);
 
   const editNote = (e: React.MouseEvent) => {
     setIsMenuOpen(false);
