@@ -1,9 +1,9 @@
 import cx from "classnames";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
-import { useEntries } from "../../contexts";
+import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEntry, INote } from "../../types";
+import { INote } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
 
@@ -15,7 +15,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
-  const { entries } = useEntries();
+  const { entries } = useCase();
   const entryCode = getEntryCode(entries, note.associatedEntry);
 
   const editNote = (e: React.MouseEvent) => {

@@ -8,7 +8,7 @@ import {
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { useEntries, useHeaderContext } from "../../contexts";
+import { useCase, useHeaderContext } from "../../contexts";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
@@ -55,7 +55,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   });
 
   const { showColumnView } = useHeaderContext();
-  const { entries } = useEntries();
+  const { entries } = useCase();
   const suggestions = entries.map((entry) => ({
     text: entry.entryCode,
     value: entry.entryCode,

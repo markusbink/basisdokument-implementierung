@@ -1,7 +1,6 @@
 import { BookmarkSimple, Eye, Trash } from "phosphor-react";
 import React, { useState } from "react";
-import { useEntries } from "../../contexts";
-import { useBookmarks } from "../../contexts/BookmarkContext";
+import { useBookmarks, useCase } from "../../contexts";
 import { IBookmark } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
@@ -14,7 +13,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
   const [doubleClicked, setDoubleClicked] = useState<boolean>(false);
 
   const { setBookmarks } = useBookmarks();
-  const { entries } = useEntries();
+  const { entries } = useCase();
   const entryCode = getEntryCode(entries, bookmark.associatedEntry);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

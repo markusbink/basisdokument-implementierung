@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { EntryProvider } from "./contexts";
-import { HeaderProvider } from "./contexts";
-import { BookmarkProvider } from "./contexts/BookmarkContext";
-import { HintProvider } from "./contexts/HintContext";
-import { NoteProvider } from "./contexts/NoteContext";
-import { UserProvider } from "./contexts/UserContext";
+import {
+  BookmarkProvider,
+  CaseProvider,
+  HeaderProvider,
+  HintProvider,
+  NoteProvider,
+  UserProvider,
+} from "./contexts";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 
@@ -28,7 +30,7 @@ export const App = () => {
     <div className="App h-screen overflow-hidden">
       <UserProvider>
         <HeaderProvider>
-          <EntryProvider>
+          <CaseProvider>
             <NoteProvider>
               <HintProvider>
                 <BookmarkProvider>
@@ -40,7 +42,7 @@ export const App = () => {
                 </BookmarkProvider>
               </HintProvider>
             </NoteProvider>
-          </EntryProvider>
+          </CaseProvider>
         </HeaderProvider>
       </UserProvider>
     </div>

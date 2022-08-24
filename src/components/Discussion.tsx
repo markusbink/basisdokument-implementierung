@@ -1,10 +1,9 @@
-import { useEntries, useHeaderContext } from "../contexts";
-import { useUser } from "../contexts/UserContext";
+import { useCase, useHeaderContext, useUser } from "../contexts";
 import { UserRole } from "../types";
 import { EntryList } from "./entry";
 
 export const Discussion = () => {
-  const { groupedEntries } = useEntries();
+  const { groupedEntries } = useCase();
   const { sectionList } = useHeaderContext();
   const { user } = useUser();
 

@@ -7,16 +7,18 @@ import {
 } from "react";
 import { IEntry } from "../types";
 
-interface IEntryContext {
+interface ICaseContext {
+  caseId: string;
+  setCaseId: Dispatch<SetStateAction<string>>;
   entries: IEntry[];
   setEntries: Dispatch<SetStateAction<IEntry[]>>;
   groupedEntries: { [key: string]: { [key: string]: IEntry[] } };
   updateEntry: (entry: IEntry) => void;
 }
 
-export const EntryContext = createContext<IEntryContext | null>(null);
+export const CaseContext = createContext<ICaseContext | null>(null);
 
-interface EntryProviderProps {
+interface CaseProviderProps {
   children: React.ReactNode;
 }
 
@@ -40,8 +42,9 @@ const groupEntriesBySectionAndParent = (entries: IEntry[]) => {
   return groupedEntries;
 };
 
-export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
+export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
   const [entries, setEntries] = useState<IEntry[]>([]);
+  const [caseId, setCaseId] = useState<string>("");
   const groupedEntries = groupEntriesBySectionAndParent(entries);
 
   const updateEntry = (entry: IEntry) => {
@@ -49,8 +52,10 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
   };
 
   return (
-    <EntryContext.Provider
+    <CaseContext.Provider
       value={{
+        caseId,
+        setCaseId,
         entries,
         setEntries,
         groupedEntries,
@@ -58,14 +63,14 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
       }}
     >
       {children}
-    </EntryContext.Provider>
+    </CaseContext.Provider>
   );
 };
 
-export const useEntries = () => {
-  const context = useContext(EntryContext);
+export const useCase = () => {
+  const context = useContext(CaseContext);
   if (context === null) {
-    throw new Error("useEntries must be used within an EntryProvider");
+    throw new Error("useCase must be used within an CaseProvider");
   }
   return context;
 };

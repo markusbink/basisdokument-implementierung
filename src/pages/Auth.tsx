@@ -2,11 +2,14 @@ import cx from "classnames";
 import { Upload } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../components/Button";
-import { useEntries, useHeaderContext } from "../contexts";
-import { useBookmarks } from "../contexts/BookmarkContext";
-import { useHints } from "../contexts/HintContext";
-import { useNotes } from "../contexts/NoteContext";
-import { useUser } from "../contexts/UserContext";
+import {
+  useBookmarks,
+  useCase,
+  useHeaderContext,
+  useHints,
+  useNotes,
+  useUser,
+} from "../contexts";
 import {
   createBasisdokument,
   createEditFile,
@@ -40,7 +43,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     useState<IStateUserInput["newVersionMode"]>(false);
 
   // Contexts to set the state globally
-  const { setEntries } = useEntries();
+  const { setEntries } = useCase();
   const {
     setSectionList,
     setVersionHistory,
