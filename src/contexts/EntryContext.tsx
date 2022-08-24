@@ -91,7 +91,6 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
       associated_entry: "3e8773e8-a1f8-4983-bbc8-3a53e024062e",
     },
   ]);
-  const [displayAsColumn, setDisplayAsColumn] = useState<boolean>(true);
   const groupedEntries = groupEntriesBySectionAndParent(entries);
 
   const updateEntry = (entry: IEntry) => {
