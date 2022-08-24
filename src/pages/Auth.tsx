@@ -6,6 +6,7 @@ import { useEntries, useHeaderContext } from "../contexts";
 import { useBookmarks } from "../contexts/BookmarkContext";
 import { useHints } from "../contexts/HintContext";
 import { useNotes } from "../contexts/NoteContext";
+import { useUser } from "../contexts/UserContext";
 import {
   createBasisdokument,
   createEditFile,
@@ -14,7 +15,7 @@ import {
   openBasisdokument,
   openEditFile,
 } from "../data-management/opening-handler";
-import { IStateUserInput, UserRole } from "../types";
+import { IStateUserInput, IUser, UserRole } from "../types";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -44,6 +45,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setNotes } = useNotes();
   const { setHints } = useHints();
   const { setBookmarks } = useBookmarks();
+  const { setUser } = useUser();
 
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -165,6 +167,12 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       console.log(basisdokumentObject);
       console.log(editFileObject);
 
+      const user: IUser = {
+        name: `${prename} ${surname}`,
+        role: role!,
+      };
+
+      setUser(user);
       setContextFromBasisdokument(basisdokumentObject);
       setContextFromEditFile(editFileObject);
 

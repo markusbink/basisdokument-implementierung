@@ -22,6 +22,11 @@ export interface INote {
   associatedEntry?: string;
 }
 
+export interface IUser {
+  name: string;
+  role: UserRole;
+}
+
 export enum UserRole {
   Plaintiff = "Kläger",
   Defendant = "Beklagter",

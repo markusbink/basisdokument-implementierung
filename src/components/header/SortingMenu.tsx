@@ -2,7 +2,9 @@ import { ClockClockwise, DotsSixVertical, ListNumbers } from "phosphor-react";
 import { useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useHeaderContext } from "../../contexts";
+import { useUser } from "../../contexts/UserContext";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { UserRole } from "../../types";
 
 export const SortingMenu = () => {
   const { sectionList, setSectionList, resetPrivateSorting } =
@@ -10,6 +12,7 @@ export const SortingMenu = () => {
   const [showSortingMenu, setShowSortingMenu] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   useOutsideClick(dropdownRef, () => setShowSortingMenu(false));
+  const { user } = useUser();
 
   const handleDrop = (droppedItem: any) => {
     // Ignore drop outside droppable container
@@ -62,8 +65,11 @@ export const SortingMenu = () => {
                           <div className="flex flex-row items-center select-none group">
                             <DotsSixVertical size={24} />
                             <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
-                              <span>{index + 1}.</span>
-                              <span>{section.titlePlaintiff}</span>
+                              <span>
+                                {user?.role === UserRole.Plaintiff
+                                  ? section.titlePlaintiff
+                                  : section.titleDefendant}
+                              </span>
                             </div>
                           </div>
                         </div>

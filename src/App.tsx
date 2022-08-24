@@ -4,6 +4,7 @@ import { HeaderProvider } from "./contexts";
 import { BookmarkProvider } from "./contexts/BookmarkContext";
 import { HintProvider } from "./contexts/HintContext";
 import { NoteProvider } from "./contexts/NoteContext";
+import { UserProvider } from "./contexts/UserContext";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 
@@ -25,21 +26,23 @@ export const App = () => {
 
   return (
     <div className="App h-screen overflow-hidden">
-      <HeaderProvider>
-        <EntryProvider>
-          <NoteProvider>
-            <HintProvider>
-              <BookmarkProvider>
-                {isAuthenticated ? (
-                  <Main />
-                ) : (
-                  <Auth setIsAuthenticated={setIsAuthenticated} />
-                )}
-              </BookmarkProvider>
-            </HintProvider>
-          </NoteProvider>
-        </EntryProvider>
-      </HeaderProvider>
+      <UserProvider>
+        <HeaderProvider>
+          <EntryProvider>
+            <NoteProvider>
+              <HintProvider>
+                <BookmarkProvider>
+                  {isAuthenticated ? (
+                    <Main />
+                  ) : (
+                    <Auth setIsAuthenticated={setIsAuthenticated} />
+                  )}
+                </BookmarkProvider>
+              </HintProvider>
+            </NoteProvider>
+          </EntryProvider>
+        </HeaderProvider>
+      </UserProvider>
     </div>
   );
 };

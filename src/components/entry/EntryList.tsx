@@ -1,4 +1,5 @@
-import { IEntry, UserRole } from "../../types";
+import { useUser } from "../../contexts/UserContext";
+import { IEntry } from "../../types";
 import { Entry } from "./";
 
 interface EntryListProps {
@@ -6,6 +7,8 @@ interface EntryListProps {
 }
 
 export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
+  const { user } = useUser();
+
   return (
     <div className="space-y-4 w-full">
       {entries.map((entry, index) => (
@@ -13,7 +16,7 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
           key={entry.id}
           entry={entry}
           isOld={entry.version !== 3}
-          viewedBy={UserRole.Plaintiff}
+          viewedBy={user!.role}
         />
       ))}
     </div>
