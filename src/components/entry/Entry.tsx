@@ -105,7 +105,6 @@ export const Entry: React.FC<EntryProps> = ({
 
   const deleteEntry = (e: React.MouseEvent) => {};
 
-
   const updateEntry = (text: string) => {
     setIsEditing(false);
     setEntries((oldEntries) => {
@@ -124,7 +123,7 @@ export const Entry: React.FC<EntryProps> = ({
     <>
       <div
         id={entry.entryCode}
-        className={cx({
+        className={cx("text-sm", {
           "opacity-50": isHidden,
           "pointer-events-none": isHidden,
         })}
@@ -159,7 +158,7 @@ export const Entry: React.FC<EntryProps> = ({
                 toggleBody={toggleBody}
               >
                 <div className="overflow-auto max-w-[350px] whitespace-nowrap">
-                  <div className="flex gap-2">
+                  <div className="flex items-center gap-2">
                     <span
                       className={cx(
                         "rounded-full px-3 py-1 text-xs font-semibold",
