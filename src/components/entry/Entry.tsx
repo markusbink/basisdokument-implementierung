@@ -10,7 +10,7 @@ import {
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useEntries } from "../../contexts";
+import { useEntries, useHeaderContext } from "../../contexts";
 import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
@@ -35,7 +35,9 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { groupedEntries, displayAsColumn, setEntries } = useEntries();
+  const { groupedEntries, setEntries } = useEntries();
+  const { showColumnView } = useHeaderContext();
+
   const thread = groupedEntries[entry.section_id][entry.id];
 
   // State of current entry
@@ -135,8 +137,8 @@ export const Entry: React.FC<EntryProps> = ({
         >
           <div
             className={cx("transition-all", {
-              "w-1/2": !isExpanded && displayAsColumn,
-              "w-full": isExpanded || !displayAsColumn,
+              "w-1/2": !isExpanded && showColumnView,
+              "w-full": isExpanded || !showColumnView,
             })}
           >
             {/* Entry */}
@@ -279,7 +281,7 @@ export const Entry: React.FC<EntryProps> = ({
           </div>
           {isNewEntryVisible && (
             <div className={cx("flex flex-col w-full")}>
-              {!displayAsColumn && (
+              {!showColumnView && (
                 <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
               )}
               <NewEntry
@@ -293,10 +295,10 @@ export const Entry: React.FC<EntryProps> = ({
       {thread?.length > 0 && (
         <div
           className={cx({
-            flex: !displayAsColumn,
+            flex: !showColumnView,
           })}
         >
-          {!displayAsColumn && (
+          {!showColumnView && (
             <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
           )}
           <EntryList entries={thread} />

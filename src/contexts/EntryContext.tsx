@@ -8,8 +8,6 @@ import {
 import { IEntry } from "../types";
 
 interface IEntryContext {
-  displayAsColumn: boolean;
-  setDisplayAsColumn: (displayAsColumn: boolean) => void;
   entries: IEntry[];
   setEntries: Dispatch<SetStateAction<IEntry[]>>;
   groupedEntries: { [key: string]: { [key: string]: IEntry[] } };
@@ -107,8 +105,6 @@ export const EntryProvider: React.FC<EntryProviderProps> = ({ children }) => {
         setEntries,
         groupedEntries,
         updateEntry,
-        displayAsColumn,
-        setDisplayAsColumn,
       }}
     >
       {children}

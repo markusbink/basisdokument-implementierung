@@ -35,7 +35,9 @@ export default interface IHeaderContext {
   reloadPageAndDoNotSave: MouseEventHandler<HTMLButtonElement> | undefined;
   setUserParty: React.Dispatch<React.SetStateAction<string>>;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
-  setSectionList: React.Dispatch<React.SetStateAction<{ id: string; title_plaintiff: string }[]>>;
+  setSectionList: React.Dispatch<
+    React.SetStateAction<{ id: string; title_plaintiff: string }[]>
+  >;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
   selectedSorting: Sorting;
@@ -44,10 +46,21 @@ export default interface IHeaderContext {
   setCaseId: React.Dispatch<React.SetStateAction<string>>;
   setSearchbarValue: React.Dispatch<React.SetStateAction<string>>;
   setShowDropdownHeader: React.Dispatch<React.SetStateAction<boolean>>;
-  setHighlighterData: React.Dispatch<React.SetStateAction<{ red: boolean; orange: boolean; yellow: boolean; green: boolean; blue: boolean; purple: boolean }>>;
+  setHighlighterData: React.Dispatch<
+    React.SetStateAction<{
+      red: boolean;
+      orange: boolean;
+      yellow: boolean;
+      green: boolean;
+      blue: boolean;
+      purple: boolean;
+    }>
+  >;
   setHideEntriesHighlighter: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedSorting: React.Dispatch<React.SetStateAction<Sorting>>;
-  setHideElementsWithoutSpecificVersion: React.Dispatch<React.SetStateAction<boolean>>;
+  setHideElementsWithoutSpecificVersion: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
   setCurrentColorSelection: React.Dispatch<React.SetStateAction<IHighlighter>>;
   setCurrentTool: React.Dispatch<React.SetStateAction<Tool>>;
 }
@@ -56,21 +69,45 @@ export const HeaderContext = createContext<IHeaderContext | null>(null);
 
 export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   // Define States
-  const [showDropdownHeader, setShowDropdownHeader] = useState<IHeaderContext["showDropdownHeader"]>(false);
-  const [username, setUsername] = useState<IHeaderContext["username"]>("Max Mustermann");
-  const [userParty, setUserParty] = useState<IHeaderContext["userParty"]>("Beklagtenpartei");
-  const [searchbarValue, setSearchbarValue] = useState<IHeaderContext["searchbarValue"]>("");
-  const [showColumnView, setShowColumnView] = useState<IHeaderContext["showColumnView"]>(false);
-  const [caseId, setCaseId] = useState<IHeaderContext["caseId"]>("AZ. 8 0 6432/18");
-  const [currentColorSelection, setCurrentColorSelection] = useState<IHighlighter>({
-    id: "red",
-    label: "Markierung 1",
+  const [showDropdownHeader, setShowDropdownHeader] =
+    useState<IHeaderContext["showDropdownHeader"]>(false);
+  const [username, setUsername] =
+    useState<IHeaderContext["username"]>("Max Mustermann");
+  const [userParty, setUserParty] =
+    useState<IHeaderContext["userParty"]>("Beklagtenpartei");
+  const [searchbarValue, setSearchbarValue] =
+    useState<IHeaderContext["searchbarValue"]>("");
+  const [showColumnView, setShowColumnView] =
+    useState<IHeaderContext["showColumnView"]>(true);
+  const [caseId, setCaseId] =
+    useState<IHeaderContext["caseId"]>("AZ. 8 0 6432/18");
+  const [currentColorSelection, setCurrentColorSelection] =
+    useState<IHighlighter>({
+      id: "red",
+      label: "Markierung 1",
+    });
+  const [getCurrentTool, setCurrentTool] = useState<Tool>({
+    id: "cursor",
+    iconNode: "Cursor",
+    germanTitle: "Maus",
   });
-  const [getCurrentTool, setCurrentTool] = useState<Tool>({ id: "cursor", iconNode: "Cursor", germanTitle: "Maus" });
-  const [highlighterData, setHighlighterData] = useState({ red: true, orange: true, yellow: true, green: true, blue: true, purple: true });
-  const [hideEntriesHighlighter, setHideEntriesHighlighter] = useState<IHeaderContext["hideEntriesHighlighter"]>(false);
-  const [selectedSorting, setSelectedSorting] = useState<Sorting>(Sorting.Original);
-  const [hideElementsWithoutSpecificVersion, setHideElementsWithoutSpecificVersion] = useState<IHeaderContext["hideElementsWithoutSpecificVersion"]>(false);
+  const [highlighterData, setHighlighterData] = useState({
+    red: true,
+    orange: true,
+    yellow: true,
+    green: true,
+    blue: true,
+    purple: true,
+  });
+  const [hideEntriesHighlighter, setHideEntriesHighlighter] =
+    useState<IHeaderContext["hideEntriesHighlighter"]>(false);
+  const [selectedSorting, setSelectedSorting] = useState<Sorting>(
+    Sorting.Original
+  );
+  const [
+    hideElementsWithoutSpecificVersion,
+    setHideElementsWithoutSpecificVersion,
+  ] = useState<IHeaderContext["hideElementsWithoutSpecificVersion"]>(false);
   // This data needs to be extracted from the json later
   const highlighterColorsExample = [
     { id: "red", label: "Markierung A" },
@@ -93,19 +130,46 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     },
   ];
   const sectionsExample = [
-    { id: "2b835162-1d32-11ed-861d-0242ac120001", title_plaintiff: "Verstoß gegen §113" },
-    { id: "2b835162-1d32-11ed-861d-0242ac120002", title_plaintiff: "Verstoß gegen §323" },
-    { id: "2b835162-1d32-11ed-861d-0242ac120003", title_plaintiff: "Verstoß gegen §14" },
-    { id: "2b835162-1d32-11ed-861d-0242ac120004", title_plaintiff: "Verstoß gegen §44" },
-    { id: "2b835162-1d32-11ed-861d-0242ac120005", title_plaintiff: "Verstoß gegen §86" },
-    { id: "2b835162-1d32-11ed-861d-0242ac120006", title_plaintiff: "Verstoß gegen §32" },
-    { id: "2b835162-1d32-11ed-861d-0242ac120007", title_plaintiff: "Verstoß gegen §13" },
+    {
+      id: "2b835162-1d32-11ed-861d-0242ac120001",
+      title_plaintiff: "Verstoß gegen §113",
+    },
+    {
+      id: "2b835162-1d32-11ed-861d-0242ac120002",
+      title_plaintiff: "Verstoß gegen §323",
+    },
+    {
+      id: "2b835162-1d32-11ed-861d-0242ac120003",
+      title_plaintiff: "Verstoß gegen §14",
+    },
+    {
+      id: "2b835162-1d32-11ed-861d-0242ac120004",
+      title_plaintiff: "Verstoß gegen §44",
+    },
+    {
+      id: "2b835162-1d32-11ed-861d-0242ac120005",
+      title_plaintiff: "Verstoß gegen §86",
+    },
+    {
+      id: "2b835162-1d32-11ed-861d-0242ac120006",
+      title_plaintiff: "Verstoß gegen §32",
+    },
+    {
+      id: "2b835162-1d32-11ed-861d-0242ac120007",
+      title_plaintiff: "Verstoß gegen §13",
+    },
   ];
 
-  const [colorSelection, setColorSelection] = useState<IHeaderContext["colorSelection"]>(highlighterColorsExample);
-  const [versionHistory, setVersionHistory] = useState<IHeaderContext["versionHistory"]>(versionHistoryExample);
-  const [selectedVersion, setSelectedVersion] = useState<IHeaderContext["selectedVersion"]>(1);
-  const [sectionList, setSectionList] = useState<IHeaderContext["sectionList"]>(sectionsExample);
+  const [colorSelection, setColorSelection] = useState<
+    IHeaderContext["colorSelection"]
+  >(highlighterColorsExample);
+  const [versionHistory, setVersionHistory] = useState<
+    IHeaderContext["versionHistory"]
+  >(versionHistoryExample);
+  const [selectedVersion, setSelectedVersion] =
+    useState<IHeaderContext["selectedVersion"]>(1);
+  const [sectionList, setSectionList] =
+    useState<IHeaderContext["sectionList"]>(sectionsExample);
 
   const resetPrivateSorting = () => {
     console.log("reset");

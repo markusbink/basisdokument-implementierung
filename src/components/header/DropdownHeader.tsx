@@ -33,11 +33,11 @@ export const DropdownHeader: React.FC<any> = () => {
             className={cx(
               "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
               {
-                "bg-lightGrey": !showColumnView,
+                "bg-lightGrey": showColumnView,
               }
             )}
             onClick={() => {
-              setShowColumnView(false);
+              setShowColumnView(true);
             }}
           >
             <img
@@ -50,11 +50,11 @@ export const DropdownHeader: React.FC<any> = () => {
             className={cx(
               "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
               {
-                "bg-lightGrey": showColumnView,
+                "bg-lightGrey": !showColumnView,
               }
             )}
             onClick={() => {
-              setShowColumnView(true);
+              setShowColumnView(false);
             }}
           >
             <img
