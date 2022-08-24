@@ -11,19 +11,13 @@ interface IProps {
   handleChange: any;
 }
 
-export const ColorSelectorListItem: React.FC<IProps> = ({
-  highlighter,
-  setCurrentColorSelection,
-  setShowColorSelectorMenu,
-  getColorCode,
-  handleChange,
-}) => {
+export const ColorSelectorListItem: React.FC<IProps> = ({ highlighter, setCurrentColorSelection, setShowColorSelectorMenu, getColorCode, handleChange }) => {
   const [inputSelected, setInputSelected] = useState<boolean>(false);
 
   return (
     <div className="flex flex-row items-center gap-2">
       <div
-        className="flex flex-row items-center gap-2 hover:bg-offWhite rounded-md cursor-pointer"
+        className="flex flex-row items-center gap-1 hover:bg-offWhite rounded-md cursor-pointer"
         onClick={(e) => {
           if (!inputSelected) {
             setCurrentColorSelection({
@@ -36,9 +30,9 @@ export const ColorSelectorListItem: React.FC<IProps> = ({
       >
         {/*Color Circle*/}
         <div className="flex flex-row items-center justify-center p-2 gap-2">
-          <div
-            className={`w-4 h-4 ${getColorCode(highlighter.id)} rounded-full `}
-          />
+          <div className={`flex items-center justify-center w-5 h-5 shadow-inner shadow-2xl ${getColorCode(highlighter.id)} rounded-full `}>
+            <div className="border-white w-4 h-4 bg-transparent rounded-full bg-transparent border-[1px]"></div>
+          </div>
         </div>
         {/*Name of Marker*/}
         {inputSelected ? (
@@ -60,9 +54,7 @@ export const ColorSelectorListItem: React.FC<IProps> = ({
             }}
           />
         ) : (
-          <span className="w-[150px] text-sm font-medium text-clip overflow-hidden whitespace-nowrap">
-            {highlighter.label}
-          </span>
+          <span className="w-[150px] text-sm font-medium text-clip overflow-hidden whitespace-nowrap">{highlighter.label}</span>
         )}
       </div>
       <Tooltip text="Markierung umbenennen">
