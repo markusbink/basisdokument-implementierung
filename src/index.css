@@ -172,6 +172,6 @@ ul > ul > ul {
   list-style-type: square;
 }
 
-p {
+p:not(:last-child) {
   @apply mb-2;
 }

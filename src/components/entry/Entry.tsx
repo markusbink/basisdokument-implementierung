@@ -38,7 +38,7 @@ export const Entry: React.FC<EntryProps> = ({
   const { groupedEntries, setEntries } = useEntries();
   const { showColumnView } = useHeaderContext();
 
-  const thread = groupedEntries[entry.section_id][entry.id];
+  const thread = groupedEntries[entry.sectionId][entry.id];
 
   // State of current entry
   const [isBodyOpen, setIsBodyOpen] = useState<boolean>(true);

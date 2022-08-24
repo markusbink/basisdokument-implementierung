@@ -17,7 +17,7 @@ export const Discussion = () => {
                 <span>1.</span> Gliederungspunkt
               </div>
               <div className="space-y-8">
-                <EntryList entries={sectionEntries["parent"]} />
+                <EntryList entries={sectionEntries?.parent || []} />
               </div>
             </section>
           );

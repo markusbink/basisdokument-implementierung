@@ -22,10 +22,9 @@ export interface IEntry {
   text: string;
   author: string;
   role: "Kläger" | "Beklagter";
-  section_id: string;
-  associated_entry?: string;
+  sectionId: string;
+  associatedEntry?: string;
 }
-
 
 export interface BasisdokumentData {
   caseId: string;
