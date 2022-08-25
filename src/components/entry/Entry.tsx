@@ -10,7 +10,7 @@ import {
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useEntries, useHeaderContext } from "../../contexts";
+import { useCase, useHeaderContext } from "../../contexts";
 import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
@@ -35,10 +35,10 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { groupedEntries, setEntries } = useEntries();
+  const { groupedEntries, setEntries } = useCase();
   const { showColumnView } = useHeaderContext();
 
-  const thread = groupedEntries[entry.section_id][entry.id];
+  const thread = groupedEntries[entry.sectionId][entry.id];
 
   // State of current entry
   const [isBodyOpen, setIsBodyOpen] = useState<boolean>(true);

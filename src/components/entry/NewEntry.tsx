@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditText } from "react-edit-text";
 import "react-edit-text/dist/index.css";
+import { useUser } from "../../contexts/UserContext";
 import { UserRole } from "../../types";
 import { Tooltip } from "../Tooltip";
 import { EntryForm } from "./EntryForm";
@@ -20,6 +21,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const isPlaintiff = parentRole === UserRole.Plaintiff;
+  const { user } = useUser();
 
   return (
     <div
@@ -50,7 +52,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             "text-darkPurple": !isPlaintiff,
             "text-darkPetrol": isPlaintiff,
           })}
-          defaultValue="Stefan Schneider"
+          defaultValue={user?.name}
           showEditButton
           editButtonContent={
             <Tooltip text="Name bearbeiten">

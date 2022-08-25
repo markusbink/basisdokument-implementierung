@@ -1,26 +1,22 @@
-import { Eye, DotsThree, PencilSimple, Trash } from "phosphor-react";
-import { useRef, useState } from "react";
-import { Button } from "../Button";
 import cx from "classnames";
+import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
+import { useRef, useState } from "react";
+import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { IHint } from "../../types";
+import { getEntryCode } from "../../util/get-entry-code";
+import { Button } from "../Button";
 
 export interface HintProps {
-  id: string;
-  title: string;
-  content?: string;
-  author: string;
-  timestamp: Date;
-  referenceTo?: string;
+  hint: IHint;
 }
 
-export const Hint: React.FC<HintProps> = (hint: HintProps) => {
+export const Hint: React.FC<HintProps> = ({ hint }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
-
-  const showReference = (e: React.MouseEvent) => {
-    //TODO jump to reference
-  };
+  const { entries } = useCase();
+  const entryCode = getEntryCode(entries, hint.associatedEntry);
 
   const editHint = (e: React.MouseEvent) => {
     setIsMenuOpen(false);
@@ -34,28 +30,29 @@ export const Hint: React.FC<HintProps> = (hint: HintProps) => {
   return (
     <div>
       <div className="flex flex-col bg-offWhite mt-4 rounded-xl text-darkGrey text-xs font-medium">
-        {hint.referenceTo && (
-          <div
+        {hint.associatedEntry && (
+          <a
+            href={`#${entryCode}`}
             className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer
               bg-darkGrey hover:bg-mediumGrey text-lightGrey text-[10px] font-semibold rounded-xl"
-            onClick={showReference}
           >
             <Eye size={16} weight="bold" className="inline"></Eye>
-            {`${hint.referenceTo}`}
-          </div>
+            {`${entryCode}`}
+          </a>
         )}
 
-        <div className={cx("mx-3", { "mt-3": !hint.referenceTo })}>
+        <div className={cx("mx-3", { "mt-3": !hint.associatedEntry })}>
           <h3 className="mb-2 text-sm font-bold">{hint.title}</h3>
-          <p className="mb-2">{hint.content}</p>
+          <p className="mb-2">{hint.text}</p>
 
           <div className="flex justify-between items-center mb-3">
             <div className="">
               <div className="font-bold">{hint.author}</div>
               <div className="opacity-40">
-                {`${String(hint.timestamp.getDate()).padStart(2, "0")}.
+                {/* {`${String(hint.timestamp.getDate()).padStart(2, "0")}.
             ${String(hint.timestamp.getMonth()).padStart(2, "0")}.
-            ${hint.timestamp.getFullYear()}`}
+            ${hint.timestamp.getFullYear()}`} */}
+                {"Timestamp"}
               </div>
             </div>
 

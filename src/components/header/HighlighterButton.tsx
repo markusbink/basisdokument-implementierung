@@ -4,15 +4,18 @@ import cx from "classnames";
 import { useHeaderContext } from "../../contexts";
 
 export const HighlighterButton: React.FC<{ id: number }> = ({ id }) => {
-  const { colorSelection, highlighterData, setHighlighterData} = useHeaderContext();
-  const color:string = colorSelection[id].id;
-  
+  const { colorSelection, highlighterData, setHighlighterData } =
+    useHeaderContext();
+  const color: string = colorSelection[id].color;
 
   return (
     <div
-      className={cx(`marker-${colorSelection[id].id} flex justify-center items-center text-white h-5 w-5 rounded-full hover:border-2 cursor-pointer hover:border-darkGrey`, {
-        "opacity-50": !highlighterData[color],
-      })}
+      className={cx(
+        `marker-${colorSelection[id].color} flex justify-center items-center text-white h-5 w-5 rounded-full hover:border-2 cursor-pointer hover:border-darkGrey`,
+        {
+          "opacity-50": !highlighterData[color],
+        }
+      )}
       onClick={() => {
         setHighlighterData({
           ...highlighterData,
@@ -20,7 +23,9 @@ export const HighlighterButton: React.FC<{ id: number }> = ({ id }) => {
         });
       }}
     >
-      {highlighterData[color] ? <Check size={14} weight="bold" className="text-darkGrey" /> : null}
+      {highlighterData[color] ? (
+        <Check size={14} weight="bold" className="text-darkGrey" />
+      ) : null}
     </div>
   );
 };

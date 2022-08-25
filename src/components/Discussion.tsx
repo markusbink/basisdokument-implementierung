@@ -1,23 +1,26 @@
-import { useEntries } from "../contexts";
+import { useCase, useHeaderContext, useUser } from "../contexts";
+import { UserRole } from "../types";
 import { EntryList } from "./entry";
 
-const mockSections: string[] = ["d990191e-13fc-11ed-861d-0242ac120002"];
-
 export const Discussion = () => {
-  const { groupedEntries } = useEntries();
+  const { groupedEntries } = useCase();
+  const { sectionList } = useHeaderContext();
+  const { user } = useUser();
 
   return (
     <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4 scroll-smooth">
       <div className="max-w-[1200px] m-auto">
-        {mockSections.map((sectionId) => {
-          const sectionEntries = groupedEntries[sectionId];
+        {sectionList.map((section) => {
+          const sectionEntries = groupedEntries[section.id];
           return (
-            <section key={sectionId} className="space-y-8">
+            <section key={section.id} className="space-y-8">
               <div className="text-xl font-bold">
-                <span>1.</span> Gliederungspunkt
+                {user?.role === UserRole.Plaintiff
+                  ? section.titlePlaintiff
+                  : section.titleDefendant}
               </div>
               <div className="space-y-8">
-                <EntryList entries={sectionEntries["parent"]} />
+                <EntryList entries={sectionEntries?.parent || []} />
               </div>
             </section>
           );

@@ -1,48 +1,9 @@
 import { CaretDown, CaretRight, Plus } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../Button";
-import { Note, NoteProps } from "./Note";
+import { Note } from "./Note";
 import { NotePopup } from "../NotePopup";
-
-//TODO: remove this, this is for testing
-const notes: NoteProps[] = [
-  {
-    id: "1",
-    title: "Test Titel mit Bezug ganz ganz ganz lang",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
-    author: "Max Muster",
-    timestamp: new Date(),
-    referenceTo: "K-2-1",
-  },
-  {
-    id: "3",
-    title: "Test Titel mit Bezug",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
-    author: "Max Muster",
-    timestamp: new Date(),
-    referenceTo: "K-3-1",
-  },
-  {
-    id: "2",
-    title: "Test Titel ohne Bezug",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
-    author: "Max Muster",
-    timestamp: new Date(),
-  },
-  {
-    id: "4",
-    title: "Test Titel ohne Bezug",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur dolorum earum dolores omnis odit, voluptas ratione? Praesentium reprehenderit perspiciatis repudiandae officia veniam qui facere at deserunt, harum ab pariatur beatae?",
-    author: "Max Muster",
-    timestamp: new Date(),
-  },
-];
-
-// const notes: NoteProps[] = [];
+import { useNotes } from "../../contexts/NoteContext";
 
 export const SidebarNotes = () => {
   const [notesWithoutReferenceOpen, setNotesWithoutReferenceOpen] =
@@ -50,6 +11,8 @@ export const SidebarNotes = () => {
   const [notesWithReferenceOpen, setNotesWithReferenceOpen] =
     useState<boolean>(true);
   const [showModal, setShowModal] = useState(false);
+
+  const { notes } = useNotes();
 
   return (
     // TODO: Hide overflow here to make sure "Notizen" and the Add-Button are always visible...but now the buttom gets cut off...how to fix this?
@@ -76,7 +39,7 @@ export const SidebarNotes = () => {
       )}
 
       {notes.length > 0 && (
-        <div className="flex flex-col p-4 text-mediumGrey font-extrabold text-sm overflow-y-scroll">
+        <div className="flex flex-col p-4 text-mediumGrey font-extrabold text-sm overflow-auto">
           <div
             className="cursor-pointer flex items-center"
             onClick={() =>
@@ -94,7 +57,7 @@ export const SidebarNotes = () => {
             {notesWithoutReferenceOpen &&
               notes.map(
                 (note) =>
-                  !note.referenceTo && <Note key={note.id} {...note}></Note>
+                  !note.associatedEntry && <Note key={note.id} note={note} />
               )}
           </div>
 
@@ -113,7 +76,7 @@ export const SidebarNotes = () => {
             {notesWithReferenceOpen &&
               notes.map(
                 (note) =>
-                  note.referenceTo && <Note key={note.id} {...note}></Note>
+                  note.associatedEntry && <Note key={note.id} note={note} />
               )}
           </div>
         </div>

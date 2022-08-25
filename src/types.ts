@@ -1,7 +1,30 @@
 export interface IBookmark {
   id: string;
   title: string;
-  referenceTo: string;
+  associatedEntry: string;
+}
+
+export interface IHint {
+  id: string;
+  version: number;
+  title: string;
+  text: string;
+  author: string;
+  associatedEntry?: string;
+}
+
+export interface INote {
+  id: string;
+  title: string;
+  text: string;
+  author: string;
+  timestamp: Date;
+  associatedEntry?: string;
+}
+
+export interface IUser {
+  name: string;
+  role: UserRole;
 }
 
 export enum UserRole {
@@ -15,6 +38,13 @@ export enum Sorting {
   Original,
 }
 
+export interface ISection {
+  id: string;
+  version: number;
+  titlePlaintiff: string;
+  titleDefendant: string;
+}
+
 export interface IEntry {
   id: string;
   entryCode: string;
@@ -22,10 +52,9 @@ export interface IEntry {
   text: string;
   author: string;
   role: "Kläger" | "Beklagter";
-  section_id: string;
-  associated_entry?: string;
+  sectionId: string;
+  associatedEntry?: string;
 }
-
 
 export interface BasisdokumentData {
   caseId: string;
@@ -37,8 +66,23 @@ export interface UserData {
 }
 
 export interface IHighlighter {
-  id: string;
+  color: string;
   label: string;
+}
+
+export interface IMetaData {
+  plaintiff: string;
+  defendant: string;
+}
+
+export interface ILitigiousCheck {
+  entryId: string;
+  isLitigious: boolean;
+}
+
+export interface IHighlightedEntry {
+  entryId: string;
+  highlightedText: string;
 }
 
 export interface IVersion {
@@ -55,7 +99,7 @@ export interface Tool {
 
 export interface IStateUserInput {
   usage: "open" | "create" | undefined;
-  role: "Kläger" | "Beklagter" | "Richter" | undefined;
+  role: UserRole | undefined;
   prename: string;
   surname: string;
   caseId: string;

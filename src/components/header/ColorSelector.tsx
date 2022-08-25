@@ -11,21 +11,22 @@ export const ColorSelector = () => {
     currentColorSelection,
     setCurrentColorSelection,
   } = useHeaderContext();
+
   const [showColorSelectorMenu, setShowColorSelectorMenu] =
     useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   useOutsideClick(dropdownRef, () => setShowColorSelectorMenu(false));
 
-  const handleChange = (e: React.BaseSyntheticEvent, id: string) => {
+  const handleChange = (e: React.BaseSyntheticEvent, color: string) => {
     setColorSelection(
       colorSelection.map((item) =>
-        item.id === id ? { ...item, label: e.target.value } : item
+        item.color === color ? { ...item, label: e.target.value } : item
       )
     );
   };
 
-  const getColorCode = (id: string) => {
-    switch (id) {
+  const getColorCode = (color: string) => {
+    switch (color) {
       case "red":
         return "bg-marker-red";
       case "orange":
@@ -51,7 +52,7 @@ export const ColorSelector = () => {
       >
         <div
           className={`w-4 h-4 ${getColorCode(
-            currentColorSelection.id
+            currentColorSelection?.color
           )} rounded-full `}
         />
       </div>
@@ -62,7 +63,7 @@ export const ColorSelector = () => {
             colorSelection.length > 0 &&
             colorSelection.map((highlighter: any) => (
               <ColorSelectorListItem
-                key={highlighter.id}
+                key={highlighter.color}
                 highlighter={highlighter}
                 setCurrentColorSelection={setCurrentColorSelection}
                 setShowColorSelectorMenu={setShowColorSelectorMenu}

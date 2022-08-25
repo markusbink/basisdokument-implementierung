@@ -1,6 +1,9 @@
 import { IStateUserInput } from "../types";
 
-function updateSortingsIfVersionIsDifferent(basisdokumentObject: any, editFileObject: any) {
+function updateSortingsIfVersionIsDifferent(
+  basisdokumentObject: any,
+  editFileObject: any
+) {
   let sortingsOriginalOrderFromBasisdokumentFile: string[] = [];
   let sortingsFromEditFile: string[] = [];
 
@@ -9,7 +12,9 @@ function updateSortingsIfVersionIsDifferent(basisdokumentObject: any, editFileOb
   }
 
   for (const i in basisdokumentObject["sections"]) {
-    sortingsOriginalOrderFromBasisdokumentFile.push(basisdokumentObject["sections"][i].id);
+    sortingsOriginalOrderFromBasisdokumentFile.push(
+      basisdokumentObject["sections"][i].id
+    );
   }
 
   // we need to add sections in the edit file that are in the uploaded basisdokument but not in the edit file
@@ -37,26 +42,47 @@ export function openBasisdokument(
 ) {
   const basisdokumentObject: any = JSON.parse(jsonStringBasisdokument);
   if (newVersionMode) {
-    basisdokumentObject["currentVersion"] = basisdokumentObject["currentVersion"] += 1;
-    basisdokumentObject["versions"].push({ author: prename + " " + surname, role: role, timestamp: "" });
+    basisdokumentObject["currentVersion"] = basisdokumentObject[
+      "currentVersion"
+    ] += 1;
+    basisdokumentObject["versions"].push({
+      author: prename + " " + surname,
+      role: role,
+      timestamp: "",
+    });
   } else {
-    basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1]["author"] = prename + " " + surname;
-    basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1]["role"] = role;
+    basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1][
+      "author"
+    ] = prename + " " + surname;
+    basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1][
+      "role"
+    ] = role;
   }
   return basisdokumentObject;
 }
 
-export function openEditFile(jsonStringBasisdokument: string, jsonStringEditFile: string, newVersionMode: IStateUserInput["newVersionMode"]) {
+export function openEditFile(
+  jsonStringBasisdokument: string,
+  jsonStringEditFile: string,
+  newVersionMode: IStateUserInput["newVersionMode"]
+) {
   let basisdokumentObject: any = JSON.parse(jsonStringBasisdokument);
   let editFileObject: any = JSON.parse(jsonStringEditFile);
 
-  if (basisdokumentObject["currentVersion"] !== editFileObject["currentVersion"]) {
-    editFileObject = updateSortingsIfVersionIsDifferent(basisdokumentObject, editFileObject);
+  if (
+    basisdokumentObject["currentVersion"] !== editFileObject["currentVersion"]
+  ) {
+    editFileObject = updateSortingsIfVersionIsDifferent(
+      basisdokumentObject,
+      editFileObject
+    );
   }
 
   // After we updated the versions, we can set the version of the editFile to the same version as the version of the Basisdokument
   if (newVersionMode) {
-    editFileObject["currentVersion"] = basisdokumentObject["currentVersion"] += 1;
+    editFileObject["currentVersion"] = basisdokumentObject[
+      "currentVersion"
+    ] += 1;
   } else {
     editFileObject["currentVersion"] = basisdokumentObject["currentVersion"];
   }

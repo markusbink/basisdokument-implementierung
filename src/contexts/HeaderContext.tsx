@@ -1,6 +1,6 @@
 import { createContext, MouseEventHandler, useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { IHighlighter, IVersion, Tool } from "../types";
+import { IHighlighter, ISection, IVersion, Tool } from "../types";
 
 // Define Interfaces
 interface HeaderProviderProps {
@@ -13,9 +13,6 @@ enum Sorting {
 }
 
 export default interface IHeaderContext {
-  caseId: string;
-  username: string;
-  userParty: string;
   showDropdownHeader: boolean;
   showColumnView: boolean;
   getCurrentTool: Tool;
@@ -27,23 +24,18 @@ export default interface IHeaderContext {
   colorSelection: IHighlighter[];
   versionHistory: IVersion[];
   selectedVersion: number;
-  sectionList: { id: string; title_plaintiff: string }[];
+  sectionList: ISection[];
   resetPrivateSorting: () => void;
   openOnboarding: () => void;
   downloadBasisdokument: MouseEventHandler<HTMLDivElement> | undefined;
   reloadPageAndSave: MouseEventHandler<HTMLButtonElement> | undefined;
   reloadPageAndDoNotSave: MouseEventHandler<HTMLButtonElement> | undefined;
-  setUserParty: React.Dispatch<React.SetStateAction<string>>;
-  setUsername: React.Dispatch<React.SetStateAction<string>>;
-  setSectionList: React.Dispatch<
-    React.SetStateAction<{ id: string; title_plaintiff: string }[]>
-  >;
+  setSectionList: React.Dispatch<React.SetStateAction<ISection[]>>;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
   selectedSorting: Sorting;
   setColorSelection: React.Dispatch<React.SetStateAction<IHighlighter[]>>;
   setShowColumnView: React.Dispatch<React.SetStateAction<boolean>>;
-  setCaseId: React.Dispatch<React.SetStateAction<string>>;
   setSearchbarValue: React.Dispatch<React.SetStateAction<string>>;
   setShowDropdownHeader: React.Dispatch<React.SetStateAction<boolean>>;
   setHighlighterData: React.Dispatch<
@@ -63,6 +55,8 @@ export default interface IHeaderContext {
   >;
   setCurrentColorSelection: React.Dispatch<React.SetStateAction<IHighlighter>>;
   setCurrentTool: React.Dispatch<React.SetStateAction<Tool>>;
+  individualSorting: string[];
+  setIndividualSorting: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const HeaderContext = createContext<IHeaderContext | null>(null);
@@ -71,21 +65,17 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   // Define States
   const [showDropdownHeader, setShowDropdownHeader] =
     useState<IHeaderContext["showDropdownHeader"]>(false);
-  const [username, setUsername] =
-    useState<IHeaderContext["username"]>("Max Mustermann");
-  const [userParty, setUserParty] =
-    useState<IHeaderContext["userParty"]>("Beklagtenpartei");
+
   const [searchbarValue, setSearchbarValue] =
     useState<IHeaderContext["searchbarValue"]>("");
+
   const [showColumnView, setShowColumnView] =
     useState<IHeaderContext["showColumnView"]>(true);
-  const [caseId, setCaseId] =
-    useState<IHeaderContext["caseId"]>("AZ. 8 0 6432/18");
+  const [colorSelection, setColorSelection] = useState<
+    IHeaderContext["colorSelection"]
+  >([]);
   const [currentColorSelection, setCurrentColorSelection] =
-    useState<IHighlighter>({
-      id: "red",
-      label: "Markierung 1",
-    });
+    useState<IHighlighter>(colorSelection[0]);
   const [getCurrentTool, setCurrentTool] = useState<Tool>({
     id: "cursor",
     iconNode: "Cursor",
@@ -104,72 +94,20 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const [selectedSorting, setSelectedSorting] = useState<Sorting>(
     Sorting.Original
   );
+
+  const [individualSorting, setIndividualSorting] = useState<string[]>([]);
+
   const [
     hideElementsWithoutSpecificVersion,
     setHideElementsWithoutSpecificVersion,
   ] = useState<IHeaderContext["hideElementsWithoutSpecificVersion"]>(false);
-  // This data needs to be extracted from the json later
-  const highlighterColorsExample = [
-    { id: "red", label: "Markierung A" },
-    { id: "orange", label: "Markierung 2" },
-    { id: "yellow", label: "Markierung 3" },
-    { id: "green", label: "Markierung 4" },
-    { id: "blue", label: "Markierung 5" },
-    { id: "purple", label: "Markierung 6" },
-  ];
-  const versionHistoryExample: IHeaderContext["versionHistory"] = [
-    {
-      author: "Max Mustermann",
-      role: "Kläger",
-      timestamp: "06/05/2022 14:09:24",
-    },
-    {
-      author: "Michael Bauer",
-      role: "Beklagter",
-      timestamp: "07/05/2022 14:09:24",
-    },
-  ];
-  const sectionsExample = [
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120001",
-      title_plaintiff: "Verstoß gegen §113",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120002",
-      title_plaintiff: "Verstoß gegen §323",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120003",
-      title_plaintiff: "Verstoß gegen §14",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120004",
-      title_plaintiff: "Verstoß gegen §44",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120005",
-      title_plaintiff: "Verstoß gegen §86",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120006",
-      title_plaintiff: "Verstoß gegen §32",
-    },
-    {
-      id: "2b835162-1d32-11ed-861d-0242ac120007",
-      title_plaintiff: "Verstoß gegen §13",
-    },
-  ];
 
-  const [colorSelection, setColorSelection] = useState<
-    IHeaderContext["colorSelection"]
-  >(highlighterColorsExample);
   const [versionHistory, setVersionHistory] = useState<
     IHeaderContext["versionHistory"]
-  >(versionHistoryExample);
+  >([]);
   const [selectedVersion, setSelectedVersion] =
     useState<IHeaderContext["selectedVersion"]>(1);
-  const [sectionList, setSectionList] =
-    useState<IHeaderContext["sectionList"]>(sectionsExample);
+  const [sectionList, setSectionList] = useState<ISection[]>([]);
 
   const resetPrivateSorting = () => {
     console.log("reset");
@@ -197,9 +135,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   return (
     <HeaderContext.Provider
       value={{
-        caseId,
-        username,
-        userParty,
         showDropdownHeader,
         showColumnView,
         getCurrentTool,
@@ -217,15 +152,12 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         downloadBasisdokument,
         reloadPageAndSave,
         reloadPageAndDoNotSave,
-        setUserParty,
-        setUsername,
         setSectionList,
         setSelectedVersion,
         setVersionHistory,
         selectedSorting,
         setColorSelection,
         setShowColumnView,
-        setCaseId,
         setSearchbarValue,
         setShowDropdownHeader,
         setCurrentColorSelection,
@@ -234,6 +166,8 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         setHideEntriesHighlighter,
         setSelectedSorting,
         setHideElementsWithoutSpecificVersion,
+        individualSorting,
+        setIndividualSorting,
       }}
     >
       {children}
