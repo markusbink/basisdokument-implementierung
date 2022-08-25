@@ -17,8 +17,7 @@ export const ColorSelector = () => {
   };
 
   const getColorCode = (color: string) => {
-    console.log(color);
-    
+  
     switch (color) {
       case "red":
         return "marker-red";

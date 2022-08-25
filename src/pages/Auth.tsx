@@ -2,9 +2,9 @@ import cx from "classnames";
 import { Upload } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../components/Button";
-import { useBookmarks, useCase, useHeaderContext, useHints, useNotes, useUser } from "../contexts";
+import { useBookmarks, useCase, useHeaderContext, useHints, useNotes, useUser, useSection } from "../contexts";
 import { createBasisdokument, createEditFile } from "../data-management/creation-handler";
-import { jsonToObject, openBasisdokument, openEditFile } from "../data-management/opening-handler";
+import { jsonToObject, openBasisdokument, openEditFile, updateSortingsIfVersionIsDifferent } from "../data-management/opening-handler";
 import { IStateUserInput, IUser, UsageMode, UserRole } from "../types";
 
 interface AuthProps {
@@ -27,7 +27,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   // Contexts to set the state globally
   const { setCaseId: setCaseIdContext, setEntries, setMetaData, setLitigiousChecks, setCurrentVersion } = useCase();
-  const { setSectionList, setVersionHistory, setColorSelection, setCurrentColorSelection, setIndividualSorting } = useHeaderContext();
+  const { setSectionListHeader, setVersionHistory, setColorSelection, setCurrentColorSelection } = useHeaderContext();
+  const { setSectionList, setIndividualSorting } = useSection();
   const { setNotes } = useNotes();
   const { setHints } = useHints();
   const { setBookmarks } = useBookmarks();
@@ -127,7 +128,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         if (editFile) {
           editFileObject = openEditFile(basisdokumentFile, editFile, newVersionMode);
         } else {
-          editFileObject = createEditFile(prename, surname, role, caseId, basisdokumentObject.currentVersion);
+          editFileObject = createEditFile(prename, surname, role, basisdokumentObject.caseId, basisdokumentObject.currentVersion);
+          editFileObject = updateSortingsIfVersionIsDifferent(basisdokumentObject, editFileObject)
         }
       }
 
@@ -155,17 +157,18 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const setContextFromBasisdokument = (basisdokument: any) => {
     setVersionHistory(basisdokument.versions);
     setEntries(basisdokument.entries);
+    setSectionListHeader(basisdokument.sections);
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
     setMetaData(basisdokument.metadata);
     setLitigiousChecks(basisdokument.litigiousChecks);
     setCurrentVersion(basisdokument.currentVersion);
+    setCaseIdContext(basisdokument.caseId);
   };
 
   const setContextFromEditFile = (editFile: any) => {
     setNotes(editFile.notes);
     setBookmarks(editFile.bookmarks);
-    setCaseIdContext(editFile.caseId);
     setColorSelection(editFile.highlighter);
     setCurrentColorSelection(editFile.highlighter[0]);
     setIndividualSorting(editFile.individualSorting);
