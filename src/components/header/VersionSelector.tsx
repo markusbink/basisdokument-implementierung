@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp } from "phosphor-react";
 import { useHeaderContext } from "../../contexts";
 
 export const VersionSelector = () => {
-  const { selectedVersion, versionHistory, setSelectedVersion } =
-    useHeaderContext();
+  const { selectedVersion, versionHistory, setSelectedVersion } = useHeaderContext();
   const [showVersionMenu, setShowVersionMenu] = useState<boolean>(false);
+
+  useEffect(() => {
+    setSelectedVersion(versionHistory.length-1);
+  }, []);
 
   return (
     <DropdownMenu.Root
@@ -17,23 +20,13 @@ export const VersionSelector = () => {
     >
       <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 h-8 hover:cursor-pointer font-bold text-sm max-w-[200px]">
         <span className="truncate">
-          Version {selectedVersion}
-          <span className="text-mediumGrey font-light ml-2">
-            {versionHistory[selectedVersion-1].author}
-          </span>
+          Version {selectedVersion + 1}
+          <span className="text-mediumGrey font-light ml-2">{versionHistory[selectedVersion].author}</span>
         </span>
-        {showVersionMenu ? (
-          <CaretUp size={12} className="text-darkGrey" />
-        ) : (
-          <CaretDown size={12} className="text-darkGrey" />
-        )}
+        {showVersionMenu ? <CaretUp size={12} className="text-darkGrey" /> : <CaretDown size={12} className="text-darkGrey" />}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          side="bottom"
-          align="start"
-          className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 max-h-[500px] overflow-x-scroll no-scrollbar"
-        >
+        <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 max-h-[500px] overflow-x-scroll no-scrollbar">
           {/* Iterate through list with this element */}
 
           {versionHistory.map((item: any, index: any) => (
@@ -46,9 +39,7 @@ export const VersionSelector = () => {
             >
               <div className="text-darkGrey text-sm font-medium">
                 Version {index + 1}
-                <span className="text-mediumGrey font-light ml-2">
-                  {item.author}
-                </span>
+                <span className="text-mediumGrey font-light ml-2">{item.author}</span>
               </div>
             </DropdownMenu.Item>
           ))}

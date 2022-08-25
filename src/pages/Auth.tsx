@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import { useBookmarks, useCase, useHeaderContext, useHints, useNotes, useUser } from "../contexts";
 import { createBasisdokument, createEditFile } from "../data-management/creation-handler";
-import { openBasisdokument, openEditFile } from "../data-management/opening-handler";
+import { jsonToObject, openBasisdokument, openEditFile } from "../data-management/opening-handler";
 import { IStateUserInput, IUser, UserRole } from "../types";
 
 interface AuthProps {
@@ -79,14 +79,24 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
     // check if file exists and validate
     if (usage === "open") {
-      if (!basisdokumentFilename.endsWith(".json") && typeof basisdokumentFile !== "string") {
+      if ((!basisdokumentFilename.endsWith(".json") && typeof basisdokumentFile !== "string") || !basisdokumentFile) {
         setErrorText("Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!");
         inputIsValid = false;
+      } else {
+        if (jsonToObject(basisdokumentFile).fileType !== "basisdokument") {
+          setErrorText("Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!");
+          inputIsValid = false;
+        }
       }
       if (editFile) {
-        if (!editFilename.endsWith(".json") && typeof editFile === "string") {
+        if (!editFilename.endsWith(".json") && typeof editFile !== "string") {
           setErrorText("Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!");
           inputIsValid = false;
+        } else {
+          if (jsonToObject(editFile).fileType !== "editFile") {
+            setErrorText("Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!");
+            inputIsValid = false;
+          }
         }
       }
     }
@@ -308,10 +318,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           ) : null}
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flew-row items-end justify-between space-y-2">
           <Button onClick={validateUserInput}>Basisdokument erstellen</Button>
-        </div>
-        <div className="flex flex-row justify-end">
           <p className="text-darkRed font-bold text-sm">* Pflichtfelder</p>
         </div>
       </div>
