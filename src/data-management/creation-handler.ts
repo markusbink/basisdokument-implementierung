@@ -14,12 +14,19 @@ export function createBasisdokument(prename: IStateUserInput["prename"], surname
   return basisdokumentObject;
 }
 
-export function createEditFile(prename: IStateUserInput["prename"], surname: IStateUserInput["surname"], role: IStateUserInput["role"], caseId: IStateUserInput["caseId"]) {
+export function createEditFile(prename: IStateUserInput["prename"], surname: IStateUserInput["surname"], role: IStateUserInput["role"], caseId: IStateUserInput["caseId"], version: number) {
   const editFileObject: any = {};
   editFileObject["caseId"] = caseId;
-  editFileObject["currentVersion"] = 1;
+  editFileObject["currentVersion"] = version;
   editFileObject["highlightedEntries"] = [];
-  editFileObject["highlighter"] = [];
+  editFileObject["highlighter"] = [
+    { color: "red", label: "Markierung 1" },
+    { color: "orange", label: "Markierung 2" },
+    { color: "yellow", label: "Markierung 3" },
+    { color: "green", label: "Markierung 4" },
+    { color: "blue", label: "Markierung 5" },
+    { color: "purple", label: "Markierung 6" },
+  ];
   editFileObject["notes"] = [];
   editFileObject["bookmarks"] = [];
   editFileObject["individualSorting"] = [];

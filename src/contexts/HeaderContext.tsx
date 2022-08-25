@@ -106,7 +106,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     IHeaderContext["versionHistory"]
   >([]);
   const [selectedVersion, setSelectedVersion] =
-    useState<IHeaderContext["selectedVersion"]>(1);
+    useState<IHeaderContext["selectedVersion"]>(0);
   const [sectionList, setSectionList] = useState<ISection[]>([]);
 
   const resetPrivateSorting = () => {

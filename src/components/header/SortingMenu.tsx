@@ -7,8 +7,7 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { UserRole } from "../../types";
 
 export const SortingMenu = () => {
-  const { sectionList, setSectionList, resetPrivateSorting } =
-    useHeaderContext();
+  const { sectionList, setSectionList, resetPrivateSorting } = useHeaderContext();
   const [showSortingMenu, setShowSortingMenu] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   useOutsideClick(dropdownRef, () => setShowSortingMenu(false));
@@ -35,12 +34,10 @@ export const SortingMenu = () => {
         <SortAscending size={22} className="text-darkGrey" />
       </button>
       {showSortingMenu ? (
-        <div className="absolute top-full flex flex-col bg-white shadow-md rounded-lg p-3 left-0 mt-6 w-[300px] z-50">
+        <div className="absolute top-full flex flex-col bg-white shadow-md rounded-lg p-3 left-0 mt-6 w-[350px] z-50">
           <div className="flex gap-4 items-center justify-between">
-            <p className="font-bold text-base">Beiträge sortieren</p>
-            <span className="bg-darkGrey text-white text-xs p-0.5 pl-2 pr-2 rounded-full">
-              Privat
-            </span>
+            <span className="font-bold text-base">Gliederungspunkte sortieren</span>
+            <span className="bg-darkGrey text-white text-xs p-0.5 pl-2 pr-2 rounded-full">Privat</span>
           </div>
           <DragDropContext onDragEnd={handleDrop}>
             <Droppable droppableId="sorting-menu-container">
@@ -51,25 +48,13 @@ export const SortingMenu = () => {
                   ref={provided.innerRef}
                 >
                   {sectionList.map((section, index) => (
-                    <Draggable
-                      key={section.id}
-                      draggableId={section.id}
-                      index={index}
-                    >
+                    <Draggable key={section.id} draggableId={section.id} index={index}>
                       {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                        >
+                        <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
                           <div className="flex flex-row items-center select-none group">
                             <DotsSixVertical size={24} />
                             <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
-                              <span>
-                                {user?.role === UserRole.Plaintiff
-                                  ? section.titlePlaintiff
-                                  : section.titleDefendant}
-                              </span>
+                              <span>{user?.role === UserRole.Plaintiff ? section.titlePlaintiff : section.titleDefendant}</span>
                             </div>
                           </div>
                         </div>
@@ -77,21 +62,28 @@ export const SortingMenu = () => {
                     </Draggable>
                   ))}
                   {provided.placeholder}
+                  {sectionList.length === 0 ? (
+                    <div className="flex justify-center items-center p-8">
+                      <p className="text-mediumGrey opacity-70 text-center text-sm w-48">Es wurden noch kein Gliederungspunkt angelegt.</p>
+                    </div>
+                  ) : null}
                 </div>
               )}
             </Droppable>
           </DragDropContext>
-          <div className="flex justify-end mt-2">
-            <div
-              className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey hover:bg-mediumGrey text-white text-[10px] font-bold p-1 rounded-md"
-              onClick={() => {
-                resetPrivateSorting();
-              }}
-            >
-              <ClockClockwise size={16} />
-              <p>Sortierung zurücksetzen</p>
+          {sectionList.length !== 0 ? (
+            <div className="flex justify-end mt-2">
+              <div
+                className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey hover:bg-mediumGrey text-white text-[10px] font-bold p-1 rounded-md"
+                onClick={() => {
+                  resetPrivateSorting();
+                }}
+              >
+                <ClockClockwise size={16} />
+                <p>Sortierung zurücksetzen</p>
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       ) : null}
     </div>

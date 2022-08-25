@@ -33,6 +33,10 @@ function updateSortingsIfVersionIsDifferent(
   return editFileObject;
 }
 
+export function jsonToObject(json:string) {
+ return JSON.parse(json);
+}
+
 export function openBasisdokument(
   jsonStringBasisdokument: string,
   newVersionMode: IStateUserInput["newVersionMode"],
@@ -40,7 +44,7 @@ export function openBasisdokument(
   surname: IStateUserInput["surname"],
   role: IStateUserInput["role"]
 ) {
-  const basisdokumentObject: any = JSON.parse(jsonStringBasisdokument);
+  const basisdokumentObject: any = jsonToObject(jsonStringBasisdokument);
   if (newVersionMode) {
     basisdokumentObject["currentVersion"] = basisdokumentObject[
       "currentVersion"
