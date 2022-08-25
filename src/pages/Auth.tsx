@@ -27,7 +27,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   // Contexts to set the state globally
   const { setCaseId: setCaseIdContext, setEntries, setMetaData, setLitigiousChecks, setCurrentVersion } = useCase();
-  const { setSectionListHeader, setVersionHistory, setColorSelection, setCurrentColorSelection } = useHeaderContext();
+  const { setVersionHistory, setColorSelection, setCurrentColorSelection } = useHeaderContext();
   const { setSectionList, setIndividualSorting } = useSection();
   const { setNotes } = useNotes();
   const { setHints } = useHints();
@@ -157,7 +157,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const setContextFromBasisdokument = (basisdokument: any) => {
     setVersionHistory(basisdokument.versions);
     setEntries(basisdokument.entries);
-    setSectionListHeader(basisdokument.sections);
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
     setMetaData(basisdokument.metadata);

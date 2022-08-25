@@ -25,7 +25,6 @@ export default interface IHeaderContext {
   versionHistory: IVersion[];
   selectedVersion: number;
   sectionListHeader: ISection[];
-  resetPrivateSorting: () => void;
   openOnboarding: () => void;
   downloadBasisdokument: MouseEventHandler<HTMLDivElement> | undefined;
   reloadPageAndSave: MouseEventHandler<HTMLButtonElement> | undefined;
@@ -55,8 +54,6 @@ export default interface IHeaderContext {
   >;
   setCurrentColorSelection: React.Dispatch<React.SetStateAction<IHighlighter>>;
   setCurrentTool: React.Dispatch<React.SetStateAction<Tool>>;
-  individualSortingHeader: string[];
-  setIndividualSortingHeader: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const HeaderContext = createContext<IHeaderContext | null>(null);
@@ -95,8 +92,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     Sorting.Original
   );
 
-  const [individualSortingHeader, setIndividualSortingHeader] = useState<string[]>([]);
-
   const [
     hideElementsWithoutSpecificVersion,
     setHideElementsWithoutSpecificVersion,
@@ -108,10 +103,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const [selectedVersion, setSelectedVersion] =
     useState<IHeaderContext["selectedVersion"]>(0);
   const [sectionListHeader, setSectionListHeader] = useState<ISection[]>([]);
-
-  const resetPrivateSorting = () => {
-    console.log("reset");
-  };
 
   const openOnboarding = () => {
     console.log("open onboarding");
@@ -147,7 +138,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         versionHistory,
         selectedVersion,
         sectionListHeader,
-        resetPrivateSorting,
         openOnboarding,
         downloadBasisdokument,
         reloadPageAndSave,
@@ -166,8 +156,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         setHideEntriesHighlighter,
         setSelectedSorting,
         setHideElementsWithoutSpecificVersion,
-        individualSortingHeader,
-        setIndividualSortingHeader,
       }}
     >
       {children}
