@@ -2,22 +2,9 @@ import cx from "classnames";
 import { Upload } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../components/Button";
-import {
-  useBookmarks,
-  useCase,
-  useHeaderContext,
-  useHints,
-  useNotes,
-  useUser,
-} from "../contexts";
-import {
-  createBasisdokument,
-  createEditFile,
-} from "../data-management/creating-handler";
-import {
-  openBasisdokument,
-  openEditFile,
-} from "../data-management/opening-handler";
+import { useBookmarks, useCase, useHeaderContext, useHints, useNotes, useUser } from "../contexts";
+import { createBasisdokument, createEditFile } from "../data-management/creation-handler";
+import { openBasisdokument, openEditFile } from "../data-management/opening-handler";
 import { IStateUserInput, IUser, UserRole } from "../types";
 
 interface AuthProps {
@@ -31,32 +18,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [role, setRole] = useState<IStateUserInput["role"]>();
   const [prename, setPrename] = useState<IStateUserInput["prename"]>("");
   const [surname, setSurname] = useState<IStateUserInput["surname"]>("");
-  const [basisdokumentFile, setBasisdokumentFile] =
-    useState<IStateUserInput["basisdokumentFile"]>();
+  const [basisdokumentFile, setBasisdokumentFile] = useState<IStateUserInput["basisdokumentFile"]>();
   const [editFile, setEditFile] = useState<IStateUserInput["editFile"]>();
-  const [basisdokumentFilename, setBasisdokumentFilename] =
-    useState<IStateUserInput["basisdokumentFile"]>("");
-  const [editFilename, setEditFilename] =
-    useState<IStateUserInput["editFile"]>("");
+  const [basisdokumentFilename, setBasisdokumentFilename] = useState<IStateUserInput["basisdokumentFile"]>("");
+  const [editFilename, setEditFilename] = useState<IStateUserInput["editFile"]>("");
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
-  const [newVersionMode, setNewVersionMode] =
-    useState<IStateUserInput["newVersionMode"]>(false);
+  const [newVersionMode, setNewVersionMode] = useState<IStateUserInput["newVersionMode"]>(false);
 
   // Contexts to set the state globally
-  const {
-    setCaseId: setCaseIdContext,
-    setEntries,
-    setMetaData,
-    setLitigiousChecks,
-    setCurrentVersion,
-  } = useCase();
-  const {
-    setSectionList,
-    setVersionHistory,
-    setColorSelection,
-    setCurrentColorSelection,
-    setIndividualSorting,
-  } = useHeaderContext();
+  const { setCaseId: setCaseIdContext, setEntries, setMetaData, setLitigiousChecks, setCurrentVersion } = useCase();
+  const { setSectionList, setVersionHistory, setColorSelection, setCurrentColorSelection, setIndividualSorting } = useHeaderContext();
   const { setNotes } = useNotes();
   const { setHints } = useHints();
   const { setBookmarks } = useBookmarks();
@@ -108,20 +79,15 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
     // check if file exists and validate
     if (usage === "open") {
-      if (
-        !basisdokumentFilename.endsWith(".json") &&
-        typeof basisdokumentFile == "string"
-      ) {
-        setErrorText(
-          "Bitte laden Sie eine valide Bearbeitungs-Datei (.json) hoch!"
-        );
+      if (!basisdokumentFilename.endsWith(".json") && typeof basisdokumentFile !== "string") {
+        setErrorText("Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!");
         inputIsValid = false;
       }
-      if (!editFilename.endsWith(".json") && typeof editFile == "string") {
-        setErrorText(
-          "Bitte laden Sie eine valide Basisdokument-Datei (.json) hoch!"
-        );
-        inputIsValid = false;
+      if (editFile) {
+        if (!editFilename.endsWith(".json") && typeof editFile === "string") {
+          setErrorText("Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!");
+          inputIsValid = false;
+        }
       }
     }
     if (caseId === "" && usage === "create") {
@@ -130,53 +96,32 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     }
 
     if (prename === "" || surname === "") {
-      setErrorText(
-        "Bitte geben Sie sowohl Ihren Vornamen als auch einen Nachnamen an!"
-      );
+      setErrorText("Bitte geben Sie sowohl Ihren Vornamen als auch einen Nachnamen an!");
       inputIsValid = false;
     }
     if (!role) {
-      setErrorText(
-        "Bitte spezifizieren Sie, ob Sie das Basisdokument als Kläger, Beklagter oder Richter bearbeiten möchten!"
-      );
+      setErrorText("Bitte spezifizieren Sie, ob Sie das Basisdokument als Kläger, Beklagter oder Richter bearbeiten möchten!");
       inputIsValid = false;
     }
     if (!usage) {
-      setErrorText(
-        "Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder erstellen möchten!"
-      );
+      setErrorText("Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder erstellen möchten!");
       inputIsValid = false;
     }
 
     if (inputIsValid === true) {
       let basisdokumentObject, editFileObject;
-      if (
-        usage === "open" &&
-        typeof basisdokumentFile == "string" &&
-        typeof editFile == "string"
-      ) {
-        basisdokumentObject = openBasisdokument(
-          basisdokumentFile,
-          newVersionMode,
-          prename,
-          surname,
-          role
-        );
-        editFileObject = openEditFile(
-          basisdokumentFile,
-          editFile,
-          newVersionMode
-        );
+      if (usage === "open" && typeof basisdokumentFile == "string") {
+        basisdokumentObject = openBasisdokument(basisdokumentFile, newVersionMode, prename, surname, role);
+        if (editFile) {
+          editFileObject = openEditFile(basisdokumentFile, editFile, newVersionMode);
+        } else {
+          editFileObject = createEditFile(prename, surname, role, caseId, basisdokumentObject.currentVersion);
+        }
       }
 
       if (usage === "create") {
-        basisdokumentObject = createBasisdokument(
-          prename,
-          surname,
-          role,
-          caseId
-        );
-        editFileObject = createEditFile(prename, surname, role, caseId);
+        basisdokumentObject = createBasisdokument(prename, surname, role, caseId);
+        editFileObject = createEditFile(prename, surname, role, caseId, 1);
       }
 
       console.log(basisdokumentObject);
@@ -218,34 +163,24 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     <div className="overflow-scroll h-full">
       <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex-col justify-center h-auto overflow-scroll no-scrollbar">
         <h1 className="text-3xl font-bold">Das Basisdokument</h1>
-        <p className="text-md text-mediumGrey">
-          Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines
-          Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments
-          in Form einer .json-Datei hoch, falls Sie an einer Version
-          weiterarbeiten wollen. Um persönliche Daten wie Markierungen,
-          Sortierungen und Lesezeichen zu speichern, ist es notwendig, dass Sie
-          auch Ihre persönliche Bearbeitungsdatei hochladen. Das Basisdokument
-          verwendet keinen externen Server, um Daten zu speichern. Alle Daten,
-          die Sie hochladen, bleiben <b>im Browser Ihres Computers</b>. Das
-          Basisdokument kann schließlich als .json und .pdf exportiert werden
-          und somit an Dritte weitergegeben werden.
+        <p className="text-md text-mediumGrey text-justify">
+          Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments in Form einer .json-Datei hoch, falls Sie an einer
+          Version weiterarbeiten wollen. Um persönliche Daten wie Markierungen, Sortierungen und Lesezeichen zu laden, ist es notwendig, dass Sie auch Ihre persönliche Bearbeitungsdatei hochladen. Das
+          Basisdokument verwendet keinen externen Server, um Daten zu speichern. Alle Daten, die Sie hochladen, bleiben <b>im Browser Ihres Computers</b>. Das Basisdokument kann schließlich als .json
+          und .pdf exportiert werden und somit an Dritte weitergegeben werden.
         </p>
         <div>
           <p className="font-light">
-            Ich möchte ein Basisdokument:{" "}
-            <span className="text-darkRed">*</span>
+            Ich möchte ein Basisdokument: <span className="text-darkRed">*</span>
           </p>
           <div className="flex flex-row w-auto mt-4 gap-4">
             <div
               onClick={() => {
                 setUsage("open");
               }}
-              className={cx(
-                "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                {
-                  "border-2 border-darkGrey": usage === "open",
-                }
-              )}
+              className={cx("flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
+                "border-2 border-darkGrey": usage === "open",
+              })}
             >
               Öffnen
             </div>
@@ -253,12 +188,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               onClick={() => {
                 setUsage("create");
               }}
-              className={cx(
-                "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                {
-                  "border-2 border-darkGrey": usage === "create",
-                }
-              )}
+              className={cx("flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
+                "border-2 border-darkGrey": usage === "create",
+              })}
             >
               Erstellen
             </div>
@@ -267,20 +199,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
         <div>
           <p className="font-light">
-            Ich möchte das Basisdokument bearbeiten in der Funktion:{" "}
-            <span className="text-darkRed">*</span>
+            Ich möchte das Basisdokument bearbeiten in der Funktion: <span className="text-darkRed">*</span>
           </p>
           <div className="flex flex-row w-auto mt-4 gap-4">
             <div
               onClick={() => {
                 setRole(UserRole.Plaintiff);
               }}
-              className={cx(
-                "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                {
-                  "border-2 border-darkGrey": role === "Kläger",
-                }
-              )}
+              className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
+                "border-2 border-darkGrey": role === "Kläger",
+              })}
             >
               Kläger
             </div>
@@ -288,12 +216,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               onClick={() => {
                 setRole(UserRole.Defendant);
               }}
-              className={cx(
-                "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                {
-                  "border-2 border-darkGrey": role === "Beklagter",
-                }
-              )}
+              className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
+                "border-2 border-darkGrey": role === "Beklagter",
+              })}
             >
               Beklagter
             </div>
@@ -301,12 +226,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               onClick={() => {
                 setRole(UserRole.Judge);
               }}
-              className={cx(
-                "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                {
-                  "border-2 border-darkGrey": role === "Richter",
-                }
-              )}
+              className={cx("flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
+                "border-2 border-darkGrey": role === "Richter",
+              })}
             >
               Richter
             </div>
@@ -314,40 +236,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         </div>
         <div>
           <p className="font-light">
-            Ich möchte das Basisdokument bearbeiten als:{" "}
-            <span className="text-darkRed">*</span>
+            Ich möchte das Basisdokument bearbeiten als: <span className="text-darkRed">*</span>
           </p>
           <div className="flex flex-row w-auto mt-4 gap-4">
-            <input
-              className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none"
-              type="text"
-              placeholder="Vorname..."
-              value={prename}
-              onChange={onChangeGivenPrename}
-            />
-            <input
-              className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none"
-              type="text"
-              placeholder="Nachname..."
-              value={surname}
-              onChange={onChangeGivenSurname}
-            />
+            <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Vorname..." value={prename} onChange={onChangeGivenPrename} />
+            <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Nachname..." value={surname} onChange={onChangeGivenSurname} />
           </div>
         </div>
         {usage === "create" ? (
           <div>
             <p className="font-light">
-              Aktenzeichen diese Basisdokuments:{" "}
-              <span className="text-darkRed">*</span>
+              Aktenzeichen diese Basisdokuments: <span className="text-darkRed">*</span>
             </p>
             <div className="flex flex-row w-auto mt-4 gap-4">
-              <input
-                className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none"
-                type="text"
-                placeholder="Aktenzeichen..."
-                value={caseId}
-                onChange={onChangeGivenCaseId}
-              />
+              <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Aktenzeichen..." value={caseId} onChange={onChangeGivenCaseId} />
             </div>
           </div>
         ) : null}
@@ -355,17 +257,15 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <div className="flex flex-col gap-4">
             <div>
               <p className="font-light">
-                Basisdokument-Dateien hochladen:{" "}
-                <span className="text-darkRed">*</span>
+                Basisdokument-Dateien hochladen: <span className="text-darkRed">*</span>
               </p>
               <div className="flex flex-col items-start w-auto mt-8 mb-8 gap-4">
                 <div className="flex flex-row items-center justify-center gap-4">
-                  <p className="font-semibold">Basisdokument:</p>
+                  <p className="font-semibold">
+                    Basisdokument: <span className="text-darkRed">*</span>
+                  </p>
                   <label className="flex items-center justify-center gap-2 cursor-pointer">
-                    <input
-                      type="file"
-                      onChange={handleBasisdokumentFileUploadChange}
-                    />
+                    <input type="file" onChange={handleBasisdokumentFileUploadChange} />
                     <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
                       <Upload size={24} color={"white"} />
                     </div>
@@ -385,21 +285,13 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               </div>
             </div>
             <div className="flex flex-row items-center gap-4">
-              <input
-                className="w-20 accent-darkGrey"
-                type="checkbox"
-                defaultChecked={newVersionMode}
-                onChange={() => setNewVersionMode(!newVersionMode)}
-              />
+              <input className="w-20 accent-darkGrey" type="checkbox" defaultChecked={newVersionMode} onChange={() => setNewVersionMode(!newVersionMode)} />
               <div>
                 <p className="font-extrabold">
-                  Ich möchte eine neue Version auf Basis der hochgeladenen
-                  Version erstellen. <span className="text-darkRed">*</span>
+                  Ich möchte eine neue Version auf Basis der hochgeladenen Version erstellen. <span className="text-darkRed">*</span>
                 </p>
                 <p className="font-light text-mediumGrey">
-                  Setzen Sie hier einen Haken, wenn Sie die Version des
-                  Basisdokuments, die Sie hochladen, zuvor von einer anderen
-                  Partei erhalten und noch nicht editiert haben.
+                  Setzen Sie hier einen Haken, wenn Sie die Version des Basisdokuments, die Sie hochladen, zuvor von einer anderen Partei erhalten und noch nicht editiert haben.
                 </p>
               </div>
             </div>
@@ -418,6 +310,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
         <div className="space-y-2">
           <Button onClick={validateUserInput}>Basisdokument erstellen</Button>
+        </div>
+        <div className="flex flex-row justify-end">
+          <p className="text-darkRed font-bold text-sm">* Pflichtfelder</p>
         </div>
       </div>
     </div>
