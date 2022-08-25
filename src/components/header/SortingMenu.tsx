@@ -1,14 +1,13 @@
 import { ClockClockwise, DotsSixVertical, SortAscending } from "phosphor-react";
 import { useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { useHeaderContext, useSection } from "../../contexts";
+import { useSection } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { UserRole } from "../../types";
 
 export const SortingMenu = () => {
   const { sectionList, individualSorting, setIndividualSorting } = useSection();
-  const { resetPrivateSorting } = useHeaderContext();
   const [showSortingMenu, setShowSortingMenu] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   useOutsideClick(dropdownRef, () => setShowSortingMenu(false));
@@ -27,13 +26,23 @@ export const SortingMenu = () => {
   };
 
   const getOriginalSortingPosition = (sectionId: string) => {
-    return 2;
+    var position = sectionList.findIndex(function (section) {
+      return section.id === sectionId;
+    });
+    return position + 1;
   };
 
   const getSectionObject = (id: string) => {
     let section: any = sectionList.find((section) => section.id === id);
-    return section
-  }
+    return section;
+  };
+
+  const resetPrivateSorting = () => {
+    let originalSorting = sectionList.map((section) => section.id);
+    console.log(originalSorting);
+    setIndividualSorting(originalSorting);
+    
+  };
 
   return (
     <div ref={dropdownRef} className="relative">
@@ -65,7 +74,8 @@ export const SortingMenu = () => {
                             <DotsSixVertical size={24} />
                             <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
                               <span>
-                                {getOriginalSortingPosition(getSectionObject(section).id)}. {user?.role === UserRole.Plaintiff ? getSectionObject(section).titlePlaintiff : getSectionObject(section).titleDefendant}
+                                {getOriginalSortingPosition(getSectionObject(section).id)}.{" "}
+                                {user?.role === UserRole.Plaintiff ? getSectionObject(section).titlePlaintiff : getSectionObject(section).titleDefendant}
                               </span>
                             </div>
                           </div>
