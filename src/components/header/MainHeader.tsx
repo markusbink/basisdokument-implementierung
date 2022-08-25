@@ -39,7 +39,7 @@ export const MainHeader = () => {
             <CaretDown size={12} className="text-darkGrey" weight="bold" />
           )}
         </div>
-        <span className="font-extralight text-sm">{caseId}</span>
+        <span className="font-extralight text-sm">AZ. {caseId}</span>
       </div>
       {/* searchbar */}
       <div className="flex flex-row gap-2 justify-center items-center w-full max-w-[300px]">
