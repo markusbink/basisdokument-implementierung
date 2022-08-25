@@ -12,8 +12,8 @@ export const Discussion = () => {
     if (selectedSorting === Sorting.Privat) {
       let privateSorting: ISection[] = [];
       individualSorting.forEach((id: string) => {
-        let obj: any = sectionList.find((section) => section.id === id);
-        privateSorting.push(obj);
+        let section: any = sectionList.find((section) => section.id === id);
+        privateSorting.push(section);
       });
       return privateSorting;
     } else {

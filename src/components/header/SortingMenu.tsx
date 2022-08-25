@@ -7,7 +7,7 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { UserRole } from "../../types";
 
 export const SortingMenu = () => {
-  const { sectionList, setSectionList } = useSection();
+  const { sectionList, individualSorting, setIndividualSorting } = useSection();
   const { resetPrivateSorting } = useHeaderContext();
   const [showSortingMenu, setShowSortingMenu] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -17,18 +17,23 @@ export const SortingMenu = () => {
   const handleDrop = (droppedItem: any) => {
     // Ignore drop outside droppable container
     if (!droppedItem.destination) return;
-    const updatedList = [...sectionList];
+    const updatedList = [...individualSorting];
     // Remove dragged item
     const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
     // Add dropped item
     updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
     // Update State
-    setSectionList(updatedList);
+    setIndividualSorting(updatedList);
   };
 
   const getOriginalSortingPosition = (sectionId: string) => {
     return 2;
   };
+
+  const getSectionObject = (id: string) => {
+    let section: any = sectionList.find((section) => section.id === id);
+    return section
+  }
 
   return (
     <div ref={dropdownRef} className="relative">
@@ -52,15 +57,15 @@ export const SortingMenu = () => {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {sectionList.map((section, index) => (
-                    <Draggable key={section.id} draggableId={section.id} index={index}>
+                  {individualSorting.map((section, index) => (
+                    <Draggable key={getSectionObject(section).id} draggableId={getSectionObject(section).id} index={index}>
                       {(provided) => (
                         <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
                           <div className="flex flex-row items-center select-none group">
                             <DotsSixVertical size={24} />
                             <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
                               <span>
-                                {getOriginalSortingPosition(section.id)}. {user?.role === UserRole.Plaintiff ? section.titlePlaintiff : section.titleDefendant}
+                                {getOriginalSortingPosition(getSectionObject(section).id)}. {user?.role === UserRole.Plaintiff ? getSectionObject(section).titlePlaintiff : getSectionObject(section).titleDefendant}
                               </span>
                             </div>
                           </div>
