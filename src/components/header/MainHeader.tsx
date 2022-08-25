@@ -27,7 +27,7 @@ export const MainHeader = () => {
       <div className="flex flex-row gap-4 items-center">
         <DocumentButton />
         <div
-          className="select-none flex flex-row justify-center items-center gap-1 bg-offWhite hover:bg-lightGrey rounded-full h-8 pl-2 pr-2 cursor-pointer"
+          className="select-none flex flex-row justify-center items-center gap-1 bg-offWhite hover:bg-lightGrey rounded-full h-7 pl-2 pr-2 cursor-pointer"
           onClick={() => {
             setShowDropdownHeader(!showDropdownHeader);
           }}

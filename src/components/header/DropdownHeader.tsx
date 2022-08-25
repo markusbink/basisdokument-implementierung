@@ -27,8 +27,8 @@ export const DropdownHeader: React.FC<any> = () => {
   return (
     <div className="flex flex-row gap-4 p-2 pl-8 pr-8 bg-white items-center">
       <div>
-        <p className="font-extrabold tracking-widest text-xs">DARSTELLUNG</p>
-        <div className="flex flex-row gap-2 h-8 mt-2">
+        <span className="font-extrabold tracking-widest text-xs">DARSTELLUNG</span>
+        <div className="flex flex-row gap-2 h-8">
           <div
             className={cx(
               "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
@@ -65,12 +65,12 @@ export const DropdownHeader: React.FC<any> = () => {
           </div>
         </div>
       </div>
-      <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
+      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
         <span className="font-extrabold tracking-widest text-xs">
           SORTIERUNGEN
         </span>
-        <div className="flex flex-row items-center mt-2 h-8 gap-2">
+        <div className="flex flex-row items-center h-8 gap-2">
           <SortingSelector
             selectedSorting={selectedSorting}
             setSelectedSorting={setSelectedSorting}
@@ -78,12 +78,12 @@ export const DropdownHeader: React.FC<any> = () => {
           {selectedSorting === Sorting.Privat ? <SortingMenu /> : null}
         </div>
       </div>
-      <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
+      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
         <span className="font-extrabold tracking-widest text-xs">
           MARKIERUNGEN
         </span>
-        <div className="flex flex-col lg:flex-row items-center mt-2 h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium">
+        <div className="flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium">
           <div className="flex flex-row gap-2">
             {colorSelection.map((item: any, id: number) => (
               <HighlighterButton key={id} id={id} />
@@ -91,7 +91,7 @@ export const DropdownHeader: React.FC<any> = () => {
           </div>
           <div className="flex flex-row items-center gap-2">
             <input
-              className="accent-darkGrey cursor-pointer"
+              className="small-checkbox accent-darkGrey cursor-pointer"
               type="checkbox"
               checked={hideEntriesHighlighter}
               onChange={() =>
@@ -109,14 +109,14 @@ export const DropdownHeader: React.FC<any> = () => {
           </div>
         </div>
       </div>
-      <div className="h-14 w-0.5 bg-lightGrey rounded-full"></div>
+      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
         <span className="font-extrabold tracking-widest text-xs">
           ÄNDERUNGEN VON
         </span>
-        <div className="flex flex-row items-center mt-2 h-8 gap-2">
+        <div className="flex flex-row items-center h-8 gap-2">
           <input
-            className="accent-darkGrey cursor-pointer"
+            className="small-checkbox accent-darkGrey cursor-pointer"
             type="checkbox"
             defaultChecked={hideElementsWithoutSpecificVersion}
             onChange={() =>

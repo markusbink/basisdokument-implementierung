@@ -1,4 +1,4 @@
-import { ClockClockwise, DotsSixVertical, ListNumbers } from "phosphor-react";
+import { ClockClockwise, DotsSixVertical, SortAscending } from "phosphor-react";
 import { useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useHeaderContext } from "../../contexts";
@@ -30,9 +30,9 @@ export const SortingMenu = () => {
     <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setShowSortingMenu(!showSortingMenu)}
-        className={`flex flex-row justify-between bg-darkGrey hover:bg-mediumGrey items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer font-bold h-8`}
+        className={`flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer font-bold h-8`}
       >
-        <ListNumbers size={24} className="text-white" />
+        <SortAscending size={22} className="text-darkGrey" />
       </button>
       {showSortingMenu ? (
         <div className="absolute top-full flex flex-col bg-white shadow-md rounded-lg p-3 left-0 mt-6 w-[300px] z-50">
