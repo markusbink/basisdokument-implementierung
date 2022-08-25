@@ -9,7 +9,7 @@ export const VersionSelector = () => {
 
   useEffect(() => {
     setSelectedVersion(versionHistory.length-1);
-  }, [versionHistory, setSelectedVersion]);
+  });
 
   return (
     <DropdownMenu.Root
