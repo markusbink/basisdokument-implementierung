@@ -113,13 +113,15 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       setErrorText("Bitte spezifizieren Sie, ob Sie das Basisdokument als Kläger, Beklagter oder Richter bearbeiten möchten!");
       inputIsValid = false;
     }
-    if (!usage) {
+
+    if (usage !== UsageMode.Open && usage !== UsageMode.Create) {
       setErrorText("Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder erstellen möchten!");
       inputIsValid = false;
     }
 
     if (inputIsValid === true) {
       let basisdokumentObject, editFileObject;
+
       if (usage === UsageMode.Open && typeof basisdokumentFile == "string") {
         basisdokumentObject = openBasisdokument(basisdokumentFile, newVersionMode, prename, surname, role);
         if (editFile) {
