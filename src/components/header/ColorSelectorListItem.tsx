@@ -40,7 +40,7 @@ export const ColorSelectorListItem: React.FC<IProps> = ({ highlighter, setCurren
             autoFocus={true}
             type="text"
             name="title"
-            className="rounded-md focus:outline-0 w-[150px] text-clip bg-transparent"
+            className="rounded-md focus:outline-0 w-[150px] text-clip bg-transparent text-sm font-medium"
             value={highlighter.label}
             onKeyDown={(e) => {
               if (e.key === "Enter") {

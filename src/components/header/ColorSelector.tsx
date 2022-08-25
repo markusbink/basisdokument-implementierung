@@ -40,7 +40,7 @@ export const ColorSelector = () => {
         className={`flex flex-row align-middle justify-center items-center gap-2 marker-icon-opacity ${getColorCode(currentColorSelection.id)} rounded-md w-12 h-8 cursor-pointer`}
       >
         <div className={`flex items-center justify-center w-5 h-5 shadow-inner shadow-2xl ${getColorCode(currentColorSelection.id)} rounded-full `}>
-          <div className="border-white w-4 h-4 bg-transparent rounded-full bg-transparent border-[1px]"></div>
+          <div className="border-white w-4 h-4 rounded-full bg-transparent border-[1px]"></div>
         </div>
       </div>
       {showColorSelectorMenu ? (

@@ -9,9 +9,7 @@ export const HighlighterButton: React.FC<{ id: number }> = ({ id }) => {
 
   return (
     <div
-      className={cx(`marker-${colorSelection[id].id} flex justify-center items-center text-white h-5 w-5 rounded-full hover:border-2 cursor-pointer hover:border-darkGrey`, {
-        "marker-button-opacity": !highlighterData[color],
-      })}
+      className={cx(`marker-${colorSelection[id].id} flex justify-center items-center text-white h-5 w-5 rounded-full hover:border-2 cursor-pointer hover:border-darkGrey`)}
       onClick={() => {
         setHighlighterData({
           ...highlighterData,
@@ -20,8 +18,8 @@ export const HighlighterButton: React.FC<{ id: number }> = ({ id }) => {
       }}
     >
       {highlighterData[color] ? (
-        <div className="border-white w-4 h-4 bg-transparent rounded-full bg-transparent border-[3px]" />
-      ) : null}
+        <div className="border-white w-3.5 h-3.5 rounded-full bg-transparent border-[3px]" />
+      ) : <div className="border-white w-3.5 h-3.5 bg-white rounded-full" />}
     </div>
   );
 };
