@@ -55,9 +55,9 @@ export const ToolSelector: React.FC<IProps> = ({
         <div className={`flex flex-row items-center rounded-full gap-2`}>
           <CurrentToolComponent size={16} className="text-darkGrey" />
           {showToolSelectorMenu ? (
-            <CaretUp size={12} className="text-darkGrey" weight="fill" />
+            <CaretUp size={12} className="text-darkGrey" weight="bold" />
           ) : (
-            <CaretDown size={12} className="text-darkGrey" weight="fill" />
+            <CaretDown size={12} className="text-darkGrey" weight="bold" />
           )}
         </div>
       </div>

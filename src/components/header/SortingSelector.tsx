@@ -29,9 +29,9 @@ export const SortingSelector: React.FC<IProps> = ({
           {selectedSorting === Sorting.Original ? "Original" : "Privat"}
         </span>
         {showSelectMenu ? (
-          <CaretUp size={12} className="text-darkGrey" />
+          <CaretUp size={12} className="text-darkGrey" weight="bold" />
         ) : (
-          <CaretDown size={12} className="text-darkGrey" />
+          <CaretDown size={12} className="text-darkGrey" weight="bold" />
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>

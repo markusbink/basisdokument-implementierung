@@ -34,9 +34,9 @@ export const MainHeader = () => {
         >
           <span className="text-xs font-bold">Ansicht</span>
           {showDropdownHeader ? (
-            <CaretUp size={12} className="text-darkGrey" />
+            <CaretUp size={12} className="text-darkGrey" weight="bold" />
           ) : (
-            <CaretDown size={12} className="text-darkGrey" />
+            <CaretDown size={12} className="text-darkGrey" weight="bold" />
           )}
         </div>
         <span className="font-extralight text-sm">{caseId}</span>

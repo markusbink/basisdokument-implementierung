@@ -23,9 +23,9 @@ export const VersionSelector = () => {
           </span>
         </span>
         {showVersionMenu ? (
-          <CaretUp size={12} className="text-darkGrey" />
+          <CaretUp size={12} className="text-darkGrey" weight="bold" />
         ) : (
-          <CaretDown size={12} className="text-darkGrey" />
+          <CaretDown size={12} className="text-darkGrey" weight="bold" />
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
