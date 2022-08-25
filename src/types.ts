@@ -38,6 +38,11 @@ export enum Sorting {
   Original,
 }
 
+export enum UsageMode {
+  Open,
+  Create
+}
+
 export interface ISection {
   id: string;
   version: number;
@@ -98,7 +103,7 @@ export interface Tool {
 }
 
 export interface IStateUserInput {
-  usage: "open" | "create" | undefined;
+  usage: UsageMode.Open | UsageMode.Create | undefined;
   role: UserRole | undefined;
   prename: string;
   surname: string;

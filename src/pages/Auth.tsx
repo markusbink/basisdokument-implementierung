@@ -5,7 +5,7 @@ import { Button } from "../components/Button";
 import { useBookmarks, useCase, useHeaderContext, useHints, useNotes, useUser } from "../contexts";
 import { createBasisdokument, createEditFile } from "../data-management/creation-handler";
 import { jsonToObject, openBasisdokument, openEditFile } from "../data-management/opening-handler";
-import { IStateUserInput, IUser, UserRole } from "../types";
+import { IStateUserInput, IUser, UsageMode, UserRole } from "../types";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -78,7 +78,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     let inputIsValid: boolean = true;
 
     // check if file exists and validate
-    if (usage === "open") {
+    if (usage === UsageMode.Open) {
       if ((!basisdokumentFilename.endsWith(".json") && typeof basisdokumentFile !== "string") || !basisdokumentFile) {
         setErrorText("Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!");
         inputIsValid = false;
@@ -100,7 +100,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         }
       }
     }
-    if (caseId === "" && usage === "create") {
+    if (caseId === "" && usage === UsageMode.Create) {
       setErrorText("Bitte geben Sie ein gültiges Aktenzeichen an!");
       inputIsValid = false;
     }
@@ -120,7 +120,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
     if (inputIsValid === true) {
       let basisdokumentObject, editFileObject;
-      if (usage === "open" && typeof basisdokumentFile == "string") {
+      if (usage === UsageMode.Open && typeof basisdokumentFile == "string") {
         basisdokumentObject = openBasisdokument(basisdokumentFile, newVersionMode, prename, surname, role);
         if (editFile) {
           editFileObject = openEditFile(basisdokumentFile, editFile, newVersionMode);
@@ -129,7 +129,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         }
       }
 
-      if (usage === "create") {
+      if (usage === UsageMode.Create) {
         basisdokumentObject = createBasisdokument(prename, surname, role, caseId);
         editFileObject = createEditFile(prename, surname, role, caseId, 1);
       }
@@ -186,20 +186,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <div className="flex flex-row w-auto mt-4 gap-4">
             <div
               onClick={() => {
-                setUsage("open");
+                setUsage(UsageMode.Open);
               }}
               className={cx("flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-                "border-2 border-darkGrey": usage === "open",
+                "border-2 border-darkGrey": usage === UsageMode.Open,
               })}
             >
               Öffnen
             </div>
             <div
               onClick={() => {
-                setUsage("create");
+                setUsage(UsageMode.Create);
               }}
               className={cx("flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer", {
-                "border-2 border-darkGrey": usage === "create",
+                "border-2 border-darkGrey": usage === UsageMode.Create,
               })}
             >
               Erstellen
@@ -253,7 +253,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             <input className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none" type="text" placeholder="Nachname..." value={surname} onChange={onChangeGivenSurname} />
           </div>
         </div>
-        {usage === "create" ? (
+        {usage === UsageMode.Create ? (
           <div>
             <p className="font-light">
               Aktenzeichen diese Basisdokuments: <span className="text-darkRed">*</span>
@@ -263,7 +263,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             </div>
           </div>
         ) : null}
-        {usage === "open" ? (
+        {usage === UsageMode.Open ? (
           <div className="flex flex-col gap-4">
             <div>
               <p className="font-light">
