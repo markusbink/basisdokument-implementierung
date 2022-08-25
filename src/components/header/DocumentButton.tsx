@@ -38,9 +38,9 @@ export const DocumentButton = () => {
             className="h-4"
           ></img>
           {showDownloadMenu ? (
-            <CaretUp size={12} color={"white"} weight="bold" />
+            <CaretUp size={12} className="text-white" weight="bold" />
           ) : (
-            <CaretDown size={12} color={"white"} weight="bold" />
+            <CaretDown size={12} className="text-white" weight="bold" />
           )}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
