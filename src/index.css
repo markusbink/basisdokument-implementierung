@@ -4,9 +4,109 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
 
+input[type="file"] {
+  display: none;
+}
+
+input[type="checkbox"] {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.5); /* IE */
+  -moz-transform: scale(1.5); /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */
+  -o-transform: scale(1.5); /* Opera */
+  transform: scale(1.5);
+  padding: 10px;
+}
+
+.small-checkbox {
+  -ms-transform: scale(1) !important; /* IE */
+  -moz-transform: scale(1) !important; /* FF */
+  -webkit-transform: scale(1) !important; /* Safari and Chrome */
+  -o-transform: scale(1) !important; /* Opera */
+  transform: scale(1) !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 body {
   font-family: "Manrope", sans-serif;
 }
+
+@layer base {
+  a {
+    @apply font-bold text-blue-600;
+  }
+}
+
+.marker-red {
+  @apply bg-marker-red;
+}
+
+.marker-orange {
+  @apply bg-marker-orange;
+}
+
+.marker-yellow {
+  @apply bg-marker-yellow;
+}
+
+.marker-green {
+  @apply bg-marker-green;
+}
+
+.marker-blue {
+  @apply bg-marker-blue;
+}
+
+.marker-purple {
+  @apply bg-marker-purple;
+}
+
+.marker-icon-opacity {
+  @apply bg-opacity-20;
+}
+
+.marker-icon-opacity:hover,
+.marker-button-opacity {
+  @apply bg-opacity-40;
+}
+
+/* Scrollbar for Mozilla */
+:root * {
+  scrollbar-color: rgba(58, 67, 66, 0.15) transparent;
+  scrollbar-width: thin;
+}
+
+/* width */
+::-webkit-scrollbar {
+  @apply w-[6px] h-[6px];
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply rounded-full w-3 h-3;
+  background-color: rgba(58, 67, 66, 0.15);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(58, 67, 66, 0.4);
+}
+
+/* This fix is required for react-beautiful-dnd to work together with radix */
 
 @layer components {
   .sm {
@@ -27,4 +127,68 @@ body {
   .disabled:hover {
     @apply opacity-50 cursor-not-allowed;
   }
+}
+
+/* React DraftJS WYSIWYG Editor Customizations */
+.rdw-option-wrapper {
+  @apply w-7 h-7 rounded bg-offWhite hover:shadow-none hover:border-lightGrey;
+}
+
+.rdw-option-active {
+  @apply shadow-none border-mediumGrey box-border hover:border-mediumGrey;
+}
+
+.public-DraftStyleDefault-block {
+  @apply my-0;
+}
+
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  @apply hidden;
+}
+
+.rdw-suggestion-dropdown {
+  @apply shadow-lg rounded-lg p-1;
+}
+
+.rdw-suggestion-option {
+  @apply p-2 rounded border-none hover:bg-offWhite;
+}
+
+/* SwiperJS Pagination Dots */
+.swiper-pagination-bullet {
+  @apply bg-mediumGrey;
+}
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  @apply bg-mediumGrey;
+}
+
+/* Bulletpoints */
+ul,
+ol {
+  @apply space-y-2 my-6 ml-8;
+}
+
+:is(ul, ol) > :is(ul, ol) {
+  @apply ml-4;
+}
+
+ul {
+  @apply list-disc;
+}
+
+ol {
+  @apply list-decimal;
+}
+
+ul > ul {
+  list-style-type: circle;
+}
+
+ul > ul > ul {
+  list-style-type: square;
+}
+
+p:not(:last-child) {
+  @apply mb-2;
 }

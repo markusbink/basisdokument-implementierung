@@ -1,4 +1,12 @@
 import { useEffect, useState } from "react";
+import {
+  BookmarkProvider,
+  CaseProvider,
+  HeaderProvider,
+  HintProvider,
+  NoteProvider,
+  UserProvider,
+} from "./contexts";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 
@@ -9,7 +17,7 @@ const registerKeyListener = (e: KeyboardEvent) => {
 };
 
 export const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<Boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     window.addEventListener("keydown", registerKeyListener);
@@ -19,12 +27,24 @@ export const App = () => {
   }, []);
 
   return (
-    <div className="App h-screen">
-      {isAuthenticated ? (
-        <Main />
-      ) : (
-        <Auth setIsAuthenticated={setIsAuthenticated} />
-      )}
+    <div className="App h-screen overflow-hidden">
+      <UserProvider>
+        <HeaderProvider>
+          <CaseProvider>
+            <NoteProvider>
+              <HintProvider>
+                <BookmarkProvider>
+                  {isAuthenticated ? (
+                    <Main />
+                  ) : (
+                    <Auth setIsAuthenticated={setIsAuthenticated} />
+                  )}
+                </BookmarkProvider>
+              </HintProvider>
+            </NoteProvider>
+          </CaseProvider>
+        </HeaderProvider>
+      </UserProvider>
     </div>
   );
 };
