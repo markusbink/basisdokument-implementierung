@@ -39,7 +39,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
           <div
             className={cx("flex", {
               "flex-col": user?.role === UserRole.Judge,
-              "items-center": user?.role !== UserRole.Judge,
+              "items-center h-full": user?.role !== UserRole.Judge,
             })}
           >
             {user.role === UserRole.Judge && (
