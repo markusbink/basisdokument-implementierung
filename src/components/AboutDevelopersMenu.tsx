@@ -1,5 +1,6 @@
-import { CaretDown, CaretUp } from "phosphor-react";
+import { CaretDown, CaretUp, Envelope } from "phosphor-react";
 import { useState } from "react";
+import { AiFillGithub } from "react-icons/ai";
 
 const developerData = [
   {
@@ -45,7 +46,7 @@ export const AboutDevelopersMenu = () => {
             setShowDevelopersMenu(!showDevelopersMenu);
           }}
         >
-          <span className="text-sm font-bold">Über die Entwickler</span>
+          <span className="text-sm font-bold">Über das Projekt</span>
           {showDevelopersMenu ? <CaretUp size={12} className="text-darkGrey" weight="bold" /> : <CaretDown size={12} className="text-darkGrey" weight="bold" />}
         </div>
       </div>
@@ -65,11 +66,23 @@ export const AboutDevelopersMenu = () => {
           <h2 className="font-bold text-md mt-4">Softwareentwickler:innen</h2>
           <div className="grid grid-cols-2 gap-2 mt-6">
             {developerData.map((developer) => (
-              <div className="flex flex-row items-center gap-4 hover:bg-lightGrey p-4 rounded-md cursor-pointer" onClick={() => window.open(developer.githubUrl, "_blank")}>
-                <img className="rounded-full w-16 h-26" src={developer.githubImgUrl} alt={"Bild von " + developer.name} />
-                <div className="flex flex-col">
-                  <span className="font-bold text-md">{developer.name}</span>
-                  <span className="text-mediumGrey">{developer.email}</span>
+              <div className="flex flex-row items-center gap-4 p-4 rounded-md">
+                <img className="rounded-full w-14 h-14" src={developer.githubImgUrl} alt={"Bild von " + developer.name} />
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-row gap-2">
+                    <span className="font-bold text-base">{developer.name}</span>
+                    <div className="flex flex-row items-center gap-1 p-1 rounded-md bg-darkGrey cursor-pointer" onClick={() => window.open(developer.githubUrl, "_blank")}>
+                      <AiFillGithub size={14} color={"white"} />
+                    </div>
+                  </div>
+                  <div className="hover:opacity-70">
+                    <div className="flex flex-row items-center gap-1 p-1 rounded-md bg-gradient-to-r from-lightPetrol to-lightPurple hover:bg-opacity-50 cursor-pointer">
+                      <Envelope className="text-darkGrey" size={14} />
+                      <span className="text-mediumGrey font-bold text-xs" onClick={() => window.open("mailto:" + developer.email)}>
+                        {developer.email}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
