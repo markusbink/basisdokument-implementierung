@@ -24,13 +24,12 @@ export default interface IHeaderContext {
   colorSelection: IHighlighter[];
   versionHistory: IVersion[];
   selectedVersion: number;
-  sectionList: ISection[];
-  resetPrivateSorting: () => void;
+  sectionListHeader: ISection[];
   openOnboarding: () => void;
   downloadBasisdokument: MouseEventHandler<HTMLDivElement> | undefined;
   reloadPageAndSave: MouseEventHandler<HTMLButtonElement> | undefined;
   reloadPageAndDoNotSave: MouseEventHandler<HTMLButtonElement> | undefined;
-  setSectionList: React.Dispatch<React.SetStateAction<ISection[]>>;
+  setSectionListHeader: React.Dispatch<React.SetStateAction<ISection[]>>;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
   selectedSorting: Sorting;
@@ -55,8 +54,6 @@ export default interface IHeaderContext {
   >;
   setCurrentColorSelection: React.Dispatch<React.SetStateAction<IHighlighter>>;
   setCurrentTool: React.Dispatch<React.SetStateAction<Tool>>;
-  individualSorting: string[];
-  setIndividualSorting: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const HeaderContext = createContext<IHeaderContext | null>(null);
@@ -95,8 +92,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     Sorting.Original
   );
 
-  const [individualSorting, setIndividualSorting] = useState<string[]>([]);
-
   const [
     hideElementsWithoutSpecificVersion,
     setHideElementsWithoutSpecificVersion,
@@ -107,11 +102,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   >([]);
   const [selectedVersion, setSelectedVersion] =
     useState<IHeaderContext["selectedVersion"]>(0);
-  const [sectionList, setSectionList] = useState<ISection[]>([]);
-
-  const resetPrivateSorting = () => {
-    console.log("reset");
-  };
+  const [sectionListHeader, setSectionListHeader] = useState<ISection[]>([]);
 
   const openOnboarding = () => {
     console.log("open onboarding");
@@ -146,13 +137,12 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         colorSelection,
         versionHistory,
         selectedVersion,
-        sectionList,
-        resetPrivateSorting,
+        sectionListHeader,
         openOnboarding,
         downloadBasisdokument,
         reloadPageAndSave,
         reloadPageAndDoNotSave,
-        setSectionList,
+        setSectionListHeader,
         setSelectedVersion,
         setVersionHistory,
         selectedSorting,
@@ -166,8 +156,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         setHideEntriesHighlighter,
         setSelectedSorting,
         setHideElementsWithoutSpecificVersion,
-        individualSorting,
-        setIndividualSorting,
       }}
     >
       {children}

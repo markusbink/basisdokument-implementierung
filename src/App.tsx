@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  BookmarkProvider,
-  CaseProvider,
-  HeaderProvider,
-  HintProvider,
-  NoteProvider,
-  UserProvider,
-} from "./contexts";
+import { BookmarkProvider, CaseProvider, HeaderProvider, HintProvider, NoteProvider, SectionProvider, UserProvider } from "./contexts";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 
@@ -29,21 +22,17 @@ export const App = () => {
   return (
     <div className="App h-screen overflow-hidden">
       <UserProvider>
-        <HeaderProvider>
-          <CaseProvider>
-            <NoteProvider>
-              <HintProvider>
-                <BookmarkProvider>
-                  {isAuthenticated ? (
-                    <Main />
-                  ) : (
-                    <Auth setIsAuthenticated={setIsAuthenticated} />
-                  )}
-                </BookmarkProvider>
-              </HintProvider>
-            </NoteProvider>
-          </CaseProvider>
-        </HeaderProvider>
+        <SectionProvider>
+          <HeaderProvider>
+            <CaseProvider>
+              <NoteProvider>
+                <HintProvider>
+                  <BookmarkProvider>{isAuthenticated ? <Main /> : <Auth setIsAuthenticated={setIsAuthenticated} />}</BookmarkProvider>
+                </HintProvider>
+              </NoteProvider>
+            </CaseProvider>
+          </HeaderProvider>
+        </SectionProvider>
       </UserProvider>
     </div>
   );

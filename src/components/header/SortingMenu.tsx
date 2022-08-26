@@ -1,13 +1,13 @@
 import { ClockClockwise, DotsSixVertical, SortAscending } from "phosphor-react";
 import { useRef, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { useHeaderContext } from "../../contexts";
+import { useSection } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { UserRole } from "../../types";
 
 export const SortingMenu = () => {
-  const { sectionList, setSectionList, resetPrivateSorting } = useHeaderContext();
+  const { sectionList, individualSorting, setIndividualSorting } = useSection();
   const [showSortingMenu, setShowSortingMenu] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   useOutsideClick(dropdownRef, () => setShowSortingMenu(false));
@@ -16,13 +16,31 @@ export const SortingMenu = () => {
   const handleDrop = (droppedItem: any) => {
     // Ignore drop outside droppable container
     if (!droppedItem.destination) return;
-    const updatedList = [...sectionList];
+    const updatedList = [...individualSorting];
     // Remove dragged item
     const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
     // Add dropped item
     updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
     // Update State
-    setSectionList(updatedList);
+    setIndividualSorting(updatedList);
+  };
+
+  const getOriginalSortingPosition = (sectionId: string) => {
+    var position = sectionList.findIndex(function (section) {
+      return section.id === sectionId;
+    });
+    return position + 1;
+  };
+
+  const getSectionObject = (id: string) => {
+    let section: any = sectionList.find((section) => section.id === id);
+    return section;
+  };
+
+  const resetPrivateSorting = () => {
+    let originalSorting = sectionList.map((section) => section.id);
+    setIndividualSorting(originalSorting);
+    
   };
 
   return (
@@ -47,14 +65,17 @@ export const SortingMenu = () => {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {sectionList.map((section, index) => (
-                    <Draggable key={section.id} draggableId={section.id} index={index}>
+                  {individualSorting.map((section, index) => (
+                    <Draggable key={getSectionObject(section).id} draggableId={getSectionObject(section).id} index={index}>
                       {(provided) => (
                         <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
                           <div className="flex flex-row items-center select-none group">
                             <DotsSixVertical size={24} />
                             <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
-                              <span>{user?.role === UserRole.Plaintiff ? section.titlePlaintiff : section.titleDefendant}</span>
+                              <span>
+                                {getOriginalSortingPosition(getSectionObject(section).id)}.
+                                {user?.role === UserRole.Plaintiff ? getSectionObject(section).titlePlaintiff : getSectionObject(section).titleDefendant}
+                              </span>
                             </div>
                           </div>
                         </div>

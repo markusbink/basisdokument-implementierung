@@ -1,6 +1,6 @@
 import { IStateUserInput } from "../types";
 
-function updateSortingsIfVersionIsDifferent(
+export function updateSortingsIfVersionIsDifferent(
   basisdokumentObject: any,
   editFileObject: any
 ) {
