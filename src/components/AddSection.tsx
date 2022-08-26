@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ISection } from "../types";
 
 export const AddSection = () => {
-  const { setSectionList } = useSection();
+  const { setSectionList, setIndividualSorting } = useSection();
   const { currentVersion } = useCase();
 
   const handleClick = () => {
@@ -16,6 +16,7 @@ export const AddSection = () => {
       titleDefendant: "",
     };
     setSectionList((prev) => [...prev, section]);
+    setIndividualSorting((prev) => [...prev, section.id]);
   };
 
   return (
