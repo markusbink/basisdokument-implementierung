@@ -2,6 +2,8 @@ import cx from "classnames";
 import { useUser } from "../../contexts";
 import { UserRole } from "../../types";
 import { SectionControls } from "./SectionControls";
+import { SectionDropdown } from "./SectionDropdown";
+import { SectionTitle } from "./SectionTitle";
 
 interface SectionHeaderProps {
   sectionId: number;
@@ -16,11 +18,9 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 }) => {
   const { user } = useUser();
 
-  const currentRole = "Kläger";
-
   return (
     <div
-      className={cx("flex gap-6 py-4", {
+      className={cx("flex gap-6 py-4 items-start", {
         "grid grid-cols-2": user?.role === UserRole.Judge,
       })}
     >
@@ -36,37 +36,12 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         {/* Title with User Role */}
         {(user?.role === UserRole.Plaintiff ||
           user?.role === UserRole.Judge) && (
-          <div
-            className={cx("flex", {
-              "flex-col": user?.role === UserRole.Judge,
-              "items-center h-full": user?.role !== UserRole.Judge,
-            })}
-          >
-            {user.role === UserRole.Judge && (
-              <span className="bg-lightPurple text-darkPurple text-xs font-bold rounded-md px-2 py-1 w-fit uppercase">
-                {UserRole.Plaintiff}
-              </span>
-            )}
-            <h2 className="text-xl font-bold">{titlePlaintiff}</h2>
-          </div>
+          <SectionTitle role={UserRole.Plaintiff} title={titlePlaintiff} />
         )}
       </div>
       {/* Title with User Role */}
       {(user?.role === UserRole.Defendant || user?.role === UserRole.Judge) && (
-        <div
-          className={cx("flex", {
-            "flex-col": user?.role === UserRole.Judge,
-            "items-center": user?.role !== UserRole.Judge,
-          })}
-        >
-          {user.role === UserRole.Judge && (
-            <span className="bg-lightPetrol text-darkPetrol text-xs font-bold rounded-md px-2 py-1 w-fit uppercase">
-              {UserRole.Defendant}
-            </span>
-          )}
-          <h2 className="text-xl font-bold">{titleDefendant}</h2>
-          {/* <DropdownSection></DropdownSection> */}
-        </div>
+        <SectionTitle role={UserRole.Defendant} title={titleDefendant} />
       )}
     </div>
   );

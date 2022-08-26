@@ -137,7 +137,7 @@ export const Entry: React.FC<EntryProps> = ({
         >
           <div
             className={cx("transition-all", {
-              "w-1/2": !isExpanded && showColumnView,
+              "w-[calc(50%_-_12px)]": !isExpanded && showColumnView,
               "w-full": isExpanded || !showColumnView,
             })}
           >
