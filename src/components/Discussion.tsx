@@ -1,5 +1,6 @@
 import { useCase, useHeaderContext, useSection } from "../contexts";
 import { ISection, Sorting } from "../types";
+import { AddEntryButtons } from "./AddEntryButtons";
 import { EntryList } from "./entry";
 import { SectionHeader } from "./section-header/SectionHeader";
 
@@ -29,9 +30,13 @@ export const Discussion = () => {
           return (
             <div key={section.id}>
               <SectionHeader sectionId={index + 1} section={section} />
-              <div className="space-y-8">
-                <EntryList entries={sectionEntries?.parent || []} />
-              </div>
+              {sectionEntries === undefined ? (
+                <AddEntryButtons />
+              ) : (
+                <div className="space-y-8">
+                  <EntryList entries={sectionEntries?.parent || []} />
+                </div>
+              )}
             </div>
           );
         })}
