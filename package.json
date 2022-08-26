@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "@types/react-edit-text": "^5.0.1",
+    "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.16",
     "tailwindcss": "^3.1.8"

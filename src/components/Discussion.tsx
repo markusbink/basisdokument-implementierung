@@ -1,4 +1,4 @@
-import { AddPoint } from "./AddPoint";
+import { AddSection } from "./AddSection";
 import { useCase, useHeaderContext, useSection } from "../contexts";
 import { ISection, Sorting } from "../types";
 import { EntryList } from "./entry";
@@ -33,11 +33,11 @@ export const Discussion = () => {
               <div className="space-y-8">
                 <EntryList entries={sectionEntries?.parent || []} />
               </div>
-              <AddPoint></AddPoint>
             </div>
-          )
+          );
         })}
+        <AddSection />
       </div>
     </div>
   );
-}
+};
