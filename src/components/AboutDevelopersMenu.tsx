@@ -52,9 +52,17 @@ export const AboutDevelopersMenu = () => {
       </div>
       {showDevelopersMenu ? (
         <div className="w-full bg-offWhite rounded-md p-6 mt-2">
+          <div className="pt-4 pb-6">
+            <img
+              onClick={() => window.open("https://www.uni-regensburg.de", "_blank")}
+              className="hover:cursor-pointer h-16 text-darkGrey"
+              src={`${process.env.PUBLIC_URL}/logos/universitaet-regensburg.svg`}
+              alt="Logo der Universität Regensburg"
+            />
+          </div>
           <p className="text-darkGrey text-justify text-md">
-            Im Rahmen des Projektseminars des Masterstudiengangs Medieninformatik an der Universität Regensburg wurde im Sommersemester 2022 das Konzept des Basisdokuments, das zur Strukturierung des
-            Parteivortrags im Zivilprozess dient, weiterentwickelt. Geleitet wurde das Projekt von
+            Im Rahmen des Projektseminars des Masterstudiengangs Medieninformatik der Fakultät für Informatik und Data Science an der Universität Regensburg wurde im Sommersemester 2022 das Konzept
+            des Basisdokuments, das zur Strukturierung des Parteivortrags im Zivilprozess dient, weiterentwickelt. Geleitet wurde das Projekt von
             <span
               className="cursor-pointer hover:bg-lightGrey px-1 py-0.5 rounded-md"
               onClick={() => window.open("https://www.uni-regensburg.de/sprache-literatur-kultur/medieninformatik/sekretariat-team/christian-wolff/index.html", "_blank")}
@@ -71,7 +79,7 @@ export const AboutDevelopersMenu = () => {
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-row gap-2">
                     <span className="font-bold text-base">{developer.name}</span>
-                    <div className="flex flex-row items-center gap-1 p-1 rounded-md bg-darkGrey cursor-pointer" onClick={() => window.open(developer.githubUrl, "_blank")}>
+                    <div className="flex flex-row items-center gap-1 p-1 rounded-md bg-darkGrey hover:bg-mediumGrey cursor-pointer" onClick={() => window.open(developer.githubUrl, "_blank")}>
                       <AiFillGithub size={14} color={"white"} />
                     </div>
                   </div>
