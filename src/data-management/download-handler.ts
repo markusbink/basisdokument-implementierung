@@ -1,5 +1,5 @@
 import { saveAs } from "file-saver";
-import { IEntry, IHint, ILitigiousCheck, IMetaData, ISection, IVersion } from "../types";
+import { IBookmark, IEntry, IHighlightedEntry, IHighlighter, IHint, ILitigiousCheck, IMetaData, INote, ISection, IVersion } from "../types";
 
 function downloadObjectAsJSON(obj: object, fileName: string) {
   // Create a blob of the data
@@ -31,7 +31,26 @@ export function downloadBasisdokument(
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
   basisdokumentObject["litigiousChecks"] = litigiousChecks;
-  console.log(basisdokumentObject);
+  downloadObjectAsJSON(basisdokumentObject, "basisdokument_version_" + currentVersion + "_case_" + currentVersion);
 }
 
-export function downloadBearbeitungsdatei() {}
+export function downloadEditFile(
+  caseId: string,
+  currentVersion: number,
+  highlightedEntries: IHighlightedEntry[],
+  colorSelection: IHighlighter[],
+  notes: INote[],
+  bookmarks: IBookmark[],
+  individualSorting: string[]
+) {
+  let editFileObject: any = {};
+  editFileObject["caseId"] = caseId;
+  editFileObject["fileType"] = "editFile";
+  editFileObject["currentVersion"] = currentVersion;
+  editFileObject["highlightedEntries"] = highlightedEntries;
+  editFileObject["highlighter"] = colorSelection;
+  editFileObject["notes"] = notes;
+  editFileObject["bookmarks"] = bookmarks;
+  editFileObject["individualSorting"] = individualSorting;
+  downloadObjectAsJSON(editFileObject, "bearbeitungsdatei_version_" + currentVersion + "_case_" + currentVersion);
+}
