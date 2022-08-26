@@ -39,7 +39,6 @@ export const SortingMenu = () => {
 
   const resetPrivateSorting = () => {
     let originalSorting = sectionList.map((section) => section.id);
-    console.log(originalSorting);
     setIndividualSorting(originalSorting);
     
   };
@@ -74,7 +73,7 @@ export const SortingMenu = () => {
                             <DotsSixVertical size={24} />
                             <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
                               <span>
-                                {getOriginalSortingPosition(getSectionObject(section).id)}.{" "}
+                                {getOriginalSortingPosition(getSectionObject(section).id)}.
                                 {user?.role === UserRole.Plaintiff ? getSectionObject(section).titlePlaintiff : getSectionObject(section).titleDefendant}
                               </span>
                             </div>
