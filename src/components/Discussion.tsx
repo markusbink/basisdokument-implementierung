@@ -3,6 +3,7 @@ import { useCase, useHeaderContext, useSection } from "../contexts";
 import { ISection, Sorting } from "../types";
 import { EntryList } from "./entry";
 import { SectionHeader } from "./section-header/SectionHeader";
+import { getOriginalSortingPosition } from "../util/get-original-sorting-position";
 
 export const Discussion = () => {
   const { groupedEntries } = useCase();
@@ -29,7 +30,10 @@ export const Discussion = () => {
           const sectionEntries = groupedEntries[section.id];
           return (
             <div key={section.id}>
-              <SectionHeader sectionId={index + 1} section={section} />
+              <SectionHeader
+                sectionId={getOriginalSortingPosition(sectionList, section.id)}
+                section={section}
+              />
               <div className="space-y-8">
                 <EntryList entries={sectionEntries?.parent || []} />
               </div>

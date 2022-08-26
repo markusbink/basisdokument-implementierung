@@ -5,6 +5,7 @@ import { useSection } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { UserRole } from "../../types";
+import { getOriginalSortingPosition } from "../../util/get-original-sorting-position";
 
 export const SortingMenu = () => {
   const { sectionList, individualSorting, setIndividualSorting } = useSection();
@@ -25,13 +26,6 @@ export const SortingMenu = () => {
     setIndividualSorting(updatedList);
   };
 
-  const getOriginalSortingPosition = (sectionId: string) => {
-    var position = sectionList.findIndex(function (section) {
-      return section.id === sectionId;
-    });
-    return position + 1;
-  };
-
   const getSectionObject = (id: string) => {
     let section: any = sectionList.find((section) => section.id === id);
     return section;
@@ -40,7 +34,6 @@ export const SortingMenu = () => {
   const resetPrivateSorting = () => {
     let originalSorting = sectionList.map((section) => section.id);
     setIndividualSorting(originalSorting);
-    
   };
 
   return (
@@ -54,8 +47,12 @@ export const SortingMenu = () => {
       {showSortingMenu ? (
         <div className="absolute top-full flex flex-col bg-white shadow-md rounded-lg p-3 left-0 mt-6 w-[350px] z-50">
           <div className="flex gap-4 items-center justify-between">
-            <span className="font-bold text-base">Gliederungspunkte sortieren</span>
-            <span className="bg-darkGrey text-white text-xs p-0.5 pl-2 pr-2 rounded-full">Privat</span>
+            <span className="font-bold text-base">
+              Gliederungspunkte sortieren
+            </span>
+            <span className="bg-darkGrey text-white text-xs p-0.5 pl-2 pr-2 rounded-full">
+              Privat
+            </span>
           </div>
           <DragDropContext onDragEnd={handleDrop}>
             <Droppable droppableId="sorting-menu-container">
@@ -66,15 +63,28 @@ export const SortingMenu = () => {
                   ref={provided.innerRef}
                 >
                   {individualSorting.map((section, index) => (
-                    <Draggable key={getSectionObject(section).id} draggableId={getSectionObject(section).id} index={index}>
+                    <Draggable
+                      key={getSectionObject(section).id}
+                      draggableId={getSectionObject(section).id}
+                      index={index}
+                    >
                       {(provided) => (
-                        <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                        >
                           <div className="flex flex-row items-center select-none group">
                             <DotsSixVertical size={24} />
                             <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
                               <span>
-                                {getOriginalSortingPosition(getSectionObject(section).id)}.
-                                {user?.role === UserRole.Plaintiff ? getSectionObject(section).titlePlaintiff : getSectionObject(section).titleDefendant}
+                                {`${getOriginalSortingPosition(
+                                  sectionList,
+                                  getSectionObject(section).id
+                                )}. `}
+                                {user?.role === UserRole.Plaintiff
+                                  ? getSectionObject(section).titlePlaintiff
+                                  : getSectionObject(section).titleDefendant}
                               </span>
                             </div>
                           </div>
@@ -85,7 +95,9 @@ export const SortingMenu = () => {
                   {provided.placeholder}
                   {sectionList.length === 0 ? (
                     <div className="flex justify-center items-center p-8">
-                      <p className="text-mediumGrey opacity-70 text-center text-sm w-48">Es wurden noch kein Gliederungspunkt angelegt.</p>
+                      <p className="text-mediumGrey opacity-70 text-center text-sm w-48">
+                        Es wurden noch kein Gliederungspunkt angelegt.
+                      </p>
                     </div>
                   ) : null}
                 </div>
