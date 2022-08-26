@@ -9,7 +9,7 @@ export const VersionSelector = () => {
 
   useEffect(() => {
     setSelectedVersion(versionHistory.length - 1);
-  });
+  }, [versionHistory, setSelectedVersion]);
 
   return (
     <DropdownMenu.Root
@@ -34,6 +34,8 @@ export const VersionSelector = () => {
               className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
               key={index}
               onClick={() => {
+                console.log(index);
+
                 setSelectedVersion(index);
               }}
             >

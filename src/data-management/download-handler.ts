@@ -11,6 +11,7 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   saveAs(fileToSave, fileName);
 }
 
+
 export function downloadBasisdokument(
   caseId: string,
   currentVersion: number,
@@ -26,6 +27,7 @@ export function downloadBasisdokument(
   basisdokumentObject["fileType"] = "basisdokument";
   basisdokumentObject["currentVersion"] = currentVersion;
   basisdokumentObject["versions"] = versionHistory;
+  basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1]["timestamp"] = new Date().toLocaleString("de-DE", {timeZone: "Europe/Berlin"});
   basisdokumentObject["metaData"] = metaData;
   basisdokumentObject["entries"] = entries;
   basisdokumentObject["sections"] = sectionList;
