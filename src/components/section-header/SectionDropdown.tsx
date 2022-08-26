@@ -9,8 +9,8 @@ export const SectionDropdown = () => {
 
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <span className="py-1">
+      <DropdownMenu.Trigger className="py-1">
+        <span>
           <DotsThree size={18} weight="bold" />
         </span>
       </DropdownMenu.Trigger>
