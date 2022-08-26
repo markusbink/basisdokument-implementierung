@@ -6,7 +6,7 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { ToastContainer } from "react-toastify";
 import { useUser } from "../../contexts/UserContext";
 import { toast } from "react-toastify";
-import { DownloadBasisdokumentButton } from "./DonwloadBasisdokumentButton";
+import { DownloadBasisdokumentButton } from "./DownloadBasisdokumentButton";
 
 export const DocumentButton = () => {
   const { user } = useUser();

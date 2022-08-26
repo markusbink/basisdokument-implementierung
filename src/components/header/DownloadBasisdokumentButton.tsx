@@ -10,6 +10,7 @@ export const DownloadBasisdokumentButton = () => {
   const { hints } = useHints();
   const { notes } = useNotes();
   const { bookmarks } = useBookmarks();
+
   const onClickDownloadButton = () => {
     downloadBasisdokument(caseId, currentVersion, versionHistory, metaData, entries, sectionList, hints, litigiousChecks);
     downloadEditFile(caseId, currentVersion, highlightedEntries, colorSelection, notes, bookmarks, individualSorting);
