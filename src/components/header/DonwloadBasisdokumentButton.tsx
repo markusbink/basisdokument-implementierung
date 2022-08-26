@@ -3,11 +3,15 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FileArrowDown } from "phosphor-react";
 import { useUser } from "../../contexts/UserContext";
 import { downloadBasisdokument, downloadBearbeitungsdatei } from "../../data-management/download-handler";
-import { saveAs } from "file-saver";
+import { useCase, useHeaderContext, useHints, useSection } from "../../contexts";
 
 export const DownloadBasisdokumentButton = () => {
+  const { caseId, currentVersion, metaData, entries, litigiousChecks } = useCase();
+  const { sectionList } = useSection();
+  const { versionHistory } = useHeaderContext();
+  const { hints } = useHints();
   const onClickDownloadButton = () => {
-    downloadBasisdokument();
+    downloadBasisdokument(caseId, currentVersion, versionHistory, metaData, entries, sectionList, hints, litigiousChecks);
     downloadBearbeitungsdatei();
   };
 
