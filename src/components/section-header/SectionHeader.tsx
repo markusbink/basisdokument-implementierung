@@ -20,16 +20,16 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   return (
     <div
-      className={cx("flex gap-6", {
+      className={cx("flex gap-6 py-4", {
         "grid grid-cols-2": user?.role === UserRole.Judge,
       })}
     >
       {/* Section Number */}
-      <div className="flex gap-6">
+      <div className="flex gap-6 items-start">
         <div className="flex gap-4 items-center">
           <SectionControls />
           <div className="bg-darkGrey w-10 h-10 rounded-lg rotate-45 flex items-center justify-center">
-            <span className="text-white -rotate-45">{sectionId}</span>
+            <span className="text-white font-bold -rotate-45">{sectionId}</span>
           </div>
         </div>
 

@@ -19,7 +19,7 @@ export const SectionControls = () => {
       {moveSectionButtons.map((button, index) => (
         <button
           key={`${index}-${button.title}`}
-          className="flex items-center py-1 px-2 bg-lightGrey text-darkGrey rounded"
+          className="flex items-center py-1 px-2 bg-lightGrey hover:bg-mediumGrey text-darkGrey hover:text-white rounded transition-all"
         >
           {button.icon}
         </button>
