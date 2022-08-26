@@ -1,28 +1,27 @@
-import { useCase, useHeaderContext, useUser } from "../contexts";
-import { UserRole } from "../types";
+import { useCase, useHeaderContext } from "../contexts";
 import { EntryList } from "./entry";
+import { SectionHeader } from "./section-header/SectionHeader";
 
 export const Discussion = () => {
   const { groupedEntries } = useCase();
   const { sectionList } = useHeaderContext();
-  const { user } = useUser();
 
   return (
     <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4 scroll-smooth">
       <div className="max-w-[1200px] m-auto">
-        {sectionList.map((section) => {
+        {sectionList.map((section, index) => {
           const sectionEntries = groupedEntries[section.id];
           return (
-            <section key={section.id} className="space-y-8">
-              <div className="text-xl font-bold">
-                {user?.role === UserRole.Plaintiff
-                  ? section.titlePlaintiff
-                  : section.titleDefendant}
-              </div>
+            <div key={section.id}>
+              <SectionHeader
+                sectionId={index + 1}
+                titlePlaintiff={section.titlePlaintiff}
+                titleDefendant={section.titleDefendant}
+              />
               <div className="space-y-8">
                 <EntryList entries={sectionEntries?.parent || []} />
               </div>
-            </section>
+            </div>
           );
         })}
       </div>
