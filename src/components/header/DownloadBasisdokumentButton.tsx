@@ -35,8 +35,12 @@ export const DownloadBasisdokumentButton: React.FC<IProps> = ({
   individualSorting,
 }) => {
   const onClickDownloadButton = () => {
-    downloadBasisdokument(caseId, currentVersion, versionHistory, metaData, entries, sectionList, hints, litigiousChecks);
-    downloadEditFile(caseId, currentVersion, highlightedEntries, colorSelection, notes, bookmarks, individualSorting);
+    setTimeout(() => {
+      downloadBasisdokument(caseId, currentVersion, versionHistory, metaData, entries, sectionList, hints, litigiousChecks);
+    }, 100);
+    setTimeout(() => {
+      downloadEditFile(caseId, currentVersion, highlightedEntries, colorSelection, notes, bookmarks, individualSorting);
+    }, 200);
   };
 
   return (

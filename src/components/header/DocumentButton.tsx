@@ -27,9 +27,15 @@ export const DocumentButton = () => {
   // If a new base document is to be opened and the user is taken to the home page, the page can also simply be reloaded.
   // Then the state of the components of the entire application is reset and there are no complications.
   const reloadPageAndSave = () => {
-    downloadBasisdokument(caseId, currentVersion, versionHistory, metaData, entries, sectionList, hints, litigiousChecks);
-    downloadEditFile(caseId, currentVersion, highlightedEntries, colorSelection, notes, bookmarks, individualSorting);
-    window.location.reload();
+    setTimeout(() => {
+      downloadBasisdokument(caseId, currentVersion, versionHistory, metaData, entries, sectionList, hints, litigiousChecks);
+    }, 100);
+    setTimeout(() => {
+      downloadEditFile(caseId, currentVersion, highlightedEntries, colorSelection, notes, bookmarks, individualSorting);
+    }, 200);
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
   };
 
   return (
