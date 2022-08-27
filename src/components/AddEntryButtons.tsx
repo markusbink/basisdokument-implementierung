@@ -5,12 +5,12 @@ import { NewEntry } from "./entry";
 
 export const AddEntryButtons = () => {
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
-  const [newEntryRole, setNewEntryRole] = useState<"Kläger" | "Beklagter">(
-    "Kläger"
-  );
+  const [newEntryParentRole, setNewEntryParentRole] = useState<
+    "Kläger" | "Beklagter"
+  >("Kläger");
 
-  const handleClick = (role: "Kläger" | "Beklagter") => {
-    setNewEntryRole(role);
+  const handleClick = (parentRole: "Kläger" | "Beklagter") => {
+    setNewEntryParentRole(parentRole);
     setIsNewEntryVisible(true);
   };
 
@@ -18,14 +18,14 @@ export const AddEntryButtons = () => {
     <>
       {isNewEntryVisible ? (
         <NewEntry
-          parentRole={newEntryRole}
+          parentRole={newEntryParentRole}
           setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
         />
       ) : (
         <div className="grid grid-cols-2 gap-6 mb-8 items-start w-full">
           <span className="col-start-1">
             <Button
-              onClick={() => handleClick("Kläger")}
+              onClick={() => handleClick("Beklagter")}
               icon={<Plus size={18} weight="bold" />}
             >
               Beitrag hinzufügen
@@ -33,7 +33,7 @@ export const AddEntryButtons = () => {
           </span>
           <span className="col-start-2">
             <Button
-              onClick={() => handleClick("Beklagter")}
+              onClick={() => handleClick("Kläger")}
               icon={<Plus size={18} weight="bold" />}
             >
               Beitrag hinzufügen
