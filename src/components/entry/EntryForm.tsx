@@ -7,7 +7,7 @@ import {
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useCase, useHeaderContext } from "../../contexts";
 import { Button } from "../Button";
@@ -56,6 +56,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
 
   const { showColumnView } = useHeaderContext();
   const { entries } = useCase();
+  const editorRef = useRef<Editor>(null);
   const suggestions = entries.map((entry) => ({
     text: entry.entryCode,
     value: entry.entryCode,
@@ -69,6 +70,11 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     );
   }, [contentState]);
 
+  useEffect(() => {
+    // Focus the editor when the component is mounted.
+    editorRef.current?.focusEditor();
+  }, []);
+
   return (
     <div
       className={cx("border border-t-0 rounded-b-lg", {
@@ -78,6 +84,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       })}
     >
       <Editor
+        ref={editorRef}
         mention={{
           separator: " ",
           trigger: "#",
