@@ -73,8 +73,8 @@ export const AboutDevelopersMenu = () => {
           </p>
           <h2 className="font-bold text-md mt-4">Softwareentwickler:innen</h2>
           <div className="grid grid-cols-2 gap-2 mt-6">
-            {developerData.map((developer) => (
-              <div className="flex flex-row items-center gap-4 p-4 rounded-md">
+            {developerData.map((developer, key) => (
+              <div className="flex flex-row items-center gap-4 p-4 rounded-md" key={key}>
                 <img className="rounded-full w-14 h-14" src={developer.githubImgUrl} alt={"Bild von " + developer.name} />
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-row gap-2">
