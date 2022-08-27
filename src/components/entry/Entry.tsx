@@ -38,9 +38,10 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { groupedEntries, setEntries } = useCase();
-  const { showColumnView } = useHeaderContext();
+  const { currentVersion, groupedEntries, setEntries } = useCase();
+  const { versionHistory, showColumnView } = useHeaderContext();
 
+  const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
 
   // State of current entry
@@ -58,10 +59,6 @@ export const Entry: React.FC<EntryProps> = ({
     (viewedBy === UserRole.Plaintiff && entry.role === "Kläger") ||
     (viewedBy === UserRole.Defendant && entry.role === "Beklagter");
   const canAddEntry = isJudge || !isOwnEntry;
-
-  const { versionHistory } = useHeaderContext();
-
-  const versionTimestamp = versionHistory[entry.version - 1].timestamp;
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -191,7 +188,8 @@ export const Entry: React.FC<EntryProps> = ({
                     </span>
                     <span className="font-bold">{entry.author}</span>
                     <span>
-                      {format(new Date(versionTimestamp), "dd.MM.yyyy")}
+                      {entry.version < currentVersion &&
+                        format(new Date(versionTimestamp), "dd.MM.yyyy")}
                     </span>
                   </div>
                 </div>
