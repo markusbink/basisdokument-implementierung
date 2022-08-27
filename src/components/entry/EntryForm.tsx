@@ -5,6 +5,7 @@ import {
   convertToRaw,
   EditorState,
 } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
@@ -12,7 +13,6 @@ import { useCase, useHeaderContext } from "../../contexts";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
-import draftToHtml from "draftjs-to-html";
 
 const toolbarOptions = {
   options: ["inline", "list"],
@@ -30,8 +30,8 @@ interface EntryBodyProps {
   isPlaintiff: boolean;
   isExpanded: boolean;
   setIsExpanded: () => void;
-  onAbort: () => void;
-  onSave: (x: any) => void;
+  onAbort: (plainText: string, rawHtml: string) => void;
+  onSave: (plainText: string, rawHtml: string) => void;
   defaultContent?: string;
 }
 
@@ -116,7 +116,14 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       <div className="flex justify-end gap-2 p-3 pt-2 border-t border-lightGrey">
         <Button
           icon={<X size={20} />}
-          onClick={() => onAbort()}
+          onClick={() => {
+            const plainText = editorState.getCurrentContent().getPlainText();
+            const newHtml = draftToHtml(
+              convertToRaw(editorState.getCurrentContent())
+            );
+
+            onAbort(plainText, newHtml);
+          }}
           size="sm"
           bgColor="bg-lightRed"
           textColor="font-bold text-darkRed"
@@ -126,11 +133,12 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         <Button
           icon={<FloppyDisk size={20} />}
           onClick={() => {
+            const plainText = editorState.getCurrentContent().getPlainText();
             const newHtml = draftToHtml(
               convertToRaw(editorState.getCurrentContent())
             );
 
-            onSave(newHtml);
+            onSave(plainText, newHtml);
           }}
           size="sm"
           bgColor="bg-lightGreen"

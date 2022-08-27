@@ -13,6 +13,7 @@ import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
 import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
+import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
 import { EntryList } from "./EntryList";
 import { LitigiousCheck } from "./LitigiousCheck";
@@ -47,6 +48,7 @@ export const Entry: React.FC<EntryProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
   const [isLitigious, setIsLitigious] = useState<boolean | null>(null);
+  const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -105,7 +107,11 @@ export const Entry: React.FC<EntryProps> = ({
     setIsBodyOpen(true);
   };
 
-  const deleteEntry = (e: React.MouseEvent) => {};
+  const deleteEntry = (entryId: string) => {
+    setEntries((prevEntries) =>
+      prevEntries.filter((entry) => entry.id !== entryId)
+    );
+  };
 
   const updateEntry = (text: string) => {
     setIsEditing(false);
@@ -227,7 +233,7 @@ export const Entry: React.FC<EntryProps> = ({
                                 </li>
                                 <li
                                   tabIndex={0}
-                                  onClick={deleteEntry}
+                                  onClick={() => deleteEntry(entry.id)}
                                   className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
                                 >
                                   <Trash size={20} />
@@ -253,11 +259,10 @@ export const Entry: React.FC<EntryProps> = ({
                   isExpanded={isExpanded}
                   setIsExpanded={() => setIsExpanded(!isExpanded)}
                   onAbort={() => {
-                    setIsEditing(false);
-                    setIsExpanded(false);
+                    setIsErrorVisible(true);
                   }}
-                  onSave={(text: string) => {
-                    updateEntry(text);
+                  onSave={(_: string, rawHtml: string) => {
+                    updateEntry(rawHtml);
                     setIsExpanded(false);
                   }}
                 />
@@ -285,8 +290,14 @@ export const Entry: React.FC<EntryProps> = ({
                 <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
               )}
               <NewEntry
-                parentRole={entry.role}
-                setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
+                roleForNewEntry={
+                  entry.role === UserRole.Plaintiff
+                    ? UserRole.Defendant
+                    : UserRole.Plaintiff
+                }
+                sectionId={entry.sectionId}
+                associatedEntry={entry.id}
+                setIsNewEntryVisible={setIsNewEntryVisible}
               />
             </div>
           )}
@@ -304,6 +315,36 @@ export const Entry: React.FC<EntryProps> = ({
           <EntryList entries={thread} />
         </div>
       )}
+      <ErrorPopup isVisible={isErrorVisible}>
+        <div className="flex flex-col items-center justify-center space-y-8">
+          <p className="text-center text-base">
+            Sind Sie sicher, dass Sie Ihre Änderungen verwerfen und somit{" "}
+            <strong>nicht</strong> speichern möchten?
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              bgColor="bg-lightGrey"
+              textColor="text-mediumGrey font-bold"
+              onClick={() => {
+                setIsErrorVisible(false);
+              }}
+            >
+              Abbrechen
+            </Button>
+            <Button
+              bgColor="bg-lightRed"
+              textColor="text-darkRed font-bold"
+              onClick={() => {
+                setIsErrorVisible(false);
+                setIsNewEntryVisible(false);
+                setIsEditing(false);
+              }}
+            >
+              Verwerfen
+            </Button>
+          </div>
+        </div>
+      </ErrorPopup>
     </>
   );
 };
