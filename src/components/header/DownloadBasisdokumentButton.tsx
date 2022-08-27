@@ -1,5 +1,6 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FileArrowDown } from "phosphor-react";
+import { toast } from "react-toastify";
 import { downloadBasisdokument, downloadEditFile } from "../../data-management/download-handler";
 import { IBookmark, IEntry, IHighlightedEntry, IHighlighter, IHint, ILitigiousCheck, IMetaData, INote, ISection, IVersion } from "../../types";
 
@@ -41,6 +42,7 @@ export const DownloadBasisdokumentButton: React.FC<IProps> = ({
     setTimeout(() => {
       downloadEditFile(caseId, currentVersion, highlightedEntries, colorSelection, notes, bookmarks, individualSorting);
     }, 200);
+    toast("Basisdokument wurde heruntergeladen!")
   };
 
   return (

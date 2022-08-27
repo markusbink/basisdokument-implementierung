@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { CustomToastContainer } from "./components/CustomToastContainer";
+import "react-toastify/dist/ReactToastify.css";
 import { BookmarkProvider, CaseProvider, HeaderProvider, HintProvider, NoteProvider, SectionProvider, UserProvider } from "./contexts";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
@@ -34,6 +36,7 @@ export const App = () => {
           </HeaderProvider>
         </SectionProvider>
       </UserProvider>
+      <CustomToastContainer />
     </div>
   );
 };

@@ -1,9 +1,7 @@
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp, FileArrowUp, UserCircle, Warning } from "phosphor-react";
-import "react-toastify/dist/ReactToastify.css";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import { ToastContainer } from "react-toastify";
 import { useUser } from "../../contexts/UserContext";
 import { DownloadBasisdokumentButton } from "./DownloadBasisdokumentButton";
 import { useBookmarks, useCase, useHeaderContext, useHints, useNotes, useSection } from "../../contexts";
@@ -86,27 +84,6 @@ export const DocumentButton = () => {
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
-      <div>
-        <ToastContainer
-          className="font-semibold text-sm"
-          toastStyle={{
-            backgroundColor: "#3A4342",
-            color: "#fff",
-            width: "300px",
-            borderRadius: "8px",
-          }}
-          position="top-right"
-          autoClose={2000}
-          closeButton={false}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </div>
       <AlertDialog.Root open={showPopupUpload}>
         <AlertDialog.Portal>
           <AlertDialog.Overlay />
