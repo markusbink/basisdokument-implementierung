@@ -17,7 +17,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   return (
     <div
-      className={cx("flex gap-6 py-4 items-start w-full", {
+      className={cx("flex gap-6 pb-4 pt-12 items-start w-full", {
         "grid grid-cols-2": user?.role === UserRole.Judge,
       })}
     >
