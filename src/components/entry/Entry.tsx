@@ -9,6 +9,7 @@ import {
   Trash,
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
 import { IEntry, UserRole } from "../../types";
@@ -113,14 +114,19 @@ export const Entry: React.FC<EntryProps> = ({
     );
   };
 
-  const updateEntry = (text: string) => {
+  const updateEntry = (plainText: string, rawHtml: string) => {
+    if (plainText.length === 0) {
+      toast("Bitte geben sie einen Text ein.", { type: "error" });
+      return;
+    }
+
     setIsEditing(false);
     setEntries((oldEntries) => {
       const newEntries = [...oldEntries];
       const entryIndex = newEntries.findIndex(
         (newEntry) => newEntry.id === entry.id
       );
-      newEntries[entryIndex].text = text;
+      newEntries[entryIndex].text = rawHtml;
       return newEntries;
     });
   };
@@ -261,8 +267,8 @@ export const Entry: React.FC<EntryProps> = ({
                   onAbort={() => {
                     setIsErrorVisible(true);
                   }}
-                  onSave={(_: string, rawHtml: string) => {
-                    updateEntry(rawHtml);
+                  onSave={(plainText: string, rawHtml: string) => {
+                    updateEntry(plainText, rawHtml);
                     setIsExpanded(false);
                   }}
                 />

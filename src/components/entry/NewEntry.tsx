@@ -70,7 +70,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     setIsExpanded(false);
   };
 
-  const closeNewEntryForm = (plainText: string, rawHtml: string) => {
+  const closeNewEntryForm = (plainText: string, _: string) => {
     if (plainText.length !== 0) {
       setIsErrorVisible(true);
       return;
