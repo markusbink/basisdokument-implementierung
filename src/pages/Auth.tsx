@@ -1,6 +1,7 @@
 import cx from "classnames";
 import { Upload } from "phosphor-react";
 import { useState } from "react";
+import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
 import { Button } from "../components/Button";
 import { useBookmarks, useCase, useHeaderContext, useHints, useNotes, useUser, useSection } from "../contexts";
 import { createBasisdokument, createEditFile } from "../data-management/creation-handler";
@@ -176,6 +177,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   return (
     <div className="overflow-scroll h-full">
       <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex-col justify-center h-auto overflow-scroll no-scrollbar">
+        <AboutDevelopersMenu/>
         <h1 className="text-3xl font-bold">Das Basisdokument</h1>
         <p className="text-md text-mediumGrey text-justify">
           Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments in Form einer .json-Datei hoch, falls Sie an einer
