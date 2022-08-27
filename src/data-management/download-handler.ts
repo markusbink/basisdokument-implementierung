@@ -1,14 +1,14 @@
 import { saveAs } from "file-saver";
 import { IBookmark, IEntry, IHighlightedEntry, IHighlighter, IHint, ILitigiousCheck, IMetaData, INote, ISection, IVersion } from "../types";
 
-async function downloadObjectAsJSON(obj: object, fileName: string) {
+function downloadObjectAsJSON(obj: object, fileName: string) {
   // Create a blob of the data
   var fileToSave = new Blob([JSON.stringify(obj)], {
     type: "application/json",
   });
 
   // Save the file
-  await saveAs(fileToSave, fileName);
+  saveAs(fileToSave, fileName);
 }
 
 
