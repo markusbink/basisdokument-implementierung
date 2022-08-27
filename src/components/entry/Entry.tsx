@@ -203,54 +203,56 @@ export const Entry: React.FC<EntryProps> = ({
                     </Action>
                   </Tooltip>
                   {(isJudge || (entry.role === viewedBy && !isOld)) && (
-                    <Tooltip text="Mehr Optionen">
-                      <Action
-                        className={cx("relative", {
-                          "bg-darkPurple text-lightPurple":
-                            isPlaintiff && isMenuOpen,
-                          "bg-darkPetrol text-lightPetrol":
-                            !isPlaintiff && isMenuOpen,
-                        })}
-                        onClick={toggleMenu}
-                        isPlaintiff={isPlaintiff}
-                      >
-                        <DotsThree size={20} />
-                        {isMenuOpen ? (
-                          <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
-                            {isJudge && (
+                    <div className="flex relative">
+                      <Tooltip text="Mehr Optionen">
+                        <Action
+                          className={cx({
+                            "bg-darkPurple text-lightPurple":
+                              isPlaintiff && isMenuOpen,
+                            "bg-darkPetrol text-lightPetrol":
+                              !isPlaintiff && isMenuOpen,
+                          })}
+                          onClick={toggleMenu}
+                          isPlaintiff={isPlaintiff}
+                        >
+                          <DotsThree size={20} />
+                        </Action>
+                      </Tooltip>
+                      {isMenuOpen ? (
+                        <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+                          {isJudge && (
+                            <li
+                              tabIndex={0}
+                              onClick={addHint}
+                              className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                            >
+                              <Scales size={20} />
+                              Hinweis hinzufügen
+                            </li>
+                          )}
+                          {!isOld && (
+                            <>
                               <li
                                 tabIndex={0}
-                                onClick={addHint}
+                                onClick={editEntry}
                                 className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
                               >
-                                <Scales size={20} />
-                                Hinweis hinzufügen
+                                <Pencil size={20} />
+                                Bearbeiten
                               </li>
-                            )}
-                            {!isOld && (
-                              <>
-                                <li
-                                  tabIndex={0}
-                                  onClick={editEntry}
-                                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                                >
-                                  <Pencil size={20} />
-                                  Bearbeiten
-                                </li>
-                                <li
-                                  tabIndex={0}
-                                  onClick={() => deleteEntry(entry.id)}
-                                  className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                                >
-                                  <Trash size={20} />
-                                  Löschen
-                                </li>
-                              </>
-                            )}
-                          </ul>
-                        ) : null}
-                      </Action>
-                    </Tooltip>
+                              <li
+                                tabIndex={0}
+                                onClick={() => deleteEntry(entry.id)}
+                                className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                              >
+                                <Trash size={20} />
+                                Löschen
+                              </li>
+                            </>
+                          )}
+                        </ul>
+                      ) : null}
+                    </div>
                   )}
                 </div>
               </EntryHeader>
