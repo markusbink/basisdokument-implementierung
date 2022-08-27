@@ -1,5 +1,5 @@
 import { CaretDown, CaretUp, MagnifyingGlass, Question, XCircle } from "phosphor-react";
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
 import { DocumentButton } from "../header/DocumentButton";
 import { ColorSelector } from "./ColorSelector";
@@ -11,6 +11,12 @@ export const MainHeader = () => {
 
   const onChangeSearchbar = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchbarValue(e.target.value);
+  };
+
+  const onHandleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      setSearchbarValue("");
+    }
   };
 
   return (
@@ -32,13 +38,16 @@ export const MainHeader = () => {
       {/* searchbar */}
       <div className="flex flex-row gap-2 justify-center items-center w-full max-w-[300px]">
         <div className="flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-8 items-center w-full max-w-[300px]">
-          <MagnifyingGlass size={16} weight="bold" className="hover:text-mediumGrey text-darkGrey ml-1 mr-1 cursor-pointer" />
+          <div>
+            <MagnifyingGlass size={16} weight="bold" className="hover:text-mediumGrey text-darkGrey ml-1 mr-1 cursor-pointer" />
+          </div>
           <input
             value={searchbarValue}
             onChange={(e) => onChangeSearchbar(e)}
             className="bg-offWhite outline-0 w-full max-w-[300px] pl-2 text-sm"
             type="text"
             placeholder="Im Basisdokument suchen..."
+            onKeyDown={onHandleKeyDown}
           />
           {searchbarValue !== "" ? (
             <XCircle
