@@ -1,5 +1,4 @@
-import { createContext, MouseEventHandler, useContext, useState } from "react";
-import { toast } from "react-toastify";
+import { createContext, useContext, useState } from "react";
 import { IHighlighter, ISection, IVersion, Tool } from "../types";
 
 // Define Interfaces
@@ -26,9 +25,6 @@ export default interface IHeaderContext {
   selectedVersion: number;
   sectionListHeader: ISection[];
   openOnboarding: () => void;
-  downloadBasisdokument: MouseEventHandler<HTMLDivElement> | undefined;
-  reloadPageAndSave: MouseEventHandler<HTMLButtonElement> | undefined;
-  reloadPageAndDoNotSave: MouseEventHandler<HTMLButtonElement> | undefined;
   setSectionListHeader: React.Dispatch<React.SetStateAction<ISection[]>>;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
@@ -108,21 +104,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     console.log("open onboarding");
   };
 
-  const downloadBasisdokument = () => {
-    toast("Basisokument wurde heruntergeladen!");
-  };
-
-  // If a new base document is to be opened and the user is taken to the home page, the page can also simply be reloaded.
-  // Then the state of the components of the entire application is reset and there are no complications.
-  const reloadPageAndSave = () => {
-    console.log("reload page and save!");
-  };
-
-  const reloadPageAndDoNotSave = () => {
-    console.log("reload page and do not save!");
-    window.location.reload();
-  };
-
   return (
     <HeaderContext.Provider
       value={{
@@ -139,9 +120,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         selectedVersion,
         sectionListHeader,
         openOnboarding,
-        downloadBasisdokument,
-        reloadPageAndSave,
-        reloadPageAndDoNotSave,
         setSectionListHeader,
         setSelectedVersion,
         setVersionHistory,
