@@ -37,6 +37,7 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
             {(user?.role === UserRole.Plaintiff ||
               user?.role === UserRole.Judge) && (
               <Button
+                size="sm"
                 onClick={() => handleClick(UserRole.Plaintiff)}
                 icon={<Plus size={18} weight="bold" />}
               >
@@ -48,6 +49,7 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
             {(user?.role === UserRole.Defendant ||
               user?.role === UserRole.Judge) && (
               <Button
+                size="sm"
                 onClick={() => handleClick(UserRole.Defendant)}
                 icon={<Plus size={18} weight="bold" />}
               >
