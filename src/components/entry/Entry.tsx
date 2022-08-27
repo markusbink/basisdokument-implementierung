@@ -1,4 +1,5 @@
 import cx from "classnames";
+import format from "date-fns/format";
 import {
   ArrowBendLeftUp,
   BookmarkSimple,
@@ -57,6 +58,10 @@ export const Entry: React.FC<EntryProps> = ({
     (viewedBy === UserRole.Plaintiff && entry.role === "Kläger") ||
     (viewedBy === UserRole.Defendant && entry.role === "Beklagter");
   const canAddEntry = isJudge || !isOwnEntry;
+
+  const { versionHistory } = useHeaderContext();
+
+  const versionTimestamp = versionHistory[entry.version - 1].timestamp;
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -185,7 +190,9 @@ export const Entry: React.FC<EntryProps> = ({
                       {entry.entryCode}
                     </span>
                     <span className="font-bold">{entry.author}</span>
-                    <span>25.08.2022</span>
+                    <span>
+                      {format(new Date(versionTimestamp), "dd.MM.yyyy")}
+                    </span>
                   </div>
                 </div>
                 <div className="flex gap-2">
