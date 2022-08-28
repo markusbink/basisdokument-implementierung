@@ -15,7 +15,7 @@ export const ErrorPopup: React.FC<ErrorPopupProps> = ({
 
   return (
     <>
-      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+      <div className="opacity-25 fixed inset-0 z-40 bg-black !m-0" />
       <div className="fixed inset-0 flex flex-col justify-center items-center z-50">
         <div
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2

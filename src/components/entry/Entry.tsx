@@ -51,7 +51,9 @@ export const Entry: React.FC<EntryProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
   const [isLitigious, setIsLitigious] = useState<boolean | null>(null);
-  const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
+  const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
+  const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
+    useState<boolean>(false);
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -272,13 +274,7 @@ export const Entry: React.FC<EntryProps> = ({
                               </li>
                               <li
                                 tabIndex={0}
-                                onClick={() =>
-                                  deleteEntry(
-                                    entry.id,
-                                    entry.entryCode,
-                                    entry.sectionId
-                                  )
-                                }
+                                onClick={() => setIsDeleteErrorVisible(true)}
                                 className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
                               >
                                 <Trash size={20} />
@@ -303,7 +299,7 @@ export const Entry: React.FC<EntryProps> = ({
                   isExpanded={isExpanded}
                   setIsExpanded={() => setIsExpanded(!isExpanded)}
                   onAbort={() => {
-                    setIsErrorVisible(true);
+                    setIsEditErrorVisible(true);
                   }}
                   onSave={(plainText: string, rawHtml: string) => {
                     updateEntry(plainText, rawHtml);
@@ -361,7 +357,7 @@ export const Entry: React.FC<EntryProps> = ({
           <EntryList entries={thread} />
         </div>
       )}
-      <ErrorPopup isVisible={isErrorVisible}>
+      <ErrorPopup isVisible={isEditErrorVisible}>
         <div className="flex flex-col items-center justify-center space-y-8">
           <p className="text-center text-base">
             Sind Sie sicher, dass Sie Ihre Änderungen verwerfen und somit{" "}
@@ -372,7 +368,7 @@ export const Entry: React.FC<EntryProps> = ({
               bgColor="bg-lightGrey"
               textColor="text-mediumGrey font-bold"
               onClick={() => {
-                setIsErrorVisible(false);
+                setIsEditErrorVisible(false);
               }}
             >
               Abbrechen
@@ -381,12 +377,41 @@ export const Entry: React.FC<EntryProps> = ({
               bgColor="bg-lightRed"
               textColor="text-darkRed font-bold"
               onClick={() => {
-                setIsErrorVisible(false);
+                setIsEditErrorVisible(false);
                 setIsNewEntryVisible(false);
                 setIsEditing(false);
               }}
             >
               Verwerfen
+            </Button>
+          </div>
+        </div>
+      </ErrorPopup>
+      <ErrorPopup isVisible={isDeleteErrorVisible}>
+        <div className="flex flex-col items-center justify-center space-y-8">
+          <p className="text-center text-base">
+            Sind Sie sicher, dass Sie diesen Beitrag löschen möchten? Diese
+            Aktion kann nicht rückgängig gemacht werden.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              bgColor="bg-lightGrey"
+              textColor="text-mediumGrey font-bold"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+              }}
+            >
+              Abbrechen
+            </Button>
+            <Button
+              bgColor="bg-lightRed"
+              textColor="text-darkRed font-bold"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+                deleteEntry(entry.id, entry.entryCode, entry.sectionId);
+              }}
+            >
+              Beitrag Löschen
             </Button>
           </div>
         </div>
