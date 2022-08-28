@@ -338,7 +338,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         </div>
 
         <div className="flex flew-row items-end justify-between space-y-2">
-          <Button onClick={validateUserInput}>Basisdokument erstellen</Button>
+          <Button onClick={validateUserInput}>Basisdokument {usage === UsageMode.Open ? "öffnen" : "erstellen"}</Button>
           <p className="text-darkRed font-bold text-sm">* Pflichtfelder</p>
         </div>
       </div>
