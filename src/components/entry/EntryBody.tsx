@@ -1,8 +1,9 @@
 import cx from "classnames";
 import Highlight from "highlight-react/dist/highlight";
 import { useEffect } from "react";
-import { useHeaderContext } from "../../contexts";
+import { useCase, useHeaderContext } from "../../contexts";
 import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib/index";
+import { IHighlightedEntry } from "../../types";
 
 interface EntryBodyProps {
   isPlaintiff: boolean;
@@ -13,6 +14,7 @@ interface EntryBodyProps {
 
 export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setLowerOpcacityForSearch, children }) => {
   const { searchbarValue, currentColorSelection, getCurrentTool } = useHeaderContext();
+  const { setHighlightedEntries, highlightedEntries } = useCase();
 
   useEffect(() => {
     let highlightedTextElement: Element | null = document.querySelector(`.search-text-${entryId}`);
@@ -28,7 +30,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
 
   const getCurrentHighlighterColorAsHTMLString = () => {
     if (getCurrentTool.id === "eraser") {
-      return "#ffffff"
+      return "#ffffff";
     }
     switch (currentColorSelection.color) {
       case "red":
@@ -48,15 +50,48 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     }
   };
 
+  function markedEntryExists(entryId: string) {
+    return highlightedEntries.some(function (el) {
+      return el.entryId === entryId;
+    });
+  }
+
+  const saveNewHighlighting = () => {
+    let highlightedText: string | undefined = document.querySelector(`.marker-text-${entryId}`)?.outerHTML;
+
+    if (typeof highlightedText === "string") {
+      if (markedEntryExists(entryId)) {
+        const newHighlightedEntries: any = highlightedEntries.map((entry) => {
+          if (entry.entryId === entryId) {
+            return { entryId: entryId, highlightedText: highlightedText };
+          }
+          return entry;
+        });
+        setHighlightedEntries(newHighlightedEntries);
+      } else {
+        setHighlightedEntries([...highlightedEntries, { entryId: entryId, highlightedText: highlightedText }]);
+      }
+    }
+  };
+
   const createHighlighting = () => {
     const domEle: any = document.querySelector(`.marker-text-${entryId}`);
-
-
     const options: optionsImpl = { color: getCurrentHighlighterColorAsHTMLString() };
+
     if (domEle && (getCurrentTool.id === "highlighter" || getCurrentTool.id === "eraser")) {
       const highlightMade = doHighlight(domEle, true, options);
-      console.log("highlightMade", highlightMade);
+      if (highlightMade) {
+        saveNewHighlighting();
+      }
     }
+  };
+
+  const getEntryContent = () => {
+    let highlightedEntry: IHighlightedEntry | undefined = highlightedEntries.find((entry) => entry.entryId === entryId);
+    if (highlightedEntry) {
+      return highlightedEntry.highlightedText
+    }
+    return children;
   };
 
   return (
@@ -68,7 +103,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     >
       {/* eslint-disable-next-line */}
       {searchbarValue === "" ? (
-        <p className={cx(`marker-text-${entryId}`)} onMouseUp={createHighlighting} dangerouslySetInnerHTML={{ __html: children as string }}></p>
+        <p className={cx(`marker-text-${entryId}`)} onMouseUp={createHighlighting} dangerouslySetInnerHTML={{ __html: getEntryContent() as string }}></p>
       ) : (
         <Highlight search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>{children}</Highlight> // eslint-disable-line
       )}

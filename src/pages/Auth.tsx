@@ -57,6 +57,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setMetaData,
     setLitigiousChecks,
     setCurrentVersion,
+    setHighlightedEntries
   } = useCase();
   const { setVersionHistory, setColorSelection, setCurrentColorSelection } =
     useHeaderContext();
@@ -251,6 +252,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setColorSelection(editFile.highlighter);
     setCurrentColorSelection(editFile.highlighter[0]);
     setIndividualSorting(editFile.individualSorting);
+    setHighlightedEntries(editFile.highlightedEntries);
   };
 
   return (
