@@ -1,6 +1,7 @@
 import cx from "classnames";
 import { Upload } from "phosphor-react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
 import { Button } from "../components/Button";
 import {
@@ -23,6 +24,9 @@ import {
   updateSortingsIfVersionIsDifferent,
 } from "../data-management/opening-handler";
 import { IStateUserInput, IUser, UsageMode, UserRole } from "../types";
+import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
+import { useOnboarding } from "../contexts/OnboardingContext";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -61,6 +65,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setHints } = useHints();
   const { setBookmarks } = useBookmarks();
   const { setUser } = useUser();
+  const { setIsOnboardingVisible } = useOnboarding();
 
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -100,6 +105,13 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         setEditFile(result);
       };
     } catch (error) {}
+  };
+
+  const checkOnboardingShownBefore = () => {
+    if (Cookies.get("onboarding") === undefined) {
+      Cookies.set("onboarding", "true");
+      setIsOnboardingVisible(true);
+    }
   };
 
   const validateUserInput = () => {
@@ -206,6 +218,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           caseId
         );
         editFileObject = createEditFile(prename, surname, role, caseId, 1);
+        toast("Ihr Basisdokument wurde erfolgreich erstellt!");
       }
 
       const user: IUser = {
@@ -216,7 +229,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       setUser(user);
       setContextFromBasisdokument(basisdokumentObject);
       setContextFromEditFile(editFileObject);
-
+      checkOnboardingShownBefore();
       setIsAuthenticated(true);
     }
   };
@@ -387,9 +400,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               </p>
               <div className="flex flex-col items-start w-auto mt-8 mb-8 gap-4">
                 <div className="flex flex-row items-center justify-center gap-4">
-                  <p className="font-semibold">
+                  <span className="font-semibold">
                     Basisdokument: <span className="text-darkRed">*</span>
-                  </p>
+                  </span>
                   <label className="flex items-center justify-center gap-2 cursor-pointer">
                     <input
                       type="file"
@@ -402,7 +415,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                   </label>
                 </div>
                 <div className="flex flex-row items-center justify-center gap-4">
-                  <p className="font-semibold">Bearbeitungsdatei:</p>
+                  <span className="font-semibold">Bearbeitungsdatei:</span>
                   <label className="flex items-center justify-center gap-2 cursor-pointer">
                     <input type="file" onChange={handleEditFileUploadChange} />
                     <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
@@ -446,7 +459,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         </div>
 
         <div className="flex flew-row items-end justify-between space-y-2">
-          <Button onClick={validateUserInput}>Basisdokument erstellen</Button>
+          <Button onClick={validateUserInput}>
+            Basisdokument {usage === UsageMode.Open ? "öffnen" : "erstellen"}
+          </Button>
           <p className="text-darkRed font-bold text-sm">* Pflichtfelder</p>
         </div>
       </div>

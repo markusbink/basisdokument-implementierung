@@ -4,4 +4,4 @@ This app enables lawyers to create their previous analogue correspondence in a d
 
 ## Running the project locally
 
-To get started, download the project, `cd` into the root directory and install all dependencies using `npm install` or any other package manager of your choosing. After all dependencies have successfully been installed, you can run `npm start` in your terminal which opens the app in your browser under the following URL [http://localhost:3000](http://localhost:3000).
+To get started, download the project, `cd` into the root directory and install all dependencies using `npm install --force` or any other package manager of your choosing. After all dependencies have successfully been installed, you can run `npm start` in your terminal which opens the app in your browser under the following URL [http://localhost:3000](http://localhost:3000).
