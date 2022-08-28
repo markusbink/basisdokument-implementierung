@@ -161,7 +161,7 @@ export const Entry: React.FC<EntryProps> = ({
         (newEntry) => newEntry.id === entry.id
       );
       newEntries[entryIndex].text = rawHtml;
-      newEntries[entryIndex].author = authorName;
+      newEntries[entryIndex].author = authorName || entry.author;
       return newEntries;
     });
   };
