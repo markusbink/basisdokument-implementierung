@@ -32,6 +32,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
         "border-lightPetrol": !isPlaintiff,
       })}
     >
+      {/* eslint-disable-next-line */}
       {searchbarValue === "" ? <p dangerouslySetInnerHTML={{ __html: children as string }}></p> : <Highlight search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>{children}</Highlight>}
     </div>
   );
