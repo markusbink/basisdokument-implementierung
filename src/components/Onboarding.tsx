@@ -1,16 +1,16 @@
-import { useState } from "react";
 import { Button } from "./Button";
 import { OnboardingSwiper } from "./OnboardingSwiper";
 import { XCircle } from "phosphor-react";
+import { useOnboarding } from "../contexts/OnboardingContext";
 
 export const Onboarding = () => {
-  const [isOnboardingVisible, setOnboarding] = useState(true);
+  const { onboardingIsVisible, setOnboardingIsVisible } = useOnboarding();
 
   const toggleOnboarding = () => {
-    setOnboarding(!isOnboardingVisible);
+    setOnboardingIsVisible(!onboardingIsVisible);
   };
 
-  if (isOnboardingVisible) {
+  if (onboardingIsVisible) {
     document.body.classList.add("overflow-y-hidden");
   } else {
     document.body.classList.remove("overflow-y-hidden");
@@ -18,7 +18,7 @@ export const Onboarding = () => {
 
   return (
     <>
-      {isOnboardingVisible && (
+      {onboardingIsVisible && (
         <div className="z-30 fixed">
           <div className="w-screen h-screen inset-0 fixed opacity-75 bg-darkGrey" />
           <div className="w-screen h-screen inset-0 fixed flex items-center justify-center p-4">

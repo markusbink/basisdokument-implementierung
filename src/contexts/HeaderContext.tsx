@@ -24,7 +24,6 @@ export default interface IHeaderContext {
   versionHistory: IVersion[];
   selectedVersion: number;
   sectionListHeader: ISection[];
-  openOnboarding: () => void;
   setSectionListHeader: React.Dispatch<React.SetStateAction<ISection[]>>;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
@@ -100,9 +99,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     useState<IHeaderContext["selectedVersion"]>(0);
   const [sectionListHeader, setSectionListHeader] = useState<ISection[]>([]);
 
-  const openOnboarding = () => {
-    console.log("open onboarding");
-  };
 
   return (
     <HeaderContext.Provider
@@ -119,7 +115,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         versionHistory,
         selectedVersion,
         sectionListHeader,
-        openOnboarding,
         setSectionListHeader,
         setSelectedVersion,
         setVersionHistory,
