@@ -109,7 +109,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             defaultValue={user?.name}
             showEditButton
             editButtonContent={
-              <Tooltip text="Name bearbeiten">
+              <Tooltip asChild text="Name bearbeiten">
                 <Pencil />
               </Tooltip>
             }
