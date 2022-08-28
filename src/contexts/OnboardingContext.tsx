@@ -1,8 +1,8 @@
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
 
 interface IOnboardingContext {
-  onboardingIsVisible: boolean;
-  setOnboardingIsVisible: Dispatch<SetStateAction<boolean>>;
+  isOnboardingVisible: boolean;
+  setIsOnboardingVisible: Dispatch<SetStateAction<boolean>>;
 }
 
 export const OnboardingContext = createContext<IOnboardingContext | null>(null);
@@ -12,13 +12,13 @@ interface OnboardingProviderProps {
 }
 
 export const OnboardingProvider: React.FC<OnboardingProviderProps> = ({ children }) => {
-  const [onboardingIsVisible, setOnboardingIsVisible] = useState<boolean>(false);
+  const [isOnboardingVisible, setIsOnboardingVisible] = useState<boolean>(false);
 
   return (
     <OnboardingContext.Provider
       value={{
-        onboardingIsVisible,
-        setOnboardingIsVisible,
+        isOnboardingVisible,
+        setIsOnboardingVisible,
       }}
     >
       {children}
@@ -29,7 +29,7 @@ export const OnboardingProvider: React.FC<OnboardingProviderProps> = ({ children
 export const useOnboarding = () => {
   const context = useContext(OnboardingContext);
   if (context === null) {
-    throw new Error("useHints must be used within an HintProvider");
+    throw new Error("useContext must be used within an OnboardingProvider");
   }
   return context;
 };

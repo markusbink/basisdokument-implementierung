@@ -4,13 +4,13 @@ import { XCircle } from "phosphor-react";
 import { useOnboarding } from "../contexts/OnboardingContext";
 
 export const Onboarding = () => {
-  const { onboardingIsVisible, setOnboardingIsVisible } = useOnboarding();
+  const { isOnboardingVisible, setIsOnboardingVisible } = useOnboarding();
 
   const toggleOnboarding = () => {
-    setOnboardingIsVisible(!onboardingIsVisible);
+    setIsOnboardingVisible(!isOnboardingVisible);
   };
 
-  if (onboardingIsVisible) {
+  if (isOnboardingVisible) {
     document.body.classList.add("overflow-y-hidden");
   } else {
     document.body.classList.remove("overflow-y-hidden");
@@ -18,7 +18,7 @@ export const Onboarding = () => {
 
   return (
     <>
-      {onboardingIsVisible && (
+      {isOnboardingVisible && (
         <div className="z-30 fixed">
           <div className="w-screen h-screen inset-0 fixed opacity-75 bg-darkGrey" />
           <div className="w-screen h-screen inset-0 fixed flex items-center justify-center p-4">

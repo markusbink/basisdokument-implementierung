@@ -9,7 +9,7 @@ import { ToolSelector } from "./ToolSelector";
 export const MainHeader = () => {
   const { searchbarValue, setSearchbarValue, setShowDropdownHeader, showDropdownHeader, getCurrentTool, setCurrentTool } = useHeaderContext();
   const { caseId } = useCase();
-  const { setOnboardingIsVisible } = useOnboarding();
+  const { setIsOnboardingVisible } = useOnboarding();
 
   const onChangeSearchbar = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchbarValue(e.target.value);
@@ -65,7 +65,7 @@ export const MainHeader = () => {
       </div>
       {/* actions on the right side */}
       <div className="flex flex-row gap-4 justify-end items-center">
-        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8 cursor-pointer" onClick={() => {setOnboardingIsVisible(true)}}>
+        <div className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8 cursor-pointer" onClick={() => {setIsOnboardingVisible(true)}}>
           <Question size={16} className="text-darkGrey" />
         </div>
         <ColorSelector />

@@ -38,7 +38,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setHints } = useHints();
   const { setBookmarks } = useBookmarks();
   const { setUser } = useUser();
-  const { onboardingIsVisible, setOnboardingIsVisible } = useOnboarding();
+  const { setIsOnboardingVisible } = useOnboarding();
 
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -83,7 +83,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const checkOnboardingShownBefore = () => {
     if (Cookies.get("onboarding") === undefined) {
       Cookies.set("onboarding", "true");
-      setOnboardingIsVisible(true);
+      setIsOnboardingVisible(true);
     }
   };
 
