@@ -39,7 +39,7 @@ export const Entry: React.FC<EntryProps> = ({
 }) => {
   // Threaded entries
   const { currentVersion, groupedEntries, setEntries } = useCase();
-  const { versionHistory, showColumnView } = useHeaderContext();
+  const { versionHistory, showColumnView, searchbarValue } = useHeaderContext();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -52,6 +52,7 @@ export const Entry: React.FC<EntryProps> = ({
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
   const [isLitigious, setIsLitigious] = useState<boolean | null>(null);
   const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
+  const [lowerOpacityForSearch, setLowerOpcacityForSearch] = useState<boolean>(false);
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -141,6 +142,7 @@ export const Entry: React.FC<EntryProps> = ({
         id={entry.entryCode}
         className={cx("text-sm", {
           "opacity-50": isHidden,
+          "opacity-30":!lowerOpacityForSearch && searchbarValue !== "",
           "pointer-events-none": isHidden,
         })}
       >
@@ -263,7 +265,7 @@ export const Entry: React.FC<EntryProps> = ({
               </EntryHeader>
               {/* Body */}
               {isBodyOpen && !isEditing && (
-                <EntryBody isPlaintiff={isPlaintiff}>{entry.text}</EntryBody>
+                <EntryBody isPlaintiff={isPlaintiff} setLowerOpcacityForSearch={setLowerOpcacityForSearch} entryId={entry.id}>{entry.text}</EntryBody>
               )}
               {isBodyOpen && isEditing && (
                 <EntryForm
