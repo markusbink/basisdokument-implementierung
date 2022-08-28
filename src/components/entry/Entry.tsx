@@ -10,6 +10,7 @@ import {
   Trash,
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
+import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
@@ -54,6 +55,7 @@ export const Entry: React.FC<EntryProps> = ({
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
+  const [authorName, setAuthorName] = useState<string>(entry.author);
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -79,9 +81,12 @@ export const Entry: React.FC<EntryProps> = ({
     };
   }, [isMenuOpen]);
 
-  const toggleBody = (e: React.MouseEvent) => {
+  const toggleBody = () => {
     if (isMenuOpen) {
       setIsMenuOpen(false);
+      return;
+    }
+    if (isEditing) {
       return;
     }
     setIsEditing(false);
@@ -156,6 +161,7 @@ export const Entry: React.FC<EntryProps> = ({
         (newEntry) => newEntry.id === entry.id
       );
       newEntries[entryIndex].text = rawHtml;
+      newEntries[entryIndex].author = authorName;
       return newEntries;
     });
   };
@@ -197,7 +203,7 @@ export const Entry: React.FC<EntryProps> = ({
               )}
               <EntryHeader
                 isPlaintiff={isPlaintiff}
-                isBodyOpen={isBodyOpen}
+                isBodyOpen={!isEditing && isBodyOpen}
                 toggleBody={toggleBody}
               >
                 <div className="overflow-auto max-w-[350px] whitespace-nowrap">
@@ -213,7 +219,39 @@ export const Entry: React.FC<EntryProps> = ({
                     >
                       {entry.entryCode}
                     </span>
-                    <span className="font-bold">{entry.author}</span>
+                    {isEditing ? (
+                      <EditText
+                        inputClassName={cx(
+                          "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
+                          {
+                            "border-darkPurple": isPlaintiff,
+                            "border-darkPetrol": !isPlaintiff,
+                          }
+                        )}
+                        className={cx(
+                          "font-bold p-0 my-0 flex items-center mr-2",
+                          {
+                            "text-darkPurple": isPlaintiff,
+                            "text-darkPetrol": !isPlaintiff,
+                          }
+                        )}
+                        value={authorName}
+                        onChange={(e) => {
+                          setAuthorName(e.target.value);
+                        }}
+                        showEditButton
+                        editButtonContent={
+                          <Tooltip asChild text="Name bearbeiten">
+                            <Pencil />
+                          </Tooltip>
+                        }
+                        editButtonProps={{
+                          className: cx("bg-transparent flex items-center"),
+                        }}
+                      />
+                    ) : (
+                      <span className="font-bold">{entry.author}</span>
+                    )}
                     <span>
                       {entry.version < currentVersion &&
                         format(new Date(versionTimestamp), "dd.MM.yyyy")}

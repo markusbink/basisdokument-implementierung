@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { Pencil } from "phosphor-react";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditText } from "react-edit-text";
 import "react-edit-text/dist/index.css";
@@ -31,6 +31,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
+  const [authorName, setAuthorName] = useState<string>("");
   const { user } = useUser();
   const { currentVersion, entries, setEntries } = useCase();
   const { sectionList } = useSection();
@@ -51,7 +52,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     const entry: IEntry = {
       id: uuidv4(),
       entryCode: `${entryCodePrefix}-${sectionNumber}-${newEntryCount}`,
-      author: user!.name,
+      author: authorName || user!.name,
       role: roleForNewEntry,
       sectionId,
       text: rawHtml,
@@ -75,6 +76,10 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     setIsNewEntryVisible(false);
     setIsExpanded(false);
   };
+
+  useEffect(() => {
+    setAuthorName(user!.name);
+  }, [user]);
 
   return (
     <>
@@ -106,7 +111,10 @@ export const NewEntry: React.FC<NewEntryProps> = ({
               "text-darkPurple": isPlaintiff,
               "text-darkPetrol": !isPlaintiff,
             })}
-            defaultValue={user?.name}
+            value={authorName}
+            onChange={(e) => {
+              setAuthorName(e.target.value);
+            }}
             showEditButton
             editButtonContent={
               <Tooltip asChild text="Name bearbeiten">
