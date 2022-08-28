@@ -1,18 +1,23 @@
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp, FileArrowUp, UserCircle, Warning } from "phosphor-react";
-import "react-toastify/dist/ReactToastify.css";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import { ToastContainer } from "react-toastify";
 import { useUser } from "../../contexts/UserContext";
-import { toast } from "react-toastify";
 import { DownloadBasisdokumentButton } from "./DownloadBasisdokumentButton";
+import { useBookmarks, useCase, useHeaderContext, useHints, useNotes, useSection } from "../../contexts";
+import { downloadBasisdokument, downloadEditFile } from "../../data-management/download-handler";
 
 export const DocumentButton = () => {
   const { user } = useUser();
   const [showDownloadMenu, setShowDownloadMenu] = useState<boolean>(false);
   const [showPopupUpload, setShowPopupUpload] = useState<boolean | undefined>(false);
 
+  const { caseId, currentVersion, metaData, entries, litigiousChecks, highlightedEntries } = useCase();
+  const { sectionList, individualSorting } = useSection();
+  const { versionHistory, colorSelection } = useHeaderContext();
+  const { hints } = useHints();
+  const { notes } = useNotes();
+  const { bookmarks } = useBookmarks();
 
   const reloadPageAndDoNotSave = () => {
     window.location.reload();
@@ -20,7 +25,15 @@ export const DocumentButton = () => {
   // If a new base document is to be opened and the user is taken to the home page, the page can also simply be reloaded.
   // Then the state of the components of the entire application is reset and there are no complications.
   const reloadPageAndSave = () => {
-    toast("Basisokument wurde heruntergeladen!");
+    setTimeout(() => {
+      downloadBasisdokument(caseId, currentVersion, versionHistory, metaData, entries, sectionList, hints, litigiousChecks);
+    }, 100);
+    setTimeout(() => {
+      downloadEditFile(caseId, currentVersion, highlightedEntries, colorSelection, notes, bookmarks, individualSorting);
+    }, 200);
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
   };
 
   return (
@@ -44,7 +57,21 @@ export const DocumentButton = () => {
                 <p className="text-sm text-darkGrey">{user!.role}</p>
               </div>
             </div>
-            <DownloadBasisdokumentButton/>
+            <DownloadBasisdokumentButton
+              caseId={caseId}
+              currentVersion={currentVersion}
+              versionHistory={versionHistory}
+              metaData={metaData}
+              entries={entries}
+              sectionList={sectionList}
+              hints={hints}
+              litigiousChecks={litigiousChecks}
+              highlightedEntries={highlightedEntries}
+              colorSelection={colorSelection}
+              notes={notes}
+              bookmarks={bookmarks}
+              individualSorting={individualSorting}
+            />
             <DropdownMenu.Item
               onClick={() => {
                 setShowPopupUpload(true);
@@ -57,27 +84,6 @@ export const DocumentButton = () => {
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
-      <div>
-        <ToastContainer
-          className="font-semibold text-sm"
-          toastStyle={{
-            backgroundColor: "#3A4342",
-            color: "#fff",
-            width: "300px",
-            borderRadius: "8px",
-          }}
-          position="top-right"
-          autoClose={2000}
-          closeButton={false}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </div>
       <AlertDialog.Root open={showPopupUpload}>
         <AlertDialog.Portal>
           <AlertDialog.Overlay />
