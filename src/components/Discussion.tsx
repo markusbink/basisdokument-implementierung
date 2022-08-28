@@ -36,7 +36,7 @@ export const Discussion = () => {
                 section={section}
               />
               {sectionEntries === undefined ? (
-                <AddEntryButtons />
+                <AddEntryButtons sectionId={section.id} />
               ) : (
                 <div className="space-y-8">
                   <EntryList entries={sectionEntries?.parent || []} />

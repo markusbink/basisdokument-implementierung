@@ -1,4 +1,5 @@
 import cx from "classnames";
+import format from "date-fns/format";
 import {
   ArrowBendLeftUp,
   BookmarkSimple,
@@ -9,10 +10,12 @@ import {
   Trash,
 } from "phosphor-react";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
 import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
+import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
 import { EntryList } from "./EntryList";
 import { LitigiousCheck } from "./LitigiousCheck";
@@ -35,9 +38,10 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { groupedEntries, setEntries } = useCase();
-  const { showColumnView } = useHeaderContext();
+  const { currentVersion, groupedEntries, setEntries } = useCase();
+  const { versionHistory, showColumnView } = useHeaderContext();
 
+  const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
 
   // State of current entry
@@ -47,6 +51,7 @@ export const Entry: React.FC<EntryProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
   const [isLitigious, setIsLitigious] = useState<boolean | null>(null);
+  const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -105,16 +110,25 @@ export const Entry: React.FC<EntryProps> = ({
     setIsBodyOpen(true);
   };
 
-  const deleteEntry = (e: React.MouseEvent) => {};
+  const deleteEntry = (entryId: string) => {
+    setEntries((prevEntries) =>
+      prevEntries.filter((entry) => entry.id !== entryId)
+    );
+  };
 
-  const updateEntry = (text: string) => {
+  const updateEntry = (plainText: string, rawHtml: string) => {
+    if (plainText.length === 0) {
+      toast("Bitte geben sie einen Text ein.", { type: "error" });
+      return;
+    }
+
     setIsEditing(false);
     setEntries((oldEntries) => {
       const newEntries = [...oldEntries];
       const entryIndex = newEntries.findIndex(
         (newEntry) => newEntry.id === entry.id
       );
-      newEntries[entryIndex].text = text;
+      newEntries[entryIndex].text = rawHtml;
       return newEntries;
     });
   };
@@ -173,7 +187,10 @@ export const Entry: React.FC<EntryProps> = ({
                       {entry.entryCode}
                     </span>
                     <span className="font-bold">{entry.author}</span>
-                    <span>25.08.2022</span>
+                    <span>
+                      {entry.version < currentVersion &&
+                        format(new Date(versionTimestamp), "dd.MM.yyyy")}
+                    </span>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -191,54 +208,56 @@ export const Entry: React.FC<EntryProps> = ({
                     </Action>
                   </Tooltip>
                   {(isJudge || (entry.role === viewedBy && !isOld)) && (
-                    <Tooltip text="Mehr Optionen">
-                      <Action
-                        className={cx("relative", {
-                          "bg-darkPurple text-lightPurple":
-                            isPlaintiff && isMenuOpen,
-                          "bg-darkPetrol text-lightPetrol":
-                            !isPlaintiff && isMenuOpen,
-                        })}
-                        onClick={toggleMenu}
-                        isPlaintiff={isPlaintiff}
-                      >
-                        <DotsThree size={20} />
-                        {isMenuOpen ? (
-                          <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
-                            {isJudge && (
+                    <div className="flex relative">
+                      <Tooltip text="Mehr Optionen">
+                        <Action
+                          className={cx({
+                            "bg-darkPurple text-lightPurple":
+                              isPlaintiff && isMenuOpen,
+                            "bg-darkPetrol text-lightPetrol":
+                              !isPlaintiff && isMenuOpen,
+                          })}
+                          onClick={toggleMenu}
+                          isPlaintiff={isPlaintiff}
+                        >
+                          <DotsThree size={20} />
+                        </Action>
+                      </Tooltip>
+                      {isMenuOpen ? (
+                        <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+                          {isJudge && (
+                            <li
+                              tabIndex={0}
+                              onClick={addHint}
+                              className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                            >
+                              <Scales size={20} />
+                              Hinweis hinzufügen
+                            </li>
+                          )}
+                          {!isOld && (
+                            <>
                               <li
                                 tabIndex={0}
-                                onClick={addHint}
+                                onClick={editEntry}
                                 className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
                               >
-                                <Scales size={20} />
-                                Hinweis hinzufügen
+                                <Pencil size={20} />
+                                Bearbeiten
                               </li>
-                            )}
-                            {!isOld && (
-                              <>
-                                <li
-                                  tabIndex={0}
-                                  onClick={editEntry}
-                                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                                >
-                                  <Pencil size={20} />
-                                  Bearbeiten
-                                </li>
-                                <li
-                                  tabIndex={0}
-                                  onClick={deleteEntry}
-                                  className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                                >
-                                  <Trash size={20} />
-                                  Löschen
-                                </li>
-                              </>
-                            )}
-                          </ul>
-                        ) : null}
-                      </Action>
-                    </Tooltip>
+                              <li
+                                tabIndex={0}
+                                onClick={() => deleteEntry(entry.id)}
+                                className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
+                              >
+                                <Trash size={20} />
+                                Löschen
+                              </li>
+                            </>
+                          )}
+                        </ul>
+                      ) : null}
+                    </div>
                   )}
                 </div>
               </EntryHeader>
@@ -253,11 +272,10 @@ export const Entry: React.FC<EntryProps> = ({
                   isExpanded={isExpanded}
                   setIsExpanded={() => setIsExpanded(!isExpanded)}
                   onAbort={() => {
-                    setIsEditing(false);
-                    setIsExpanded(false);
+                    setIsErrorVisible(true);
                   }}
-                  onSave={(text: string) => {
-                    updateEntry(text);
+                  onSave={(plainText: string, rawHtml: string) => {
+                    updateEntry(plainText, rawHtml);
                     setIsExpanded(false);
                   }}
                 />
@@ -285,8 +303,14 @@ export const Entry: React.FC<EntryProps> = ({
                 <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
               )}
               <NewEntry
-                parentRole={entry.role}
-                setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
+                roleForNewEntry={
+                  entry.role === UserRole.Plaintiff
+                    ? UserRole.Defendant
+                    : UserRole.Plaintiff
+                }
+                sectionId={entry.sectionId}
+                associatedEntry={entry.id}
+                setIsNewEntryVisible={setIsNewEntryVisible}
               />
             </div>
           )}
@@ -304,6 +328,36 @@ export const Entry: React.FC<EntryProps> = ({
           <EntryList entries={thread} />
         </div>
       )}
+      <ErrorPopup isVisible={isErrorVisible}>
+        <div className="flex flex-col items-center justify-center space-y-8">
+          <p className="text-center text-base">
+            Sind Sie sicher, dass Sie Ihre Änderungen verwerfen und somit{" "}
+            <strong>nicht</strong> speichern möchten?
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              bgColor="bg-lightGrey"
+              textColor="text-mediumGrey font-bold"
+              onClick={() => {
+                setIsErrorVisible(false);
+              }}
+            >
+              Abbrechen
+            </Button>
+            <Button
+              bgColor="bg-lightRed"
+              textColor="text-darkRed font-bold"
+              onClick={() => {
+                setIsErrorVisible(false);
+                setIsNewEntryVisible(false);
+                setIsEditing(false);
+              }}
+            >
+              Verwerfen
+            </Button>
+          </div>
+        </div>
+      </ErrorPopup>
     </>
   );
 };
