@@ -24,41 +24,40 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
   };
 
   return (
-    <>
-      {isNewEntryVisible ? (
+    <div className="space-y-4">
+      {isNewEntryVisible && (
         <NewEntry
           sectionId={sectionId}
           roleForNewEntry={newEntryRole}
           setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
         />
-      ) : (
-        <div className="grid grid-cols-2 gap-6 mb-8 items-start w-full">
-          <div>
-            {(user?.role === UserRole.Plaintiff ||
-              user?.role === UserRole.Judge) && (
-              <Button
-                size="sm"
-                onClick={() => handleClick(UserRole.Plaintiff)}
-                icon={<Plus size={18} weight="bold" />}
-              >
-                Beitrag hinzufügen
-              </Button>
-            )}
-          </div>
-          <div>
-            {(user?.role === UserRole.Defendant ||
-              user?.role === UserRole.Judge) && (
-              <Button
-                size="sm"
-                onClick={() => handleClick(UserRole.Defendant)}
-                icon={<Plus size={18} weight="bold" />}
-              >
-                Beitrag hinzufügen
-              </Button>
-            )}
-          </div>
-        </div>
       )}
-    </>
+      <div className="grid grid-cols-2 gap-6 mb-8 items-start w-full">
+        <div>
+          {(user?.role === UserRole.Plaintiff ||
+            user?.role === UserRole.Judge) && (
+            <Button
+              size="sm"
+              onClick={() => handleClick(UserRole.Plaintiff)}
+              icon={<Plus size={18} weight="bold" />}
+            >
+              Beitrag hinzufügen
+            </Button>
+          )}
+        </div>
+        <div>
+          {(user?.role === UserRole.Defendant ||
+            user?.role === UserRole.Judge) && (
+            <Button
+              size="sm"
+              onClick={() => handleClick(UserRole.Defendant)}
+              icon={<Plus size={18} weight="bold" />}
+            >
+              Beitrag hinzufügen
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };

@@ -35,13 +35,10 @@ export const Discussion = () => {
                 sectionId={getOriginalSortingPosition(sectionList, section.id)}
                 section={section}
               />
-              {sectionEntries === undefined ? (
+              <div className="space-y-4">
+                <EntryList entries={sectionEntries?.parent || []} />
                 <AddEntryButtons sectionId={section.id} />
-              ) : (
-                <div className="space-y-8">
-                  <EntryList entries={sectionEntries?.parent || []} />
-                </div>
-              )}
+              </div>
             </div>
           );
         })}
