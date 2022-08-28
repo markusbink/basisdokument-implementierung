@@ -29,7 +29,7 @@ export const Button: React.FC<ButtonProps> = ({
     <button
       onClick={onClick}
       className={cx(
-        `flex items-center
+        `flex items-center justify-center
         ${icon && gap} ${size} text-${size} ${bgColor} ${alternativePadding}
         ${textColor} ${disabled && "disabled"} rounded-lg`
       )}

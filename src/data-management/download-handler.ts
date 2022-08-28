@@ -1,5 +1,16 @@
 import { saveAs } from "file-saver";
-import { IBookmark, IEntry, IHighlightedEntry, IHighlighter, IHint, ILitigiousCheck, IMetaData, INote, ISection, IVersion } from "../types";
+import {
+  IBookmark,
+  IEntry,
+  IHighlightedEntry,
+  IHighlighter,
+  IHint,
+  ILitigiousCheck,
+  IMetaData,
+  INote,
+  ISection,
+  IVersion,
+} from "../types";
 
 function downloadObjectAsJSON(obj: object, fileName: string) {
   // Create a blob of the data
@@ -10,7 +21,6 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   // Save the file
   saveAs(fileToSave, fileName);
 }
-
 
 export function downloadBasisdokument(
   caseId: string,
@@ -27,13 +37,18 @@ export function downloadBasisdokument(
   basisdokumentObject["fileType"] = "basisdokument";
   basisdokumentObject["currentVersion"] = currentVersion;
   basisdokumentObject["versions"] = versionHistory;
-  basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1]["timestamp"] = new Date().toLocaleString("de-DE", {timeZone: "Europe/Berlin"});
+  basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1][
+    "timestamp"
+  ] = new Date() /*.toLocaleString("de-DE", {timeZone: "Europe/Berlin"})*/;
   basisdokumentObject["metaData"] = metaData;
   basisdokumentObject["entries"] = entries;
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
   basisdokumentObject["litigiousChecks"] = litigiousChecks;
-  downloadObjectAsJSON(basisdokumentObject, "basisdokument_version_" + currentVersion + "_case_" + currentVersion);
+  downloadObjectAsJSON(
+    basisdokumentObject,
+    "basisdokument_version_" + currentVersion + "_case_" + currentVersion
+  );
 }
 
 export function downloadEditFile(
@@ -54,5 +69,8 @@ export function downloadEditFile(
   editFileObject["notes"] = notes;
   editFileObject["bookmarks"] = bookmarks;
   editFileObject["individualSorting"] = individualSorting;
-  downloadObjectAsJSON(editFileObject, "bearbeitungsdatei_version_" + currentVersion + "_case_" + currentVersion);
+  downloadObjectAsJSON(
+    editFileObject,
+    "bearbeitungsdatei_version_" + currentVersion + "_case_" + currentVersion
+  );
 }
