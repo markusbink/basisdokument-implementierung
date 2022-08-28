@@ -1,5 +1,5 @@
 import cx from "classnames";
-import format from "date-fns/format";
+import { format } from "date-fns";
 import {
   ArrowBendLeftUp,
   BookmarkSimple,
@@ -42,6 +42,8 @@ export const Entry: React.FC<EntryProps> = ({
   const { versionHistory, showColumnView } = useHeaderContext();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
+  console.log(versionTimestamp);
+
   const thread = groupedEntries[entry.sectionId][entry.id];
 
   // State of current entry
