@@ -110,9 +110,34 @@ export const Entry: React.FC<EntryProps> = ({
     setIsBodyOpen(true);
   };
 
-  const deleteEntry = (entryId: string) => {
+  const deleteEntry = (
+    entryId: string,
+    entryCode: string,
+    sectionId: string
+  ) => {
     setEntries((prevEntries) =>
-      prevEntries.filter((entry) => entry.id !== entryId)
+      prevEntries
+        .filter((entry) => entry.id !== entryId)
+        .map((entry, index) => {
+          // Only update entries that were added in the current version and
+          // are contained withing the specified section
+          const isCurrentVersion = entry.version === currentVersion;
+          const isInSection = entry.sectionId === sectionId;
+
+          if (isCurrentVersion && isInSection) {
+            const newEntryCode = entry.entryCode.split("-");
+            if (
+              Number(newEntryCode[newEntryCode.length - 1]) >
+              Number(entryCode.split("-")[newEntryCode.length - 1])
+            ) {
+              newEntryCode[newEntryCode.length - 1] = String(
+                Number(newEntryCode[newEntryCode.length - 1]) - 1
+              );
+              entry.entryCode = newEntryCode.join("-");
+            }
+          }
+          return entry;
+        })
     );
   };
 
@@ -247,7 +272,13 @@ export const Entry: React.FC<EntryProps> = ({
                               </li>
                               <li
                                 tabIndex={0}
-                                onClick={() => deleteEntry(entry.id)}
+                                onClick={() =>
+                                  deleteEntry(
+                                    entry.id,
+                                    entry.entryCode,
+                                    entry.sectionId
+                                  )
+                                }
                                 className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
                               >
                                 <Trash size={20} />
