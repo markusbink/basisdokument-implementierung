@@ -142,7 +142,7 @@ export const Entry: React.FC<EntryProps> = ({
         id={entry.entryCode}
         className={cx("text-sm", {
           "opacity-50": isHidden,
-          "opacity-30 pointer-events-none":!lowerOpacityForSearch && searchbarValue !== "",
+          "opacity-30 pointer-events-none":!lowerOpacityForSearch && searchbarValue !== "" && !isEditing,
           "pointer-events-none": isHidden,
         })}
       >
