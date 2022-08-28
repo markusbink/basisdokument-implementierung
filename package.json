@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@funktechno/texthighlighter": "^2.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.0",
     "@radix-ui/react-dropdown-menu": "^1.0.0",
     "@radix-ui/react-select": "^1.0.0",
@@ -24,8 +25,8 @@
     "draftjs-to-html": "^0.9.1",
     "file-saver": "^2.0.5",
     "gh-pages": "^4.0.0",
-    "js-cookie": "^3.0.1",
     "highlight-react": "^0.1.13",
+    "js-cookie": "^3.0.1",
     "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.0",
