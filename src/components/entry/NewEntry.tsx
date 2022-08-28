@@ -31,15 +31,13 @@ export const NewEntry: React.FC<NewEntryProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
-  const isPlaintiff = roleForNewEntry === UserRole.Plaintiff;
   const { user } = useUser();
-  const { currentVersion, setEntries } = useCase();
+  const { currentVersion, entries, setEntries } = useCase();
   const { sectionList } = useSection();
-  const { groupedEntries } = useCase();
 
+  const isPlaintiff = roleForNewEntry === UserRole.Plaintiff;
   const entryCodePrefix = isPlaintiff ? "K" : "B";
   const sectionNumber = getOriginalSortingPosition(sectionList, sectionId);
-  const sectionEntries = groupedEntries[sectionId];
 
   const createEntry = (plainText: string, rawHtml: string) => {
     if (plainText.length === 0) {
@@ -47,9 +45,8 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       return;
     }
 
-    const newEntryCount = sectionEntries
-      ? Object.keys(sectionEntries).length + 1
-      : 1;
+    const newEntryCount =
+      entries.filter((entry) => entry.sectionId === sectionId).length + 1;
 
     const entry: IEntry = {
       id: uuidv4(),

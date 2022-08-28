@@ -42,8 +42,6 @@ export const Entry: React.FC<EntryProps> = ({
   const { versionHistory, showColumnView } = useHeaderContext();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
-  console.log(versionTimestamp);
-
   const thread = groupedEntries[entry.sectionId][entry.id];
 
   // State of current entry
