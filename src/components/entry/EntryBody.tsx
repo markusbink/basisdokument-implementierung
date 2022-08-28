@@ -14,12 +14,14 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   const { searchbarValue } = useHeaderContext();
 
   useEffect(() => {
-    let highlightedTextElement: any = document.querySelector(`.search-text-${entryId}`);
-    let numberOfMarksInEntry: any = highlightedTextElement.querySelectorAll("mark").length;
-    if (numberOfMarksInEntry > 0) {
-      setLowerOpcacityForSearch(true);
-    } else {
-      setLowerOpcacityForSearch(false);
+    let highlightedTextElement: Element | null = document.querySelector(`.search-text-${entryId}`);
+    if (highlightedTextElement !== null) {
+      let numberOfMarksInEntry: number = highlightedTextElement?.querySelectorAll("mark").length;
+      if (numberOfMarksInEntry > 0) {
+        setLowerOpcacityForSearch(true);
+      } else {
+        setLowerOpcacityForSearch(false);
+      }
     }
   }, [searchbarValue, entryId, setLowerOpcacityForSearch]);
 
@@ -30,7 +32,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
         "border-lightPetrol": !isPlaintiff,
       })}
     >
-      {searchbarValue === "" ? <p dangerouslySetInnerHTML={{ __html: children as string }}></p> : <Highlight search={searchbarValue}>{children}</Highlight>}
+      {searchbarValue === "" ? <p dangerouslySetInnerHTML={{ __html: children as string }}></p> : <Highlight search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>{children}</Highlight>}
     </div>
   );
 };
