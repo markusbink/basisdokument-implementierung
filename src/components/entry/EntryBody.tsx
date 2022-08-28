@@ -12,7 +12,7 @@ interface EntryBodyProps {
 }
 
 export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setLowerOpcacityForSearch, children }) => {
-  const { searchbarValue, currentColorSelection } = useHeaderContext();
+  const { searchbarValue, currentColorSelection, getCurrentTool } = useHeaderContext();
 
   useEffect(() => {
     let highlightedTextElement: Element | null = document.querySelector(`.search-text-${entryId}`);
@@ -27,6 +27,9 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   }, [searchbarValue, entryId, setLowerOpcacityForSearch]);
 
   const getCurrentHighlighterColorAsHTMLString = () => {
+    if (getCurrentTool.id === "eraser") {
+      return "#ffffff"
+    }
     switch (currentColorSelection.color) {
       case "red":
         return "#FCA5A5";
@@ -50,7 +53,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
 
 
     const options: optionsImpl = { color: getCurrentHighlighterColorAsHTMLString() };
-    if (domEle) {
+    if (domEle && (getCurrentTool.id === "highlighter" || getCurrentTool.id === "eraser")) {
       const highlightMade = doHighlight(domEle, true, options);
       console.log("highlightMade", highlightMade);
     }
