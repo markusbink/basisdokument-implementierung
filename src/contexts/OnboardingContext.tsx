@@ -12,7 +12,7 @@ interface OnboardingProviderProps {
 }
 
 export const OnboardingProvider: React.FC<OnboardingProviderProps> = ({ children }) => {
-  const [onboardingIsVisible, setOnboardingIsVisible] = useState<boolean>(true);
+  const [onboardingIsVisible, setOnboardingIsVisible] = useState<boolean>(false);
 
   return (
     <OnboardingContext.Provider

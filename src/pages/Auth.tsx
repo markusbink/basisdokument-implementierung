@@ -9,6 +9,8 @@ import { createBasisdokument, createEditFile } from "../data-management/creation
 import { jsonToObject, openBasisdokument, openEditFile, updateSortingsIfVersionIsDifferent } from "../data-management/opening-handler";
 import { IStateUserInput, IUser, UsageMode, UserRole } from "../types";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
+import { useOnboarding } from "../contexts/OnboardingContext";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -36,6 +38,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setHints } = useHints();
   const { setBookmarks } = useBookmarks();
   const { setUser } = useUser();
+  const { onboardingIsVisible, setOnboardingIsVisible } = useOnboarding();
 
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -75,6 +78,13 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         setEditFile(result);
       };
     } catch (error) {}
+  };
+
+  const checkOnboardingShownBefore = () => {
+    if (Cookies.get("onboarding") === undefined) {
+      Cookies.set("onboarding", "true");
+      setOnboardingIsVisible(true);
+    }
   };
 
   const validateUserInput = () => {
@@ -153,7 +163,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       setUser(user);
       setContextFromBasisdokument(basisdokumentObject);
       setContextFromEditFile(editFileObject);
-
+      checkOnboardingShownBefore();
       setIsAuthenticated(true);
     }
   };
