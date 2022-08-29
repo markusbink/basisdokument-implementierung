@@ -42,20 +42,64 @@ export const SectionControls: React.FC<SectionControlsProps> = ({
   const { currentVersion } = useCase();
   const { selectedSorting } = useHeaderContext();
 
-  const isMoveable = version === currentVersion;
+  const isCurrentVersion = version === currentVersion;
   const canMoveUp =
     position > 0 &&
     (isPreviousSectionMovable(sectionList, position, currentVersion) ||
       selectedSorting === Sorting.Privat);
   const canMoveDown = position < sectionList.length - 1;
 
+  const moveSection = <T,>(direction: Direction, sectionList: T[]) => {
+    const moveBy = direction === Direction.Up ? -1 : 1;
+
+    const newSectionList = [...sectionList];
+    [newSectionList[position + moveBy], newSectionList[position]] = [
+      newSectionList[position],
+      newSectionList[position + moveBy],
+    ];
+    return newSectionList;
+  };
+
   const handleMoveSection = (direction: Direction) => {
-    if (!canMoveUp || !canMoveDown) {
+    if (
+      (!canMoveUp && direction === Direction.Up) ||
+      (!canMoveDown && direction === Direction.Down)
+    ) {
       return;
+    }
+
+    switch (direction) {
+      case Direction.Up:
+        if (selectedSorting === Sorting.Original) {
+          setSectionList((prevSectionList) =>
+            moveSection(direction, prevSectionList)
+          );
+        } else {
+          setIndividualSorting((prevSorting) =>
+            moveSection(direction, prevSorting)
+          );
+        }
+        break;
+      case Direction.Down:
+        if (selectedSorting === Sorting.Original) {
+          setSectionList((prevSectionList) =>
+            moveSection(direction, prevSectionList)
+          );
+        } else {
+          setIndividualSorting((prevSorting) =>
+            moveSection(direction, prevSorting)
+          );
+        }
+        break;
+      default:
+        throw new Error(
+          `Unsupported direction used. Only ${Sorting.Original} and ${Sorting.Privat} are available.`
+        );
     }
   };
 
-  if (!isMoveable && selectedSorting === Sorting.Original) {
+  // Hide Controls for older sections that are in the original sorting
+  if (!isCurrentVersion && selectedSorting === Sorting.Original) {
     return null;
   }
 
