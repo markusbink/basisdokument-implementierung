@@ -16,9 +16,9 @@ export const getColorHexForColor = (colorId: string): any => {
     case "yellow":
       return colorHexCodes.yellow;
     case "green":
-      return colorHexCodes.blue;
+      return colorHexCodes.green;
     case "blue":
-      return colorHexCodes.red;
+      return colorHexCodes.blue;
     case "purple":
       return colorHexCodes.purple;
     default:
