@@ -10,9 +10,11 @@ interface EntryBodyProps {
   entryId: string;
   children: React.ReactNode;
   setLowerOpcacityForSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  lowerOpcacityForHighlighters: boolean;
+  setLowerOpcacityForHighlighters: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setLowerOpcacityForSearch, children }) => {
+export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setLowerOpcacityForSearch, lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters, children }) => {
   const { searchbarValue, currentColorSelection, getCurrentTool, highlighterData } = useHeaderContext();
   const { setHighlightedEntries, highlightedEntries } = useCase();
 
@@ -28,11 +30,8 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     }
   }, [searchbarValue, entryId, setLowerOpcacityForSearch]);
 
-  const getCurrentHighlighterColorAsHTMLString = () => {
-    if (getCurrentTool.id === "eraser") {
-      return "#ffffff";
-    }
-    switch (currentColorSelection.color) {
+  const getColorHexForColor = (colorId: string) => {
+    switch (colorId) {
       case "red":
         return "#FCA5A5";
       case "orange":
@@ -48,6 +47,13 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
       default:
         break;
     }
+  };
+
+  const getCurrentHighlighterColorAsHTMLString = () => {
+    if (getCurrentTool.id === "eraser") {
+      return "#ffffff";
+    }
+    return getColorHexForColor(currentColorSelection.color);
   };
 
   function markedEntryExists(entryId: string) {
@@ -111,35 +117,13 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     return div;
   };
 
-  const getColorHexForColor = (colorId: string) => {
-    switch (colorId) {
-      case "red":
-        return "#FCA5A5";
-      case "orange":
-        return "#FDBA74";
-      case "yellow":
-        return "#FDE047";
-      case "green":
-        return "#86EFAC";
-      case "blue":
-        return "#93C5FD";
-      case "purple":
-        return "#D8B4FE";
-      default:
-        break;
-    }
-  };
-
   const applyHighlighterFiltersToEntry = (entryText: string) => {
-    console.log(entryText);
-    
     let htmlElementOfEntryText: any = createElementFromHTML(entryText);
-    console.log(htmlElementOfEntryText);
 
     // hide specific colors
     Object.keys(highlighterData).forEach(function eachKey(key) {
       let colorId: string = key;
-      let isSelectedColor: string = highlighterData[key];
+      let isSelectedColor: boolean = highlighterData[key];
       let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
       for (let index = 0; index < allHighlightings.length; index++) {
         const highlighting = allHighlightings[index];
@@ -151,7 +135,31 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
       }
     });
 
-    // ausblenden der beiträge ohne spezielle farbe
+    let allSelectedColorsUsedInEntry: boolean = true;
+    Object.keys(highlighterData).forEach(function eachKey(key) {
+      let colorId: string = key;
+      let isSelectedColor: boolean = highlighterData[key];
+      // wir müssen bei jeder Farbe schauen, ob diese auch vorkommt. ist dies bei einer farbe nicht der fall, -> false
+
+      if (isSelectedColor) {
+        let colorIsUsedInEntry: boolean = false;
+        let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
+        if (allHighlightings.length > 1) {
+          colorIsUsedInEntry = true;
+        }
+        if (!colorIsUsedInEntry) {
+          allSelectedColorsUsedInEntry = false;
+        }
+      }
+    });
+
+    // Prevent infinite re-render
+    if (allSelectedColorsUsedInEntry && lowerOpcacityForHighlighters !== true) {
+      setLowerOpcacityForHighlighters(true);
+    }
+    if (!allSelectedColorsUsedInEntry && lowerOpcacityForHighlighters !== false) {
+      setLowerOpcacityForHighlighters(false);
+    }
 
     return htmlElementOfEntryText.innerHTML;
   };

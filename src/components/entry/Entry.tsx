@@ -57,6 +57,7 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const [authorName, setAuthorName] = useState<string>(entry.author);
   const [lowerOpacityForSearch, setLowerOpcacityForSearch] = useState<boolean>(false);
+  const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] = useState<boolean>(false);
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -330,7 +331,7 @@ export const Entry: React.FC<EntryProps> = ({
               </EntryHeader>
               {/* Body */}
               {isBodyOpen && !isEditing && (
-                <EntryBody isPlaintiff={isPlaintiff} setLowerOpcacityForSearch={setLowerOpcacityForSearch} entryId={entry.id}>{entry.text}</EntryBody>
+                <EntryBody isPlaintiff={isPlaintiff} setLowerOpcacityForSearch={setLowerOpcacityForSearch} setLowerOpcacityForHighlighters={setLowerOpcacityForHighlighters} lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}  entryId={entry.id}>{entry.text}</EntryBody>
               )}
               {isBodyOpen && isEditing && (
                 <EntryForm
