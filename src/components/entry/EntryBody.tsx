@@ -47,6 +47,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     Object.keys(highlighterData).forEach(function eachKey(key) {
       let colorId: string = key;
       let isSelectedColor: boolean = highlighterData[key];
+
       if (isSelectedColor) {
         hideAllEntries = false;
         let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
@@ -61,8 +62,6 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
       setLowerOpcacityForHighlighters(!oneColorIsUsed);
     }
   }, [highlighterData, setLowerOpcacityForHighlighters, getCurrentTool, getEntryContent]);
-
- 
 
   const getCurrentHighlighterColorAsHTMLString = () => {
     if (getCurrentTool.id === Tool.Eraser) {
@@ -132,6 +131,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
       let colorId: string = key;
       let isSelectedColor: boolean = highlighterData[key];
       let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
+
       for (let index = 0; index < allHighlightings.length; index++) {
         const highlighting = allHighlightings[index];
         if (isSelectedColor) {
