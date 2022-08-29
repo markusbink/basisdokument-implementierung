@@ -1,10 +1,12 @@
-import { AddSection } from "./AddSection";
+import { User } from "phosphor-react";
 import { useCase, useHeaderContext, useSection } from "../contexts";
-import { ISection, Sorting } from "../types";
-import { AddEntryButtons } from "./AddEntryButtons";
-import { EntryList } from "./entry";
-import { SectionHeader } from "./section-header/SectionHeader";
+import { ISection, Sorting, UserRole } from "../types";
 import { getOriginalSortingPosition } from "../util/get-original-sorting-position";
+import { AddEntryButtons } from "./AddEntryButtons";
+import { AddSection } from "./AddSection";
+import { EntryList } from "./entry";
+import { MetaData } from "./metadata/MetaData";
+import { SectionHeader } from "./section-header/SectionHeader";
 
 export const Discussion = () => {
   const { groupedEntries } = useCase();
@@ -27,7 +29,11 @@ export const Discussion = () => {
   return (
     <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4 scroll-smooth">
       <div className="max-w-[1200px] m-auto">
-        {getRequestedSorting(sectionList).map((section, index) => {
+        <div className="grid grid-cols-2 gap-6 mb-16">
+          <MetaData owner={UserRole.Plaintiff} />
+          <MetaData owner={UserRole.Defendant} />
+        </div>
+        {getRequestedSorting(sectionList).map((section) => {
           const sectionEntries = groupedEntries[section.id];
           return (
             <div key={section.id}>

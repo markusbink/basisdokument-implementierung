@@ -8,9 +8,10 @@ import {
   Scales,
   Trash,
 } from "phosphor-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
+import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
@@ -54,23 +55,9 @@ export const Entry: React.FC<EntryProps> = ({
     (viewedBy === UserRole.Plaintiff && entry.role === "Kläger") ||
     (viewedBy === UserRole.Defendant && entry.role === "Beklagter");
   const canAddEntry = isJudge || !isOwnEntry;
+  const menuRef = useRef(null);
 
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", closeMenu);
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeMenu();
-      }
-    });
-
-    return () => {
-      document.removeEventListener("click", closeMenu);
-    };
-  }, [isMenuOpen]);
+  useOutsideClick(menuRef, () => setIsMenuOpen(false));
 
   const toggleBody = (e: React.MouseEvent) => {
     if (isMenuOpen) {
@@ -204,7 +191,10 @@ export const Entry: React.FC<EntryProps> = ({
                       >
                         <DotsThree size={20} />
                         {isMenuOpen ? (
-                          <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+                          <ul
+                            ref={menuRef}
+                            className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50"
+                          >
                             {isJudge && (
                               <li
                                 tabIndex={0}
