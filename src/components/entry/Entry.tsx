@@ -264,7 +264,7 @@ export const Entry: React.FC<EntryProps> = ({
                     </Action>
                   </Tooltip>
                   {(isJudge || (entry.role === viewedBy && !isOld)) && (
-                    <div className="flex relative">
+                    <div className="flex relative space-y-2">
                       <Tooltip text="Mehr Optionen">
                         <Action
                           className={cx({
