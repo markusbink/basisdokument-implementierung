@@ -6,7 +6,7 @@ import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
-import { IEntry, UserRole } from "../../types";
+import { IEntry, Tool, UserRole } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
@@ -148,7 +148,7 @@ export const Entry: React.FC<EntryProps> = ({ entry, viewedBy, isBookmarked = fa
         className={cx("text-sm", {
           "opacity-50": isHidden,
           "opacity-30 pointer-events-none":
-            (!lowerOpacityForSearch && searchbarValue !== "" && !isEditing) || (searchbarValue === "" && lowerOpcacityForHighlighters && hideEntriesHighlighter && getCurrentTool.id === "cursor"),
+            (!lowerOpacityForSearch && searchbarValue !== "" && !isEditing) || (searchbarValue === "" && lowerOpcacityForHighlighters && hideEntriesHighlighter && getCurrentTool.id === Tool.Cursor),
           "pointer-events-none": isHidden,
         })}
       >

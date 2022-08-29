@@ -5,6 +5,7 @@ import { SortingSelector } from "./SortingSelector";
 import { SortingMenu } from "./SortingMenu";
 import { VersionSelector } from "./VersionSelector";
 import { useHeaderContext } from "../../contexts";
+import { Tool } from "../../types";
 
 export enum Sorting {
   Privat,
@@ -66,7 +67,7 @@ export const DropdownHeader: React.FC<any> = () => {
         <span className="font-extrabold tracking-widest text-xs">MARKIERUNGEN</span>
         <div
           className={cx(`flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`, {
-            "opacity-30 pointer-events-none": (getCurrentTool.id === "highlighter" || getCurrentTool.id === "eraser"),
+            "opacity-30 pointer-events-none": (getCurrentTool.id === Tool.Highlighter || getCurrentTool.id === Tool.Eraser),
           })}
         >
           <div className="flex flex-row gap-2">

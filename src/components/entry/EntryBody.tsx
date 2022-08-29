@@ -3,7 +3,7 @@ import Highlight from "highlight-react/dist/highlight";
 import { useCallback, useEffect } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
 import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib/index";
-import { IHighlightedEntry } from "../../types";
+import { IHighlightedEntry, Tool } from "../../types";
 import { getColorHexForColor } from "../../util/get-hex-code-for-marker";
 
 interface EntryBodyProps {
@@ -65,7 +65,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
  
 
   const getCurrentHighlighterColorAsHTMLString = () => {
-    if (getCurrentTool.id === "eraser") {
+    if (getCurrentTool.id === Tool.Eraser) {
       return "#ffffff";
     }
     return getColorHexForColor(currentColorSelection.color);
@@ -99,7 +99,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     const domEle: any = document.querySelector(`.marker-text-${entryId}`);
     const options: optionsImpl = { color: getCurrentHighlighterColorAsHTMLString() };
 
-    if (domEle && (getCurrentTool.id === "highlighter" || getCurrentTool.id === "eraser")) {
+    if (domEle && (getCurrentTool.id === Tool.Highlighter || getCurrentTool.id === Tool.Eraser)) {
       const highlightMade = doHighlight(domEle, true, options);
       if (highlightMade) {
         saveNewHighlighting();
@@ -109,9 +109,9 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
 
   const getToolIconPath = () => {
     switch (getCurrentTool.id) {
-      case "highlighter":
+      case Tool.Highlighter:
         return `url(cursors/highlighter-${currentColorSelection.color}.svg), auto`;
-      case "eraser":
+      case Tool.Eraser:
         return `url(cursors/eraser.svg), auto`;
       default:
         return "";
@@ -153,10 +153,10 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
       })}
     >
       {/* eslint-disable-next-line */}
-      {searchbarValue === "" && (getCurrentTool.id === "highlighter" || getCurrentTool.id === "eraser") ? (
+      {searchbarValue === "" && (getCurrentTool.id === Tool.Highlighter || getCurrentTool.id === Tool.Eraser) ? (
         <p style={{ cursor: getToolIconPath() }} className={cx(`marker-text-${entryId}`)} onMouseUp={createHighlighting} dangerouslySetInnerHTML={{ __html: getEntryContent() as string }}></p>
       ) : null}
-      {searchbarValue === "" && getCurrentTool.id === "cursor" ? <p dangerouslySetInnerHTML={{ __html: applyHighlighterFiltersToEntry(getEntryContent() as string) }}></p> : null}
+      {searchbarValue === "" && getCurrentTool.id === Tool.Cursor ? <p dangerouslySetInnerHTML={{ __html: applyHighlighterFiltersToEntry(getEntryContent() as string) }}></p> : null}
       {searchbarValue !== "" ? (
         <Highlight search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>{children}</Highlight> // eslint-disable-line
       ) : null}
