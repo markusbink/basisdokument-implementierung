@@ -139,7 +139,7 @@ export const Entry: React.FC<EntryProps> = ({
 
   const updateEntry = (plainText: string, rawHtml: string) => {
     if (plainText.length === 0) {
-      toast("Bitte geben sie einen Text ein.", { type: "error" });
+      toast("Bitte geben Sie einen Text ein.", { type: "error" });
       return;
     }
 
