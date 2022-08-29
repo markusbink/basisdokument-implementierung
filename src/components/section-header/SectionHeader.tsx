@@ -30,7 +30,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         })}
       >
         <div className="flex gap-4 items-center">
-          <SectionControls position={position} />
+          <SectionControls position={position} version={section.version} />
           <div className="bg-darkGrey w-10 h-10 rounded-lg rotate-45 flex items-center justify-center">
             <span className="text-white font-bold -rotate-45">{sectionId}</span>
           </div>

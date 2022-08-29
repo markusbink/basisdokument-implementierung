@@ -1,14 +1,9 @@
 import { createContext, useContext, useState } from "react";
-import { IHighlighter, ISection, IVersion, Tool } from "../types";
+import { IHighlighter, ISection, IVersion, Sorting, Tool } from "../types";
 
 // Define Interfaces
 interface HeaderProviderProps {
   children: React.ReactNode;
-}
-
-enum Sorting {
-  Privat,
-  Original,
 }
 
 export default interface IHeaderContext {
@@ -98,7 +93,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const [selectedVersion, setSelectedVersion] =
     useState<IHeaderContext["selectedVersion"]>(0);
   const [sectionListHeader, setSectionListHeader] = useState<ISection[]>([]);
-
 
   return (
     <HeaderContext.Provider

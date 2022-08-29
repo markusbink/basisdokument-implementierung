@@ -1,6 +1,7 @@
 import { CaretDown, CaretUp } from "phosphor-react";
-import { useSection } from "../../contexts";
+import { useCase, useHeaderContext, useSection } from "../../contexts";
 import cx from "classnames";
+import { ISection, Sorting } from "../../types";
 
 const enum Direction {
   Up = "up",
@@ -22,17 +23,40 @@ const moveSectionButtons = [
 
 interface SectionControlsProps {
   position: number;
+  version: number;
 }
+
+const isPreviousSectionMovable = (
+  sectionList: ISection[],
+  clickedPosition: number,
+  currentVersion: number
+) => {
+  return sectionList[clickedPosition - 1]?.version === currentVersion;
+};
 
 export const SectionControls: React.FC<SectionControlsProps> = ({
   position,
+  version,
 }) => {
-  const { sectionList } = useSection();
+  const { sectionList, setSectionList, setIndividualSorting } = useSection();
+  const { currentVersion } = useCase();
+  const { selectedSorting } = useHeaderContext();
+
+  const isMoveable = version === currentVersion;
+  const canMoveUp =
+    position > 0 &&
+    isPreviousSectionMovable(sectionList, position, currentVersion);
   const canMoveDown = position < sectionList.length - 1;
-  const canMoveUp = position > 0;
+
   const handleMoveSection = (direction: Direction) => {
-    console.log({ direction, position });
+    if (!canMoveUp || !canMoveDown) {
+      return;
+    }
   };
+
+  if (!isMoveable && selectedSorting === Sorting.Original) {
+    return null;
+  }
 
   return (
     <div className="flex gap-1 flex-col">
