@@ -30,8 +30,6 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
   const isJudge = user?.role === UserRole.Judge;
   const content = isPlaintiff ? metaData?.plaintiff : metaData?.defendant;
 
-  console.log("MetaData", metaData);
-
   const toggleMenu = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
@@ -137,7 +135,6 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
         >
           {isEditing ? (
             <MetaDataForm
-              isPlaintiff={isPlaintiff}
               defaultContent={content}
               onAbort={(plainText, rawHtml) => {
                 setIsEditErrorVisible(true);

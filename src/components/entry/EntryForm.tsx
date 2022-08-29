@@ -15,7 +15,7 @@ import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
 
 const toolbarOptions = {
-  options: ["inline", "list"],
+  options: ["inline", "list", "textAlign"],
   inline: {
     className: ["!mb-0"],
     options: ["bold", "italic", "underline", "strikethrough"],
@@ -23,6 +23,10 @@ const toolbarOptions = {
   list: {
     className: ["!mb-0"],
     options: ["unordered", "ordered"],
+  },
+  textAlign: {
+    className: ["!mb-0"],
+    options: ["left", "center", "right", "justify"],
   },
 };
 

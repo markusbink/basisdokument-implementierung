@@ -12,7 +12,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { Button } from "../Button";
 
 const toolbarOptions = {
-  options: ["inline", "list"],
+  options: ["inline", "list", "textAlign"],
   inline: {
     className: ["!mb-0"],
     options: ["bold", "italic", "underline", "strikethrough"],
@@ -21,17 +21,19 @@ const toolbarOptions = {
     className: ["!mb-0"],
     options: ["unordered", "ordered"],
   },
+  textAlign: {
+    className: ["!mb-0"],
+    options: ["left", "center", "right", "justify"],
+  },
 };
 
 interface MetaDataFormProps {
-  isPlaintiff: boolean;
   onAbort: (plainText: string, rawHtml: string) => void;
   onSave: (plainText: string, rawHtml: string) => void;
   defaultContent?: string;
 }
 
 export const MetaDataForm: React.FC<MetaDataFormProps> = ({
-  isPlaintiff,
   onAbort,
   onSave,
   defaultContent,

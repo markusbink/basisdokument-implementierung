@@ -154,6 +154,22 @@ body {
   @apply p-2 rounded border-none hover:bg-offWhite;
 }
 
+.rdw-left-aligned-block > div {
+  @apply text-left;
+}
+
+.rdw-center-aligned-block > div {
+  @apply text-center;
+}
+
+.rdw-right-aligned-block > div {
+  @apply text-right;
+}
+
+.rdw-justify-aligned-block > div {
+  @apply text-justify;
+}
+
 /* SwiperJS Pagination Dots */
 .swiper-pagination-bullet {
   @apply bg-mediumGrey;
