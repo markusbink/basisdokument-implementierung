@@ -30,6 +30,32 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     }
   }, [searchbarValue, entryId, setLowerOpcacityForSearch]);
 
+  useEffect(() => {
+    let htmlElementOfEntryText: any = createElementFromHTML(getEntryContent() as string);
+    let allSelectedColorsUsedInEntry: boolean = true;
+    Object.keys(highlighterData).forEach(function eachKey(key) {
+      let colorId: string = key;
+      let isSelectedColor: boolean = highlighterData[key];
+      // wir müssen bei jeder Farbe schauen, ob diese auch vorkommt. ist dies bei einer farbe nicht der fall, -> false
+
+      if (isSelectedColor) {
+        let colorIsUsedInEntry: boolean = false;
+        let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
+        if (allHighlightings.length > 0) {
+          colorIsUsedInEntry = true;
+        } else {
+          colorIsUsedInEntry = false;
+        }
+        if (!colorIsUsedInEntry) {
+          allSelectedColorsUsedInEntry = false;
+        }
+      }
+    });
+    console.log(allSelectedColorsUsedInEntry);
+    setLowerOpcacityForHighlighters(allSelectedColorsUsedInEntry);
+    // eslint-disable-next-line
+  }, [highlighterData, setLowerOpcacityForHighlighters, getCurrentTool]);
+
   const getColorHexForColor = (colorId: string) => {
     switch (colorId) {
       case "red":
@@ -134,32 +160,6 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
         }
       }
     });
-
-    let allSelectedColorsUsedInEntry: boolean = true;
-    Object.keys(highlighterData).forEach(function eachKey(key) {
-      let colorId: string = key;
-      let isSelectedColor: boolean = highlighterData[key];
-      // wir müssen bei jeder Farbe schauen, ob diese auch vorkommt. ist dies bei einer farbe nicht der fall, -> false
-
-      if (isSelectedColor) {
-        let colorIsUsedInEntry: boolean = false;
-        let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
-        if (allHighlightings.length > 1) {
-          colorIsUsedInEntry = true;
-        }
-        if (!colorIsUsedInEntry) {
-          allSelectedColorsUsedInEntry = false;
-        }
-      }
-    });
-
-    // Prevent infinite re-render
-    if (allSelectedColorsUsedInEntry && lowerOpcacityForHighlighters !== true) {
-      setLowerOpcacityForHighlighters(true);
-    }
-    if (!allSelectedColorsUsedInEntry && lowerOpcacityForHighlighters !== false) {
-      setLowerOpcacityForHighlighters(false);
-    }
 
     return htmlElementOfEntryText.innerHTML;
   };
