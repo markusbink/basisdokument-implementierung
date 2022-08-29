@@ -44,6 +44,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
 
   const editMetaData = () => {
     setIsEditing(!isEditing);
+    setIsBodyOpen(true);
     setIsMenuOpen(false);
   };
 
@@ -139,7 +140,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
               isPlaintiff={isPlaintiff}
               defaultContent={content}
               onAbort={(plainText, rawHtml) => {
-                setIsEditing(false);
+                setIsEditErrorVisible(true);
               }}
               onSave={(plainText, rawHtml) => {
                 updateMetaData(plainText, rawHtml);
