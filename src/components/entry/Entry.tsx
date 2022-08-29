@@ -9,11 +9,12 @@ import {
   Scales,
   Trash,
 } from "phosphor-react";
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
+import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEntry, UserRole } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -56,7 +57,8 @@ export const Entry: React.FC<EntryProps> = ({
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
   const [authorName, setAuthorName] = useState<string>(entry.author);
-  const [lowerOpacityForSearch, setLowerOpcacityForSearch] = useState<boolean>(false);
+  const [lowerOpacityForSearch, setLowerOpcacityForSearch] =
+    useState<boolean>(false);
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -64,23 +66,9 @@ export const Entry: React.FC<EntryProps> = ({
     (viewedBy === UserRole.Plaintiff && entry.role === "Kläger") ||
     (viewedBy === UserRole.Defendant && entry.role === "Beklagter");
   const canAddEntry = isJudge || !isOwnEntry;
+  const menuRef = useRef(null);
 
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", closeMenu);
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeMenu();
-      }
-    });
-
-    return () => {
-      document.removeEventListener("click", closeMenu);
-    };
-  }, [isMenuOpen]);
+  useOutsideClick(menuRef, () => setIsMenuOpen(false));
 
   const toggleBody = () => {
     if (isMenuOpen) {
@@ -151,7 +139,7 @@ export const Entry: React.FC<EntryProps> = ({
 
   const updateEntry = (plainText: string, rawHtml: string) => {
     if (plainText.length === 0) {
-      toast("Bitte geben sie einen Text ein.", { type: "error" });
+      toast("Bitte geben Sie einen Text ein.", { type: "error" });
       return;
     }
 
@@ -175,7 +163,8 @@ export const Entry: React.FC<EntryProps> = ({
         id={entry.entryCode}
         className={cx("text-sm", {
           "opacity-50": isHidden,
-          "opacity-30 pointer-events-none":!lowerOpacityForSearch && searchbarValue !== "" && !isEditing,
+          "opacity-30 pointer-events-none":
+            !lowerOpacityForSearch && searchbarValue !== "" && !isEditing,
           "pointer-events-none": isHidden,
         })}
       >
@@ -205,7 +194,7 @@ export const Entry: React.FC<EntryProps> = ({
               )}
               <EntryHeader
                 isPlaintiff={isPlaintiff}
-                isBodyOpen={!isEditing && isBodyOpen}
+                isBodyOpen={isBodyOpen}
                 toggleBody={toggleBody}
               >
                 <div className="overflow-auto max-w-[350px] whitespace-nowrap">
@@ -275,7 +264,7 @@ export const Entry: React.FC<EntryProps> = ({
                     </Action>
                   </Tooltip>
                   {(isJudge || (entry.role === viewedBy && !isOld)) && (
-                    <div className="flex relative">
+                    <div className="flex relative space-y-2">
                       <Tooltip text="Mehr Optionen">
                         <Action
                           className={cx({
@@ -291,7 +280,10 @@ export const Entry: React.FC<EntryProps> = ({
                         </Action>
                       </Tooltip>
                       {isMenuOpen ? (
-                        <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+                        <ul
+                          ref={menuRef}
+                          className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50"
+                        >
                           {isJudge && (
                             <li
                               tabIndex={0}
@@ -330,7 +322,13 @@ export const Entry: React.FC<EntryProps> = ({
               </EntryHeader>
               {/* Body */}
               {isBodyOpen && !isEditing && (
-                <EntryBody isPlaintiff={isPlaintiff} setLowerOpcacityForSearch={setLowerOpcacityForSearch} entryId={entry.id}>{entry.text}</EntryBody>
+                <EntryBody
+                  isPlaintiff={isPlaintiff}
+                  setLowerOpcacityForSearch={setLowerOpcacityForSearch}
+                  entryId={entry.id}
+                >
+                  {entry.text}
+                </EntryBody>
               )}
               {isBodyOpen && isEditing && (
                 <EntryForm

@@ -17,8 +17,8 @@ import { useSection } from "./SectionContext";
 interface ICaseContext {
   caseId: string;
   setCaseId: Dispatch<SetStateAction<string>>;
-  metaData: IMetaData | null;
-  setMetaData: Dispatch<SetStateAction<IMetaData | null>>;
+  metaData: IMetaData;
+  setMetaData: Dispatch<SetStateAction<IMetaData>>;
   litigiousChecks: ILitigiousCheck[];
   setLitigiousChecks: Dispatch<SetStateAction<ILitigiousCheck[]>>;
   entries: IEntry[];
@@ -60,7 +60,10 @@ const groupEntriesBySectionAndParent = (entries: IEntry[]) => {
 export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
   const [entries, setEntries] = useState<IEntry[]>([]);
   const [caseId, setCaseId] = useState<string>("");
-  const [metaData, setMetaData] = useState<IMetaData | null>(null);
+  const [metaData, setMetaData] = useState<IMetaData>({
+    plaintiff: "",
+    defendant: "",
+  });
   const [litigiousChecks, setLitigiousChecks] = useState<ILitigiousCheck[]>([]);
   const [highlightedEntries, setHighlightedEntries] = useState<
     IHighlightedEntry[]

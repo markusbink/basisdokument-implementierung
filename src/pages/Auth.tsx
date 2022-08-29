@@ -239,7 +239,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setEntries(basisdokument.entries);
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
-    setMetaData(basisdokument.metadata);
+    setMetaData(basisdokument.metaData);
     setLitigiousChecks(basisdokument.litigiousChecks);
     setCurrentVersion(basisdokument.currentVersion);
     setCaseIdContext(basisdokument.caseId);

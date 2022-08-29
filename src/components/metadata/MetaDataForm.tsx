@@ -6,13 +6,10 @@ import {
   EditorState,
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
-import { useEffect, useRef, useState } from "react";
+import { FloppyDisk, X } from "phosphor-react";
+import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { useCase, useHeaderContext } from "../../contexts";
 import { Button } from "../Button";
-import { Tooltip } from "../Tooltip";
-import { Action } from "./Action";
 
 const toolbarOptions = {
   options: ["inline", "list", "textAlign"],
@@ -30,19 +27,13 @@ const toolbarOptions = {
   },
 };
 
-interface EntryBodyProps {
-  isPlaintiff: boolean;
-  isExpanded: boolean;
-  setIsExpanded: () => void;
+interface MetaDataFormProps {
   onAbort: (plainText: string, rawHtml: string) => void;
   onSave: (plainText: string, rawHtml: string) => void;
   defaultContent?: string;
 }
 
-export const EntryForm: React.FC<EntryBodyProps> = ({
-  isPlaintiff,
-  isExpanded,
-  setIsExpanded,
+export const MetaDataForm: React.FC<MetaDataFormProps> = ({
   onAbort,
   onSave,
   defaultContent,
@@ -57,15 +48,6 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
 
     return EditorState.createWithContent(contentState);
   });
-
-  const { showColumnView } = useHeaderContext();
-  const { entries } = useCase();
-  const editorRef = useRef<Editor>(null);
-  const suggestions = entries.map((entry) => ({
-    text: entry.entryCode,
-    value: entry.entryCode,
-    url: `#${entry.entryCode}`,
-  }));
   const contentState = editorState.getCurrentContent();
 
   useEffect(() => {
@@ -74,26 +56,13 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     );
   }, [contentState]);
 
-  useEffect(() => {
-    // Focus the editor when the component is mounted.
-    editorRef.current?.focusEditor();
-  }, []);
-
   return (
     <div
-      className={cx("border border-t-0 rounded-b-lg", {
-        "border-lightPurple": isPlaintiff,
-        "border-lightPetrol": !isPlaintiff,
+      className={cx("rounded-b-lg bg-white", {
         "RichEditor-hidePlaceholder": hidePlaceholder,
       })}
     >
       <Editor
-        ref={editorRef}
-        mention={{
-          separator: " ",
-          trigger: "#",
-          suggestions,
-        }}
         defaultEditorState={editorState}
         onEditorStateChange={setEditorState}
         wrapperClassName={cx("w-full focus:outline-none")}
@@ -103,26 +72,6 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"
         )}
         toolbar={toolbarOptions}
-        toolbarCustomButtons={
-          showColumnView
-            ? [
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 leading-[0]">
-                  <Tooltip
-                    position="top"
-                    text={isExpanded ? "Minimieren" : "Maximieren"}
-                  >
-                    <Action
-                      className="text-base"
-                      onClick={() => setIsExpanded()}
-                      isPlaintiff={isPlaintiff}
-                    >
-                      {isExpanded ? <CornersIn /> : <CornersOut />}
-                    </Action>
-                  </Tooltip>
-                </span>,
-              ]
-            : []
-        }
       />
       <div className="flex justify-end gap-2 p-3 pt-2 border-t border-lightGrey">
         <Button

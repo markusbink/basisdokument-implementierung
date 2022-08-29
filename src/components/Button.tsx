@@ -11,6 +11,7 @@ interface ButtonProps {
   hasText?: boolean;
   alternativePadding?: string;
   gap?: string;
+  position?: "start" | "end";
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -24,14 +25,19 @@ export const Button: React.FC<ButtonProps> = ({
   gap = "gap-3",
   onClick,
   children,
+  position = "start",
 }) => {
   return (
     <button
       onClick={onClick}
       className={cx(
-        `flex items-center justify-center
-        ${icon && gap} ${size} text-${size} ${bgColor} ${alternativePadding}
-        ${textColor} ${disabled && "disabled"} rounded-lg`
+        `flex items-center
+        ${size} text-${size} ${bgColor} ${alternativePadding}
+        ${textColor} ${gap} rounded-lg`,
+        {
+          disabled: disabled,
+          "flex-row-reverse": position === "end",
+        }
       )}
     >
       <span>{icon}</span>
