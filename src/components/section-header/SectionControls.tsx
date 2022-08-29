@@ -104,7 +104,7 @@ export const SectionControls: React.FC<SectionControlsProps> = ({
   }
 
   return (
-    <div className="flex gap-1 flex-col">
+    <div className="flex gap-1 flex-col absolute -left-full">
       {moveSectionButtons.map((button, index) => (
         <button
           key={`${index}-${button.title}`}
