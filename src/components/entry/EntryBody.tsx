@@ -13,7 +13,7 @@ interface EntryBodyProps {
 }
 
 export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setLowerOpcacityForSearch, children }) => {
-  const { searchbarValue, currentColorSelection, getCurrentTool } = useHeaderContext();
+  const { searchbarValue, currentColorSelection, getCurrentTool, highlighterData } = useHeaderContext();
   const { setHighlightedEntries, highlightedEntries } = useCase();
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   }
 
   const saveNewHighlighting = () => {
-    let highlightedText: string | undefined = document.querySelector(`.marker-text-${entryId}`)?.outerHTML;
+    let highlightedText: string | undefined = document.querySelector(`.marker-text-${entryId}`)?.innerHTML;
 
     if (typeof highlightedText === "string") {
       if (markedEntryExists(entryId)) {
@@ -105,6 +105,57 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     }
   };
 
+  const createElementFromHTML = (htmlString: string) => {
+    let div = document.createElement("div");
+    div.innerHTML = htmlString.trim();
+    return div.firstChild;
+  };
+
+  const getColorHexForColor = (colorId: string) => {
+    switch (colorId) {
+      case "red":
+        return "#FCA5A5";
+      case "orange":
+        return "#FDBA74";
+      case "yellow":
+        return "#FDE047";
+      case "green":
+        return "#86EFAC";
+      case "blue":
+        return "#93C5FD";
+      case "purple":
+        return "#D8B4FE";
+      default:
+        break;
+    }
+  };
+
+  const applyHighlighterFiltersToEntry = (entryText: string) => {
+    let htmlElementOfEntryText: any = createElementFromHTML(entryText);
+
+    // hide specific colors
+    Object.keys(highlighterData).forEach(function eachKey(key) {
+      let colorId: string = key;
+      let isSelectedColor: string = highlighterData[key];
+      // data-backgroundcolor="#FCA5A5"
+      let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
+      console.log("allHighlightings", allHighlightings);
+      for (let index = 0; index < allHighlightings.length; index++) {
+        const highlighting = allHighlightings[index];
+        // highlighting.setAttribute("data-backgroundcolor", "off-" + colorId);
+        if (isSelectedColor) {
+          highlighting.style.backgroundColor = getColorHexForColor(colorId);
+        } else {
+          highlighting.style.backgroundColor = "";
+        }
+      }
+    });
+
+    // ausblenden der beiträge ohne spezielle farbe
+
+    return htmlElementOfEntryText.outerHTML;
+  };
+
   return (
     <div
       className={cx(`p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`, {
@@ -113,11 +164,13 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
       })}
     >
       {/* eslint-disable-next-line */}
-      {searchbarValue === "" ? (
+      {searchbarValue === "" && (getCurrentTool.id === "highlighter" || getCurrentTool.id === "eraser") ? (
         <p style={{ cursor: getToolIconPath() }} className={cx(`marker-text-${entryId}`)} onMouseUp={createHighlighting} dangerouslySetInnerHTML={{ __html: getEntryContent() as string }}></p>
-      ) : (
+      ) : null}
+      {searchbarValue === "" && getCurrentTool.id === "cursor" ? <p dangerouslySetInnerHTML={{ __html: applyHighlighterFiltersToEntry(getEntryContent() as string) }}></p> : null}
+      {searchbarValue !== "" ? (
         <Highlight search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>{children}</Highlight> // eslint-disable-line
-      )}
+      ) : null}
     </div>
   );
 };

@@ -6,10 +6,7 @@
   </defs>
   <g id="Zeichenfläche_1" data-name="Zeichenfläche – 1" clip-path="url(#clip-Zeichenfläche_1)">
     <rect width="16" height="16" fill="rgba(255,255,255,0)"/>
-    <g id="Rechteck_5" data-name="Rechteck 5" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1">
-      <rect width="1" height="16" rx="0.5" stroke="none"/>
-      <rect x="0.5" y="0.5" height="15" fill="none"/>
-    </g>
+    <rect id="Rechteck_5" data-name="Rechteck 5" width="1.5" height="16" rx="0.75"/>
     <rect id="Rechteck_6" data-name="Rechteck 6" width="5.995" height="14" rx="1" transform="translate(10.399 0.868) rotate(45)" fill="#fff" stroke="#000" stroke-width="1"/>
     <path id="Rechteck_7" data-name="Rechteck 7" d="M0,0H6A0,0,0,0,1,6,0V5A1,1,0,0,1,5,6H1A1,1,0,0,1,0,5V0A0,0,0,0,1,0,0Z" transform="translate(4.743 6.525) rotate(45)" stroke="#000" stroke-width="1"/>
   </g>
