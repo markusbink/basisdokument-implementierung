@@ -56,9 +56,7 @@ export const MetaDataForm: React.FC<MetaDataFormProps> = ({
 
   return (
     <div
-      className={cx("border border-t-0 rounded-b-lg", {
-        "border-lightPurple": isPlaintiff,
-        "border-lightPetrol": !isPlaintiff,
+      className={cx("rounded-b-lg bg-white", {
         "RichEditor-hidePlaceholder": hidePlaceholder,
       })}
     >
