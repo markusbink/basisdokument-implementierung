@@ -194,7 +194,7 @@ export const Entry: React.FC<EntryProps> = ({
               )}
               <EntryHeader
                 isPlaintiff={isPlaintiff}
-                isBodyOpen={!isEditing && isBodyOpen}
+                isBodyOpen={isBodyOpen}
                 toggleBody={toggleBody}
               >
                 <div className="overflow-auto max-w-[350px] whitespace-nowrap">

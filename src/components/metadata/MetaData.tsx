@@ -42,6 +42,11 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
     setIsEditing(false);
   };
 
+  const editMetaData = () => {
+    setIsEditing(!isEditing);
+    setIsMenuOpen(false);
+  };
+
   const updateMetaData = (plainText: string, rawHtml: string) => {
     if (plainText.length === 0) {
       toast("Bitte geben sie einen Text ein.", { type: "error" });
@@ -86,7 +91,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           {owner}
         </Button>
         {(isJudge || user?.role === owner) && (
-          <div className="flex relative space-y-1">
+          <div className="flex relative space-y-1 cursor-pointer">
             <Tooltip text="Mehr Optionen">
               <Action
                 className={cx("relative", {
@@ -107,7 +112,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                 <>
                   <li
                     tabIndex={0}
-                    onClick={() => setIsEditing(!isEditing)}
+                    onClick={editMetaData}
                     className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
                   >
                     <Pencil size={20} />
