@@ -46,6 +46,11 @@ body {
   }
 }
 
+::selection {
+  background-color: #333;
+  color: white;
+}
+
 .marker-red {
   @apply bg-marker-red;
 }

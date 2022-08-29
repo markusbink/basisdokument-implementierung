@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { IHighlighter, ISection, IVersion, Tool } from "../types";
+import { IHighlighter, ISection, IVersion, ITool, Tool } from "../types";
 
 // Define Interfaces
 interface HeaderProviderProps {
@@ -14,7 +14,7 @@ enum Sorting {
 export default interface IHeaderContext {
   showDropdownHeader: boolean;
   showColumnView: boolean;
-  getCurrentTool: Tool;
+  getCurrentTool: ITool;
   currentColorSelection: IHighlighter;
   searchbarValue: string;
   highlighterData: any;
@@ -48,7 +48,7 @@ export default interface IHeaderContext {
     React.SetStateAction<boolean>
   >;
   setCurrentColorSelection: React.Dispatch<React.SetStateAction<IHighlighter>>;
-  setCurrentTool: React.Dispatch<React.SetStateAction<Tool>>;
+  setCurrentTool: React.Dispatch<React.SetStateAction<ITool>>;
 }
 
 export const HeaderContext = createContext<IHeaderContext | null>(null);
@@ -68,8 +68,8 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   >([]);
   const [currentColorSelection, setCurrentColorSelection] =
     useState<IHighlighter>(colorSelection[0]);
-  const [getCurrentTool, setCurrentTool] = useState<Tool>({
-    id: "cursor",
+  const [getCurrentTool, setCurrentTool] = useState<ITool>({
+    id: Tool.Cursor,
     iconNode: "Cursor",
     germanTitle: "Maus",
   });

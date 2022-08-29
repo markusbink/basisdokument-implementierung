@@ -7,6 +7,7 @@ import {
 } from "phosphor-react";
 import { useRef, useState } from "react";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { Tool } from "../../types";
 
 const StaticToolList: any = {
   Cursor,
@@ -15,17 +16,17 @@ const StaticToolList: any = {
 };
 
 const tools = [
-  { id: "cursor", iconNode: "Cursor", germanTitle: "Maus" },
+  { id: Tool.Cursor, iconNode: "Cursor", germanTitle: "Maus" },
   {
-    id: "highlighter",
+    id: Tool.Highlighter,
     iconNode: "PencilSimpleLine",
     germanTitle: "Markieren",
   },
-  { id: "eraser", iconNode: "Eraser", germanTitle: "Markierung löschen" },
+  { id: Tool.Eraser, iconNode: "Eraser", germanTitle: "Markierung löschen" },
 ];
 
 export interface IState {
-  tool: { id: string; iconNode: string; germanTitle: string };
+  tool: { id: Tool; iconNode: string; germanTitle: string };
 }
 
 interface IProps {

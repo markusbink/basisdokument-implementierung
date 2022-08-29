@@ -16,7 +16,7 @@ export const HighlighterButton: React.FC<{ id: number }> = ({ id }) => {
         });
       }}
     >
-      {highlighterData[color] ? <div className="border-white w-3.5 h-3.5 rounded-full bg-transparent border-[3px]" /> : <div className="border-white w-3.5 h-3.5 bg-white rounded-full" />}
+      {highlighterData[color] ? <div className="border-white w-3 h-3 rounded-full bg-transparent border-[1px]" /> : <div className="border-white w-3.5 h-3.5 bg-white rounded-full" />}
     </div>
   );
 };
