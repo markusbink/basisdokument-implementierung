@@ -32,13 +32,14 @@ export const Discussion = () => {
           <MetaData owner={UserRole.Plaintiff} />
           <MetaData owner={UserRole.Defendant} />
         </div>
-        {getRequestedSorting(sectionList).map((section) => {
+        {getRequestedSorting(sectionList).map((section, index) => {
           const sectionEntries = groupedEntries[section.id];
           return (
             <div key={section.id}>
               <SectionHeader
                 sectionId={getOriginalSortingPosition(sectionList, section.id)}
                 section={section}
+                position={index}
               />
               <div className="space-y-4">
                 <EntryList entries={sectionEntries?.parent || []} />

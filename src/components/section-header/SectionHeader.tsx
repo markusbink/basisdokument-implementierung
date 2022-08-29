@@ -7,11 +7,13 @@ import { SectionTitle } from "./SectionTitle";
 interface SectionHeaderProps {
   sectionId: number;
   section: ISection;
+  position: number;
 }
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
   sectionId,
   section,
+  position,
 }) => {
   const { user } = useUser();
 
@@ -28,7 +30,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         })}
       >
         <div className="flex gap-4 items-center">
-          <SectionControls />
+          <SectionControls position={position} />
           <div className="bg-darkGrey w-10 h-10 rounded-lg rotate-45 flex items-center justify-center">
             <span className="text-white font-bold -rotate-45">{sectionId}</span>
           </div>
