@@ -32,29 +32,23 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
 
   useEffect(() => {
     let htmlElementOfEntryText: any = createElementFromHTML(getEntryContent() as string);
-    let allSelectedColorsUsedInEntry: boolean = true;
+    let oneColorIsUsed: boolean = false;
     let hideAllEntries: boolean = true;
     Object.keys(highlighterData).forEach(function eachKey(key) {
       let colorId: string = key;
       let isSelectedColor: boolean = highlighterData[key];
       if (isSelectedColor) {
         hideAllEntries = false;
-        let colorIsUsedInEntry: boolean = false;
         let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
         if (allHighlightings.length > 0) {
-          colorIsUsedInEntry = true;
-        } else {
-          colorIsUsedInEntry = false;
-        }
-        if (!colorIsUsedInEntry) {
-          allSelectedColorsUsedInEntry = false;
-        }
+          oneColorIsUsed = true;
+        } 
       }
     });
     if (hideAllEntries) {
       setLowerOpcacityForHighlighters(true);
     } else {
-      setLowerOpcacityForHighlighters(!allSelectedColorsUsedInEntry);
+      setLowerOpcacityForHighlighters(!oneColorIsUsed);
     }
 
     // eslint-disable-next-line

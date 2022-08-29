@@ -82,7 +82,7 @@ export const DropdownHeader: React.FC<any> = () => {
                 setHideEntriesHighlighter(!hideEntriesHighlighter);
               }}
             >
-              Beiträge ausblenden
+              Beiträge hervorheben
             </span>
           </div>
         </div>
