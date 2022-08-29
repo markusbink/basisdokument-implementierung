@@ -1,12 +1,5 @@
 import cx from "classnames";
-import {
-  CaretDown,
-  CaretUp,
-  DotsThree,
-  Pencil,
-  Plus,
-  PlusCircle,
-} from "phosphor-react";
+import { CaretDown, CaretUp, DotsThree, Pencil, Plus } from "phosphor-react";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useCase, useUser } from "../../contexts";

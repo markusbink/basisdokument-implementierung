@@ -1,4 +1,3 @@
-import { User } from "phosphor-react";
 import { useCase, useHeaderContext, useSection } from "../contexts";
 import { ISection, Sorting, UserRole } from "../types";
 import { getOriginalSortingPosition } from "../util/get-original-sorting-position";
