@@ -91,7 +91,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           {owner}
         </Button>
         {(isJudge || user?.role === owner) && (
-          <div className="flex relative">
+          <div className="flex relative space-y-1">
             <Tooltip text="Mehr Optionen">
               <Action
                 className={cx("relative", {
