@@ -15,7 +15,10 @@ export const SectionDropdown = () => {
         </span>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className="bg-darkGrey rounded-lg shadow-lg">
+        <DropdownMenu.Content
+          align="end"
+          className="bg-darkGrey rounded-lg shadow-lg z-50"
+        >
           <DropdownMenu.Item>
             <Button icon={<Trash size={18} />} size="sm">
               Gliederungspunkt löschen

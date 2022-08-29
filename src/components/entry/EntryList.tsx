@@ -17,7 +17,7 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
         <Entry
           key={entry.id}
           entry={entry}
-          isOld={entry.version <= currentVersion}
+          isOld={entry.version < currentVersion}
           viewedBy={user!.role}
         />
       ))}

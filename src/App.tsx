@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { BookmarkProvider, CaseProvider, HeaderProvider, HintProvider, NoteProvider, SectionProvider, UserProvider } from "./contexts";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
+import { OnboardingProvider } from "./contexts/OnboardingContext";
 
 const registerKeyListener = (e: KeyboardEvent) => {
   if (e.key === "r" && e.metaKey) {
@@ -23,19 +24,21 @@ export const App = () => {
 
   return (
     <div className="App h-screen overflow-hidden">
-      <UserProvider>
-        <SectionProvider>
-          <HeaderProvider>
-            <CaseProvider>
-              <NoteProvider>
-                <HintProvider>
-                  <BookmarkProvider>{isAuthenticated ? <Main /> : <Auth setIsAuthenticated={setIsAuthenticated} />}</BookmarkProvider>
-                </HintProvider>
-              </NoteProvider>
-            </CaseProvider>
-          </HeaderProvider>
-        </SectionProvider>
-      </UserProvider>
+      <OnboardingProvider>
+        <UserProvider>
+          <SectionProvider>
+            <HeaderProvider>
+              <CaseProvider>
+                <NoteProvider>
+                  <HintProvider>
+                    <BookmarkProvider>{isAuthenticated ? <Main /> : <Auth setIsAuthenticated={setIsAuthenticated} />}</BookmarkProvider>
+                  </HintProvider>
+                </NoteProvider>
+              </CaseProvider>
+            </HeaderProvider>
+          </SectionProvider>
+        </UserProvider>
+      </OnboardingProvider>
       <CustomToastContainer />
     </div>
   );

@@ -3,6 +3,7 @@ import {
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import {
@@ -11,6 +12,7 @@ import {
   ILitigiousCheck,
   IMetaData,
 } from "../types";
+import { useSection } from "./SectionContext";
 
 interface ICaseContext {
   caseId: string;
@@ -66,12 +68,18 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
   const [highlightedEntries, setHighlightedEntries] = useState<
     IHighlightedEntry[]
   >([]);
+  const [groupedEntries, setGroupedEntries] = useState({});
   const [currentVersion, setCurrentVersion] = useState<number>(0);
-  const groupedEntries = groupEntriesBySectionAndParent(entries);
+
+  const { sectionList } = useSection();
 
   const updateEntry = (entry: IEntry) => {
     setEntries(entries.map((e) => (e.id === entry.id ? entry : e)));
   };
+
+  useEffect(() => {
+    setGroupedEntries(groupEntriesBySectionAndParent(entries));
+  }, [entries, sectionList]);
 
   return (
     <CaseContext.Provider

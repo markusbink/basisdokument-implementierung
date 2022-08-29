@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { Button } from "./Button";
 import { OnboardingSwiper } from "./OnboardingSwiper";
 import { XCircle } from "phosphor-react";
+import { useOnboarding } from "../contexts/OnboardingContext";
 
 export const Onboarding = () => {
-  const [isOnboardingVisible, setOnboarding] = useState(true);
+  const { isOnboardingVisible, setIsOnboardingVisible } = useOnboarding();
 
   const toggleOnboarding = () => {
-    setOnboarding(!isOnboardingVisible);
+    setIsOnboardingVisible(!isOnboardingVisible);
   };
 
   if (isOnboardingVisible) {
