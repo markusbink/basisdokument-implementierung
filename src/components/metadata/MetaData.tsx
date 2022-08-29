@@ -1,23 +1,16 @@
-import {
-  CaretDown,
-  CaretUp,
-  DotsThree,
-  Notepad,
-  Pencil,
-  Scales,
-} from "phosphor-react";
+import cx from "classnames";
+import { CaretDown, CaretUp, DotsThree, Pencil } from "phosphor-react";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useCase, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { UserRole } from "../../types";
 import { Button } from "../Button";
-import { Action, EntryHeader } from "../entry";
+import { Action } from "../entry";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
 import { MetaDataBody } from "./MetaDataBody";
 import { MetaDataForm } from "./MetaDataForm";
-import cx from "classnames";
 
 interface MetaDataProps {
   owner: UserRole;
@@ -36,6 +29,8 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
   const isPlaintiff = owner === UserRole.Plaintiff;
   const isJudge = user?.role === UserRole.Judge;
   const content = isPlaintiff ? metaData?.plaintiff : metaData?.defendant;
+
+  console.log("MetaData", metaData);
 
   const toggleMenu = (e: React.MouseEvent) => {
     e.stopPropagation();
