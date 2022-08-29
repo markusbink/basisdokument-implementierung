@@ -89,9 +89,20 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   const getEntryContent = () => {
     let highlightedEntry: IHighlightedEntry | undefined = highlightedEntries.find((entry) => entry.entryId === entryId);
     if (highlightedEntry) {
-      return highlightedEntry.highlightedText
+      return highlightedEntry.highlightedText;
     }
     return children;
+  };
+
+  const getToolIconPath = () => {
+    switch (getCurrentTool.id) {
+      case "highlighter":
+        return `url(cursors/highlighter-${currentColorSelection.color}.svg), auto`;
+      case "eraser":
+        return `url(cursors/eraser.svg), auto`;
+      default:
+        return "";
+    }
   };
 
   return (
@@ -103,7 +114,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     >
       {/* eslint-disable-next-line */}
       {searchbarValue === "" ? (
-        <p className={cx(`marker-text-${entryId}`)} onMouseUp={createHighlighting} dangerouslySetInnerHTML={{ __html: getEntryContent() as string }}></p>
+        <p style={{ cursor: getToolIconPath() }} className={cx(`marker-text-${entryId}`)} onMouseUp={createHighlighting} dangerouslySetInnerHTML={{ __html: getEntryContent() as string }}></p>
       ) : (
         <Highlight search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>{children}</Highlight> // eslint-disable-line
       )}
