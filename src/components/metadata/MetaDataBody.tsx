@@ -2,7 +2,7 @@ import cx from "classnames";
 
 interface MetaDataBodyProps {
   isPlaintiff: boolean;
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export const MetaDataBody: React.FC<MetaDataBodyProps> = ({
@@ -16,7 +16,7 @@ export const MetaDataBody: React.FC<MetaDataBodyProps> = ({
         "border-darkPetrol/25": !isPlaintiff,
       })}
     >
-      <p dangerouslySetInnerHTML={{ __html: children as string }}></p>
+      {children}
     </div>
   );
 };

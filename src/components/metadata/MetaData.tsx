@@ -1,5 +1,12 @@
 import cx from "classnames";
-import { CaretDown, CaretUp, DotsThree, Pencil } from "phosphor-react";
+import {
+  CaretDown,
+  CaretUp,
+  DotsThree,
+  Pencil,
+  Plus,
+  PlusCircle,
+} from "phosphor-react";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useCase, useUser } from "../../contexts";
@@ -145,9 +152,33 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
             />
           ) : (
             <MetaDataBody isPlaintiff={isPlaintiff}>
-              {isPlaintiff ? metaData?.plaintiff : metaData?.defendant}
+              {content ? (
+                <p dangerouslySetInnerHTML={{ __html: content }} />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
+                  <span className="text-sm">
+                    Bisher wurden noch keine Metadaten hinterlegt.
+                  </span>
+                  <Button
+                    size="sm"
+                    bgColor={cx({
+                      "bg-darkPurple": isPlaintiff,
+                      "bg-darkPetrol": !isPlaintiff,
+                    })}
+                    textColor={cx({
+                      "text-lightPurple": isPlaintiff,
+                      "text-lightPetrol": !isPlaintiff,
+                    })}
+                    onClick={() => setIsEditing(true)}
+                    icon={<Plus size={18} />}
+                  >
+                    Hinzufügen
+                  </Button>
+                </div>
+              )}
             </MetaDataBody>
           )}
+
           <ErrorPopup isVisible={isEditErrorVisible}>
             <div className="flex flex-col items-center justify-center space-y-8">
               <p className="text-center text-base">
