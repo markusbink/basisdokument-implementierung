@@ -108,7 +108,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   const createElementFromHTML = (htmlString: string) => {
     let div = document.createElement("div");
     div.innerHTML = htmlString.trim();
-    return div.firstChild;
+    return div;
   };
 
   const getColorHexForColor = (colorId: string) => {
@@ -131,18 +131,18 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   };
 
   const applyHighlighterFiltersToEntry = (entryText: string) => {
+    console.log(entryText);
+    
     let htmlElementOfEntryText: any = createElementFromHTML(entryText);
+    console.log(htmlElementOfEntryText);
 
     // hide specific colors
     Object.keys(highlighterData).forEach(function eachKey(key) {
       let colorId: string = key;
       let isSelectedColor: string = highlighterData[key];
-      // data-backgroundcolor="#FCA5A5"
       let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
-      console.log("allHighlightings", allHighlightings);
       for (let index = 0; index < allHighlightings.length; index++) {
         const highlighting = allHighlightings[index];
-        // highlighting.setAttribute("data-backgroundcolor", "off-" + colorId);
         if (isSelectedColor) {
           highlighting.style.backgroundColor = getColorHexForColor(colorId);
         } else {
@@ -153,7 +153,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
 
     // ausblenden der beiträge ohne spezielle farbe
 
-    return htmlElementOfEntryText.outerHTML;
+    return htmlElementOfEntryText.innerHTML;
   };
 
   return (
