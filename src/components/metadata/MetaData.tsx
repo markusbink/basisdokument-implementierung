@@ -145,29 +145,38 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
             />
           ) : (
             <MetaDataBody isPlaintiff={isPlaintiff}>
-              {content ? (
-                <p dangerouslySetInnerHTML={{ __html: content }} />
+              {isJudge || user?.role === owner ? (
+                <>
+                  {content ? (
+                    <p dangerouslySetInnerHTML={{ __html: content }} />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
+                      <p className="text-sm">
+                        Bisher wurden noch keine Metadaten hinterlegt.
+                      </p>
+                      <Button
+                        size="sm"
+                        bgColor={cx({
+                          "bg-darkPurple": isPlaintiff,
+                          "bg-darkPetrol": !isPlaintiff,
+                        })}
+                        textColor={cx({
+                          "text-lightPurple": isPlaintiff,
+                          "text-lightPetrol": !isPlaintiff,
+                        })}
+                        onClick={() => setIsEditing(true)}
+                        icon={<Plus size={18} />}
+                      >
+                        Hinzufügen
+                      </Button>
+                    </div>
+                  )}
+                </>
               ) : (
-                <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
-                  <span className="text-sm">
-                    Bisher wurden noch keine Metadaten hinterlegt.
-                  </span>
-                  <Button
-                    size="sm"
-                    bgColor={cx({
-                      "bg-darkPurple": isPlaintiff,
-                      "bg-darkPetrol": !isPlaintiff,
-                    })}
-                    textColor={cx({
-                      "text-lightPurple": isPlaintiff,
-                      "text-lightPetrol": !isPlaintiff,
-                    })}
-                    onClick={() => setIsEditing(true)}
-                    icon={<Plus size={18} />}
-                  >
-                    Hinzufügen
-                  </Button>
-                </div>
+                <p className="text-center py-4">
+                  {" "}
+                  Bisher wurden noch keine Metadaten hinterlegt.
+                </p>
               )}
             </MetaDataBody>
           )}
