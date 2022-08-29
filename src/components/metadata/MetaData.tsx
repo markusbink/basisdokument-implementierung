@@ -28,6 +28,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
 
   const isPlaintiff = owner === UserRole.Plaintiff;
   const isJudge = user?.role === UserRole.Judge;
+  const canEdit = isJudge || user?.role === owner;
   const content = isPlaintiff ? metaData?.plaintiff : metaData?.defendant;
 
   const toggleMenu = (e: React.MouseEvent) => {
@@ -89,7 +90,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
         >
           {owner}
         </Button>
-        {(isJudge || user?.role === owner) && (
+        {canEdit && (
           <div className="flex relative space-y-1 cursor-pointer">
             <Tooltip text="Mehr Optionen">
               <Action
@@ -145,38 +146,31 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
             />
           ) : (
             <MetaDataBody isPlaintiff={isPlaintiff}>
-              {isJudge || user?.role === owner ? (
-                <>
-                  {content ? (
-                    <p dangerouslySetInnerHTML={{ __html: content }} />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
-                      <p className="text-sm">
-                        Bisher wurden noch keine Metadaten hinterlegt.
-                      </p>
-                      <Button
-                        size="sm"
-                        bgColor={cx({
-                          "bg-darkPurple": isPlaintiff,
-                          "bg-darkPetrol": !isPlaintiff,
-                        })}
-                        textColor={cx({
-                          "text-lightPurple": isPlaintiff,
-                          "text-lightPetrol": !isPlaintiff,
-                        })}
-                        onClick={() => setIsEditing(true)}
-                        icon={<Plus size={18} />}
-                      >
-                        Hinzufügen
-                      </Button>
-                    </div>
-                  )}
-                </>
+              {content ? (
+                <p dangerouslySetInnerHTML={{ __html: content }} />
               ) : (
-                <p className="text-center py-4">
-                  {" "}
-                  Bisher wurden noch keine Metadaten hinterlegt.
-                </p>
+                <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
+                  <p className="text-sm">
+                    Bisher wurden noch keine Metadaten hinterlegt.
+                  </p>
+                  {canEdit && (
+                    <Button
+                      size="sm"
+                      bgColor={cx({
+                        "bg-darkPurple": isPlaintiff,
+                        "bg-darkPetrol": !isPlaintiff,
+                      })}
+                      textColor={cx({
+                        "text-lightPurple": isPlaintiff,
+                        "text-lightPetrol": !isPlaintiff,
+                      })}
+                      onClick={() => setIsEditing(true)}
+                      icon={<Plus size={18} />}
+                    >
+                      Hinzufügen
+                    </Button>
+                  )}
+                </div>
               )}
             </MetaDataBody>
           )}
