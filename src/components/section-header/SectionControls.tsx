@@ -45,7 +45,8 @@ export const SectionControls: React.FC<SectionControlsProps> = ({
   const isMoveable = version === currentVersion;
   const canMoveUp =
     position > 0 &&
-    isPreviousSectionMovable(sectionList, position, currentVersion);
+    (isPreviousSectionMovable(sectionList, position, currentVersion) ||
+      selectedSorting === Sorting.Privat);
   const canMoveDown = position < sectionList.length - 1;
 
   const handleMoveSection = (direction: Direction) => {
