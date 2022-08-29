@@ -148,7 +148,7 @@ export const Entry: React.FC<EntryProps> = ({ entry, viewedBy, isBookmarked = fa
         className={cx("text-sm", {
           "opacity-50": isHidden,
           "opacity-30 pointer-events-none":
-            (!lowerOpacityForSearch && searchbarValue !== "" && !isEditing) || (!lowerOpcacityForHighlighters && hideEntriesHighlighter && getCurrentTool.id === "cursor"),
+            (!lowerOpacityForSearch && searchbarValue !== "" && !isEditing) || (lowerOpcacityForHighlighters && hideEntriesHighlighter && getCurrentTool.id === "cursor"),
           "pointer-events-none": isHidden,
         })}
       >

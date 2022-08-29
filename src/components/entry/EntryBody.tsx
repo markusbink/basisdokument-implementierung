@@ -33,12 +33,14 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   useEffect(() => {
     let htmlElementOfEntryText: any = createElementFromHTML(getEntryContent() as string);
     let allSelectedColorsUsedInEntry: boolean = true;
+    let hideAllEntries:boolean = true;
     Object.keys(highlighterData).forEach(function eachKey(key) {
       let colorId: string = key;
       let isSelectedColor: boolean = highlighterData[key];
       // wir müssen bei jeder Farbe schauen, ob diese auch vorkommt. ist dies bei einer farbe nicht der fall, -> false
 
       if (isSelectedColor) {
+        hideAllEntries = false;
         let colorIsUsedInEntry: boolean = false;
         let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
         if (allHighlightings.length > 0) {
@@ -52,7 +54,14 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
       }
     });
     console.log(allSelectedColorsUsedInEntry);
-    setLowerOpcacityForHighlighters(allSelectedColorsUsedInEntry);
+    if (hideAllEntries) {
+      console.log("enter");
+      
+      setLowerOpcacityForHighlighters(true);
+    } else {
+      setLowerOpcacityForHighlighters(!allSelectedColorsUsedInEntry);
+    }
+    
     // eslint-disable-next-line
   }, [highlighterData, setLowerOpcacityForHighlighters, getCurrentTool]);
 
