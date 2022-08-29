@@ -82,7 +82,8 @@ export const SortingMenu = () => {
                                   sectionList,
                                   getSectionObject(section).id
                                 )}. `}
-                                {user?.role === UserRole.Plaintiff
+                                {user?.role === UserRole.Plaintiff ||
+                                user?.role === UserRole.Judge
                                   ? getSectionObject(section).titlePlaintiff
                                   : getSectionObject(section).titleDefendant}
                               </span>

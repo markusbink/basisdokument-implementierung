@@ -15,14 +15,15 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
   title,
   role,
 }) => {
-  const { user } = useUser();
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const { user } = useUser();
   const { setSectionList } = useSection();
 
   const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSectionList((prevState) => {
       const newState = [...prevState];
       const section = newState.find((s) => s.id === id);
+
       if (section) {
         if (role === UserRole.Plaintiff) {
           section.titlePlaintiff = e.target.value;
@@ -55,27 +56,43 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
         </span>
       )}
       <div
-        className={cx("flex items-start gap-2 w-full", {
+        className={cx("flex items-start justify-start gap-2 w-full", {
           "py-3": user?.role !== UserRole.Judge,
         })}
       >
-        <input
-          readOnly={!isEditing}
-          className="bg-transparent text-xl font-bold w-full outline-none"
-          placeholder="Optionalen Titel vergeben"
-          type="text"
-          autoFocus={true}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              setIsEditing(false);
-            }
-          }}
-          onClick={() => setIsEditing(true)}
-          onChange={changeTitle}
-          onBlur={() => setIsEditing(false)}
-          value={title}
-        />
+        {isEditing ? (
+          <input
+            placeholder="Optionalen Titel vergeben"
+            type="text"
+            autoFocus={true}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                if (title.length > 0) {
+                  setIsEditing(false);
+                }
+                e.currentTarget.blur();
+              }
+            }}
+            onChange={changeTitle}
+            onBlur={() => {
+              console.log("onblur");
+
+              if (title.length > 0) {
+                setIsEditing(false);
+              }
+            }}
+            value={title}
+            className="bg-transparent text-xl font-bold w-full max-w-[250px] outline-none"
+          />
+        ) : (
+          <div
+            className="bg-transparent text-xl font-bold outline-offset-[6px] rounded"
+            onClick={() => setIsEditing(true)}
+          >
+            {title}
+          </div>
+        )}
         <SectionDropdown />
       </div>
     </div>
