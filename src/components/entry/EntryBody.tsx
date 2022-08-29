@@ -1,9 +1,10 @@
 import cx from "classnames";
 import Highlight from "highlight-react/dist/highlight";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
 import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib/index";
 import { IHighlightedEntry } from "../../types";
+import { getColorHexForColor } from "../../util/get-hex-code-for-marker";
 
 interface EntryBodyProps {
   isPlaintiff: boolean;
@@ -30,10 +31,19 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     }
   }, [searchbarValue, entryId, setLowerOpcacityForSearch]);
 
+  const getEntryContent = useCallback(() => {
+    let highlightedEntry: IHighlightedEntry | undefined = highlightedEntries.find((entry) => entry.entryId === entryId);
+    if (highlightedEntry) {
+      return highlightedEntry.highlightedText;
+    }
+    return children;
+  }, [children, entryId, highlightedEntries]);
+
   useEffect(() => {
-    let htmlElementOfEntryText: any = createElementFromHTML(getEntryContent() as string);
+    let htmlElementOfEntryText: HTMLDivElement = createElementFromHTML(getEntryContent() as string);
     let oneColorIsUsed: boolean = false;
     let hideAllEntries: boolean = true;
+
     Object.keys(highlighterData).forEach(function eachKey(key) {
       let colorId: string = key;
       let isSelectedColor: boolean = highlighterData[key];
@@ -42,7 +52,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
         let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
         if (allHighlightings.length > 0) {
           oneColorIsUsed = true;
-        } 
+        }
       }
     });
     if (hideAllEntries) {
@@ -50,28 +60,9 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     } else {
       setLowerOpcacityForHighlighters(!oneColorIsUsed);
     }
+  }, [highlighterData, setLowerOpcacityForHighlighters, getCurrentTool, getEntryContent]);
 
-    // eslint-disable-next-line
-  }, [highlighterData, setLowerOpcacityForHighlighters, getCurrentTool]);
-
-  const getColorHexForColor = (colorId: string) => {
-    switch (colorId) {
-      case "red":
-        return "#FCA5A5";
-      case "orange":
-        return "#FDBA74";
-      case "yellow":
-        return "#FDE047";
-      case "green":
-        return "#86EFAC";
-      case "blue":
-        return "#93C5FD";
-      case "purple":
-        return "#D8B4FE";
-      default:
-        break;
-    }
-  };
+ 
 
   const getCurrentHighlighterColorAsHTMLString = () => {
     if (getCurrentTool.id === "eraser") {
@@ -114,14 +105,6 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
         saveNewHighlighting();
       }
     }
-  };
-
-  const getEntryContent = () => {
-    let highlightedEntry: IHighlightedEntry | undefined = highlightedEntries.find((entry) => entry.entryId === entryId);
-    if (highlightedEntry) {
-      return highlightedEntry.highlightedText;
-    }
-    return children;
   };
 
   const getToolIconPath = () => {
