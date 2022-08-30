@@ -81,7 +81,7 @@ export const NotePopup = ({ isVisible, onClose }: NotePopupProps) => {
                   </span>
                   <p className="text-sm">
                     Alle Notizen sind privat und können nicht von den anderen
-                    Parteien eingesehen werden. Sie können die Notitz zu jedem
+                    Parteien eingesehen werden. Sie können die Notiz zu jedem
                     Zeitpunkt bearbeiten und löschen.
                   </p>
                 </div>
