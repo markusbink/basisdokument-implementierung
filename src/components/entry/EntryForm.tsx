@@ -95,6 +95,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           suggestions,
         }}
         defaultEditorState={editorState}
+        stripPastedStyles={true}
         onEditorStateChange={setEditorState}
         wrapperClassName={cx("w-full focus:outline-none")}
         editorClassName="p-6 min-h-[160px] overflow-visible"
