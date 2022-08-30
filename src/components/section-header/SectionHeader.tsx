@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useCase, useUser } from "../../contexts";
+import { useUser } from "../../contexts";
 import { ISection, UserRole } from "../../types";
 import { SectionControls } from "./SectionControls";
 import { SectionTitle } from "./SectionTitle";
