@@ -1,19 +1,28 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Button } from "../Button";
 import { DotsThree, Trash, CheckCircle, XCircle, Circle } from "phosphor-react";
-import { useCase, useUser } from "../../contexts";
+import { useCase, useSection, useUser } from "../../contexts";
 import { UserRole } from "../../types";
 
 interface SectionDropdownProps {
+  sectionId: string;
   version: number;
 }
 
 export const SectionDropdown: React.FC<SectionDropdownProps> = ({
+  sectionId,
   version,
 }) => {
   const { user } = useUser();
   const { currentVersion } = useCase();
+  const { setSectionList } = useSection();
   const isOld = version < currentVersion;
+
+  const handleDelete = () => {
+    setSectionList((prevSectionList) =>
+      prevSectionList.filter((section) => section.id !== sectionId)
+    );
+  };
 
   return (
     <DropdownMenu.Root>
@@ -27,7 +36,7 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
           align="end"
           className="bg-darkGrey rounded-lg shadow-lg z-50">
           {!isOld && (
-            <DropdownMenu.Item>
+            <DropdownMenu.Item onClick={() => handleDelete()}>
               <Button icon={<Trash size={18} />} size="sm">
                 Gliederungspunkt löschen
               </Button>

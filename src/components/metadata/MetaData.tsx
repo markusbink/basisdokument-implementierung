@@ -86,8 +86,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
             ) : (
               <CaretDown size={14} weight="bold" />
             )
-          }
-        >
+          }>
           {owner}
         </Button>
         {canEdit && (
@@ -99,22 +98,19 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                   "bg-darkPetrol text-lightPetrol": !isPlaintiff && isMenuOpen,
                 })}
                 onClick={toggleMenu}
-                isPlaintiff={isPlaintiff}
-              >
+                isPlaintiff={isPlaintiff}>
                 <DotsThree size={20} />
               </Action>
             </Tooltip>
             {isMenuOpen ? (
               <ul
                 ref={menuRef}
-                className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[150px] shadow-lg z-50 text-sm"
-              >
+                className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[150px] shadow-lg z-50 text-sm">
                 <>
                   <li
                     tabIndex={0}
                     onClick={editMetaData}
-                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                  >
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
                     <Pencil size={20} />
                     Bearbeiten
                   </li>
@@ -132,8 +128,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
               "bg-lightPurple text-darkPurple": isPlaintiff,
               "bg-lightPetrol text-darkPetrol": !isPlaintiff,
             }
-          )}
-        >
+          )}>
           {isEditing ? (
             <MetaDataForm
               defaultContent={content}
@@ -165,8 +160,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                         "text-lightPetrol": !isPlaintiff,
                       })}
                       onClick={() => setIsEditing(true)}
-                      icon={<Plus size={18} />}
-                    >
+                      icon={<Plus size={18} />}>
                       Hinzufügen
                     </Button>
                   )}
@@ -187,8 +181,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                   textColor="text-mediumGrey font-bold"
                   onClick={() => {
                     setIsEditErrorVisible(false);
-                  }}
-                >
+                  }}>
                   Abbrechen
                 </Button>
                 <Button
@@ -197,8 +190,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                   onClick={() => {
                     setIsEditErrorVisible(false);
                     setIsEditing(false);
-                  }}
-                >
+                  }}>
                   Verwerfen
                 </Button>
               </div>

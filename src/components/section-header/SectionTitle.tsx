@@ -102,7 +102,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
         {}
         {((!isOld && user?.role !== UserRole.Judge) ||
           user?.role === UserRole.Judge) && (
-          <SectionDropdown version={version} />
+          <SectionDropdown sectionId={id} version={version} />
         )}
       </div>
     </div>
