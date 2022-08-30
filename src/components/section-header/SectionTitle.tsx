@@ -90,14 +90,14 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
               }
             }}
             value={title}
-            className="bg-transparent text-xl font-bold w-full max-w-[250px] outline-none"
+            className="bg-transparent text-xl font-bold w-full outline-none"
           />
         ) : (
-          <div
+          <h2
             className="bg-transparent text-xl font-bold outline-offset-[6px] rounded"
             onClick={() => setIsEditing(true)}>
             {title}
-          </div>
+          </h2>
         )}
         {}
         {((!isOld && user?.role !== UserRole.Judge) ||

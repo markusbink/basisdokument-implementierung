@@ -208,3 +208,8 @@ ul > ul > ul {
 p:not(:last-child) {
   @apply mb-2;
 }
+
+/* Break words for headlines */
+h2 {
+  hyphens: auto;
+}
