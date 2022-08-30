@@ -96,7 +96,7 @@ export const SortingMenu = () => {
                   {sectionList.length === 0 ? (
                     <div className="flex justify-center items-center p-8">
                       <p className="text-mediumGrey opacity-70 text-center text-sm w-48">
-                        Es wurden noch kein Gliederungspunkt angelegt.
+                        Es wurden noch keine Gliederungspunkte angelegt.
                       </p>
                     </div>
                   ) : null}
