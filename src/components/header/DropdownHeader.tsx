@@ -21,8 +21,8 @@ export const DropdownHeader: React.FC<any> = () => {
     colorSelection,
     setSelectedSorting,
     hideEntriesHighlighter,
-    setHideElementsWithoutSpecificVersion,
-    hideElementsWithoutSpecificVersion,
+    setHighlightElementsWithSpecificVersion,
+    highlightElementsWithSpecificVersion,
   } = useHeaderContext();
 
   const { getCurrentTool } = useHeaderContext();
@@ -95,8 +95,8 @@ export const DropdownHeader: React.FC<any> = () => {
           <input
             className="small-checkbox accent-darkGrey cursor-pointer"
             type="checkbox"
-            defaultChecked={hideElementsWithoutSpecificVersion}
-            onChange={() => setHideElementsWithoutSpecificVersion(!hideElementsWithoutSpecificVersion)}
+            defaultChecked={highlightElementsWithSpecificVersion}
+            onChange={() => setHighlightElementsWithSpecificVersion(!highlightElementsWithSpecificVersion)}
           />
           <VersionSelector />
         </div>
