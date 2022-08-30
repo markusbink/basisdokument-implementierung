@@ -1,11 +1,19 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Button } from "../Button";
 import { DotsThree, Trash, CheckCircle, XCircle, Circle } from "phosphor-react";
-import { useUser } from "../../contexts";
+import { useCase, useUser } from "../../contexts";
 import { UserRole } from "../../types";
 
-export const SectionDropdown = () => {
+interface SectionDropdownProps {
+  version: number;
+}
+
+export const SectionDropdown: React.FC<SectionDropdownProps> = ({
+  version,
+}) => {
   const { user } = useUser();
+  const { currentVersion } = useCase();
+  const isOld = version < currentVersion;
 
   return (
     <DropdownMenu.Root>
@@ -17,13 +25,14 @@ export const SectionDropdown = () => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           align="end"
-          className="bg-darkGrey rounded-lg shadow-lg z-50"
-        >
-          <DropdownMenu.Item>
-            <Button icon={<Trash size={18} />} size="sm">
-              Gliederungspunkt löschen
-            </Button>
-          </DropdownMenu.Item>
+          className="bg-darkGrey rounded-lg shadow-lg z-50">
+          {!isOld && (
+            <DropdownMenu.Item>
+              <Button icon={<Trash size={18} />} size="sm">
+                Gliederungspunkt löschen
+              </Button>
+            </DropdownMenu.Item>
+          )}
           {user?.role === UserRole.Judge && (
             <>
               <DropdownMenu.Item>

@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useUser } from "../../contexts";
+import { useCase, useUser } from "../../contexts";
 import { ISection, UserRole } from "../../types";
 import { SectionControls } from "./SectionControls";
 import { SectionTitle } from "./SectionTitle";
@@ -21,14 +21,12 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
     <div
       className={cx("flex gap-6 pb-4 pt-12 items-start w-full", {
         "grid grid-cols-2": user?.role === UserRole.Judge,
-      })}
-    >
+      })}>
       {/* Section Number */}
       <div
         className={cx("flex gap-6 items-start", {
           "w-full": user?.role !== UserRole.Defendant,
-        })}
-      >
+        })}>
         <div className="flex gap-4 items-center relative">
           <SectionControls position={position} version={section.version} />
           <div className="ml-1 bg-darkGrey w-10 h-10 rounded-lg rotate-45 flex items-center justify-center">
@@ -43,6 +41,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
             id={section.id}
             role={UserRole.Plaintiff}
             title={section.titlePlaintiff}
+            version={section.version}
           />
         )}
       </div>
@@ -52,6 +51,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
           id={section.id}
           role={UserRole.Defendant}
           title={section.titleDefendant}
+          version={section.version}
         />
       )}
     </div>
