@@ -19,7 +19,7 @@ export default interface IHeaderContext {
   searchbarValue: string;
   highlighterData: any;
   hideEntriesHighlighter: boolean;
-  hideElementsWithoutSpecificVersion: boolean;
+  highlightElementsWithSpecificVersion: boolean;
   colorSelection: IHighlighter[];
   versionHistory: IVersion[];
   selectedVersion: number;
@@ -44,7 +44,7 @@ export default interface IHeaderContext {
   >;
   setHideEntriesHighlighter: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedSorting: React.Dispatch<React.SetStateAction<Sorting>>;
-  setHideElementsWithoutSpecificVersion: React.Dispatch<
+  setHighlightElementsWithSpecificVersion: React.Dispatch<
     React.SetStateAction<boolean>
   >;
   setCurrentColorSelection: React.Dispatch<React.SetStateAction<IHighlighter>>;
@@ -88,9 +88,9 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   );
 
   const [
-    hideElementsWithoutSpecificVersion,
-    setHideElementsWithoutSpecificVersion,
-  ] = useState<IHeaderContext["hideElementsWithoutSpecificVersion"]>(false);
+    highlightElementsWithSpecificVersion,
+    setHighlightElementsWithSpecificVersion,
+  ] = useState<IHeaderContext["highlightElementsWithSpecificVersion"]>(false);
 
   const [versionHistory, setVersionHistory] = useState<
     IHeaderContext["versionHistory"]
@@ -110,7 +110,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         searchbarValue,
         highlighterData,
         hideEntriesHighlighter,
-        hideElementsWithoutSpecificVersion,
+        highlightElementsWithSpecificVersion,
         colorSelection,
         versionHistory,
         selectedVersion,
@@ -128,7 +128,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         setHighlighterData,
         setHideEntriesHighlighter,
         setSelectedSorting,
-        setHideElementsWithoutSpecificVersion,
+        setHighlightElementsWithSpecificVersion,
       }}
     >
       {children}

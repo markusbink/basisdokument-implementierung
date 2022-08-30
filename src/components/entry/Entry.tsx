@@ -34,7 +34,7 @@ interface EntryProps {
 export const Entry: React.FC<EntryProps> = ({ entry, viewedBy, isBookmarked = false, isHidden = false, isOld = false, isHighlighted = false }) => {
   // Threaded entries
   const { currentVersion, groupedEntries, setEntries } = useCase();
-  const { versionHistory, showColumnView, searchbarValue, hideEntriesHighlighter, getCurrentTool, hideElementsWithoutSpecificVersion, selectedVersion} = useHeaderContext();
+  const { versionHistory, showColumnView, searchbarValue, hideEntriesHighlighter, getCurrentTool, highlightElementsWithSpecificVersion, selectedVersion} = useHeaderContext();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -160,7 +160,7 @@ export const Entry: React.FC<EntryProps> = ({ entry, viewedBy, isBookmarked = fa
             {/* Entry */}
             <div
               className={cx("shadow rounded-lg bg-white relative", {
-                "outline outline-2 outline-offset-4 outline-blue-600": selectedVersion + 1 === entry.version && hideElementsWithoutSpecificVersion,
+                "outline outline-2 outline-offset-4 outline-blue-600": selectedVersion + 1 === entry.version && highlightElementsWithSpecificVersion,
               })}
             >
               {isJudge && (
