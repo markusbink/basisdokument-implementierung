@@ -103,7 +103,7 @@ export const DropdownHeader: React.FC<any> = () => {
           <div className="flex flex-row items-center gap-2">
           <Tooltip asChild text="Beiträge ohne eine der ausgewählten Farben werden ausgeblendet">
             <div
-              className="flex flex-row gap-2 bg-offWhite hover:bg-lightGrey p-1.5 cursor-pointer rounded-md"
+              className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
               onClick={() => {
                 setHideEntriesHighlighter(!hideEntriesHighlighter);
               }}>
