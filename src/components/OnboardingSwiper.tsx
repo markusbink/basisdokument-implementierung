@@ -28,8 +28,14 @@ const sliderItems = [
   {
     imageSrc: "mainscreenBD.png",
     imageAlt: "blabla",
-    title: "Basisdokument: Beiträge hinzufügen, Fall bearbeiten & Argumente hinzufügen",
-    desc: "Auf der Hauptseite der Anwendung können Sie über „Beitrag hinzufügen“ einen neuen Klagepunkt hinzufügen. Beiträge werden immer zu Gliederungspunkten hinzugefügt. Ein Titel für einen Gliederungspunkt ist dabei optional und kann von allen Parteien eingesehen werden. Als Vertreter:innen der Beklagten können Sie, um auf einen Beitrag einzugehen und die Sicht Ihrer Mandant:innen darzustellen, im jeweiligen Abschnitt einen eigenen Beitrag über „Text verfassen“ hinzufügen.",
+    title: "Basisdokument: Beiträge hinzufügen",
+    desc: "Auf der Hauptseite der Anwendung können Sie über „Beitrag hinzufügen“ einen neuen Klagepunkt hinzufügen. Beiträge werden immer zu Gliederungspunkten hinzugefügt. Ein Titel für einen Gliederungspunkt ist dabei optional und kann von allen Parteien eingesehen werden.",
+  },
+  {
+    imageSrc: "mainscreenBD.png",
+    imageAlt: "blabla",
+    title: "Basisdokument: Fall bearbeiten & Argumente hinzufügen",
+    desc: "Als Vertreter:innen der Beklagten können Sie, um auf einen Beitrag einzugehen und die Sicht Ihrer Mandant:innen darzustellen, im jeweiligen Abschnitt einen eigenen Beitrag über „Text verfassen“ hinzufügen.",
   },
   {
     imageSrc: "mainscreenBD.png",
