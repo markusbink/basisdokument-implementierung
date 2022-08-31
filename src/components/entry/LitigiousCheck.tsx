@@ -1,37 +1,53 @@
 import cx from "classnames";
 import { Check, X } from "phosphor-react";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
+import { useCase } from "../../contexts";
+import { useOutsideClick } from "../../hooks/use-outside-click";
 
 interface LitigiousCheckProps {
-  isLitigious: boolean | null;
-  setIsLitigious: (isLitigious: boolean | null) => void;
+  entryId: string;
 }
 
-export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
-  isLitigious,
-  setIsLitigious,
-}) => {
+export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({ entryId }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const menuRef = useRef<HTMLSpanElement>(null);
+  const { litigiousChecks, setLitigiousChecks } = useCase();
+  useOutsideClick(menuRef, () => closeMenu());
+
+  const isLitigious = litigiousChecks.filter(
+    (check) => check.entryId === entryId
+  )[0]?.isLitigious;
 
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
-  useEffect(() => {
-    document.addEventListener("click", closeMenu);
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeMenu();
-      }
-    });
+  const removeLitigiousCheck = () => {
+    setLitigiousChecks(
+      litigiousChecks.filter((check) => check.entryId !== entryId)
+    );
+  };
 
-    return () => {
-      document.removeEventListener("click", closeMenu);
-    };
-  }, [isMenuOpen]);
+  const setLitigiousCheck = (isLitigious: boolean) => {
+    // Create new litigious check if it doesn't exist yet in the litigious checks array
+    if (!litigiousChecks.filter((check) => check.entryId === entryId)[0]) {
+      setLitigiousChecks([...litigiousChecks, { entryId, isLitigious }]);
+    }
+    // Otherwise, update the litigious check in the litigious checks array
+    else {
+      setLitigiousChecks(
+        litigiousChecks.map((litigiousCheck) =>
+          litigiousCheck.entryId === entryId
+            ? { ...litigiousCheck, isLitigious }
+            : litigiousCheck
+        )
+      );
+    }
+  };
 
   return (
     <span
+      ref={menuRef}
       onClick={(e) => {
         e.stopPropagation();
         setIsMenuOpen(!isMenuOpen);
@@ -39,12 +55,11 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
       className={cx(
         "flex items-center justify-center cursor-pointer absolute bottom-0 right-0 translate-x-1 translate-y-1 z-10 rounded-full bg-offWhite text-white  h-6 w-6",
         {
-          "border-2 border-mediumGrey": isLitigious === null,
+          "border-2 border-mediumGrey": isLitigious === undefined,
           "bg-vibrantRed": isLitigious,
           "bg-vibrantGreen": isLitigious === false,
         }
-      )}
-    >
+      )}>
       {isLitigious && <X size={14} weight="bold" />}
       {isLitigious === false && <Check size={14} weight="bold" />}
       {isMenuOpen && (
@@ -53,11 +68,10 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
             tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
-              setIsLitigious(null);
+              removeLitigiousCheck();
               setIsMenuOpen(false);
             }}
-            className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-          >
+            className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
             <CircleWithIcon isLitigious={null} />
             Zurücksetzen
           </li>
@@ -66,11 +80,10 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
             tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
-              setIsLitigious(false);
+              setLitigiousCheck(false);
               setIsMenuOpen(false);
             }}
-            className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-          >
+            className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
             <CircleWithIcon
               icon={<Check size={12} weight="bold" />}
               isLitigious={false}
@@ -81,11 +94,10 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
             tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
-              setIsLitigious(true);
+              setLitigiousCheck(true);
               setIsMenuOpen(false);
             }}
-            className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-          >
+            className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
             <CircleWithIcon
               icon={<X size={12} weight="bold" />}
               isLitigious={true}
@@ -116,8 +128,7 @@ const CircleWithIcon: React.FC<CircleWithIconProps> = ({
           "bg-vibrantRed": isLitigious,
           "bg-vibrantGreen": isLitigious === false,
         }
-      )}
-    >
+      )}>
       {icon}
     </div>
   );

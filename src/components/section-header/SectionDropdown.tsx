@@ -18,10 +18,22 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   const { setSectionList } = useSection();
   const isOld = version < currentVersion;
 
-  const handleDelete = () => {
+  const deleteSection = () => {
     setSectionList((prevSectionList) =>
       prevSectionList.filter((section) => section.id !== sectionId)
     );
+  };
+
+  const resetLitigiousChecks = () => {
+    console.log("resetLitigiousChecks");
+  };
+
+  const setAllLitigious = () => {
+    console.log("setAllLitigious");
+  };
+
+  const setAllNotLitigious = () => {
+    console.log("setAllNotLitigious");
   };
 
   return (
@@ -36,7 +48,7 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
           align="end"
           className="bg-darkGrey rounded-lg shadow-lg z-50">
           {!isOld && (
-            <DropdownMenu.Item onClick={() => handleDelete()}>
+            <DropdownMenu.Item onClick={() => deleteSection()}>
               <Button icon={<Trash size={18} />} size="sm">
                 Gliederungspunkt löschen
               </Button>
@@ -44,17 +56,17 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
           )}
           {user?.role === UserRole.Judge && (
             <>
-              <DropdownMenu.Item>
+              <DropdownMenu.Item onClick={() => resetLitigiousChecks()}>
                 <Button icon={<Circle size={18} />} size="sm">
                   Alle Streitigkeitsmarkierungen zurücksetzen
                 </Button>
               </DropdownMenu.Item>
-              <DropdownMenu.Item>
+              <DropdownMenu.Item onClick={() => setAllNotLitigious()}>
                 <Button icon={<CheckCircle size={18} />} size="sm">
                   Alle Beiträge als unstreitig markieren
                 </Button>
               </DropdownMenu.Item>
-              <DropdownMenu.Item>
+              <DropdownMenu.Item onClick={() => setAllLitigious()}>
                 <Button icon={<XCircle size={18} />} size="sm">
                   Alle Beiträge als streitig markieren
                 </Button>

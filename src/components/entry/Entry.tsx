@@ -52,7 +52,6 @@ export const Entry: React.FC<EntryProps> = ({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
-  const [isLitigious, setIsLitigious] = useState<boolean | null>(null);
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
@@ -166,37 +165,27 @@ export const Entry: React.FC<EntryProps> = ({
           "opacity-30 pointer-events-none":
             !lowerOpacityForSearch && searchbarValue !== "" && !isEditing,
           "pointer-events-none": isHidden,
-        })}
-      >
+        })}>
         <div
           className={cx("flex flex-col", {
             "items-end": !isPlaintiff,
-          })}
-        >
+          })}>
           <div
             className={cx("transition-all", {
               "w-[calc(50%_-_12px)]": !isExpanded && showColumnView,
               "w-full": isExpanded || !showColumnView,
-            })}
-          >
+            })}>
             {/* Entry */}
             <div
               className={cx("shadow rounded-lg bg-white relative", {
                 "outline outline-2 outline-offset-4 outline-blue-600":
                   isHighlighted,
-              })}
-            >
-              {isJudge && (
-                <LitigiousCheck
-                  isLitigious={isLitigious}
-                  setIsLitigious={setIsLitigious}
-                />
-              )}
+              })}>
+              {isJudge && <LitigiousCheck entryId={entry.id} />}
               <EntryHeader
                 isPlaintiff={isPlaintiff}
                 isBodyOpen={isBodyOpen}
-                toggleBody={toggleBody}
-              >
+                toggleBody={toggleBody}>
                 <div className="overflow-auto max-w-[350px] whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <span
@@ -206,8 +195,7 @@ export const Entry: React.FC<EntryProps> = ({
                           "bg-darkPurple text-lightPurple": isPlaintiff,
                           "bg-darkPetrol text-lightPetrol": !isPlaintiff,
                         }
-                      )}
-                    >
+                      )}>
                       {entry.entryCode}
                     </span>
                     {isEditing ? (
@@ -274,22 +262,19 @@ export const Entry: React.FC<EntryProps> = ({
                               !isPlaintiff && isMenuOpen,
                           })}
                           onClick={toggleMenu}
-                          isPlaintiff={isPlaintiff}
-                        >
+                          isPlaintiff={isPlaintiff}>
                           <DotsThree size={20} />
                         </Action>
                       </Tooltip>
                       {isMenuOpen ? (
                         <ul
                           ref={menuRef}
-                          className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50"
-                        >
+                          className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
                           {isJudge && (
                             <li
                               tabIndex={0}
                               onClick={addHint}
-                              className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                            >
+                              className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
                               <Scales size={20} />
                               Hinweis hinzufügen
                             </li>
@@ -299,16 +284,14 @@ export const Entry: React.FC<EntryProps> = ({
                               <li
                                 tabIndex={0}
                                 onClick={editEntry}
-                                className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                              >
+                                className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
                                 <Pencil size={20} />
                                 Bearbeiten
                               </li>
                               <li
                                 tabIndex={0}
                                 onClick={() => setIsDeleteErrorVisible(true)}
-                                className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                              >
+                                className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none">
                                 <Trash size={20} />
                                 Löschen
                               </li>
@@ -325,8 +308,7 @@ export const Entry: React.FC<EntryProps> = ({
                 <EntryBody
                   isPlaintiff={isPlaintiff}
                   setLowerOpcacityForSearch={setLowerOpcacityForSearch}
-                  entryId={entry.id}
-                >
+                  entryId={entry.id}>
                   {entry.text}
                 </EntryBody>
               )}
@@ -356,8 +338,7 @@ export const Entry: React.FC<EntryProps> = ({
                 textColor={cx("font-bold", {
                   "text-darkPurple": isPlaintiff,
                   "text-darkPetrol": !isPlaintiff,
-                })}
-              >
+                })}>
                 Text verfassen
               </Button>
             )}
@@ -387,8 +368,7 @@ export const Entry: React.FC<EntryProps> = ({
         <div
           className={cx({
             flex: !showColumnView,
-          })}
-        >
+          })}>
           {!showColumnView && (
             <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
           )}
@@ -407,8 +387,7 @@ export const Entry: React.FC<EntryProps> = ({
               textColor="text-mediumGrey font-bold"
               onClick={() => {
                 setIsEditErrorVisible(false);
-              }}
-            >
+              }}>
               Abbrechen
             </Button>
             <Button
@@ -418,8 +397,7 @@ export const Entry: React.FC<EntryProps> = ({
                 setIsEditErrorVisible(false);
                 setIsNewEntryVisible(false);
                 setIsEditing(false);
-              }}
-            >
+              }}>
               Verwerfen
             </Button>
           </div>
@@ -437,8 +415,7 @@ export const Entry: React.FC<EntryProps> = ({
               textColor="text-mediumGrey font-bold"
               onClick={() => {
                 setIsDeleteErrorVisible(false);
-              }}
-            >
+              }}>
               Abbrechen
             </Button>
             <Button
@@ -447,8 +424,7 @@ export const Entry: React.FC<EntryProps> = ({
               onClick={() => {
                 setIsDeleteErrorVisible(false);
                 deleteEntry(entry.id, entry.entryCode, entry.sectionId);
-              }}
-            >
+              }}>
               Beitrag Löschen
             </Button>
           </div>
