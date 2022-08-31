@@ -14,9 +14,14 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   version,
 }) => {
   const { user } = useUser();
-  const { currentVersion } = useCase();
+  const { entries, currentVersion, setLitigiousChecks } = useCase();
   const { setSectionList } = useSection();
+
   const isOld = version < currentVersion;
+  const sectionEntries = entries.filter(
+    (entry) => entry.sectionId === sectionId
+  );
+  const sectionEntriesIds = sectionEntries.map((entry) => entry.id);
 
   const deleteSection = () => {
     setSectionList((prevSectionList) =>
@@ -25,15 +30,53 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   };
 
   const resetLitigiousChecks = () => {
-    console.log("resetLitigiousChecks");
+    setLitigiousChecks((prevLitigiousChecks) =>
+      prevLitigiousChecks.filter(
+        (litigiousCheck) => !sectionEntriesIds.includes(litigiousCheck.entryId)
+      )
+    );
   };
 
   const setAllLitigious = () => {
-    console.log("setAllLitigious");
+    // If sectionEntriesIds are already in the litigiousChecks array, update them to be litigious.
+    setLitigiousChecks((prevLitigiousChecks) => {
+      const newLitigiousChecks = [...prevLitigiousChecks];
+      sectionEntriesIds.forEach((entryId) => {
+        const litigiousCheck = newLitigiousChecks.find(
+          (litigiousCheck) => litigiousCheck.entryId === entryId
+        );
+        if (litigiousCheck) {
+          litigiousCheck.isLitigious = true;
+        } else {
+          newLitigiousChecks.push({
+            entryId,
+            isLitigious: true,
+          });
+        }
+      });
+      return newLitigiousChecks;
+    });
   };
 
   const setAllNotLitigious = () => {
-    console.log("setAllNotLitigious");
+    // If sectionEntriesIds are already in the litigiousChecks array, update them to be litigious.
+    setLitigiousChecks((prevLitigiousChecks) => {
+      const newLitigiousChecks = [...prevLitigiousChecks];
+      sectionEntriesIds.forEach((entryId) => {
+        const litigiousCheck = newLitigiousChecks.find(
+          (litigiousCheck) => litigiousCheck.entryId === entryId
+        );
+        if (litigiousCheck) {
+          litigiousCheck.isLitigious = false;
+        } else {
+          newLitigiousChecks.push({
+            entryId,
+            isLitigious: false,
+          });
+        }
+      });
+      return newLitigiousChecks;
+    });
   };
 
   return (

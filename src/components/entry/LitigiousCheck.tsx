@@ -30,7 +30,11 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({ entryId }) => {
 
   const setLitigiousCheck = (isLitigious: boolean) => {
     // Create new litigious check if it doesn't exist yet in the litigious checks array
-    if (!litigiousChecks.filter((check) => check.entryId === entryId)[0]) {
+    if (
+      !litigiousChecks.filter(
+        (litigiousCheck) => litigiousCheck.entryId === entryId
+      )[0]
+    ) {
       setLitigiousChecks([...litigiousChecks, { entryId, isLitigious }]);
     }
     // Otherwise, update the litigious check in the litigious checks array
