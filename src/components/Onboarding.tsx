@@ -31,8 +31,8 @@ export const Onboarding = () => {
               </button>
               <div className="h-full overflow-y-auto">
                 <OnboardingSwiper />
-                <div className="flex justify-center py-8">
-                  <Button onClick={toggleOnboarding} size="sm">
+                <div className="flex justify-center py-4">
+                  <Button onClick={toggleOnboarding} size="sm" gap="0">
                     Loslegen
                   </Button>
                 </div>
