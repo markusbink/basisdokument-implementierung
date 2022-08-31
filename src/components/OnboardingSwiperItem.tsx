@@ -21,7 +21,7 @@ export const OnboardingSliderItem = ({
         />
       </div>
       <div className="p-4 max-w-[800px] m-auto">
-        <h3 className="leading-loose text-xl text-center text-darkGrey font-semibold ">
+        <h3 className="leading-loose text-xl text-center text-darkGrey font-semibold mt-8 mb-2">
           {title}
         </h3>
         <p className="text-center text-mediumGrey">{desc}</p>
