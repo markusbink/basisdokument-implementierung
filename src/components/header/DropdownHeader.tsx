@@ -25,6 +25,7 @@ export const DropdownHeader: React.FC<any> = () => {
     hideEntriesHighlighter,
     setHighlightElementsWithSpecificVersion,
     highlightElementsWithSpecificVersion,
+    setCurrentTool
   } = useHeaderContext();
 
   const { getCurrentTool } = useHeaderContext();
@@ -90,35 +91,43 @@ export const DropdownHeader: React.FC<any> = () => {
           className={cx(
             `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
             {
-              "opacity-30 pointer-events-none":
-                getCurrentTool.id === Tool.Highlighter ||
-                getCurrentTool.id === Tool.Eraser,
+              "opacity-30":
+                getCurrentTool.id !== Tool.Cursor,
             }
-          )}>
+          )}
+          onClick={() => {
+            console.log(getCurrentTool.id);
+            
+            if (getCurrentTool.id !== Tool.Cursor) {
+              setCurrentTool({ id: Tool.Cursor, iconNode: "Cursor", germanTitle: "Maus" })
+            }
+          }}>
           <div className="flex flex-row gap-2">
             {colorSelection.map((item: any, id: number) => (
               <HighlighterButton key={id} id={id} />
             ))}
           </div>
           <div className="flex flex-row items-center gap-2">
-          <Tooltip asChild text="Beiträge ohne eine der ausgewählten Farben werden ausgeblendet">
-            <div
-              className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
-              onClick={() => {
-                setHideEntriesHighlighter(!hideEntriesHighlighter);
-              }}>
-              <input
-                className="small-checkbox accent-darkGrey cursor-pointer"
-                type="checkbox"
-                checked={hideEntriesHighlighter}
-                onChange={() =>
-                  setHideEntriesHighlighter(!hideEntriesHighlighter)
-                }
-              />
-              <div>
-                <SelectionForeground size={16} />
+            <Tooltip
+              asChild
+              text="Beiträge ohne eine der ausgewählten Farben werden ausgeblendet">
+              <div
+                className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
+                onClick={() => {
+                  setHideEntriesHighlighter(!hideEntriesHighlighter);
+                }}>
+                <input
+                  className="small-checkbox accent-darkGrey cursor-pointer"
+                  type="checkbox"
+                  checked={hideEntriesHighlighter}
+                  onChange={() =>
+                    setHideEntriesHighlighter(!hideEntriesHighlighter)
+                  }
+                />
+                <div>
+                  <SelectionForeground size={16} />
+                </div>
               </div>
-            </div>
             </Tooltip>
           </div>
         </div>
