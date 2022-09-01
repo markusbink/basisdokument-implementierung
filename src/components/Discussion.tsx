@@ -10,7 +10,12 @@ import { SectionHeader } from "./section-header/SectionHeader";
 export const Discussion = () => {
   const { groupedEntries } = useCase();
   const { sectionList, individualSorting } = useSection();
-  const { selectedSorting, selectedVersion, versionHistory, highlightElementsWithSpecificVersion } = useHeaderContext();
+  const {
+    selectedSorting,
+    selectedVersion,
+    versionHistory,
+    highlightElementsWithSpecificVersion,
+  } = useHeaderContext();
 
   const getRequestedSorting = (sectionList: ISection[]) => {
     if (selectedSorting === Sorting.Privat) {
@@ -41,18 +46,23 @@ export const Discussion = () => {
               <span>
                 Beiträge, die in{" "}
                 <b>
-                  Version {selectedVersion + 1} ({versionHistory[selectedVersion].author})
+                  Version {selectedVersion + 1} (
+                  {versionHistory[selectedVersion].author})
                 </b>{" "}
                 hinzugefügt wurden, werden mit einem blauen Rahmen hervorgehoben
               </span>
             </div>
           </div>
         ) : null}
-        {getRequestedSorting(sectionList).map((section) => {
+        {getRequestedSorting(sectionList).map((section, index) => {
           const sectionEntries = groupedEntries[section.id];
           return (
             <div key={section.id}>
-              <SectionHeader sectionId={getOriginalSortingPosition(sectionList, section.id)} section={section} />
+              <SectionHeader
+                sectionId={getOriginalSortingPosition(sectionList, section.id)}
+                section={section}
+                position={index}
+              />
               <div className="space-y-4">
                 <EntryList entries={sectionEntries?.parent || []} />
                 <AddEntryButtons sectionId={section.id} />

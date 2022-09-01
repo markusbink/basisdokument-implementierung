@@ -1,6 +1,6 @@
 import cx from "classnames";
-import { useState } from "react";
-import { useSection, useUser } from "../../contexts";
+import { useEffect, useState } from "react";
+import { useCase, useSection, useUser } from "../../contexts";
 import { UserRole } from "../../types";
 import { SectionDropdown } from "./SectionDropdown";
 
@@ -8,21 +8,26 @@ interface SectionTitleProps {
   id: string;
   title: string;
   role: UserRole;
+  version: number;
 }
 
 export const SectionTitle: React.FC<SectionTitleProps> = ({
   id,
   title,
   role,
+  version,
 }) => {
-  const { user } = useUser();
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const { user } = useUser();
   const { setSectionList } = useSection();
+  const { currentVersion } = useCase();
+  const isOld = version < currentVersion;
 
   const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSectionList((prevState) => {
       const newState = [...prevState];
       const section = newState.find((s) => s.id === id);
+
       if (section) {
         if (role === UserRole.Plaintiff) {
           section.titlePlaintiff = e.target.value;
@@ -34,13 +39,18 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
     });
   };
 
+  useEffect(() => {
+    if (!title) {
+      setIsEditing(true);
+    }
+  }, [title]);
+
   return (
     <div
       className={cx("flex w-full", {
         "flex-col": user?.role === UserRole.Judge,
         "items-center gap-2": user?.role !== UserRole.Judge,
-      })}
-    >
+      })}>
       {user?.role === UserRole.Judge && (
         <span
           className={cx(
@@ -49,34 +59,51 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
               "bg-lightPurple text-darkPurple": role === UserRole.Plaintiff,
               "bg-lightPetrol text-darkPetrol": role === UserRole.Defendant,
             }
-          )}
-        >
+          )}>
           {role}
         </span>
       )}
       <div
-        className={cx("flex items-start gap-2 w-full", {
+        className={cx("flex items-start justify-start gap-2 w-full", {
           "py-3": user?.role !== UserRole.Judge,
-        })}
-      >
-        <input
-          readOnly={!isEditing}
-          className="bg-transparent text-xl font-bold w-full outline-none"
-          placeholder="Optionalen Titel vergeben"
-          type="text"
-          autoFocus={true}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              setIsEditing(false);
-            }
-          }}
-          onClick={() => setIsEditing(true)}
-          onChange={changeTitle}
-          onBlur={() => setIsEditing(false)}
-          value={title}
-        />
-        <SectionDropdown />
+        })}>
+        {isEditing ? (
+          <input
+            placeholder="Optionalen Titel vergeben"
+            type="text"
+            autoFocus={true}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                if (title.length > 0) {
+                  setIsEditing(false);
+                }
+                e.currentTarget.blur();
+              }
+            }}
+            onChange={changeTitle}
+            onBlur={() => {
+              console.log("onblur");
+
+              if (title.length > 0) {
+                setIsEditing(false);
+              }
+            }}
+            value={title}
+            className="bg-transparent text-xl font-bold w-full outline-none"
+          />
+        ) : (
+          <h2
+            className="bg-transparent text-xl font-bold outline-offset-[6px] rounded"
+            onClick={() => setIsEditing(true)}>
+            {title}
+          </h2>
+        )}
+        {}
+        {((!isOld && user?.role !== UserRole.Judge) ||
+          user?.role === UserRole.Judge) && (
+          <SectionDropdown sectionId={id} version={version} />
+        )}
       </div>
     </div>
   );
