@@ -59,7 +59,7 @@ export const MainHeader = () => {
         <div
           className={cx(
             "flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-8 items-center w-full max-w-[300px]",
-            { "outline outline-2 outline-offset-0 outline-darkGrey-600": searchbarValue !== "" }
+            { "outline outline-1,5 outline-offset-0 outline-darkGrey": searchbarValue !== "" }
           )}>
           <div>
             <MagnifyingGlass
