@@ -80,7 +80,7 @@ export const JudgeHintPopup = ({ isVisible, onClose }: JudgeHintPopupProps) => {
                     <WarningCircle size={40} />
                   </span>
                   <p className="text-sm">
-                    Hinweise von Richter:innen sind öffentlich und können von den anderen Parteien eingesehen werden. 
+                    Hinweise von Richtern sind öffentlich und können von den anderen Parteien eingesehen werden. 
                     Sie können einen Hinweis nachträglich bearbeiten und löschen, bis zu dem Zeitpunkt der Übermittlung dieser Version des Basisdokuments. 
                   </p>
                 </div>

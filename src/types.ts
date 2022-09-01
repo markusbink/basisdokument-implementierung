@@ -96,8 +96,14 @@ export interface IVersion {
   timestamp: string;
 }
 
-export interface Tool {
-  id: string;
+export enum Tool {
+  Eraser,
+  Cursor,
+  Highlighter
+}
+
+export interface ITool {
+  id: Tool;
   iconNode: string;
   germanTitle: string;
 }

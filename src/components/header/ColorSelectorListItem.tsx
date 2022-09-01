@@ -31,7 +31,7 @@ export const ColorSelectorListItem: React.FC<IProps> = ({ highlighter, setCurren
         {/*Color Circle*/}
         <div className="flex flex-row items-center justify-center p-2 gap-2">
           <div className={`flex items-center justify-center w-5 h-5 shadow-inner shadow-2xl ${getColorCode(highlighter.color)} rounded-full `}>
-            <div className="border-white w-4 h-4 bg-transparent rounded-full bg-transparent border-[1px]"></div>
+            <div className="border-white w-3 h-3 bg-transparent rounded-full bg-transparent border-[1px]"></div>
           </div>
         </div>
         {/*Name of Marker*/}

@@ -83,8 +83,8 @@ export const AboutDevelopersMenu = () => {
                       <AiFillGithub size={14} color={"white"} />
                     </div>
                   </div>
-                  <div className="hover:opacity-70">
-                    <div className="flex flex-row items-center gap-1 p-1 rounded-md bg-gradient-to-r from-lightPetrol to-lightPurple hover:bg-opacity-50 cursor-pointer">
+                  <div>
+                    <div className="flex flex-row items-center gap-1 p-1 rounded-md bg-gradient-to-r from-lightPetrol to-lightPurple hover:from-lightPetrol/50 hover:to-lightPurple/50 cursor-pointer">
                       <Envelope className="text-darkGrey" size={14} />
                       <span className="text-mediumGrey font-bold text-xs" onClick={() => window.open("mailto:" + developer.email)}>
                         {developer.email}

@@ -5,6 +5,9 @@ import { SortingSelector } from "./SortingSelector";
 import { SortingMenu } from "./SortingMenu";
 import { VersionSelector } from "./VersionSelector";
 import { useHeaderContext } from "../../contexts";
+import { Tool } from "../../types";
+import { SelectionForeground } from "phosphor-react";
+import { Tooltip } from "../Tooltip";
 
 export enum Sorting {
   Privat,
@@ -20,14 +23,19 @@ export const DropdownHeader: React.FC<any> = () => {
     colorSelection,
     setSelectedSorting,
     hideEntriesHighlighter,
-    setHideElementsWithoutSpecificVersion,
-    hideElementsWithoutSpecificVersion,
+    setHighlightElementsWithSpecificVersion,
+    highlightElementsWithSpecificVersion,
+    setCurrentTool
   } = useHeaderContext();
+
+  const { getCurrentTool } = useHeaderContext();
 
   return (
     <div className="flex flex-row gap-4 p-2 pl-8 pr-8 bg-white items-center">
       <div>
-        <span className="font-extrabold tracking-widest text-xs">DARSTELLUNG</span>
+        <span className="font-extrabold tracking-widest text-xs">
+          DARSTELLUNG
+        </span>
         <div className="flex flex-row gap-2 h-8">
           <div
             className={cx(
@@ -38,13 +46,11 @@ export const DropdownHeader: React.FC<any> = () => {
             )}
             onClick={() => {
               setShowColumnView(true);
-            }}
-          >
+            }}>
             <img
               className="w-4"
               src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`}
-              alt="column view icon"
-            ></img>
+              alt="column view icon"></img>
           </div>
           <div
             className={cx(
@@ -55,13 +61,11 @@ export const DropdownHeader: React.FC<any> = () => {
             )}
             onClick={() => {
               setShowColumnView(false);
-            }}
-          >
+            }}>
             <img
               className="w-4"
               src={`${process.env.PUBLIC_URL}/icons/row-view-icon.svg`}
-              alt="row view icon"
-            ></img>
+              alt="row view icon"></img>
           </div>
         </div>
       </div>
@@ -83,29 +87,48 @@ export const DropdownHeader: React.FC<any> = () => {
         <span className="font-extrabold tracking-widest text-xs">
           MARKIERUNGEN
         </span>
-        <div className="flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium">
+        <div
+          className={cx(
+            `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
+            {
+              "opacity-30":
+                getCurrentTool.id !== Tool.Cursor,
+            }
+          )}
+          onClick={() => {
+            console.log(getCurrentTool.id);
+            
+            if (getCurrentTool.id !== Tool.Cursor) {
+              setCurrentTool({ id: Tool.Cursor, iconNode: "Cursor", germanTitle: "Maus" })
+            }
+          }}>
           <div className="flex flex-row gap-2">
             {colorSelection.map((item: any, id: number) => (
               <HighlighterButton key={id} id={id} />
             ))}
           </div>
           <div className="flex flex-row items-center gap-2">
-            <input
-              className="small-checkbox accent-darkGrey cursor-pointer"
-              type="checkbox"
-              checked={hideEntriesHighlighter}
-              onChange={() =>
-                setHideEntriesHighlighter(!hideEntriesHighlighter)
-              }
-            />
-            <span
-              className="text-clip overflow-hidden whitespace-nowrap cursor-pointer"
-              onClick={() => {
-                setHideEntriesHighlighter(!hideEntriesHighlighter);
-              }}
-            >
-              Beiträge ausblenden
-            </span>
+            <Tooltip
+              asChild
+              text="Beiträge ohne eine der ausgewählten Farben werden ausgeblendet">
+              <div
+                className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
+                onClick={() => {
+                  setHideEntriesHighlighter(!hideEntriesHighlighter);
+                }}>
+                <input
+                  className="small-checkbox accent-darkGrey cursor-pointer"
+                  type="checkbox"
+                  checked={hideEntriesHighlighter}
+                  onChange={() =>
+                    setHideEntriesHighlighter(!hideEntriesHighlighter)
+                  }
+                />
+                <div>
+                  <SelectionForeground size={16} />
+                </div>
+              </div>
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -118,10 +141,10 @@ export const DropdownHeader: React.FC<any> = () => {
           <input
             className="small-checkbox accent-darkGrey cursor-pointer"
             type="checkbox"
-            defaultChecked={hideElementsWithoutSpecificVersion}
+            defaultChecked={highlightElementsWithSpecificVersion}
             onChange={() =>
-              setHideElementsWithoutSpecificVersion(
-                !hideElementsWithoutSpecificVersion
+              setHighlightElementsWithSpecificVersion(
+                !highlightElementsWithSpecificVersion
               )
             }
           />

@@ -29,13 +29,13 @@ const sliderItems = [
     imageSrc: "mainscreenBD.png",
     imageAlt: "blabla",
     title: "Sidebar",
-    desc: "In der Sidebar können Sie privaten Notizen zu Beträgen und Lesezeichen anlegen. Dort finden Sie zusätzlich Hinweise von Richter:innen. Private Notizen und Lesezeichen können nur von Ihnen eingesehen werden. Ein Klick auf die BeitragsID bringt Sie direkt zum jeweiligen Beitrag.",
+    desc: "In der Sidebar können Sie privaten Notizen zu Beträgen und Lesezeichen anlegen. Dort finden Sie zusätzlich Hinweise von Richtern. Private Notizen und Lesezeichen können nur von Ihnen eingesehen werden. Ein Klick auf die BeitragsID bringt Sie direkt zum jeweiligen Beitrag.",
   },
   {
     imageSrc: "mainscreenBD.png",
     imageAlt: "blibla",
     title: "Speichern & Versenden",
-    desc: "Sie können Ihre Version des Basisdokuments lokal speichern. Das ermöglicht Ihnen über mehrere Sitzngen hinweg Beträge hinzuzufügen. Ist Ihre aktuelle Version des Basisdokuments abgeschlossen und dieses soll an den/die Richter:in weitergegeben werden können Sie dieses exportieren. Ab dem Export können Sie keine Beiträge mehr bearbeiten, beim bloßigen Speichern ist das weiterhin möglich.",
+    desc: "Sie können Ihre Version des Basisdokuments lokal speichern. Das ermöglicht Ihnen über mehrere Sitzngen hinweg Beträge hinzuzufügen. Ist Ihre aktuelle Version des Basisdokuments abgeschlossen und dieses soll an den Richter weitergegeben werden können Sie dieses exportieren. Ab dem Export können Sie keine Beiträge mehr bearbeiten, beim bloßigen Speichern ist das weiterhin möglich.",
   },
   {
     imageSrc: "mainscreenBD.png",

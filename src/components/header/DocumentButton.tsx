@@ -45,7 +45,7 @@ export const DocumentButton = () => {
         }}
       >
         <DropdownMenu.Trigger className="flex flex-row bg-darkGrey hover:bg-mediumGrey justify-center items-center rounded-md gap-2 pl-2 pr-2 h-8 hover:cursor-pointer">
-          <img src={`${process.env.PUBLIC_URL}/icons/document.svg`} alt="document icon" className="h-4"></img>
+          <img src={`${process.env.PUBLIC_URL}/icons/document.svg`} alt="document icon" className="h-5"></img>
           {showDownloadMenu ? <CaretUp size={12} className="text-white" weight="bold" /> : <CaretDown size={12} className="text-white" weight="bold" />}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>

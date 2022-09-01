@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEntry, UserRole } from "../../types";
+import { IEntry, UserRole, Tool } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
@@ -41,7 +41,15 @@ export const Entry: React.FC<EntryProps> = ({
 }) => {
   // Threaded entries
   const { currentVersion, groupedEntries, setEntries } = useCase();
-  const { versionHistory, showColumnView, searchbarValue } = useHeaderContext();
+  const {
+    versionHistory,
+    showColumnView,
+    searchbarValue,
+    hideEntriesHighlighter,
+    getCurrentTool,
+    highlightElementsWithSpecificVersion,
+    selectedVersion,
+  } = useHeaderContext();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -57,6 +65,8 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const [authorName, setAuthorName] = useState<string>(entry.author);
   const [lowerOpacityForSearch, setLowerOpcacityForSearch] =
+    useState<boolean>(false);
+  const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
 
   const isJudge = viewedBy === UserRole.Judge;
@@ -163,7 +173,11 @@ export const Entry: React.FC<EntryProps> = ({
         className={cx("text-sm", {
           "opacity-50": isHidden,
           "opacity-30 pointer-events-none":
-            !lowerOpacityForSearch && searchbarValue !== "" && !isEditing,
+            (!lowerOpacityForSearch && searchbarValue !== "" && !isEditing) ||
+            (searchbarValue === "" &&
+              lowerOpcacityForHighlighters &&
+              hideEntriesHighlighter &&
+              getCurrentTool.id === Tool.Cursor),
           "pointer-events-none": isHidden,
         })}>
         <div
@@ -179,7 +193,9 @@ export const Entry: React.FC<EntryProps> = ({
             <div
               className={cx("shadow rounded-lg bg-white relative", {
                 "outline outline-2 outline-offset-4 outline-blue-600":
-                  isHighlighted,
+                  selectedVersion + 1 === entry.version &&
+                  highlightElementsWithSpecificVersion,
+                isHighlighted,
               })}>
               {isJudge && <LitigiousCheck entryId={entry.id} />}
               <EntryHeader
@@ -308,6 +324,10 @@ export const Entry: React.FC<EntryProps> = ({
                 <EntryBody
                   isPlaintiff={isPlaintiff}
                   setLowerOpcacityForSearch={setLowerOpcacityForSearch}
+                  setLowerOpcacityForHighlighters={
+                    setLowerOpcacityForHighlighters
+                  }
+                  lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
                   entryId={entry.id}>
                   {entry.text}
                 </EntryBody>
@@ -370,7 +390,7 @@ export const Entry: React.FC<EntryProps> = ({
             flex: !showColumnView,
           })}>
           {!showColumnView && (
-            <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
+            <button className="ml-5 w-5 border-l-2 border-lightGrey" />
           )}
           <EntryList entries={thread} />
         </div>
