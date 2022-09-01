@@ -10,7 +10,7 @@ import { SectionHeader } from "./section-header/SectionHeader";
 export const Discussion = () => {
   const { groupedEntries } = useCase();
   const { sectionList, individualSorting } = useSection();
-  
+
   const {
     selectedSorting,
     selectedVersion,
@@ -34,27 +34,30 @@ export const Discussion = () => {
   return (
     <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4 scroll-smooth">
       <div className="max-w-[1200px] m-auto">
+        {highlightElementsWithSpecificVersion ? (
+          <div className="flex justify-center">
+            <div className="fixed flex justify-center items-center -mt-24">
+              <div className="flex flex-row items-center justify-center gap-4 bg-blue-600 bg-opacity-80 text-white p-2 px-3 rounded-md">
+                <div>
+                  <div className="w-4 h-4 border-blue-200 border-2 rounded-full"></div>
+                </div>
+                <span>
+                  Beiträge, die in{" "}
+                  <b>
+                    Version {selectedVersion + 1} (
+                    {versionHistory[selectedVersion].author})
+                  </b>{" "}
+                  hinzugefügt wurden, werden mit einem blauen Rahmen
+                  hervorgehoben.
+                </span>
+              </div>
+            </div>
+          </div>
+        ) : null}
         <div className="grid grid-cols-2 gap-6 mb-16">
           <MetaData owner={UserRole.Plaintiff} />
           <MetaData owner={UserRole.Defendant} />
         </div>
-        {highlightElementsWithSpecificVersion ? (
-          <div className="flex justify-center items-center">
-            <div className="flex flex-row items-center justify-center gap-4 bg-blue-600 text-white p-4 rounded-md">
-              <div>
-                <div className="w-6 h-6 border-blue-200 border-2 rounded-full"></div>
-              </div>
-              <span>
-                Beiträge, die in{" "}
-                <b>
-                  Version {selectedVersion + 1} (
-                  {versionHistory[selectedVersion].author})
-                </b>{" "}
-                hinzugefügt wurden, werden mit einem blauen Rahmen hervorgehoben.
-              </span>
-            </div>
-          </div>
-        ) : null}
         {getRequestedSorting(sectionList).map((section, index) => {
           const sectionEntries = groupedEntries[section.id];
           return (
