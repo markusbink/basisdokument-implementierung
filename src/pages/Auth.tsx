@@ -57,7 +57,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setMetaData,
     setLitigiousChecks,
     setCurrentVersion,
-    setHighlightedEntries
+    setHighlightedEntries,
   } = useCase();
   const { setVersionHistory, setColorSelection, setCurrentColorSelection } =
     useHeaderContext();
@@ -68,6 +68,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setUser } = useUser();
   const { setIsOnboardingVisible } = useOnboarding();
 
+  // Set React states when user enters/changes text input fields
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setPrename(newValue);
@@ -108,6 +109,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     } catch (error) {}
   };
 
+  // The onboarding should only be displayed when if the user opens a basisdokument for the first time.
+  // It is still possible to access the onboarding via the ?-icon in the header.
   const checkOnboardingShownBefore = () => {
     if (Cookies.get("onboarding") === undefined) {
       Cookies.set("onboarding", "true");
@@ -235,6 +238,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     }
   };
 
+  // The imported data from the files is then merged into a React state (context provider).
   const setContextFromBasisdokument = (basisdokument: any) => {
     setVersionHistory(basisdokument.versions);
     setEntries(basisdokument.entries);
@@ -287,8 +291,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 {
                   "border-2 border-darkGrey": usage === UsageMode.Open,
                 }
-              )}
-            >
+              )}>
               Öffnen
             </div>
             <div
@@ -300,8 +303,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 {
                   "border-2 border-darkGrey": usage === UsageMode.Create,
                 }
-              )}
-            >
+              )}>
               Erstellen
             </div>
           </div>
@@ -322,8 +324,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 {
                   "border-2 border-darkGrey": role === "Kläger",
                 }
-              )}
-            >
+              )}>
               Kläger
             </div>
             <div
@@ -335,8 +336,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 {
                   "border-2 border-darkGrey": role === "Beklagter",
                 }
-              )}
-            >
+              )}>
               Beklagter
             </div>
             <div
@@ -348,8 +348,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 {
                   "border-2 border-darkGrey": role === "Richter",
                 }
-              )}
-            >
+              )}>
               Richter
             </div>
           </div>

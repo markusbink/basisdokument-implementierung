@@ -147,6 +147,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
     }
   };
 
+  // Change cursor if highlighter cursor is selected
   const getToolIconPath = () => {
     switch (getCurrentTool.id) {
       case Tool.Highlighter:
@@ -158,6 +159,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
     }
   };
 
+  // Source: https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro
   const createElementFromHTML = (htmlString: string) => {
     let div = document.createElement("div");
     div.innerHTML = htmlString.trim();

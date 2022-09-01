@@ -10,6 +10,7 @@ import { SectionHeader } from "./section-header/SectionHeader";
 export const Discussion = () => {
   const { groupedEntries } = useCase();
   const { sectionList, individualSorting } = useSection();
+  
   const {
     selectedSorting,
     selectedVersion,
