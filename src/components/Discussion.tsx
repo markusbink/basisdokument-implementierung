@@ -49,7 +49,7 @@ export const Discussion = () => {
                   Version {selectedVersion + 1} (
                   {versionHistory[selectedVersion].author})
                 </b>{" "}
-                hinzugefügt wurden, werden mit einem blauen Rahmen hervorgehoben
+                hinzugefügt wurden, werden mit einem blauen Rahmen hervorgehoben.
               </span>
             </div>
           </div>
