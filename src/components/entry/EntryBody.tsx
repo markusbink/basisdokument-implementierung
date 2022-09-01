@@ -197,7 +197,6 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
           "border-lightPetrol": !isPlaintiff,
         }
       )}>
-      {/* eslint-disable-next-line */}
       {searchbarValue === "" &&
       (getCurrentTool.id === Tool.Highlighter ||
         getCurrentTool.id === Tool.Eraser) ? (
@@ -214,7 +213,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
           }}></p>
       ) : null}
       {searchbarValue !== "" ? (
-        <Highlight
+        <Highlight // eslint-disable-next-line
           search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>
           {children}
         </Highlight> // eslint-disable-line
