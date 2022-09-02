@@ -3,6 +3,7 @@ import { Button } from "../Button";
 import { DotsThree, Trash, CheckCircle, XCircle, Circle } from "phosphor-react";
 import { useCase, useSection, useUser } from "../../contexts";
 import { UserRole } from "../../types";
+import { Tooltip } from "../Tooltip";
 
 interface SectionDropdownProps {
   sectionId: string;
@@ -83,11 +84,13 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
     <DropdownMenu.Root>
       <DropdownMenu.Trigger className="py-1">
         <span>
-          <DotsThree
-            size={20}
-            weight="bold"
-            className="rounded-md hover:bg-darkPurple hover:text-lightPurple"
-          />
+          <Tooltip text="Mehr Optionen">
+            <DotsThree
+              size={20}
+              weight="bold"
+              className="rounded-md hover:bg-darkPurple hover:text-lightPurple"
+            />
+          </Tooltip>
         </span>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
