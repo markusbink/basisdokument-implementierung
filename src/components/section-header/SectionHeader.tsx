@@ -19,12 +19,12 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   return (
     <div
-      className={cx("flex gap-6 pb-4 pt-12 items-start w-full", {
+      className={cx("flex gap-6 items-start pb-4 pt-12 w-full", {
         "grid grid-cols-2": user?.role === UserRole.Judge,
       })}>
       {/* Section Number */}
       <div
-        className={cx("flex gap-6 items-start", {
+        className={cx("flex gap-6 items-center", {
           "w-full": user?.role !== UserRole.Defendant,
         })}>
         <div className="flex gap-4 items-center relative">
