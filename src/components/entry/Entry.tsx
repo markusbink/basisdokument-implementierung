@@ -15,12 +15,15 @@ import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEntry, UserRole, Tool } from "../../types";
+import { IEntry, UserRole, Tool, IBookmark } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
 import { EntryList } from "./EntryList";
 import { LitigiousCheck } from "./LitigiousCheck";
+import { useBookmarks } from "../../contexts";
+import { v4 as uuidv4 } from "uuid";
+import { BookmarkProps } from "../sidebar/Bookmark";
 
 interface EntryProps {
   entry: IEntry;
@@ -68,6 +71,7 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
+  const { setBookmarks } = useBookmarks();
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -98,6 +102,17 @@ export const Entry: React.FC<EntryProps> = ({
   const bookmarkEntry = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
+    setBookmarks((oldBoomarks) => {
+      const newBookmark: IBookmark = {
+        id: uuidv4(),
+        title: "Lesezeichen",
+        associatedEntry: entry.id,
+      };
+      const newBookmarks = [...oldBoomarks, newBookmark];
+      return newBookmarks;
+      // TODO open sidebar
+      // TODO get in edit mode for title
+    });
   };
 
   const addNote = (e: React.MouseEvent) => {
