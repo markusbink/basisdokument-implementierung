@@ -23,7 +23,7 @@ import { EntryList } from "./EntryList";
 import { LitigiousCheck } from "./LitigiousCheck";
 import { useBookmarks } from "../../contexts";
 import { v4 as uuidv4 } from "uuid";
-import { BookmarkProps } from "../sidebar/Bookmark";
+import { useSidebar } from "../../contexts/SidebarContext";
 
 interface EntryProps {
   entry: IEntry;
@@ -72,6 +72,13 @@ export const Entry: React.FC<EntryProps> = ({
   const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
   const { setBookmarks } = useBookmarks();
+  const {
+    sidebars,
+    isSidebarOpen,
+    setIsSidebarOpen,
+    activeSidebar,
+    setActiveSidebar,
+  } = useSidebar();
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -105,14 +112,13 @@ export const Entry: React.FC<EntryProps> = ({
     setBookmarks((oldBoomarks) => {
       const newBookmark: IBookmark = {
         id: uuidv4(),
-        title: "Lesezeichen",
+        title: `Lesezeichen ${oldBoomarks.length + 1}`,
         associatedEntry: entry.id,
       };
       const newBookmarks = [...oldBoomarks, newBookmark];
       return newBookmarks;
-      // TODO open sidebar
-      // TODO get in edit mode for title
     });
+    setActiveSidebar("Bookmarks");
   };
 
   const addNote = (e: React.MouseEvent) => {

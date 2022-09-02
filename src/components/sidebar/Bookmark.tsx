@@ -10,7 +10,7 @@ export interface BookmarkProps {
 }
 
 export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
-  const [doubleClicked, setDoubleClicked] = useState<boolean>(false);
+  const [doubleClicked, setDoubleClicked] = useState<boolean>(true);
 
   const { setBookmarks } = useBookmarks();
   const { entries } = useCase();
@@ -47,6 +47,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           autoFocus={true}
           type="text"
           name="title"
+          placeholder="Titel vergeben..."
           className="max-w-[55%] rounded-md focus:outline focus:outline-lightGrey"
           value={bookmark.title}
           onBlur={() => setDoubleClicked(false)}
