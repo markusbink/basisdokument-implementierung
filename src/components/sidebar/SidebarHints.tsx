@@ -32,8 +32,7 @@ export const SidebarHints = () => {
             textColor="text-white"
             hasText={false}
             alternativePadding="p-1"
-            icon={<Plus size={18} weight="bold" />}
-          ></Button>
+            icon={<Plus size={18} weight="bold" />}></Button>
         )}
       </div>
       {hints.length <= 0 && (
@@ -43,46 +42,46 @@ export const SidebarHints = () => {
             : "Hinweise nach §139 ZPO erscheinen in dieser Ansicht, sobald der Richter oder die Richterin welche verfasst hat."}
         </div>
       )}
-      <div className="flex flex-col p-4 overflow-auto text-mediumGrey font-extrabold text-sm">
-        <div
-          className="cursor-pointer flex items-center"
-          onClick={() =>
-            setHintsWithoutReferenceOpen(!hintsWithoutReferenceOpen)
-          }
-        >
-          {hintsWithoutReferenceOpen ? (
-            <CaretDown size={14} className="inline mr-1" weight="bold" />
-          ) : (
-            <CaretRight size={14} className="inline mr-1" weight="bold" />
-          )}
-          OHNE BEZUG AUF BEITRAG
-        </div>
-        <div>
-          {hintsWithoutReferenceOpen &&
-            hints.map(
-              (hint) =>
-                !hint.associatedEntry && <Hint key={hint.id} hint={hint} />
+      {hints.length > 0 && (
+        <div className="flex flex-col p-4 overflow-auto text-mediumGrey font-extrabold text-sm">
+          <div
+            className="cursor-pointer flex items-center"
+            onClick={() =>
+              setHintsWithoutReferenceOpen(!hintsWithoutReferenceOpen)
+            }>
+            {hintsWithoutReferenceOpen ? (
+              <CaretDown size={14} className="inline mr-1" weight="bold" />
+            ) : (
+              <CaretRight size={14} className="inline mr-1" weight="bold" />
             )}
-        </div>
-        <div
-          className="cursor-pointer flex items-center mt-7"
-          onClick={() => setHintsWithReferenceOpen(!hintsWithReferenceOpen)}
-        >
-          {hintsWithReferenceOpen ? (
-            <CaretDown size={14} className="inline mr-1" weight="bold" />
-          ) : (
-            <CaretRight size={14} className="inline mr-1" weight="bold" />
-          )}
-          MIT BEZUG AUF BEITRAG
-        </div>
-        <div>
-          {hintsWithReferenceOpen &&
-            hints.map(
-              (hint) =>
-                hint.associatedEntry && <Hint key={hint.id} hint={hint} />
+            OHNE BEZUG AUF BEITRAG
+          </div>
+          <div>
+            {hintsWithoutReferenceOpen &&
+              hints.map(
+                (hint) =>
+                  !hint.associatedEntry && <Hint key={hint.id} hint={hint} />
+              )}
+          </div>
+          <div
+            className="cursor-pointer flex items-center mt-7"
+            onClick={() => setHintsWithReferenceOpen(!hintsWithReferenceOpen)}>
+            {hintsWithReferenceOpen ? (
+              <CaretDown size={14} className="inline mr-1" weight="bold" />
+            ) : (
+              <CaretRight size={14} className="inline mr-1" weight="bold" />
             )}
+            MIT BEZUG AUF BEITRAG
+          </div>
+          <div>
+            {hintsWithReferenceOpen &&
+              hints.map(
+                (hint) =>
+                  hint.associatedEntry && <Hint key={hint.id} hint={hint} />
+              )}
+          </div>
         </div>
-      </div>
+      )}
       {showModal ? (
         <JudgeHintPopup
           isVisible={showModal}
