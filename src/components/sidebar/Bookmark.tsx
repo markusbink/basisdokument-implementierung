@@ -30,7 +30,9 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
   };
 
   const deleteBookmark = () => {
-    //TODO
+    setBookmarks((bookmarks) => {
+      return bookmarks.filter((oldBoomark) => oldBoomark.id !== bookmark.id);
+    });
   };
 
   return (
