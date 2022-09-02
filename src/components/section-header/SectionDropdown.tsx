@@ -83,7 +83,11 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
     <DropdownMenu.Root>
       <DropdownMenu.Trigger className="py-1">
         <span>
-          <DotsThree size={18} weight="bold" />
+          <DotsThree
+            size={20}
+            weight="bold"
+            className="rounded-md hover:bg-darkPurple hover:text-lightPurple"
+          />
         </span>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
