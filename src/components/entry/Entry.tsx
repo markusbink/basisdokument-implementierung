@@ -72,13 +72,7 @@ export const Entry: React.FC<EntryProps> = ({
   const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
   const { setBookmarks } = useBookmarks();
-  const {
-    sidebars,
-    isSidebarOpen,
-    setIsSidebarOpen,
-    activeSidebar,
-    setActiveSidebar,
-  } = useSidebar();
+  const { setActiveSidebar } = useSidebar();
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
