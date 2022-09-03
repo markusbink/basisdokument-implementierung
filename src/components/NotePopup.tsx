@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useNotes, UserContext, useUser } from "../contexts";
+import { useNotes, useUser } from "../contexts";
 import draftToHtml from "draftjs-to-html";
 import { INote } from "../types";
 import { v4 as uuidv4 } from "uuid";
@@ -35,7 +35,6 @@ export const NotePopup = () => {
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const {
     setShowNotePopup,
-    showNotePopup,
     contentState,
     editorState,
     setEditorState,
@@ -61,7 +60,6 @@ export const NotePopup = () => {
   }, [contentState]);
 
   const addNote = () => {
-    const plainText = editorState.getCurrentContent().getPlainText();
     const newHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
     if (title === "" || newHtml === "<p></p>\n") {
@@ -131,8 +129,7 @@ export const NotePopup = () => {
               <div>
                 <button
                   onClick={() => {
-                    console.log("click", showNotePopup);
-
+                    setShowErrorText(false);
                     setShowNotePopup(false);
                   }}
                   className="text-darkGrey">
