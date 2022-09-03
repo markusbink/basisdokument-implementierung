@@ -4,6 +4,7 @@ import { useBookmarks, useCase } from "../../contexts";
 import { IBookmark } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
+import { Tooltip } from "../Tooltip";
 
 export interface BookmarkProps {
   bookmark: IBookmark;
@@ -47,6 +48,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
         weight="fill"
         className="fill-darkGrey min-w-fit"
       />
+
       {bookmark.isInEditMode ? (
         <input
           autoFocus={true}
@@ -54,7 +56,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           name="title"
           placeholder="Titel vergeben..."
           maxLength={43}
-          className="max-w-[55%] rounded-md focus:outline focus:outline-lightGrey"
+          className="max-w-[55%] focus:outline focus:outline-offWhite focus:bg-offWhite"
           value={bookmark.title}
           onBlur={() => setBookmarkEditMode(bookmark, false)}
           onChange={handleChange}
@@ -65,7 +67,9 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           onDoubleClick={() => {
             setBookmarkEditMode(bookmark, true);
           }}>
-          {bookmark.title}
+          <Tooltip text="Doppelklick, um zu Editieren">
+            {bookmark.title}
+          </Tooltip>
         </div>
       )}
 
