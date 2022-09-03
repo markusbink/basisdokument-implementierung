@@ -3,13 +3,7 @@ import cx from "classnames";
 import { useSidebar } from "../../contexts/SidebarContext";
 
 export const Sidebar = () => {
-  const {
-    sidebars,
-    isSidebarOpen,
-    setIsSidebarOpen,
-    activeSidebar,
-    setActiveSidebar,
-  } = useSidebar();
+  const { sidebars, isSidebarOpen, activeSidebar } = useSidebar();
 
   return (
     <aside
@@ -20,11 +14,7 @@ export const Sidebar = () => {
           "w-[400px]": isSidebarOpen,
         }
       )}>
-      <SidebarHeader
-        setActiveSidebar={setActiveSidebar}
-        sidebarOpen={isSidebarOpen}
-        setSidebarOpen={setIsSidebarOpen}
-      />
+      <SidebarHeader />
       {sidebars.map(
         (sidebar) =>
           sidebar.name === activeSidebar && isSidebarOpen && sidebar.jsxElem

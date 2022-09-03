@@ -1,3 +1,4 @@
+import { Notepad, Scales, Bookmarks } from "phosphor-react";
 import {
   createContext,
   Dispatch,
@@ -12,20 +13,24 @@ import { SidebarNotes } from "../components/sidebar/SidebarNotes";
 interface ISidebar {
   name: string;
   jsxElem: JSX.Element;
+  icon: JSX.Element;
 }
 
 const sidebars: ISidebar[] = [
   {
     name: "Notes",
     jsxElem: <SidebarNotes key="Notes"></SidebarNotes>,
+    icon: <Notepad size={20} />,
   },
   {
     name: "Hints",
     jsxElem: <SidebarHints key="Hints"></SidebarHints>,
+    icon: <Scales size={20} />,
   },
   {
     name: "Bookmarks",
     jsxElem: <SidebarBookmarks key="Bookmarks"></SidebarBookmarks>,
+    icon: <Bookmarks size={20} />,
   },
 ];
 
