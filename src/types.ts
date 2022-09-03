@@ -2,6 +2,7 @@ export interface IBookmark {
   id: string;
   title: string;
   associatedEntry: string;
+  isInEditMode?: boolean;
 }
 
 export interface IHint {

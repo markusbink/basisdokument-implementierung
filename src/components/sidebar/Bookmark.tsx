@@ -1,5 +1,5 @@
 import { BookmarkSimple, Eye, Trash } from "phosphor-react";
-import React, { useState } from "react";
+import React from "react";
 import { useBookmarks, useCase } from "../../contexts";
 import { IBookmark } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
@@ -10,9 +10,7 @@ export interface BookmarkProps {
 }
 
 export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
-  const [doubleClicked, setDoubleClicked] = useState<boolean>(true);
-
-  const { setBookmarks } = useBookmarks();
+  const { setBookmarks, setBookmarkEditMode } = useBookmarks();
   const { entries } = useCase();
   const entryCode = getEntryCode(entries, bookmark.associatedEntry);
 
@@ -42,7 +40,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
         weight="fill"
         className="fill-darkGrey min-w-fit"
       />
-      {doubleClicked ? (
+      {bookmark.isInEditMode ? (
         <input
           autoFocus={true}
           type="text"
@@ -51,14 +49,14 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           maxLength={43}
           className="max-w-[55%] rounded-md focus:outline focus:outline-lightGrey"
           value={bookmark.title}
-          onBlur={() => setDoubleClicked(false)}
+          onBlur={() => setBookmarkEditMode(bookmark, false)}
           onChange={handleChange}
         />
       ) : (
         <div
           className="break-words grow max-w-[55%]"
           onDoubleClick={() => {
-            setDoubleClicked(true);
+            setBookmarkEditMode(bookmark, true);
           }}>
           {bookmark.title}
         </div>

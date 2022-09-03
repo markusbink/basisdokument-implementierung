@@ -71,7 +71,7 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
-  const { setBookmarks } = useBookmarks();
+  const { setBookmarks, setBookmarkEditMode } = useBookmarks();
   const { setActiveSidebar } = useSidebar();
 
   const isJudge = viewedBy === UserRole.Judge;
@@ -108,6 +108,7 @@ export const Entry: React.FC<EntryProps> = ({
         id: uuidv4(),
         title: `Lesezeichen ${oldBoomarks.length + 1}`,
         associatedEntry: entry.id,
+        isInEditMode: true,
       };
       const newBookmarks = [...oldBoomarks, newBookmark];
       return newBookmarks;

@@ -1,3 +1,4 @@
+import { Bookmark } from "phosphor-react";
 import {
   createContext,
   Dispatch,
@@ -11,6 +12,7 @@ interface IBookmarkContext {
   bookmarks: IBookmark[];
   setBookmarks: Dispatch<SetStateAction<IBookmark[]>>;
   updateBookmark: (bookmark: IBookmark) => void;
+  setBookmarkEditMode: (bookmark: IBookmark, value: boolean) => void;
 }
 
 export const BookmarkContext = createContext<IBookmarkContext | null>(null);
@@ -28,14 +30,24 @@ export const BookmarkProvider: React.FC<BookmarkProviderProps> = ({
     setBookmarks(bookmarks.map((e) => (e.id === bookmark.id ? bookmark : e)));
   };
 
+  const setBookmarkEditMode = (bookmark: IBookmark, value: boolean) => {
+    setBookmarks(
+      bookmarks.map((e) =>
+        e.id === bookmark.id
+          ? { ...e, isInEditMode: value }
+          : { ...e, isInEditMode: e.isInEditMode }
+      )
+    );
+  };
+
   return (
     <BookmarkContext.Provider
       value={{
         bookmarks,
         setBookmarks,
         updateBookmark,
-      }}
-    >
+        setBookmarkEditMode,
+      }}>
       {children}
     </BookmarkContext.Provider>
   );
