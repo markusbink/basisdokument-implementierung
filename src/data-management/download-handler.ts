@@ -23,17 +23,32 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   saveAs(fileToSave, fileName);
 }
 
-function downloadBasisdokumentAsPDF(obj: object, fileName: string) {
+function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   let pdfConverter = jsPDF,
-  doc = new pdfConverter();
+    doc = new pdfConverter();
 
-  let stringHtml = `<div><h1></h1>/div>`;
+  let basisdokumentDOMRepresentation = document.createElement("div");
+  basisdokumentDOMRepresentation.style.padding = "10px";
+  let mainTitle = document.createElement("h1");
+  mainTitle.style.fontSize = "3px";
+  mainTitle.style.fontWeight = "bold";
+  mainTitle.innerHTML = "Basisdokument";
+  basisdokumentDOMRepresentation.appendChild(mainTitle);
+  console.log(obj);
+  
+
+  let caseId = document.createElement("p");
+  caseId.innerHTML = `Aktenzeichen:${obj["caseId"]}`
+  caseId.style.fontSize = "3px";
+  basisdokumentDOMRepresentation.appendChild(caseId);
+
+  console.log(basisdokumentDOMRepresentation.outerHTML);
+  let stringHtml = basisdokumentDOMRepresentation.outerHTML;
 
   doc.setFontSize(22);
-  doc.text("Title", 15, 15);
-  doc.html(stringHtml);
-
-  window.open(doc.output("bloburl"), "_blank");
+  doc.html(stringHtml).then(() => doc.save(fileName));
+  //doc.save(fileName);
+  //window.open(doc.output("bloburl"), "_blank");
 }
 
 export function downloadBasisdokument(
