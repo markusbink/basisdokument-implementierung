@@ -17,7 +17,7 @@ import { EntryForm } from "./EntryForm";
 import { EntryHeader } from "./EntryHeader";
 
 interface NewEntryProps {
-  roleForNewEntry: "Kläger" | "Beklagter";
+  roleForNewEntry: "Klagepartei" | "Beklagtenpartei";
   setIsNewEntryVisible: Dispatch<SetStateAction<boolean>>;
   sectionId: string;
   associatedEntry?: string;

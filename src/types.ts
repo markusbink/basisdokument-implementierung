@@ -28,9 +28,9 @@ export interface IUser {
 }
 
 export enum UserRole {
-  Plaintiff = "Kläger",
-  Defendant = "Beklagter",
-  Judge = "Richter",
+  Plaintiff = "Klagepartei",
+  Defendant = "Beklagtenpartei",
+  Judge = "Richter:in",
 }
 
 export enum Sorting {
@@ -56,7 +56,7 @@ export interface IEntry {
   version: number;
   text: string;
   author: string;
-  role: "Kläger" | "Beklagter";
+  role: "Klagepartei" | "Beklagtenpartei";
   sectionId: string;
   associatedEntry?: string;
 }

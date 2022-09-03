@@ -13,12 +13,12 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
   sectionId,
 }) => {
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
-  const [newEntryRole, setNewEntryRole] = useState<"Kläger" | "Beklagter">(
-    "Kläger"
+  const [newEntryRole, setNewEntryRole] = useState<"Klagepartei" | "Beklagtenpartei">(
+    "Klagepartei"
   );
   const { user } = useUser();
 
-  const handleClick = (roleForNewEntry: "Kläger" | "Beklagter") => {
+  const handleClick = (roleForNewEntry: "Klagepartei" | "Beklagtenpartei") => {
     setNewEntryRole(roleForNewEntry);
     setIsNewEntryVisible(true);
   };
