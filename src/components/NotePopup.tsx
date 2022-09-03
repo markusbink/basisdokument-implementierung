@@ -70,7 +70,7 @@ export const NotePopup = () => {
     } else {
       // edit Note
       if (openedNoteId !== "" && user !== null) {
-        let newNote: INote = {
+        let editedNote: INote = {
           id: openedNoteId,
           title: title,
           text: newHtml,
@@ -78,9 +78,9 @@ export const NotePopup = () => {
           timestamp: new Date(),
         };
         if (associatedEntryId !== "") {
-          newNote["associatedEntry"] = associatedEntryId;
+          editedNote["associatedEntry"] = associatedEntryId;
         }
-        updateNote(newNote);
+        updateNote(editedNote);
       } else {
         if (user !== null) {
           let newNote: INote = {
