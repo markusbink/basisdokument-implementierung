@@ -11,6 +11,7 @@ import {
   ISection,
   IVersion,
 } from "../types";
+import { jsPDF } from "jspdf";
 
 function downloadObjectAsJSON(obj: object, fileName: string) {
   // Create a blob of the data
@@ -20,6 +21,19 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
 
   // Save the file
   saveAs(fileToSave, fileName);
+}
+
+function downloadBasisdokumentAsPDF(obj: object, fileName: string) {
+  let pdfConverter = jsPDF,
+  doc = new pdfConverter();
+
+  let stringHtml = `<div><h1></h1>/div>`;
+
+  doc.setFontSize(22);
+  doc.text("Title", 15, 15);
+  doc.html(stringHtml);
+
+  window.open(doc.output("bloburl"), "_blank");
 }
 
 export function downloadBasisdokument(
@@ -45,7 +59,11 @@ export function downloadBasisdokument(
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
   basisdokumentObject["litigiousChecks"] = litigiousChecks;
-  downloadObjectAsJSON(
+  // downloadObjectAsJSON(
+  //   basisdokumentObject,
+  //   "basisdokument_version_" + currentVersion + "_case_" + currentVersion
+  // );
+  downloadBasisdokumentAsPDF(
     basisdokumentObject,
     "basisdokument_version_" + currentVersion + "_case_" + currentVersion
   );
@@ -69,8 +87,8 @@ export function downloadEditFile(
   editFileObject["notes"] = notes;
   editFileObject["bookmarks"] = bookmarks;
   editFileObject["individualSorting"] = individualSorting;
-  downloadObjectAsJSON(
-    editFileObject,
-    "bearbeitungsdatei_version_" + currentVersion + "_case_" + currentVersion
-  );
+  // downloadObjectAsJSON(
+  //   editFileObject,
+  //   "bearbeitungsdatei_version_" + currentVersion + "_case_" + currentVersion
+  // );
 }
