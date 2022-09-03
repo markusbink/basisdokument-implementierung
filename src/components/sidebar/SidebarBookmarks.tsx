@@ -6,7 +6,7 @@ export const SidebarBookmarks = () => {
   const { bookmarks } = useBookmarks();
 
   return (
-    <div className="flex flex-col gap-3 flex-1 overflow-hidden">
+    <div className="flex flex-col gap-3 flex-1 overflow-auto">
       <div className="font-bold text-darkGrey text-lg pt-4 px-4">
         Lesezeichen
       </div>
