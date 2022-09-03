@@ -29,23 +29,70 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   let basisdokumentDOMRepresentation = document.createElement("div");
   basisdokumentDOMRepresentation.style.padding = "10px";
-  let mainTitle = document.createElement("h1");
-  mainTitle.style.fontSize = "3px";
-  mainTitle.style.fontWeight = "bold";
-  mainTitle.innerHTML = "Basisdokument";
-  basisdokumentDOMRepresentation.appendChild(mainTitle);
-  console.log(obj);
-  
+  basisdokumentDOMRepresentation.style.display = "flex";
+  basisdokumentDOMRepresentation.style.flexDirection = "column";
+  basisdokumentDOMRepresentation.style.width = "210px";
 
-  let caseId = document.createElement("p");
-  caseId.innerHTML = `Aktenzeichen:${obj["caseId"]}`
-  caseId.style.fontSize = "3px";
-  basisdokumentDOMRepresentation.appendChild(caseId);
+  // Main Title "Basisdokument"
+  let mainTitleEl = document.createElement("h1");
+  mainTitleEl.style.fontSize = "3px";
+  mainTitleEl.style.fontWeight = "bold";
+  mainTitleEl.innerHTML = "Basisdokument";
+  basisdokumentDOMRepresentation.appendChild(mainTitleEl);
+
+  // Case Id
+  let caseIdEl = document.createElement("span");
+  caseIdEl.innerHTML = "Aktenzeichen " + obj["caseId"];
+  caseIdEl.style.fontSize = "3px";
+  basisdokumentDOMRepresentation.appendChild(caseIdEl);
+
+  // Version
+  let versionEl = document.createElement("span");
+  versionEl.innerHTML = "Version " + obj["currentVersion"];
+  versionEl.style.fontSize = "3px";
+  basisdokumentDOMRepresentation.appendChild(versionEl);
+
+  // Export Timestamp
+  let timestampEl = document.createElement("span");
+  timestampEl.innerHTML =
+    "Exportiert am " +
+    obj["versions"][obj["versions"].length - 1]["timestamp"].toLocaleString();
+  timestampEl.style.fontSize = "3px";
+  basisdokumentDOMRepresentation.appendChild(timestampEl);
+
+  // Hinweise des Richters nach
+  let hintsTitleEl = document.createElement("span");
+  hintsTitleEl.innerHTML = "Hinweise des Richters nach (nach §139 ZPO)";
+  hintsTitleEl.style.fontSize = "4px";
+  hintsTitleEl.style.marginTop = "4px";
+  basisdokumentDOMRepresentation.appendChild(hintsTitleEl);
+
+  for (let index = 0; index < obj["judgeHints"].length; index++) {
+    const judgeHintObject = obj["judgeHints"][index];
+    let judgeHintTitleEl = document.createElement("span");
+    let entryCode = obj["entries"].find((entry: any) => {
+      return entry.id === judgeHintObject.associatedEntry;
+    }).entryCode;
+
+    judgeHintTitleEl.innerHTML =
+      judgeHintObject.author +
+      " | Verweis auf: " +
+      entryCode +
+      " | " +
+      judgeHintObject.title;
+    judgeHintTitleEl.style.fontSize = "3px";
+    judgeHintTitleEl.style.fontWeight = "bold";
+    judgeHintTitleEl.style.marginTop = "4px";
+    let judgeHintTextEl = document.createElement("span");
+    judgeHintTextEl.innerHTML = judgeHintObject.text;
+    judgeHintTextEl.style.fontSize = "3px";
+    basisdokumentDOMRepresentation.appendChild(judgeHintTitleEl);
+    basisdokumentDOMRepresentation.appendChild(judgeHintTextEl);
+  }
 
   console.log(basisdokumentDOMRepresentation.outerHTML);
   let stringHtml = basisdokumentDOMRepresentation.outerHTML;
 
-  doc.setFontSize(22);
   doc.html(stringHtml).then(() => doc.save(fileName));
   //doc.save(fileName);
   //window.open(doc.output("bloburl"), "_blank");
