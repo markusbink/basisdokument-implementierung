@@ -26,8 +26,6 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   } = useNotes();
 
   let entryCode;
-  console.log(note.associatedEntry);
-
   if (note.associatedEntry) {
     try {
       entryCode = getEntryCode(entries, note.associatedEntry);
