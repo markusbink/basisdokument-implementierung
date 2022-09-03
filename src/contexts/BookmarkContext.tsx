@@ -1,4 +1,3 @@
-import { Bookmark } from "phosphor-react";
 import {
   createContext,
   Dispatch,

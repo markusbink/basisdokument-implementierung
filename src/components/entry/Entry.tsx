@@ -71,7 +71,7 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
-  const { setBookmarks, setBookmarkEditMode } = useBookmarks();
+  const { setBookmarks } = useBookmarks();
   const { setActiveSidebar } = useSidebar();
 
   const isJudge = viewedBy === UserRole.Judge;
