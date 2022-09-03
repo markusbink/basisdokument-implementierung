@@ -26,8 +26,12 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   } = useNotes();
 
   let entryCode;
+  console.log(note.associatedEntry);
+
   if (note.associatedEntry) {
-    entryCode = getEntryCode(entries, note.associatedEntry);
+    try {
+      entryCode = getEntryCode(entries, note.associatedEntry);
+    } catch {}
   }
 
   const editNote = (e: React.MouseEvent) => {
@@ -59,7 +63,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
             className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer
               bg-darkGrey hover:bg-mediumGrey text-lightGrey text-[10px] font-semibold rounded-xl">
             <Eye size={16} weight="bold" className="inline"></Eye>
-            {`${entryCode}`}
+            {`${entryCode ? entryCode : "nicht verfügbar"}`}
           </a>
         )}
 

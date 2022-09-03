@@ -9,7 +9,7 @@ import {
   Scales,
   Trash,
 } from "phosphor-react";
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";

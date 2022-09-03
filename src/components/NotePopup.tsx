@@ -14,7 +14,6 @@ import { useCase, useNotes, useUser } from "../contexts";
 import draftToHtml from "draftjs-to-html";
 import { INote } from "../types";
 import { v4 as uuidv4 } from "uuid";
-import { getEntryCode } from "../util/get-entry-code";
 
 const toolbarOptions = {
   options: ["inline", "list", "textAlign"],
@@ -115,8 +114,6 @@ export const NotePopup = () => {
     let entry = entries.find((obj) => {
       return obj.id === associatedEntryId;
     });
-
-    console.log("note", entry);
     if (entry) {
       return entry.entryCode;
     }
