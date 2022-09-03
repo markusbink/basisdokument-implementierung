@@ -1,4 +1,5 @@
 import cx from "classnames";
+import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
 import { useCase, useNotes } from "../../contexts";
@@ -16,7 +17,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries } = useCase();
-  const { setShowNotePopup } = useNotes();
+  const { setShowNotePopup, setTitle, setEditorState,setOpenedNoteId } = useNotes();
 
   let entryCode;
   if (note.associatedEntry) {
@@ -26,6 +27,14 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   const editNote = (e: React.MouseEvent) => {
     setIsMenuOpen(false);
     setShowNotePopup(true);
+    setTitle(note.title);
+    setOpenedNoteId(note.id);
+    const blocksFromHTML = convertFromHTML(note.text);
+    const contentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    setEditorState(EditorState.createWithContent(contentState));
   };
 
   const deleteNote = (e: React.MouseEvent) => {
