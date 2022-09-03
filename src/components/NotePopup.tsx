@@ -10,10 +10,11 @@ import {
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useNotes, useUser } from "../contexts";
+import { useCase, useNotes, useUser } from "../contexts";
 import draftToHtml from "draftjs-to-html";
 import { INote } from "../types";
 import { v4 as uuidv4 } from "uuid";
+import { getEntryCode } from "../util/get-entry-code";
 
 const toolbarOptions = {
   options: ["inline", "list", "textAlign"],
@@ -52,6 +53,7 @@ export const NotePopup = () => {
   } = useNotes();
 
   const { user } = useUser();
+  const { entries } = useCase();
 
   useEffect(() => {
     setHidePlaceholder(
@@ -107,6 +109,18 @@ export const NotePopup = () => {
       setOpenedNoteId("");
       setAssociatedEntryId("");
     }
+  };
+
+  const getEntryCode = () => {
+    let entry = entries.find((obj) => {
+      return obj.id === associatedEntryId;
+    });
+
+    console.log("note", entry);
+    if (entry) {
+      return entry.entryCode;
+    }
+    return "Beitrag nicht gefunden";
   };
 
   return (
@@ -188,10 +202,19 @@ export const NotePopup = () => {
                     <div className="bg-darkGrey rounded flex items-center p-1 m-1">
                       <Quotes size={16} color="white" weight="regular" />
                     </div>
-                    <div className="flex items-center gap-2 cursor-pointer rounded-full pl-3 pr-1 py-1 m-1 text-xs font-semibold bg-darkGrey text-white">
-                      K-2-1
-                      <XCircle size={20} weight="fill" />
-                    </div>
+
+                    {associatedEntryId !== "" ? (
+                      <div className="flex items-center gap-2 cursor-pointer rounded-full pl-3 pr-1 py-1 m-1 text-xs font-semibold bg-darkGrey text-white">
+                        {getEntryCode()}
+                        <XCircle
+                          size={20}
+                          weight="fill"
+                          onClick={() => {
+                            setAssociatedEntryId("");
+                          }}
+                        />
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>

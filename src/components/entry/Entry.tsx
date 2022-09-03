@@ -9,11 +9,11 @@ import {
   Scales,
   Trash,
 } from "phosphor-react";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useCase, useHeaderContext } from "../../contexts";
+import { useCase, useHeaderContext, useNotes } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEntry, UserRole, Tool } from "../../types";
 import { Button } from "../Button";
@@ -50,6 +50,7 @@ export const Entry: React.FC<EntryProps> = ({
     highlightElementsWithSpecificVersion,
     selectedVersion,
   } = useHeaderContext();
+  const { setShowNotePopup, setAssociatedEntryId } = useNotes();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -103,6 +104,8 @@ export const Entry: React.FC<EntryProps> = ({
   const addNote = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
+    setShowNotePopup(true);
+    setAssociatedEntryId(entry.id);
   };
 
   const toggleMenu = (e: React.MouseEvent) => {
