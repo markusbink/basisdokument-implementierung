@@ -17,7 +17,13 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries } = useCase();
-  const { setShowNotePopup, setTitle, setEditorState,setOpenedNoteId } = useNotes();
+  const {
+    setShowNotePopup,
+    setTitle,
+    setEditorState,
+    setOpenedNoteId,
+    setAssociatedEntryId,
+  } = useNotes();
 
   let entryCode;
   if (note.associatedEntry) {
@@ -29,6 +35,9 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setShowNotePopup(true);
     setTitle(note.title);
     setOpenedNoteId(note.id);
+    if (note.associatedEntry) {
+      setAssociatedEntryId(note.associatedEntry);
+    }
     const blocksFromHTML = convertFromHTML(note.text);
     const contentState = ContentState.createFromBlockArray(
       blocksFromHTML.contentBlocks,
