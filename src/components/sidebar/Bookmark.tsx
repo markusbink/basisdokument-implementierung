@@ -12,7 +12,14 @@ export interface BookmarkProps {
 export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
   const { setBookmarks, setBookmarkEditMode } = useBookmarks();
   const { entries } = useCase();
-  const entryCode = getEntryCode(entries, bookmark.associatedEntry);
+
+  let entryCode;
+  try {
+    entryCode = getEntryCode(entries, bookmark.associatedEntry);
+  } catch (e) {
+    console.warn(e);
+    entryCode = null;
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -73,10 +80,10 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           </a>
         ) : (
           <div
-            className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey hover:bg-mediumGrey
-          text-lightGrey text-[10px] font-semibold min-w-fit">
-            <Eye size={16} weight="bold" className="inline"></Eye>
-            {`${entryCode}`}
+            className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey
+          text-lightGrey text-[9px] font-semibold min-w-fit">
+            <Eye size={12} weight="bold" className="inline"></Eye>
+            {`fehlend`}
           </div>
         )}
 

@@ -136,7 +136,7 @@ export const Entry: React.FC<EntryProps> = ({
     entryCode: string,
     sectionId: string
   ) => {
-    deleteBookmarkByReference(entryCode);
+    deleteBookmarkByReference(entryId);
     setEntries((prevEntries) =>
       prevEntries
         .filter((entry) => entry.id !== entryId)
