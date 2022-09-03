@@ -71,7 +71,7 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
-  const { setBookmarks } = useBookmarks();
+  const { setBookmarks, deleteBookmarkByReference } = useBookmarks();
   const { setActiveSidebar } = useSidebar();
 
   const isJudge = viewedBy === UserRole.Judge;
@@ -136,6 +136,7 @@ export const Entry: React.FC<EntryProps> = ({
     entryCode: string,
     sectionId: string
   ) => {
+    deleteBookmarkByReference(entryCode);
     setEntries((prevEntries) =>
       prevEntries
         .filter((entry) => entry.id !== entryId)

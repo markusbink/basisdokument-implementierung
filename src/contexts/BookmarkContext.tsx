@@ -12,6 +12,7 @@ interface IBookmarkContext {
   setBookmarks: Dispatch<SetStateAction<IBookmark[]>>;
   updateBookmark: (bookmark: IBookmark) => void;
   setBookmarkEditMode: (bookmark: IBookmark, value: boolean) => void;
+  deleteBookmarkByReference: (reference: string) => void;
 }
 
 export const BookmarkContext = createContext<IBookmarkContext | null>(null);
@@ -39,6 +40,12 @@ export const BookmarkProvider: React.FC<BookmarkProviderProps> = ({
     );
   };
 
+  const deleteBookmarkByReference = (reference: string) => {
+    setBookmarks(
+      bookmarks.filter((bookmark) => bookmark.associatedEntry !== reference)
+    );
+  };
+
   return (
     <BookmarkContext.Provider
       value={{
@@ -46,6 +53,7 @@ export const BookmarkProvider: React.FC<BookmarkProviderProps> = ({
         setBookmarks,
         updateBookmark,
         setBookmarkEditMode,
+        deleteBookmarkByReference,
       }}>
       {children}
     </BookmarkContext.Provider>

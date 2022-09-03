@@ -63,13 +63,22 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
       )}
 
       <div className="flex items-center gap-2">
-        <a
-          href={`#${entryCode}`}
-          className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey hover:bg-mediumGrey
+        {entryCode ? (
+          <a
+            href={`#${entryCode}`}
+            className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey hover:bg-mediumGrey
           text-lightGrey text-[10px] font-semibold cursor-pointer min-w-fit">
-          <Eye size={16} weight="bold" className="inline"></Eye>
-          {`${entryCode}`}
-        </a>
+            <Eye size={16} weight="bold" className="inline"></Eye>
+            {`${entryCode}`}
+          </a>
+        ) : (
+          <div
+            className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey hover:bg-mediumGrey
+          text-lightGrey text-[10px] font-semibold min-w-fit">
+            <Eye size={16} weight="bold" className="inline"></Eye>
+            {`${entryCode}`}
+          </div>
+        )}
 
         <Button
           key="createNote"
