@@ -23,6 +23,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setEditorState,
     setOpenedNoteId,
     setAssociatedEntryId,
+    setEditMode
   } = useNotes();
 
   let entryCode;
@@ -37,6 +38,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setShowNotePopup(true);
     setTitle(note.title);
     setOpenedNoteId(note.id);
+    setEditMode(true);
     if (note.associatedEntry) {
       setAssociatedEntryId(note.associatedEntry);
     }

@@ -25,6 +25,8 @@ interface INoteContext {
   setShowErrorText: Dispatch<SetStateAction<boolean>>;
   associatedEntryId: string;
   setAssociatedEntryId: Dispatch<SetStateAction<string>>;
+  editMode: boolean;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
 }
 
 export const NoteContext = createContext<INoteContext | null>(null);
@@ -36,6 +38,7 @@ interface NoteProviderProps {
 export const NoteProvider: React.FC<NoteProviderProps> = ({ children }) => {
   const [notes, setNotes] = useState<INote[]>([]);
   const [showNotePopup, setShowNotePopup] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [showErrorText, setShowErrorText] = useState<boolean>(false);
   const [associatedEntryId, setAssociatedEntryId] = useState<string>("");
   const [openedNoteId, setOpenedNoteId] = useState<string>("");
@@ -75,6 +78,8 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }) => {
         setShowErrorText,
         associatedEntryId,
         setAssociatedEntryId,
+        editMode,
+        setEditMode
       }}>
       {children}
     </NoteContext.Provider>

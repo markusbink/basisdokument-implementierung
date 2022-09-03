@@ -49,6 +49,8 @@ export const NotePopup = () => {
     setAssociatedEntryId,
     setNotes,
     notes,
+    editMode,
+    setEditMode
   } = useNotes();
 
   const { user } = useUser();
@@ -107,6 +109,7 @@ export const NotePopup = () => {
       setShowErrorText(false);
       setOpenedNoteId("");
       setAssociatedEntryId("");
+      setEditMode(false);
     }
   };
 
@@ -135,13 +138,14 @@ export const NotePopup = () => {
             {/*header*/}
             <div className="flex items-start justify-between rounded-lg ">
               <h3 className="text-2xl font-bold text-darkGrey">
-                Neue Notiz verfassen
+              {`${editMode ? "Notiz bearbeiten": "Neue Notiz hinzufügen"}`}
               </h3>
               <div>
                 <button
                   onClick={() => {
                     setShowErrorText(false);
                     setShowNotePopup(false);
+                    setEditMode(false);
                   }}
                   className="text-darkGrey">
                   <XCircle size={29} weight="fill" />
@@ -229,7 +233,7 @@ export const NotePopup = () => {
                 onClick={() => {
                   addNote();
                 }}>
-                Notiz hinzufügen
+                Notiz {`${editMode ? "speichern": "hinzufügen"}`}
               </Button>
             </div>
           </div>
