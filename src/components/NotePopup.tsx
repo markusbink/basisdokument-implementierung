@@ -202,7 +202,7 @@ export const NotePopup = () => {
             <div className="flex justify-center">
               {showErrorText ? (
                 <p className="p-2 bg-lightRed text-darkRed rounded-md w-auto">
-                  Bitte geben Sie sowohl einen Titel und einen Text ein.
+                  Bitte geben Sie einen Titel und einen Text ein.
                 </p>
               ) : null}
             </div>
