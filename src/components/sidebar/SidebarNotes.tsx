@@ -15,7 +15,6 @@ export const SidebarNotes = () => {
   const { notes } = useNotes();
 
   return (
-    // TODO: Hide overflow here to make sure "Notizen" and the Add-Button are always visible...but now the buttom gets cut off...how to fix this?
     <div className="flex flex-col gap-3 flex-1 h-[calc(100%_-_3.5rem)] overflow-auto">
       <div className="flex justify-between items-center pt-4 px-4">
         <div className="font-bold text-darkGrey text-lg">Notizen</div>

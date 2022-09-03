@@ -34,8 +34,7 @@ export const BookmarkProvider: React.FC<BookmarkProviderProps> = ({
         bookmarks,
         setBookmarks,
         updateBookmark,
-      }}
-    >
+      }}>
       {children}
     </BookmarkContext.Provider>
   );

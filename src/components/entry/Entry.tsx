@@ -12,14 +12,8 @@ import {
 import React, { useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
-import { setSyntheticLeadingComments } from "typescript";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import {
-  useBookmarks,
-  useCase,
-  useHeaderContext,
-  useHints,
-} from "../../contexts";
+import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEntry, UserRole, Tool } from "../../types";
 import { Button } from "../Button";
@@ -106,137 +100,9 @@ export const Entry: React.FC<EntryProps> = ({
     setIsMenuOpen(false);
   };
 
-  //TODO: REMOVE
-  const { setBookmarks } = useBookmarks();
-  const { setHints } = useHints();
   const addNote = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
-    setBookmarks([
-      { id: "123", title: "titel", associatedEntry: entry.id },
-      { id: "1234", title: "titel1", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "titel2", associatedEntry: entry.id },
-      { id: "1235", title: "sbsrbsbf", associatedEntry: entry.id },
-      { id: "1235", title: "abs", associatedEntry: entry.id },
-    ]);
-    setHints([
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-      },
-
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-        associatedEntry: "123",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-        associatedEntry: "123",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-        associatedEntry: "123",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-        associatedEntry: "123",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-        associatedEntry: "123",
-      },
-      {
-        id: "123",
-        version: 1,
-        title: "title",
-        text: "text",
-        author: "me myself and i",
-        associatedEntry: "123",
-      },
-    ]);
   };
 
   const toggleMenu = (e: React.MouseEvent) => {

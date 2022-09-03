@@ -6,9 +6,7 @@ export const getEntryCode = (
 ): string => {
   const entry = entries.find((e) => e.id === entryId);
   if (!entry) {
-    // TODO throw new Error(`Entry ${entryId} not found`);
-    console.log("entry not found");
-    return "no";
+    throw new Error(`Entry ${entryId} not found`);
   }
   return entry.entryCode;
 };
