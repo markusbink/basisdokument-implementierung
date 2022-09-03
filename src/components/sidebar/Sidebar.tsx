@@ -27,13 +27,12 @@ export const Sidebar = () => {
   return (
     <aside
       className={cx(
-        "h-full overflow-y-clip shadow-lg divide-y-[1px] divide-lightGrey transition-width duration-300",
+        "shadow-lg divide-y-[1px] divide-lightGrey transition-width duration-300",
         {
-          "w-[65px] overflow-hidden": !sidebarOpen,
-          "w-[400px]": sidebarOpen,
+          "w-[65px] min-w-[65px] max-w-[65px]": !sidebarOpen,
+          "w-[350px] min-w-[350px] max-w-[350px]": sidebarOpen,
         }
-      )}
-    >
+      )}>
       <SidebarHeader
         setActiveSidebar={setActiveSidebar}
         sidebarOpen={sidebarOpen}

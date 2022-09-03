@@ -18,7 +18,7 @@ export const SidebarHints = () => {
   const { hints } = useHints();
 
   return (
-    <div className="flex flex-col gap-3 flex-1 overflow-hidden">
+    <div className="flex flex-col gap-3 flex-1 h-[calc(100%_-_3.5rem)] overflow-auto">
       <div className="flex justify-between items-center pt-4 px-4">
         <div className="font-bold text-darkGrey text-lg">
           Hinweise (nach §139 ZPO)
@@ -32,8 +32,7 @@ export const SidebarHints = () => {
             textColor="text-white"
             hasText={false}
             alternativePadding="p-1"
-            icon={<Plus size={18} weight="bold" />}
-          ></Button>
+            icon={<Plus size={18} weight="bold" />}></Button>
         )}
       </div>
       {hints.length <= 0 && (
@@ -43,13 +42,12 @@ export const SidebarHints = () => {
             : "Hinweise nach §139 ZPO erscheinen in dieser Ansicht, sobald die Richterin oder der Richter welche verfasst hat."}
         </div>
       )}
-      <div className="flex flex-col p-4 overflow-auto text-mediumGrey font-extrabold text-sm">
+      <div className="flex flex-col p-4 text-mediumGrey font-extrabold text-sm">
         <div
           className="cursor-pointer flex items-center"
           onClick={() =>
             setHintsWithoutReferenceOpen(!hintsWithoutReferenceOpen)
-          }
-        >
+          }>
           {hintsWithoutReferenceOpen ? (
             <CaretDown size={14} className="inline mr-1" weight="bold" />
           ) : (
@@ -66,8 +64,7 @@ export const SidebarHints = () => {
         </div>
         <div
           className="cursor-pointer flex items-center mt-7"
-          onClick={() => setHintsWithReferenceOpen(!hintsWithReferenceOpen)}
-        >
+          onClick={() => setHintsWithReferenceOpen(!hintsWithReferenceOpen)}>
           {hintsWithReferenceOpen ? (
             <CaretDown size={14} className="inline mr-1" weight="bold" />
           ) : (

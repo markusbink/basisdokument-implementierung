@@ -32,8 +32,7 @@ export const HintProvider: React.FC<HintProviderProps> = ({ children }) => {
         hints,
         setHints,
         updateHint,
-      }}
-    >
+      }}>
       {children}
     </HintContext.Provider>
   );
