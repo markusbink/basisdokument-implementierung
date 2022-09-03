@@ -48,6 +48,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           type="text"
           name="title"
           placeholder="Titel vergeben..."
+          maxLength={43}
           className="max-w-[55%] rounded-md focus:outline focus:outline-lightGrey"
           value={bookmark.title}
           onBlur={() => setDoubleClicked(false)}
