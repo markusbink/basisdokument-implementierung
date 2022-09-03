@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
-import { useCase } from "../../contexts";
+import { useCase, useNotes } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { INote } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
@@ -16,11 +16,16 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries } = useCase();
-  const entryCode = getEntryCode(entries, note.associatedEntry);
+  const { setShowNotePopup } = useNotes();
+
+  let entryCode;
+  if (note.associatedEntry) {
+    entryCode = getEntryCode(entries, note.associatedEntry);
+  }
 
   const editNote = (e: React.MouseEvent) => {
     setIsMenuOpen(false);
-    //TODO open popup
+    setShowNotePopup(true);
   };
 
   const deleteNote = (e: React.MouseEvent) => {
@@ -34,8 +39,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
           <a
             href={`#${entryCode}`}
             className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer
-              bg-darkGrey hover:bg-mediumGrey text-lightGrey text-[10px] font-semibold rounded-xl"
-          >
+              bg-darkGrey hover:bg-mediumGrey text-lightGrey text-[10px] font-semibold rounded-xl">
             <Eye size={16} weight="bold" className="inline"></Eye>
             {`${entryCode}`}
           </a>
@@ -69,23 +73,20 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
                 onClick={() => {
                   setIsMenuOpen(!isMenuOpen);
                 }}
-                icon={<DotsThree size={20} weight="bold" />}
-              ></Button>{" "}
+                icon={<DotsThree size={20} weight="bold" />}></Button>{" "}
               {isMenuOpen ? (
                 <ul className="absolute right-0 bottom-8 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
                   <li
                     tabIndex={0}
                     onClick={editNote}
-                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none  cursor-pointer"
-                  >
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none  cursor-pointer">
                     <PencilSimple size={16} />
                     Bearbeiten
                   </li>
                   <li
                     tabIndex={0}
                     onClick={deleteNote}
-                    className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none  cursor-pointer"
-                  >
+                    className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none  cursor-pointer">
                     <Trash size={16} />
                     Löschen
                   </li>
