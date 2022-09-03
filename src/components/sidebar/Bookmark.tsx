@@ -51,8 +51,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           <div
             onDoubleClick={() => {
               setDoubleClicked(true);
-            }}
-          >
+            }}>
             {bookmark.title}
           </div>
         )}
@@ -62,8 +61,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
         <a
           href={`#${entryCode}`}
           className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey hover:bg-mediumGrey
-          text-lightGrey text-[10px] font-semibold cursor-pointer"
-        >
+          text-lightGrey text-[10px] font-semibold cursor-pointer">
           <Eye size={16} weight="bold" className="inline"></Eye>
           {`${entryCode}`}
         </a>
@@ -76,8 +74,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           hasText={false}
           alternativePadding="p-1"
           onClick={deleteBookmark}
-          icon={<Trash size={16} />}
-        ></Button>
+          icon={<Trash size={16} />}></Button>
       </div>
     </div>
   );
