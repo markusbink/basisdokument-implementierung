@@ -14,11 +14,7 @@ export const Sidebar = () => {
           "w-[400px]": isSidebarOpen,
         }
       )}>
-      <SidebarHeader
-        setActiveSidebar={setActiveSidebar}
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
+      <SidebarHeader />
       {sidebars.map(
         (sidebar) =>
           sidebar.name === activeSidebar && isSidebarOpen && sidebar.jsxElem
