@@ -234,10 +234,10 @@ export function downloadBasisdokument(
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
   basisdokumentObject["litigiousChecks"] = litigiousChecks;
-  // downloadObjectAsJSON(
-  //   basisdokumentObject,
-  //   "basisdokument_version_" + currentVersion + "_case_" + currentVersion
-  // );
+  downloadObjectAsJSON(
+    basisdokumentObject,
+    "basisdokument_version_" + currentVersion + "_case_" + currentVersion
+  );
   downloadBasisdokumentAsPDF(
     basisdokumentObject,
     "basisdokument_version_" + currentVersion + "_case_" + currentVersion
@@ -262,8 +262,8 @@ export function downloadEditFile(
   editFileObject["notes"] = notes;
   editFileObject["bookmarks"] = bookmarks;
   editFileObject["individualSorting"] = individualSorting;
-  // downloadObjectAsJSON(
-  //   editFileObject,
-  //   "bearbeitungsdatei_version_" + currentVersion + "_case_" + currentVersion
-  // );
+  downloadObjectAsJSON(
+    editFileObject,
+    "bearbeitungsdatei_version_" + currentVersion + "_case_" + currentVersion
+  );
 }
