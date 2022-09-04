@@ -39,7 +39,7 @@ export const SidebarHints = () => {
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm">
           {isJudge
             ? "Hinweise, die Sie zu Beiträgen verfassen, erscheinen in dieser Ansicht. Nur Sie können Hinweise verfassen."
-            : "Hinweise nach §139 ZPO erscheinen in dieser Ansicht, sobald der Richter oder die Richterin welche verfasst hat."}
+            : "Hinweise nach §139 ZPO erscheinen in dieser Ansicht, sobald die Richterin oder der Richter welche verfasst hat."}
         </div>
       )}
       {hints.length > 0 && (

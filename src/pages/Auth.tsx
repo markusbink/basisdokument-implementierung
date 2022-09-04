@@ -170,7 +170,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     }
     if (!role) {
       setErrorText(
-        "Bitte spezifizieren Sie, ob Sie das Basisdokument als Kläger, Beklagter oder Richter bearbeiten möchten!"
+        "Bitte spezifizieren Sie, ob Sie das Basisdokument als Klagepartei, Beklagtenpartei oder Richter:in bearbeiten möchten!"
       );
       inputIsValid = false;
     }
@@ -322,10 +322,10 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               className={cx(
                 "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
                 {
-                  "border-2 border-darkGrey": role === "Kläger",
+                  "border-2 border-darkGrey": role === "Klagepartei",
                 }
               )}>
-              Kläger
+              Klagepartei
             </div>
             <div
               onClick={() => {
@@ -334,10 +334,10 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               className={cx(
                 "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
                 {
-                  "border-2 border-darkGrey": role === "Beklagter",
+                  "border-2 border-darkGrey": role === "Beklagtenpartei",
                 }
               )}>
-              Beklagter
+              Beklagtenpartei
             </div>
             <div
               onClick={() => {
@@ -346,10 +346,10 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               className={cx(
                 "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
                 {
-                  "border-2 border-darkGrey": role === "Richter",
+                  "border-2 border-darkGrey": role === "Richter:in",
                 }
               )}>
-              Richter
+              Richter:in
             </div>
           </div>
         </div>
