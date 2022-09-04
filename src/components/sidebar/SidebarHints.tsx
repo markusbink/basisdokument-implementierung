@@ -1,12 +1,11 @@
 import { CaretDown, CaretRight, Plus } from "phosphor-react";
 import { useState } from "react";
+import { useUser } from "../../contexts";
 import { useHints } from "../../contexts/HintContext";
+import { UserRole } from "../../types";
 import { Button } from "../Button";
 import { JudgeHintPopup } from "../JudgeHintPopup";
 import { Hint } from "./Hint";
-
-//TODO: remove this, this is for testing
-const isJudge = true;
 
 export const SidebarHints = () => {
   const [hintsWithReferenceOpen, setHintsWithReferenceOpen] =
@@ -16,6 +15,8 @@ export const SidebarHints = () => {
   const [showModal, setShowModal] = useState(false);
 
   const { hints } = useHints();
+  const { user } = useUser();
+  const isJudge = user?.role === UserRole.Judge;
 
   return (
     <div className="flex flex-col gap-3 flex-1 overflow-hidden">
