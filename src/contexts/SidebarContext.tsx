@@ -9,12 +9,7 @@ import {
 import { SidebarBookmarks } from "../components/sidebar/SidebarBookmarks";
 import { SidebarHints } from "../components/sidebar/SidebarHints";
 import { SidebarNotes } from "../components/sidebar/SidebarNotes";
-
-interface ISidebar {
-  name: string;
-  jsxElem: JSX.Element;
-  icon: JSX.Element;
-}
+import { ISidebar } from "../types";
 
 const sidebars: ISidebar[] = [
   {

@@ -23,6 +23,12 @@ export interface INote {
   associatedEntry?: string;
 }
 
+export interface ISidebar {
+  name: string;
+  jsxElem: JSX.Element;
+  icon: JSX.Element;
+}
+
 export interface IUser {
   name: string;
   role: UserRole;
