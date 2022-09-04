@@ -166,11 +166,8 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   discussionTitleEl.style.marginTop = "3px";
   basisdokumentDOMRepresentation.appendChild(discussionTitleEl);
 
-
   // Get grouped entries
   let groupedEntries = groupEntriesBySectionAndParent(obj["entries"]);
-
-  console.log(obj["sections"]);
 
   if (obj["sections"].length === 0) {
     let noEntryTextEl = document.createElement("span");
@@ -179,7 +176,6 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     noEntryTextEl.style.fontSize = "3px";
     basisdokumentDOMRepresentation.appendChild(noEntryTextEl);
   }
-  
 
   for (let i = 0; i < obj["sections"].length; i++) {
     // section index
