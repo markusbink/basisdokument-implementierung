@@ -1,4 +1,4 @@
-import { XCircle, WarningCircle, Quotes } from "phosphor-react";
+import { XCircle, WarningCircle} from "phosphor-react";
 import { Button } from "./Button";
 import cx from "classnames";
 import {
@@ -34,7 +34,6 @@ const toolbarOptions = {
 };
 
 export const NotePopup = () => {
-  const options = ['New', 'Edit', 'Update', 'Delete'];
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const {
     setShowNotePopup,
@@ -58,7 +57,6 @@ export const NotePopup = () => {
 
   const { user } = useUser();
   const { entries } = useCase();
-  const entryarray = entries.map((entry) => entry.entryCode);
 
   useEffect(() => {
     setHidePlaceholder(
@@ -204,7 +202,7 @@ export const NotePopup = () => {
                 <div className="flex p-3 items-center justify-content w-fit rounded-lg bg-offWhite text-darkGrey gap-3">
                   <p className="text-sm">Beitrag auswählen:</p>
                   <div className="flex flex-1 border-lightGrey border border-solid p-1 rounded-lg">
-                    <Dropdown options={entryarray}/>
+                    <Dropdown/>
                     {associatedEntryId !== "" ? (
                       <div className="flex items-center gap-2 cursor-pointer rounded-full pl-3 pr-1 py-1 m-1 text-xs font-semibold bg-darkGrey text-white">
                         {getEntryCode()}
