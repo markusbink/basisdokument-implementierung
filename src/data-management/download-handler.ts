@@ -75,7 +75,6 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     metaPlaintiffTextEl.innerHTML = obj["metaData"]["plaintiff"];
   }
   metaPlaintiffTextEl.style.fontSize = "3px";
-  metaPlaintiffTextEl.style.marginTop = "10px";
   basisdokumentDOMRepresentation.appendChild(metaPlaintiffTextEl);
 
   // Metadaten Defendant
@@ -90,7 +89,6 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     metaDefendantTextEl.innerHTML = obj["metaData"]["defendant"];
   }
   metaDefendantTextEl.style.fontSize = "3px";
-  metaDefendantTextEl.style.marginTop = "10px";
   basisdokumentDOMRepresentation.appendChild(metaDefendantTextEl);
 
   // Hinweise des Richters nach §139 ZPO
