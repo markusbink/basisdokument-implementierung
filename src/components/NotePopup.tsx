@@ -1,4 +1,4 @@
-import { XCircle, WarningCircle} from "phosphor-react";
+import { XCircle, WarningCircle, Quotes } from "phosphor-react";
 import { Button } from "./Button";
 import cx from "classnames";
 import {
@@ -12,10 +12,9 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useCase, useNotes, useUser } from "../contexts";
 import draftToHtml from "draftjs-to-html";
-import { INote } from "../types";
+import { IEntry, INote } from "../types";
 import { v4 as uuidv4 } from "uuid";
-import {Dropdown} from "./Dropdown";
-
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 const toolbarOptions = {
   options: ["inline", "list", "textAlign"],
@@ -52,7 +51,7 @@ export const NotePopup = () => {
     setNotes,
     notes,
     editMode,
-    setEditMode
+    setEditMode,
   } = useNotes();
 
   const { user } = useUser();
@@ -140,7 +139,7 @@ export const NotePopup = () => {
             {/*header*/}
             <div className="flex items-start justify-between rounded-lg ">
               <h3 className="text-2xl font-bold text-darkGrey">
-              {`${editMode ? "Notiz bearbeiten": "Neue Notiz hinzufügen"}`}
+                {`${editMode ? "Notiz bearbeiten" : "Neue Notiz hinzufügen"}`}
               </h3>
               <div>
                 <button
@@ -199,10 +198,31 @@ export const NotePopup = () => {
                 <label className="my-4 text-lg leading-relaxed font-bold text-darkGrey">
                   Verweis auf einen Beitrag hinzufügen
                 </label>
-                <div className="flex p-3 items-center justify-content w-fit rounded-lg bg-offWhite text-darkGrey gap-3">
-                  <p className="text-sm">Beitrag auswählen:</p>
-                  <div className="flex flex-1 border-lightGrey border border-solid p-1 rounded-lg">
-                    <Dropdown/>
+                <div className="flex flex-row w-fit p-3 items-center rounded-lg bg-offWhite text-darkGrey gap-3">
+                  <span className="text-sm">Beitrag auswählen:</span>
+                  <div className="flex flex-row items-center justify-center border-lightGrey border border-solid p-2 rounded-lg">
+                    <DropdownMenu.Root modal={false}>
+                      <DropdownMenu.Trigger className="flex items-center justify-center bg-darkGrey rounded flex items-center h-8 w-8">
+                        <Quotes size={16} color="white" weight="regular" />
+                      </DropdownMenu.Trigger>
+                      <DropdownMenu.Portal>
+                        <DropdownMenu.Content className="flex flex-col gap-2 bg-white rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
+                          {entries &&
+                            entries.map((entry: IEntry) => (
+                              <DropdownMenu.Item
+                                key={entry.id}
+                                onClick={() => {
+                                  setAssociatedEntryId(entry.id);
+                                }}
+                                className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 w-full rounded-md cursor-pointer"
+                                role="menuitem"
+                                id="menu-item-0">
+                                {entry.entryCode}
+                              </DropdownMenu.Item>
+                            ))}
+                        </DropdownMenu.Content>
+                      </DropdownMenu.Portal>
+                    </DropdownMenu.Root>
                     {associatedEntryId !== "" ? (
                       <div className="flex items-center gap-2 cursor-pointer rounded-full pl-3 pr-1 py-1 m-1 text-xs font-semibold bg-darkGrey text-white">
                         {getEntryCode()}
@@ -228,11 +248,11 @@ export const NotePopup = () => {
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end">
-              <Button 
+              <Button
                 onClick={() => {
                   addNote();
                 }}>
-                Notiz {`${editMode ? "speichern": "hinzufügen"}`}
+                Notiz {`${editMode ? "speichern" : "hinzufügen"}`}
               </Button>
             </div>
           </div>
