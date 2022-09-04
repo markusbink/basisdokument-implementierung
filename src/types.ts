@@ -24,7 +24,7 @@ export interface INote {
 }
 
 export interface ISidebar {
-  name: string;
+  name: SidebarState;
   jsxElem: JSX.Element;
   icon: JSX.Element;
 }
@@ -48,6 +48,12 @@ export enum Sorting {
 export enum UsageMode {
   Open,
   Create
+}
+
+export enum SidebarState {
+  Notes,
+  Hints,
+  Bookmarks
 }
 
 export interface ISection {

@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEntry, UserRole, Tool, IBookmark } from "../../types";
+import { IEntry, UserRole, Tool, IBookmark, SidebarState } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
@@ -113,7 +113,7 @@ export const Entry: React.FC<EntryProps> = ({
       const newBookmarks = [...oldBoomarks, newBookmark];
       return newBookmarks;
     });
-    setActiveSidebar("Bookmarks");
+    setActiveSidebar(SidebarState.Bookmarks);
   };
 
   const addNote = (e: React.MouseEvent) => {
