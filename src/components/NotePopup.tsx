@@ -14,6 +14,8 @@ import { useCase, useNotes, useUser } from "../contexts";
 import draftToHtml from "draftjs-to-html";
 import { INote } from "../types";
 import { v4 as uuidv4 } from "uuid";
+import {Dropdown} from "./Dropdown";
+
 
 const toolbarOptions = {
   options: ["inline", "list", "textAlign"],
@@ -32,6 +34,7 @@ const toolbarOptions = {
 };
 
 export const NotePopup = () => {
+  const options = ['New', 'Edit', 'Update', 'Delete'];
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const {
     setShowNotePopup,
@@ -55,6 +58,7 @@ export const NotePopup = () => {
 
   const { user } = useUser();
   const { entries } = useCase();
+  const entryarray = entries.map((entry) => entry.entryCode);
 
   useEffect(() => {
     setHidePlaceholder(
@@ -200,10 +204,7 @@ export const NotePopup = () => {
                 <div className="flex p-3 items-center justify-content w-fit rounded-lg bg-offWhite text-darkGrey gap-3">
                   <p className="text-sm">Beitrag auswählen:</p>
                   <div className="flex flex-1 border-lightGrey border border-solid p-1 rounded-lg">
-                    <div className="bg-darkGrey rounded flex items-center p-1 m-1">
-                      <Quotes size={16} color="white" weight="regular" />
-                    </div>
-
+                    <Dropdown options={entryarray}/>
                     {associatedEntryId !== "" ? (
                       <div className="flex items-center gap-2 cursor-pointer rounded-full pl-3 pr-1 py-1 m-1 text-xs font-semibold bg-darkGrey text-white">
                         {getEntryCode()}
@@ -229,7 +230,7 @@ export const NotePopup = () => {
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end">
-              <Button
+              <Button 
                 onClick={() => {
                   addNote();
                 }}>
