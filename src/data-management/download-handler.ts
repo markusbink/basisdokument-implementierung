@@ -89,6 +89,12 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   let metaPlaintiffTextEl = document.createElement("span");
   if (obj["metaData"]) {
     metaPlaintiffTextEl.innerHTML = obj["metaData"]["plaintiff"];
+  } else {
+    let noMetaDataTextEl = document.createElement("span");
+    noMetaDataTextEl.innerHTML =
+      "Es wurden keine Metadaten von der Klagepartei angelegt.";
+    noMetaDataTextEl.style.fontSize = "3px";
+    basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
   metaPlaintiffTextEl.style.fontSize = "3px";
   basisdokumentDOMRepresentation.appendChild(metaPlaintiffTextEl);
@@ -103,17 +109,31 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   let metaDefendantTextEl = document.createElement("span");
   if (obj["metaData"]) {
     metaDefendantTextEl.innerHTML = obj["metaData"]["defendant"];
+  } else {
+    let noMetaDataTextEl = document.createElement("span");
+    noMetaDataTextEl.innerHTML =
+      "Es wurden keine Metadaten von der Beklagtenpartei angelegt.";
+    noMetaDataTextEl.style.fontSize = "3px";
+    basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
   metaDefendantTextEl.style.fontSize = "3px";
   basisdokumentDOMRepresentation.appendChild(metaDefendantTextEl);
 
-  // Hinweise des Richters nach §139 ZPO
+  // hints from the judge §139 ZPO
   let hintsTitleEl = document.createElement("span");
   hintsTitleEl.innerHTML = "Hinweise des Richters nach (nach §139 ZPO)";
   hintsTitleEl.style.fontSize = "4px";
   hintsTitleEl.style.fontWeight = "bold";
   hintsTitleEl.style.marginTop = "3px";
   basisdokumentDOMRepresentation.appendChild(hintsTitleEl);
+
+  if (obj["judgeHints"].length === 0) {
+    let noHintTextEl = document.createElement("span");
+    noHintTextEl.innerHTML =
+      "Es wurden keine Hinweise von der Richterin / dem Richter verfasst.";
+    noHintTextEl.style.fontSize = "3px";
+    basisdokumentDOMRepresentation.appendChild(noHintTextEl);
+  }
 
   for (let index = 0; index < obj["judgeHints"].length; index++) {
     const judgeHintObject = obj["judgeHints"][index];
@@ -138,7 +158,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     basisdokumentDOMRepresentation.appendChild(judgeHintTextEl);
   }
 
-  // Discussion Title
+  // discussion Title
   let discussionTitleEl = document.createElement("span");
   discussionTitleEl.innerHTML = "Parteivortrag";
   discussionTitleEl.style.fontSize = "4px";
@@ -146,14 +166,26 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   discussionTitleEl.style.marginTop = "3px";
   basisdokumentDOMRepresentation.appendChild(discussionTitleEl);
 
+
   // Get grouped entries
   let groupedEntries = groupEntriesBySectionAndParent(obj["entries"]);
 
+  console.log(obj["sections"]);
+
+  if (obj["sections"].length === 0) {
+    let noEntryTextEl = document.createElement("span");
+    noEntryTextEl.innerHTML =
+      "Es wurden keine Gliederungspunkte / Beiträge von den Parteien angelegt.";
+    noEntryTextEl.style.fontSize = "3px";
+    basisdokumentDOMRepresentation.appendChild(noEntryTextEl);
+  }
+  
+
   for (let i = 0; i < obj["sections"].length; i++) {
-    // Gliederungspunkt Nummer
+    // section index
     let letSectionTitleEl = document.createElement("span");
     letSectionTitleEl.innerHTML = `${i + 1}. Gliederungspunkt`;
-    letSectionTitleEl.style.fontSize = "3px";
+    letSectionTitleEl.style.fontSize = "3.5px";
     letSectionTitleEl.style.fontWeight = "bold";
     letSectionTitleEl.style.marginTop = "3px";
     basisdokumentDOMRepresentation.appendChild(letSectionTitleEl);
@@ -228,6 +260,12 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
           }
         }
       }
+    } else {
+      let noEntryInSectionTextEl = document.createElement("span");
+      noEntryInSectionTextEl.innerHTML =
+        "Es wurden keine Beiträge zu diesem Gliederungspunkt verfasst.";
+      noEntryInSectionTextEl.style.fontSize = "3px";
+      basisdokumentDOMRepresentation.appendChild(noEntryInSectionTextEl);
     }
   }
 
