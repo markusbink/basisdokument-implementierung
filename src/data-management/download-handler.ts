@@ -25,6 +25,15 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   saveAs(fileToSave, fileName);
 }
 
+function resetFontSize(parentElement: any) {
+  ["p", "span", "div", "b", "i"].forEach((elementIType) => {
+    parentElement.querySelectorAll(elementIType).forEach((element: any) => {
+      element.style.fontSize = "3px";
+    });
+  });
+  return parentElement;
+}
+
 function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   let pdfConverter = jsPDF,
     doc = new pdfConverter();
@@ -39,10 +48,9 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   doc.setFont("Manrope");
 
   let basisdokumentDOMRepresentation = document.createElement("div");
-  basisdokumentDOMRepresentation.style.padding = "10px";
   basisdokumentDOMRepresentation.style.display = "flex";
   basisdokumentDOMRepresentation.style.flexDirection = "column";
-  basisdokumentDOMRepresentation.style.width = "210px";
+  basisdokumentDOMRepresentation.style.width = "180px";
 
   // Main Title "Basisdokument"
   let mainTitleEl = document.createElement("h1");
@@ -180,8 +188,10 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
         entryTitleEl.style.marginTop = "4px";
         basisdokumentDOMRepresentation.appendChild(entryTitleEl);
 
-        let entryTextEl = document.createElement("span");
-        entryTextEl.innerHTML = entry.text;
+        let entryTextEl = document.createElement("div");
+        entryTextEl.innerHTML = entry.text.trim();
+        entryTextEl = resetFontSize(entryTextEl);
+
         entryTextEl.style.fontSize = "3px";
         basisdokumentDOMRepresentation.appendChild(entryTextEl);
 
@@ -210,7 +220,8 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
             basisdokumentDOMRepresentation.appendChild(childEntryTitleEl);
 
             let childEntryTextEl = document.createElement("span");
-            childEntryTextEl.innerHTML = childEntry.text;
+            childEntryTextEl.innerHTML = childEntry.text.trim();
+            childEntryTextEl = resetFontSize(childEntryTextEl);
             childEntryTextEl.style.fontSize = "3px";
             childEntryTextEl.style.marginLeft = "4px";
             basisdokumentDOMRepresentation.appendChild(childEntryTextEl);
@@ -221,7 +232,11 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   }
 
   let stringHtml = basisdokumentDOMRepresentation.outerHTML;
-  doc.html(stringHtml).then(() => doc.save(fileName));
+  doc
+    .html(stringHtml, {
+      margin: 15,
+    })
+    .then(() => doc.save(fileName));
 }
 
 export function downloadBasisdokument(
