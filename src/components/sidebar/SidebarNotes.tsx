@@ -27,12 +27,11 @@ export const SidebarNotes = () => {
           textColor="text-white"
           hasText={false}
           alternativePadding="p-1"
-          icon={<Plus size={18} weight="bold" />}
-        ></Button>
+          icon={<Plus size={18} weight="bold" />}></Button>
       </div>
 
       {notes.length <= 0 && (
-        <div className="mt-7 text-darkGrey opacity-40 text-center text-sm">
+        <div className="mt-7 text-darkGrey opacity-40 text-center text-sm px-4">
           Notizen, die Sie zu Beiträgen verfassen, erscheinen in dieser Ansicht
           und sind nur für Sie sichtbar.
         </div>
@@ -44,8 +43,7 @@ export const SidebarNotes = () => {
             className="cursor-pointer flex items-center"
             onClick={() =>
               setNotesWithoutReferenceOpen(!notesWithoutReferenceOpen)
-            }
-          >
+            }>
             {notesWithoutReferenceOpen ? (
               <CaretDown size={14} className="inline mr-1" weight="bold" />
             ) : (
@@ -63,8 +61,7 @@ export const SidebarNotes = () => {
 
           <div
             className="cursor-pointer mt-7 flex items-center"
-            onClick={() => setNotesWithReferenceOpen(!notesWithReferenceOpen)}
-          >
+            onClick={() => setNotesWithReferenceOpen(!notesWithReferenceOpen)}>
             {notesWithReferenceOpen ? (
               <CaretDown size={14} className="inline mr-1" weight="bold" />
             ) : (

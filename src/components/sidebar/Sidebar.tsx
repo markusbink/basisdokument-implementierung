@@ -8,13 +8,17 @@ export const Sidebar = () => {
   return (
     <aside
       className={cx(
-        "h-full overflow-y-clip shadow-lg divide-y-[1px] divide-lightGrey transition-width duration-300",
+        "h-full overflow-y-clip shadow-lg transition-width duration-300",
         {
           "w-[65px] overflow-hidden": !isSidebarOpen,
           "w-[400px]": isSidebarOpen,
         }
       )}>
-      <SidebarHeader />
+      <SidebarHeader
+        setActiveSidebar={setActiveSidebar}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
       {sidebars.map(
         (sidebar) =>
           sidebar.name === activeSidebar && isSidebarOpen && sidebar.jsxElem
