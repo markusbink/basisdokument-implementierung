@@ -13,6 +13,7 @@ import {
 } from "../types";
 import { jsPDF } from "jspdf";
 import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
+import { manropeMedium, manropeBold } from "../fonts/fonts";
 
 function downloadObjectAsJSON(obj: object, fileName: string) {
   // Create a blob of the data
@@ -28,7 +29,14 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   let pdfConverter = jsPDF,
     doc = new pdfConverter();
 
-  doc.setFont("Comic Sans");
+  // converter https://www.giftofspeed.com/base64-encoder/
+
+  doc.addFileToVFS("Manrope-Medium.ttf", manropeMedium);
+  doc.addFileToVFS("Manrope-Bold.ttf", manropeBold);
+  doc.addFont("Manrope-Medium.ttf", "Manrope", "normal");
+  doc.addFont("Manrope-Bold.ttf", "Manrope", "bold");
+  doc.setFontSize(4);
+  doc.setFont("Manrope");
 
   let basisdokumentDOMRepresentation = document.createElement("div");
   basisdokumentDOMRepresentation.style.padding = "10px";
@@ -38,27 +46,27 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   // Main Title "Basisdokument"
   let mainTitleEl = document.createElement("h1");
-  mainTitleEl.style.fontSize = "5px";
+  mainTitleEl.style.fontSize = "4px";
   mainTitleEl.style.fontWeight = "bold";
   mainTitleEl.innerHTML = "Basisdokument";
   basisdokumentDOMRepresentation.appendChild(mainTitleEl);
 
   // Case Id
   let caseIdEl = document.createElement("span");
-  caseIdEl.innerHTML = "Aktenzeichen " + obj["caseId"];
+  caseIdEl.innerHTML = "Aktenzeichen: " + obj["caseId"];
   caseIdEl.style.fontSize = "3px";
   basisdokumentDOMRepresentation.appendChild(caseIdEl);
 
   // Version
   let versionEl = document.createElement("span");
-  versionEl.innerHTML = "Version " + obj["currentVersion"];
+  versionEl.innerHTML = "Version: " + obj["currentVersion"];
   versionEl.style.fontSize = "3px";
   basisdokumentDOMRepresentation.appendChild(versionEl);
 
   // Export Timestamp
   let timestampEl = document.createElement("span");
   timestampEl.innerHTML =
-    "Exportiert am " +
+    "Export: " +
     obj["versions"][obj["versions"].length - 1]["timestamp"].toLocaleString();
   timestampEl.style.fontSize = "3px";
   basisdokumentDOMRepresentation.appendChild(timestampEl);
@@ -66,9 +74,9 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   // Metadaten Plaintiff
   let metaPlaintiffTitleEl = document.createElement("span");
   metaPlaintiffTitleEl.innerHTML = "Metadaten Klagepartei";
-  metaPlaintiffTitleEl.style.fontSize = "5px";
+  metaPlaintiffTitleEl.style.fontSize = "4px";
   metaPlaintiffTitleEl.style.fontWeight = "bold";
-  metaPlaintiffTitleEl.style.marginTop = "5px";
+  metaPlaintiffTitleEl.style.marginTop = "4px";
   basisdokumentDOMRepresentation.appendChild(metaPlaintiffTitleEl);
   let metaPlaintiffTextEl = document.createElement("span");
   if (obj["metaData"]) {
@@ -80,9 +88,9 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   // Metadaten Defendant
   let metaDefendantTitleEl = document.createElement("span");
   metaDefendantTitleEl.innerHTML = "Metadaten Beklagtenpartei";
-  metaDefendantTitleEl.style.fontSize = "5px";
+  metaDefendantTitleEl.style.fontSize = "4px";
   metaDefendantTitleEl.style.fontWeight = "bold";
-  metaDefendantTitleEl.style.marginTop = "5px";
+  metaDefendantTitleEl.style.marginTop = "4px";
   basisdokumentDOMRepresentation.appendChild(metaDefendantTitleEl);
   let metaDefendantTextEl = document.createElement("span");
   if (obj["metaData"]) {
@@ -94,9 +102,9 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   // Hinweise des Richters nach §139 ZPO
   let hintsTitleEl = document.createElement("span");
   hintsTitleEl.innerHTML = "Hinweise des Richters nach (nach §139 ZPO)";
-  hintsTitleEl.style.fontSize = "5px";
+  hintsTitleEl.style.fontSize = "4px";
   hintsTitleEl.style.fontWeight = "bold";
-  hintsTitleEl.style.marginTop = "4px";
+  hintsTitleEl.style.marginTop = "3px";
   basisdokumentDOMRepresentation.appendChild(hintsTitleEl);
 
   for (let index = 0; index < obj["judgeHints"].length; index++) {
@@ -114,7 +122,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
       judgeHintObject.title;
     judgeHintTitleEl.style.fontSize = "3px";
     judgeHintTitleEl.style.fontWeight = "bold";
-    judgeHintTitleEl.style.marginTop = "4px";
+    judgeHintTitleEl.style.marginTop = "3px";
     let judgeHintTextEl = document.createElement("span");
     judgeHintTextEl.innerHTML = judgeHintObject.text;
     judgeHintTextEl.style.fontSize = "3px";
@@ -125,9 +133,9 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   // Discussion Title
   let discussionTitleEl = document.createElement("span");
   discussionTitleEl.innerHTML = "Parteivortrag";
-  discussionTitleEl.style.fontSize = "5px";
+  discussionTitleEl.style.fontSize = "4px";
   discussionTitleEl.style.fontWeight = "bold";
-  discussionTitleEl.style.marginTop = "4px";
+  discussionTitleEl.style.marginTop = "3px";
   basisdokumentDOMRepresentation.appendChild(discussionTitleEl);
 
   // Get grouped entries
@@ -137,9 +145,9 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     // Gliederungspunkt Nummer
     let letSectionTitleEl = document.createElement("span");
     letSectionTitleEl.innerHTML = `${i + 1}. Gliederungspunkt`;
-    letSectionTitleEl.style.fontSize = "4px";
+    letSectionTitleEl.style.fontSize = "3px";
     letSectionTitleEl.style.fontWeight = "bold";
-    letSectionTitleEl.style.marginTop = "4px";
+    letSectionTitleEl.style.marginTop = "3px";
     basisdokumentDOMRepresentation.appendChild(letSectionTitleEl);
 
     // section title plaintiff
@@ -159,47 +167,54 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     basisdokumentDOMRepresentation.appendChild(letSectionTitleDefendantEl);
 
     // get section entries
-    let sectionEntriesParent = groupedEntries[obj["sections"][i].id].parent;
-    for (let entryId = 0; entryId < sectionEntriesParent.length; entryId++) {
-      const entry = sectionEntriesParent[entryId];
+    if (groupedEntries[obj["sections"][i].id]) {
+      let sectionEntriesParent = groupedEntries[obj["sections"][i].id].parent;
+      for (let entryId = 0; entryId < sectionEntriesParent.length; entryId++) {
+        const entry = sectionEntriesParent[entryId];
 
-      let entryTitleEl = document.createElement("span");
-      entryTitleEl.innerHTML = entry.entryCode + " | " + entry.author;
-      entryTitleEl.style.fontSize = "3px";
-      entryTitleEl.style.fontWeight = "bold";
-      entryTitleEl.style.marginTop = "5px";
-      basisdokumentDOMRepresentation.appendChild(entryTitleEl);
+        let entryTitleEl = document.createElement("span");
+        entryTitleEl.innerHTML =
+          entry.entryCode + " | " + entry.author + " | " + entry.role;
+        entryTitleEl.style.fontSize = "3px";
+        entryTitleEl.style.fontWeight = "bold";
+        entryTitleEl.style.marginTop = "4px";
+        basisdokumentDOMRepresentation.appendChild(entryTitleEl);
 
-      let entryTextEl = document.createElement("span");
-      entryTextEl.innerHTML = entry.text;
-      entryTextEl.style.fontSize = "3px";
-      basisdokumentDOMRepresentation.appendChild(entryTextEl);
+        let entryTextEl = document.createElement("span");
+        entryTextEl.innerHTML = entry.text;
+        entryTextEl.style.fontSize = "3px";
+        basisdokumentDOMRepresentation.appendChild(entryTextEl);
 
-      // get child entries of an entry
-      if (groupedEntries[obj["sections"][i].id][entry.id]) {
-        for (
-          let childEntryIndex = 0;
-          childEntryIndex <
-          groupedEntries[obj["sections"][i].id][entry.id].length;
-          childEntryIndex++
-        ) {
-          let childEntry =
-            groupedEntries[obj["sections"][i].id][entry.id][childEntryIndex];
+        // get child entries of an entry
+        if (groupedEntries[obj["sections"][i].id][entry.id]) {
+          for (
+            let childEntryIndex = 0;
+            childEntryIndex <
+            groupedEntries[obj["sections"][i].id][entry.id].length;
+            childEntryIndex++
+          ) {
+            let childEntry =
+              groupedEntries[obj["sections"][i].id][entry.id][childEntryIndex];
 
-          let childEntryTitleEl = document.createElement("span");
-          childEntryTitleEl.innerHTML =
-            childEntry.entryCode + " | " + childEntry.author;
-          childEntryTitleEl.style.fontSize = "3px";
-          childEntryTitleEl.style.fontWeight = "bold";
-          childEntryTitleEl.style.marginTop = "5px";
-          childEntryTitleEl.style.marginLeft = "5px";
-          basisdokumentDOMRepresentation.appendChild(childEntryTitleEl);
+            let childEntryTitleEl = document.createElement("span");
+            childEntryTitleEl.innerHTML =
+              childEntry.entryCode +
+              " | " +
+              childEntry.author +
+              " (" +
+              childEntry.role;
+            childEntryTitleEl.style.fontSize = "3px";
+            childEntryTitleEl.style.fontWeight = "bold";
+            childEntryTitleEl.style.marginTop = "4px";
+            childEntryTitleEl.style.marginLeft = "4px";
+            basisdokumentDOMRepresentation.appendChild(childEntryTitleEl);
 
-          let childEntryTextEl = document.createElement("span");
-          childEntryTextEl.innerHTML = childEntry.text;
-          childEntryTextEl.style.fontSize = "3px";
-          childEntryTextEl.style.marginLeft = "5px";
-          basisdokumentDOMRepresentation.appendChild(childEntryTextEl);
+            let childEntryTextEl = document.createElement("span");
+            childEntryTextEl.innerHTML = childEntry.text;
+            childEntryTextEl.style.fontSize = "3px";
+            childEntryTextEl.style.marginLeft = "4px";
+            basisdokumentDOMRepresentation.appendChild(childEntryTextEl);
+          }
         }
       }
     }
