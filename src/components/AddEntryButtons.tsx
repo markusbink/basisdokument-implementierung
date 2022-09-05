@@ -13,9 +13,9 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
   sectionId,
 }) => {
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
-  const [newEntryRole, setNewEntryRole] = useState<"Klagepartei" | "Beklagtenpartei">(
-    "Klagepartei"
-  );
+  const [newEntryRole, setNewEntryRole] = useState<
+    "Klagepartei" | "Beklagtenpartei"
+  >("Klagepartei");
   const { user } = useUser();
 
   const handleClick = (roleForNewEntry: "Klagepartei" | "Beklagtenpartei") => {
@@ -24,7 +24,7 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full flex flex-col">
       {isNewEntryVisible && (
         <NewEntry
           sectionId={sectionId}
@@ -39,8 +39,7 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
             <Button
               size="sm"
               onClick={() => handleClick(UserRole.Plaintiff)}
-              icon={<Plus size={18} weight="bold" />}
-            >
+              icon={<Plus size={18} weight="bold" />}>
               Beitrag hinzufügen
             </Button>
           )}
@@ -51,8 +50,7 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
             <Button
               size="sm"
               onClick={() => handleClick(UserRole.Defendant)}
-              icon={<Plus size={18} weight="bold" />}
-            >
+              icon={<Plus size={18} weight="bold" />}>
               Beitrag hinzufügen
             </Button>
           )}
