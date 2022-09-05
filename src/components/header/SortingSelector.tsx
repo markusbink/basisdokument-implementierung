@@ -22,8 +22,7 @@ export const SortingSelector: React.FC<IProps> = ({
       modal={false}
       onOpenChange={() => {
         setShowDownloadMenu(!showSelectMenu);
-      }}
-    >
+      }}>
       <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 px-2 h-8 hover:cursor-pointer w-[100px] font-bold">
         <span className="text-sm">
           {selectedSorting === Sorting.Original ? "Original" : "Privat"}
@@ -38,22 +37,19 @@ export const SortingSelector: React.FC<IProps> = ({
         <DropdownMenu.Content
           side="bottom"
           align="start"
-          className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 w-[100px]"
-        >
+          className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 w-[100px] z-20">
           <DropdownMenu.Item
             className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
             onClick={() => {
               setSelectedSorting(Sorting.Original);
-            }}
-          >
+            }}>
             <div className="text-darkGrey text-sm font-medium">Original</div>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
             onClick={() => {
               setSelectedSorting(Sorting.Privat);
-            }}
-          >
+            }}>
             <div className="text-darkGrey text-sm font-medium">Privat</div>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
