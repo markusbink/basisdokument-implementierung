@@ -229,7 +229,7 @@ export const NotePopup = () => {
                       </DropdownMenu.Portal>
                     </DropdownMenu.Root>
                     {associatedEntryId !== "" ? (
-                      <div className="flex items-center gap-2 cursor-pointer rounded-full pl-3 pr-1 py-1 m-1 text-xs font-semibold bg-darkGrey text-white">
+                      <div className="flex items-center gap-2 cursor-pointer rounded-full pl-3 pr-1 py-1 mx-1 text-xs font-semibold bg-darkGrey text-white">
                         {getEntryCode()}
                         <XCircle
                           size={20}
