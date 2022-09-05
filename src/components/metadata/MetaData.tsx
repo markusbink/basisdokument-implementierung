@@ -71,12 +71,12 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
         <Button
           position="end"
           bgColor={cx({
-            "bg-lightPurple": isPlaintiff,
-            "bg-lightPetrol": !isPlaintiff,
+            "bg-lightPurple hover:bg-darkPurple": isPlaintiff,
+            "bg-lightPetrol hover:bg-darkPetrol": !isPlaintiff,
           })}
           textColor={cx("font-bold text-sm uppercase tracking-wider", {
-            "text-darkPurple": isPlaintiff,
-            "text-darkPetrol": !isPlaintiff,
+            "text-darkPurple hover:text-lightPurple": isPlaintiff,
+            "text-darkPetrol hover:text-lightPetrol": !isPlaintiff,
           })}
           size="sm"
           onClick={toggleMetaData}
