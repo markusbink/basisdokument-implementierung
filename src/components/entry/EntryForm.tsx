@@ -134,8 +134,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             onAbort(plainText, newHtml);
           }}
           size="sm"
-          bgColor="bg-lightRed"
-          textColor="font-bold text-darkRed">
+          bgColor="bg-lightRed hover:bg-darkRed"
+          textColor="font-bold text-darkRed hover:text-white">
           Abbrechen
         </Button>
         <Button
@@ -149,8 +149,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             onSave(plainText, newHtml);
           }}
           size="sm"
-          bgColor="bg-lightGreen"
-          textColor="font-bold text-darkGreen">
+          bgColor="bg-lightGreen hover:bg-darkGreen"
+          textColor="font-bold text-darkGreen hover:text-white">
           Speichern
         </Button>
       </div>

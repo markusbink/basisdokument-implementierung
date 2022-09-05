@@ -38,6 +38,8 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
             user?.role === UserRole.Judge) && (
             <Button
               size="sm"
+              bgColor="bg-darkGrey hover:bg-lightGrey"
+              textColor="text-white hover:text-darkGrey"
               onClick={() => handleClick(UserRole.Plaintiff)}
               icon={<Plus size={18} weight="bold" />}>
               Beitrag hinzufügen
@@ -49,6 +51,8 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
             user?.role === UserRole.Judge) && (
             <Button
               size="sm"
+              bgColor="bg-darkGrey hover:bg-lightGrey"
+              textColor="text-white hover:text-darkGrey"
               onClick={() => handleClick(UserRole.Defendant)}
               icon={<Plus size={18} weight="bold" />}>
               Beitrag hinzufügen
