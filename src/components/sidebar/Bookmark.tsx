@@ -60,16 +60,20 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           value={bookmark.title}
           onBlur={() => setBookmarkEditMode(bookmark, false)}
           onChange={handleChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              setBookmarkEditMode(bookmark, false);
+            }
+          }}
         />
       ) : (
         <div
-          className="break-words grow max-w-[55%]"
+          className="break-words grow max-w-[55%] justify-start"
           onDoubleClick={() => {
             setBookmarkEditMode(bookmark, true);
           }}>
-          <Tooltip text="Doppelklick, um zu Editieren">
-            {bookmark.title}
-          </Tooltip>
+          <Tooltip text="Doppelklick, um zu Editieren"></Tooltip>
+          {bookmark.title}
         </div>
       )}
 

@@ -103,18 +103,22 @@ export const Entry: React.FC<EntryProps> = ({
 
   const bookmarkEntry = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsMenuOpen(false);
-    setBookmarks((oldBoomarks) => {
-      const newBookmark: IBookmark = {
-        id: uuidv4(),
-        title: `Lesezeichen ${oldBoomarks.length + 1}`,
-        associatedEntry: entry.id,
-        isInEditMode: true,
-      };
-      const newBookmarks = [...oldBoomarks, newBookmark];
-      return newBookmarks;
-    });
-    setActiveSidebar("Bookmarks");
+    if (isBookmarked) {
+      deleteBookmarkByReference(entry.id);
+    } else {
+      setIsMenuOpen(false);
+      setBookmarks((oldBoomarks) => {
+        const newBookmark: IBookmark = {
+          id: uuidv4(),
+          title: `Lesezeichen ${oldBoomarks.length + 1}`,
+          associatedEntry: entry.id,
+          isInEditMode: true,
+        };
+        const newBookmarks = [...oldBoomarks, newBookmark];
+        return newBookmarks;
+      });
+      setActiveSidebar("Bookmarks");
+    }
   };
 
   const addNote = (e: React.MouseEvent) => {
@@ -274,7 +278,12 @@ export const Entry: React.FC<EntryProps> = ({
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Tooltip text="Zu Lesezeichen hinzufügen">
+                  <Tooltip
+                    text={
+                      isBookmarked
+                        ? "Lesezeichen zu diesem Beitrag entfernen"
+                        : "Zu Lesezeichen hinzufügen"
+                    }>
                     <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
                       <BookmarkSimple
                         size={20}
