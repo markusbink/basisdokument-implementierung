@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { Upload } from "phosphor-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
 import { Button } from "../components/Button";
@@ -49,6 +49,10 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
   const [newVersionMode, setNewVersionMode] =
     useState<IStateUserInput["newVersionMode"]>(false);
+
+  // Refs
+  const basisdokumentFileUploadRef = useRef<HTMLInputElement>(null);
+  const editFileUploadRef = useRef<HTMLInputElement>(null);
 
   // Contexts to set the state globally
   const {
@@ -282,7 +286,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             <span className="text-darkRed">*</span>
           </p>
           <div className="flex flex-row w-auto mt-4 gap-4">
-            <div
+            <button
               onClick={() => {
                 setUsage(UsageMode.Open);
               }}
@@ -293,8 +297,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 }
               )}>
               Öffnen
-            </div>
-            <div
+            </button>
+            <button
               onClick={() => {
                 setUsage(UsageMode.Create);
               }}
@@ -305,7 +309,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 }
               )}>
               Erstellen
-            </div>
+            </button>
           </div>
         </div>
 
@@ -315,7 +319,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             <span className="text-darkRed">*</span>
           </p>
           <div className="flex flex-row w-auto mt-4 gap-4">
-            <div
+            <button
               onClick={() => {
                 setRole(UserRole.Plaintiff);
               }}
@@ -326,8 +330,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 }
               )}>
               Klagepartei
-            </div>
-            <div
+            </button>
+            <button
               onClick={() => {
                 setRole(UserRole.Defendant);
               }}
@@ -338,8 +342,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 }
               )}>
               Beklagtenpartei
-            </div>
-            <div
+            </button>
+            <button
               onClick={() => {
                 setRole(UserRole.Judge);
               }}
@@ -350,7 +354,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 }
               )}>
               Richter:in
-            </div>
+            </button>
           </div>
         </div>
         <div>
@@ -404,24 +408,39 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                   <span className="font-semibold">
                     Basisdokument: <span className="text-darkRed">*</span>
                   </span>
-                  <label className="flex items-center justify-center gap-2 cursor-pointer">
+                  <label
+                    role="button"
+                    className="flex items-center justify-center gap-2 cursor-pointer">
                     <input
+                      ref={basisdokumentFileUploadRef}
                       type="file"
                       onChange={handleBasisdokumentFileUploadChange}
                     />
-                    <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                    <button
+                      onClick={() => {
+                        basisdokumentFileUploadRef?.current?.click();
+                      }}
+                      className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
                       <Upload size={24} color={"white"} />
-                    </div>
+                    </button>
                     <p className="text-black">{basisdokumentFilename}</p>
                   </label>
                 </div>
                 <div className="flex flex-row items-center justify-center gap-4">
                   <span className="font-semibold">Bearbeitungsdatei:</span>
                   <label className="flex items-center justify-center gap-2 cursor-pointer">
-                    <input type="file" onChange={handleEditFileUploadChange} />
-                    <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                    <input
+                      ref={editFileUploadRef}
+                      type="file"
+                      onChange={handleEditFileUploadChange}
+                    />
+                    <button
+                      onClick={() => {
+                        editFileUploadRef?.current?.click();
+                      }}
+                      className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
                       <Upload size={24} color={"white"} />
-                    </div>
+                    </button>
                     <p className="text-black">{editFilename}</p>
                   </label>
                 </div>

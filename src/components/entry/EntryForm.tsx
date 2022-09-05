@@ -85,8 +85,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         "border-lightPurple": isPlaintiff,
         "border-lightPetrol": !isPlaintiff,
         "RichEditor-hidePlaceholder": hidePlaceholder,
-      })}
-    >
+      })}>
       <Editor
         ref={editorRef}
         mention={{
@@ -98,7 +97,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         stripPastedStyles={true}
         onEditorStateChange={setEditorState}
         wrapperClassName={cx("w-full focus:outline-none")}
-        editorClassName="p-6 min-h-[160px] overflow-visible"
+        editorClassName="p-6 min-h-[300px] overflow-visible"
         placeholder="Text eingeben..."
         toolbarClassName={cx(
           "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"
@@ -110,13 +109,11 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
                 <span className="absolute right-2 top-1/2 -translate-y-1/2 leading-[0]">
                   <Tooltip
                     position="top"
-                    text={isExpanded ? "Minimieren" : "Maximieren"}
-                  >
+                    text={isExpanded ? "Minimieren" : "Maximieren"}>
                     <Action
                       className="text-base"
                       onClick={() => setIsExpanded()}
-                      isPlaintiff={isPlaintiff}
-                    >
+                      isPlaintiff={isPlaintiff}>
                       {isExpanded ? <CornersIn /> : <CornersOut />}
                     </Action>
                   </Tooltip>
@@ -137,9 +134,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             onAbort(plainText, newHtml);
           }}
           size="sm"
-          bgColor="bg-lightRed"
-          textColor="font-bold text-darkRed"
-        >
+          bgColor="bg-lightRed hover:bg-darkRed"
+          textColor="font-bold text-darkRed hover:text-white">
           Abbrechen
         </Button>
         <Button
@@ -153,9 +149,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             onSave(plainText, newHtml);
           }}
           size="sm"
-          bgColor="bg-lightGreen"
-          textColor="font-bold text-darkGreen"
-        >
+          bgColor="bg-lightGreen hover:bg-darkGreen"
+          textColor="font-bold text-darkGreen hover:text-white">
           Speichern
         </Button>
       </div>

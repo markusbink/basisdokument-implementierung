@@ -423,15 +423,15 @@ export const Entry: React.FC<EntryProps> = ({
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Button
-              bgColor="bg-lightGrey"
-              textColor="text-mediumGrey font-bold"
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
               onClick={() => {
                 setIsEditErrorVisible(false);
               }}>
               Abbrechen
             </Button>
             <Button
-              bgColor="bg-lightRed"
+              bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
                 setIsEditErrorVisible(false);
@@ -451,21 +451,21 @@ export const Entry: React.FC<EntryProps> = ({
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Button
-              bgColor="bg-lightGrey"
-              textColor="text-mediumGrey font-bold"
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
               onClick={() => {
                 setIsDeleteErrorVisible(false);
               }}>
               Abbrechen
             </Button>
             <Button
-              bgColor="bg-lightRed"
+              bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
                 setIsDeleteErrorVisible(false);
                 deleteEntry(entry.id, entry.entryCode, entry.sectionId);
               }}>
-              Beitrag Löschen
+              Beitrag löschen
             </Button>
           </div>
         </div>
