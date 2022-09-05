@@ -110,7 +110,7 @@ export const Entry: React.FC<EntryProps> = ({
       setBookmarks((oldBoomarks) => {
         const newBookmark: IBookmark = {
           id: uuidv4(),
-          title: `Lesezeichen ${oldBoomarks.length + 1}`,
+          title: `Lesezeichen zu ${entry.entryCode}`,
           associatedEntry: entry.id,
           isInEditMode: true,
         };
