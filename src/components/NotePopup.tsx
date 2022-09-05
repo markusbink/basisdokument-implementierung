@@ -207,11 +207,11 @@ export const NotePopup = () => {
                   <span className="text-sm">Beitrag auswählen:</span>
                   <div className="flex flex-row items-center justify-center border-lightGrey border border-solid p-2 rounded-lg">
                     <DropdownMenu.Root modal={false}>
-                      <DropdownMenu.Trigger className="flex items-center justify-center bg-darkGrey rounded flex items-center h-8 w-8">
+                      <DropdownMenu.Trigger className="justify-center bg-darkGrey rounded flex items-center h-8 w-8">
                         <Quotes size={16} color="white" weight="regular" />
                       </DropdownMenu.Trigger>
                       <DropdownMenu.Portal>
-                        <DropdownMenu.Content className="flex flex-col gap-2 bg-white rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
+                        <DropdownMenu.Content className="flex flex-col gap-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
                           {entries &&
                             entries.map((entry: IEntry) => (
                               <DropdownMenu.Item

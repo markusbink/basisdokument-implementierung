@@ -1,7 +1,8 @@
 import cx from "classnames";
+import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
-import { useRef, useState } from "react";
-import { useCase } from "../../contexts";
+import React, { useRef, useState } from "react";
+import { useCase, useHints } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IHint } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
@@ -16,15 +17,42 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries } = useCase();
-  const entryCode = getEntryCode(entries, hint.associatedEntry);
+  const { hints, setHints } = useHints();
+  const {
+    setShowJudgeHintPopup,
+    setTitle,
+    setEditorState,
+    setOpenedHintId,
+    setAssociatedEntryId,
+    setEditMode,
+  } = useHints();
+
+  let entryCode;
+  if (hint.associatedEntry) {
+    try {
+      entryCode = getEntryCode(entries, hint.associatedEntry);
+    } catch {}
+  }
 
   const editHint = (e: React.MouseEvent) => {
     setIsMenuOpen(false);
-    //TODO open Popup
+    setShowJudgeHintPopup(true);
+    setTitle(hint.title);
+    setOpenedHintId(hint.id);
+    setEditMode(true);
+    if (hint.associatedEntry) {
+      setAssociatedEntryId(hint.associatedEntry);
+    }
+    const blocksFromHTML = convertFromHTML(hint.text);
+    const contentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    setEditorState(EditorState.createWithContent(contentState));
   };
 
   const deleteHint = (e: React.MouseEvent) => {
-    //TODO
+    setHints(hints.filter(item => item.id !== hint.id));
   };
 
   return (
@@ -37,13 +65,13 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
               bg-darkGrey hover:bg-mediumGrey text-lightGrey text-[10px] font-semibold rounded-xl"
           >
             <Eye size={16} weight="bold" className="inline"></Eye>
-            {`${entryCode}`}
+            {`${entryCode ? entryCode : "nicht verfügbar"}`}
           </a>
         )}
 
         <div className={cx("mx-3", { "mt-3": !hint.associatedEntry })}>
           <h3 className="mb-2 text-sm font-bold">{hint.title}</h3>
-          <p className="mb-2">{hint.text}</p>
+          <p className="mb-2"dangerouslySetInnerHTML={{ __html: hint.text }} ></p>
 
           <div className="flex justify-between items-center mb-3">
             <div className="">
