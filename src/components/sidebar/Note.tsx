@@ -17,13 +17,14 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries } = useCase();
+  const { notes, setNotes } = useNotes();
   const {
     setShowNotePopup,
     setTitle,
     setEditorState,
     setOpenedNoteId,
     setAssociatedEntryId,
-    setEditMode
+    setEditMode,
   } = useNotes();
 
   let entryCode;
@@ -51,7 +52,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   };
 
   const deleteNote = (e: React.MouseEvent) => {
-    //TODO
+    setNotes(notes.filter(item => item.id !== note.id));
   };
 
   return (

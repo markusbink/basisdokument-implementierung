@@ -63,6 +63,21 @@ export const NotePopup = () => {
     );
   }, [contentState]);
 
+  const resetStates = () => {
+    setTitle("");
+    const blocksFromHTML = convertFromHTML("");
+    const contentStateNew = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    setEditorState(EditorState.createWithContent(contentStateNew));
+    setShowNotePopup(false);
+    setShowErrorText(false);
+    setOpenedNoteId("");
+    setAssociatedEntryId("");
+    setEditMode(false);
+  };
+
   const addNote = () => {
     const newHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
@@ -97,20 +112,7 @@ export const NotePopup = () => {
           setNotes([...notes, newNote]);
         }
       }
-
-      // Reset all states
-      setTitle("");
-      const blocksFromHTML = convertFromHTML("");
-      const contentStateNew = ContentState.createFromBlockArray(
-        blocksFromHTML.contentBlocks,
-        blocksFromHTML.entityMap
-      );
-      setEditorState(EditorState.createWithContent(contentStateNew));
-      setShowNotePopup(false);
-      setShowErrorText(false);
-      setOpenedNoteId("");
-      setAssociatedEntryId("");
-      setEditMode(false);
+      resetStates();
     }
   };
 
@@ -146,6 +148,9 @@ export const NotePopup = () => {
                   onClick={() => {
                     setShowErrorText(false);
                     setShowNotePopup(false);
+                    if (editMode) {
+                      resetStates();
+                    }
                     setEditMode(false);
                   }}
                   className="text-darkGrey">
