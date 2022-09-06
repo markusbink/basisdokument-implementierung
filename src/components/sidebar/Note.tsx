@@ -52,7 +52,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   };
 
   const deleteNote = (e: React.MouseEvent) => {
-    setNotes(notes.filter(item => item.id !== note.id));
+    setNotes(notes.filter((item) => item.id !== note.id));
   };
 
   return (
@@ -75,12 +75,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
           <div className="flex justify-between items-center mb-3">
             <div className="">
               <div className="font-bold">{note.author}</div>
-              <div className="opacity-40">
-                {/* {`${String(note.timestamp.getDate()).padStart(2, "0")}.
-            ${String(note.timestamp.getMonth()).padStart(2, "0")}.
-            ${note.timestamp.getFullYear()}`} */}
-                {"Timestamp"}
-              </div>
+              <div className="opacity-40">{`${new Date(Date.parse(String(note.timestamp))).toLocaleString("de-DE")}`}</div>
             </div>
 
             <div ref={ref} className="self-end relative">

@@ -13,7 +13,7 @@ import React, { useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useCase, useHeaderContext, useNotes } from "../../contexts";
+import { useCase, useHeaderContext, useNotes, useHints } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEntry, UserRole, Tool, IBookmark } from "../../types";
 import { Button } from "../Button";
@@ -54,6 +54,7 @@ export const Entry: React.FC<EntryProps> = ({
     selectedVersion,
   } = useHeaderContext();
   const { setShowNotePopup, setAssociatedEntryId } = useNotes();
+  const { setShowJudgeHintPopup } = useHints();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -124,6 +125,13 @@ export const Entry: React.FC<EntryProps> = ({
     setAssociatedEntryId(entry.id);
   };
 
+  const addHint = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMenuOpen(false);
+    setShowJudgeHintPopup(true);
+    setAssociatedEntryId(entry.id);
+  };
+
   const toggleMenu = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
@@ -183,8 +191,6 @@ export const Entry: React.FC<EntryProps> = ({
       return newEntries;
     });
   };
-
-  const addHint = () => {};
 
   return (
     <>

@@ -138,16 +138,19 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   for (let index = 0; index < obj["judgeHints"].length; index++) {
     const judgeHintObject = obj["judgeHints"][index];
     let judgeHintTitleEl = document.createElement("span");
-    let entryCode = obj["entries"].find((entry: any) => {
+    let filteredEntry = obj["entries"].find((entry: any) => {
       return entry.id === judgeHintObject.associatedEntry;
-    }).entryCode;
+    });
+    let entryCodeText;
+    if (filteredEntry) {
+      let entryCode = filteredEntry.entryCode;
+      entryCodeText = " | Verweis auf: " + entryCode;
+    } else {
+      entryCodeText = "";
+    }
 
     judgeHintTitleEl.innerHTML =
-      judgeHintObject.author +
-      " | Verweis auf: " +
-      entryCode +
-      " | " +
-      judgeHintObject.title;
+      judgeHintObject.author + entryCodeText + " | " + judgeHintObject.title;
     judgeHintTitleEl.style.fontSize = "3px";
     judgeHintTitleEl.style.fontWeight = "bold";
     judgeHintTitleEl.style.marginTop = "3px";
