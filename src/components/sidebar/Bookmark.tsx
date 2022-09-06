@@ -18,10 +18,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
   let entryCode;
   try {
     entryCode = getEntryCode(entries, bookmark.associatedEntry);
-  } catch (e) {
-    console.warn(e);
-    entryCode = null;
-  }
+  } catch {}
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -61,10 +58,15 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           value={bookmark.title}
           onBlur={() => setBookmarkEditMode(bookmark, false)}
           onChange={handleChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              setBookmarkEditMode(bookmark, false);
+            }
+          }}
         />
       ) : (
         <div
-          className="break-words grow max-w-[55%]"
+          className="break-words grow max-w-[55%] justify-start"
           onDoubleClick={() => {
             setBookmarkEditMode(bookmark, true);
           }}>
@@ -93,9 +95,9 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
         ) : (
           <div
             className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey
-          text-lightGrey text-[9px] font-semibold min-w-fit">
-            <Eye size={12} weight="bold" className="inline"></Eye>
-            {`fehlend`}
+          text-lightGrey text-[10px] font-semibold min-w-fit">
+            <Eye size={16} weight="bold" className="inline"></Eye>
+            {`nicht verfügbar`}
           </div>
         )}
 

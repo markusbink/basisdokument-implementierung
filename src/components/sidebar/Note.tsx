@@ -83,12 +83,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
           <div className="flex justify-between items-center mb-3">
             <div className="">
               <div className="font-bold">{note.author}</div>
-              <div className="opacity-40">
-                {/* {`${String(note.timestamp.getDate()).padStart(2, "0")}.
-            ${String(note.timestamp.getMonth()).padStart(2, "0")}.
-            ${note.timestamp.getFullYear()}`} */}
-                {"Timestamp"}
-              </div>
+              <div className="opacity-40">{`${new Date(Date.parse(String(note.timestamp))).toLocaleString("de-DE")}`}</div>
             </div>
 
             <div ref={ref} className="self-end relative">
@@ -110,14 +105,14 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
                   <li
                     tabIndex={0}
                     onClick={editNote}
-                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none  cursor-pointer">
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                     <PencilSimple size={16} />
                     Bearbeiten
                   </li>
                   <li
                     tabIndex={0}
                     onClick={deleteNote}
-                    className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none  cursor-pointer">
+                    className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                     <Trash size={16} />
                     Löschen
                   </li>

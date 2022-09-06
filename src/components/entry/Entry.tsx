@@ -13,9 +13,9 @@ import React, { useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useCase, useHeaderContext, useNotes } from "../../contexts";
+import { useCase, useHeaderContext, useNotes, useHints } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEntry, UserRole, Tool, IBookmark } from "../../types";
+import { IEntry, UserRole, Tool, IBookmark, SidebarState } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
@@ -54,6 +54,7 @@ export const Entry: React.FC<EntryProps> = ({
     selectedVersion,
   } = useHeaderContext();
   const { setShowNotePopup, setAssociatedEntryId } = useNotes();
+  const { setShowJudgeHintPopup } = useHints();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -103,24 +104,35 @@ export const Entry: React.FC<EntryProps> = ({
 
   const bookmarkEntry = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsMenuOpen(false);
-    setBookmarks((oldBoomarks) => {
-      const newBookmark: IBookmark = {
-        id: uuidv4(),
-        title: `Lesezeichen ${oldBoomarks.length + 1}`,
-        associatedEntry: entry.id,
-        isInEditMode: true,
-      };
-      const newBookmarks = [...oldBoomarks, newBookmark];
-      return newBookmarks;
-    });
-    setActiveSidebar("Bookmarks");
+    if (isBookmarked) {
+      deleteBookmarkByReference(entry.id);
+    } else {
+      setIsMenuOpen(false);
+      setBookmarks((oldBoomarks) => {
+        const newBookmark: IBookmark = {
+          id: uuidv4(),
+          title: `Lesezeichen zu ${entry.entryCode}`,
+          associatedEntry: entry.id,
+          isInEditMode: true,
+        };
+        const newBookmarks = [...oldBoomarks, newBookmark];
+        return newBookmarks;
+      });
+      setActiveSidebar(SidebarState.Bookmarks);
+    }
   };
 
   const addNote = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
     setShowNotePopup(true);
+    setAssociatedEntryId(entry.id);
+  };
+
+  const addHint = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMenuOpen(false);
+    setShowJudgeHintPopup(true);
     setAssociatedEntryId(entry.id);
   };
 
@@ -183,8 +195,6 @@ export const Entry: React.FC<EntryProps> = ({
       return newEntries;
     });
   };
-
-  const addHint = () => {};
 
   return (
     <>
@@ -274,7 +284,12 @@ export const Entry: React.FC<EntryProps> = ({
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Tooltip text="Zu Lesezeichen hinzufügen">
+                  <Tooltip
+                    text={
+                      isBookmarked
+                        ? "Lesezeichen zu diesem Beitrag entfernen"
+                        : "Zu Lesezeichen hinzufügen"
+                    }>
                     <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
                       <BookmarkSimple
                         size={20}
