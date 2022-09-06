@@ -69,8 +69,9 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           onDoubleClick={() => {
             setBookmarkEditMode(bookmark, true);
           }}>
-          <Tooltip text="Doppelklick, um zu Editieren"></Tooltip>
-          {bookmark.title}
+          <Tooltip text="Doppelklick, um zu Editieren">
+            {bookmark.title}
+          </Tooltip>
         </div>
       )}
 
