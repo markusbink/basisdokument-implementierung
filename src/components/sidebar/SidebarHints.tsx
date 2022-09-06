@@ -4,7 +4,6 @@ import { useUser } from "../../contexts";
 import { useHints } from "../../contexts/HintContext";
 import { UserRole } from "../../types";
 import { Button } from "../Button";
-import { JudgeHintPopup } from "../JudgeHintPopup";
 import { Hint } from "./Hint";
 
 export const SidebarHints = () => {
@@ -12,7 +11,7 @@ export const SidebarHints = () => {
     useState<boolean>(true);
   const [hintsWithoutReferenceOpen, setHintsWithoutReferenceOpen] =
     useState<boolean>(true);
-  const { hints, setShowJudgeHintPopup, showJudgeHintPopup } = useHints();
+  const { hints, setShowJudgeHintPopup } = useHints();
   const { user } = useUser();
 
   return (
@@ -80,7 +79,6 @@ export const SidebarHints = () => {
           </div>
         </div>
       )}
-      {showJudgeHintPopup ? <JudgeHintPopup /> : null}
     </div>
   );
 };
