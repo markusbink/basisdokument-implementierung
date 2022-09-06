@@ -152,12 +152,12 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                     <Button
                       size="sm"
                       bgColor={cx({
-                        "bg-darkPurple": isPlaintiff,
-                        "bg-darkPetrol": !isPlaintiff,
+                        "bg-darkPurple hover:bg-darkPurple/25": isPlaintiff,
+                        "bg-darkPetrol hover:bg-darkPetrol/25": !isPlaintiff,
                       })}
                       textColor={cx({
-                        "text-lightPurple": isPlaintiff,
-                        "text-lightPetrol": !isPlaintiff,
+                        "text-lightPurple hover:text-darkPurple": isPlaintiff,
+                        "text-lightPetrol hover:text-darkPetrol": !isPlaintiff,
                       })}
                       onClick={() => setIsEditing(true)}
                       icon={<Plus size={18} />}>
