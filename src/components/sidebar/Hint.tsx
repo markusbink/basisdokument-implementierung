@@ -106,7 +106,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
                     <li
                       tabIndex={0}
                       onClick={editHint}
-                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                       <PencilSimple size={16} />
                       Bearbeiten
                     </li>
@@ -114,7 +114,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
                     <li
                       tabIndex={0}
                       onClick={deleteHint}
-                      className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+                      className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                       <Trash size={16} />
                       Löschen
                     </li>

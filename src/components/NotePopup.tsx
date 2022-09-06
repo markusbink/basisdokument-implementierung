@@ -158,7 +158,7 @@ export const NotePopup = () => {
                 </button>
               </div>
             </div>
-            <div className="flex gap-2 mx-20 p-3 bg-yellow-100 rounded-lg font-bold text-darkGrey">
+            <div className="flex gap-2 mx-20 p-3 bg-offWhite rounded-lg font-bold text-darkGrey">
               <span>
                 <WarningCircle size={40} />
               </span>
@@ -207,12 +207,16 @@ export const NotePopup = () => {
                   <span className="text-sm">Beitrag auswählen:</span>
                   <div className="flex flex-row items-center justify-center border-lightGrey border border-solid p-2 rounded-lg">
                     <DropdownMenu.Root modal={false}>
-                      <DropdownMenu.Trigger className="justify-center bg-darkGrey rounded flex items-center h-6 w-6">
+                      <DropdownMenu.Trigger className="justify-center bg-darkGrey hover:bg-mediumGrey rounded flex items-center h-6 w-6">
                         <Quotes size={14} color="white" weight="regular" />
                       </DropdownMenu.Trigger>
                       <DropdownMenu.Portal>
                         <DropdownMenu.Content className="flex flex-col gap-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
-                          {entries.length === 0 && <div className="p-2">Es sind keine Beiträge im Basisdokument vorhanden.</div>}
+                          {entries.length === 0 && (
+                            <div className="p-2">
+                              Es sind keine Beiträge im Basisdokument vorhanden.
+                            </div>
+                          )}
                           {entries &&
                             entries.map((entry: IEntry) => (
                               <DropdownMenu.Item
@@ -254,13 +258,13 @@ export const NotePopup = () => {
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end">
-              <Button
-              size="sm"
+              <button
+                className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
                 onClick={() => {
                   addNote();
                 }}>
                 Notiz {`${editMode ? "speichern" : "hinzufügen"}`}
-              </Button>
+              </button>
             </div>
           </div>
         </div>
