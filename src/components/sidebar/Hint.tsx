@@ -2,7 +2,7 @@ import cx from "classnames";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
-import { useCase, useHints } from "../../contexts";
+import { useCase, useHints, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IHint } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
@@ -16,8 +16,9 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
-  const { entries } = useCase();
+  const { entries, currentVersion } = useCase();
   const { hints, setHints } = useHints();
+  const { user } = useUser();
   const {
     setShowJudgeHintPopup,
     setTitle,
@@ -52,7 +53,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
   };
 
   const deleteHint = (e: React.MouseEvent) => {
-    setHints(hints.filter(item => item.id !== hint.id));
+    setHints(hints.filter((item) => item.id !== hint.id));
   };
 
   return (
@@ -62,8 +63,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
           <a
             href={`#${entryCode}`}
             className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer
-              bg-darkGrey hover:bg-mediumGrey text-lightGrey text-[10px] font-semibold rounded-xl"
-          >
+              bg-darkGrey hover:bg-mediumGrey text-lightGrey text-[10px] font-semibold rounded-xl">
             <Eye size={16} weight="bold" className="inline"></Eye>
             {`${entryCode ? entryCode : "nicht verfügbar"}`}
           </a>
@@ -71,7 +71,9 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
 
         <div className={cx("mx-3", { "mt-3": !hint.associatedEntry })}>
           <h3 className="mb-2 text-sm font-bold">{hint.title}</h3>
-          <p className="mb-2"dangerouslySetInnerHTML={{ __html: hint.text }} ></p>
+          <p
+            className="mb-2"
+            dangerouslySetInnerHTML={{ __html: hint.text }}></p>
 
           <div className="flex justify-between items-center mb-3">
             <div className="">
@@ -84,42 +86,44 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
               </div>
             </div>
 
-            <div ref={ref} className="self-end relative">
-              <Button
-                key="createHint"
-                bgColor={
-                  isMenuOpen ? "bg-lightGrey" : "bg-offWhite hover:bg-lightGrey"
-                }
-                size="sm"
-                textColor="text-darkGrey"
-                hasText={false}
-                alternativePadding="p-1"
-                onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
-                }}
-                icon={<DotsThree size={20} weight="bold" />}
-              ></Button>{" "}
-              {isMenuOpen ? (
-                <ul className="absolute right-0 bottom-8 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
-                  <li
-                    tabIndex={0}
-                    onClick={editHint}
-                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                  >
-                    <PencilSimple size={16} />
-                    Bearbeiten
-                  </li>
-                  <li
-                    tabIndex={0}
-                    onClick={deleteHint}
-                    className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none"
-                  >
-                    <Trash size={16} />
-                    Löschen
-                  </li>
-                </ul>
-              ) : null}
-            </div>
+            {hint.version === currentVersion && user?.role === "Richter:in" ? (
+              <div ref={ref} className="self-end relative">
+                <Button
+                  key="createHint"
+                  bgColor={
+                    isMenuOpen
+                      ? "bg-lightGrey"
+                      : "bg-offWhite hover:bg-lightGrey"
+                  }
+                  size="sm"
+                  textColor="text-darkGrey"
+                  hasText={false}
+                  alternativePadding="p-1"
+                  onClick={() => {
+                    setIsMenuOpen(!isMenuOpen);
+                  }}
+                  icon={<DotsThree size={20} weight="bold" />}></Button>{" "}
+                {isMenuOpen ? (
+                  <ul className="absolute right-0 bottom-8 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
+                    <li
+                      tabIndex={0}
+                      onClick={editHint}
+                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+                      <PencilSimple size={16} />
+                      Bearbeiten
+                    </li>
+
+                    <li
+                      tabIndex={0}
+                      onClick={deleteHint}
+                      className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+                      <Trash size={16} />
+                      Löschen
+                    </li>
+                  </ul>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
