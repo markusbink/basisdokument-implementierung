@@ -65,15 +65,15 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           }}
         />
       ) : (
-        <div
-          className="break-words grow max-w-[55%] justify-start"
-          onDoubleClick={() => {
-            setBookmarkEditMode(bookmark, true);
-          }}>
-          <Tooltip text="Doppelklick, um zu Editieren">
+        <Tooltip text="Doppelklick, um zu Editieren">
+          <div
+            className="break-words text-left"
+            onDoubleClick={() => {
+              setBookmarkEditMode(bookmark, true);
+            }}>
             {bookmark.title}
-          </Tooltip>
-        </div>
+          </div>
+        </Tooltip>
       )}
 
       <div className="flex items-center gap-2">

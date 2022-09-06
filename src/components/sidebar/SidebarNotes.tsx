@@ -13,7 +13,7 @@ export const SidebarNotes = () => {
   const { notes, setShowNotePopup } = useNotes();
 
   return (
-    <div className="flex flex-col gap-3 flex-1 overflow-hidden">
+    <div className="flex flex-col gap-3 flex-1 h-[calc(100%_-_3.5rem)] overflow-auto">
       <div className="flex justify-between items-center pt-4 px-4">
         <div className="font-bold text-darkGrey text-lg">Notizen</div>
         <Button
