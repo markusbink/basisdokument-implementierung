@@ -118,7 +118,7 @@ export const Entry: React.FC<EntryProps> = ({
         const newBookmarks = [...oldBoomarks, newBookmark];
         return newBookmarks;
       });
-      setActiveSidebar("Bookmarks");
+      setActiveSidebar(SidebarState.Bookmarks);
     }
   };
 
