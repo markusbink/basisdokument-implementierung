@@ -1,4 +1,4 @@
-import { XCircle, WarningCircle, Quotes } from "phosphor-react";
+import { XCircle, WarningCircle, Quotes, X } from "phosphor-react";
 import { Button } from "./Button";
 import cx from "classnames";
 import {
@@ -91,7 +91,7 @@ export const JudgeHintPopup = () => {
           title: title,
           text: newHtml,
           author: user?.name,
-          version: currentVersion
+          version: currentVersion,
         };
         if (associatedEntryId !== "") {
           editedHint["associatedEntry"] = associatedEntryId;
@@ -104,7 +104,7 @@ export const JudgeHintPopup = () => {
             title: title,
             text: newHtml,
             author: user?.name,
-            version: currentVersion
+            version: currentVersion,
           };
           if (associatedEntryId !== "") {
             newHint["associatedEntry"] = associatedEntryId;
@@ -140,8 +140,10 @@ export const JudgeHintPopup = () => {
           <div className="p-6 space-y-4 border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
             <div className="flex items-start justify-between rounded-lg ">
-              <h3 className="text-2xl font-bold text-darkGrey">
-                {`${editMode ? "Hinweis bearbeiten" : "Neuen Hinweis hinzufügen"}`}
+              <h3 className="text-xl font-bold text-darkGrey">
+                {`${
+                  editMode ? "Hinweis bearbeiten" : "Neuen Hinweis hinzufügen"
+                }`}
               </h3>
               <div>
                 <button
@@ -153,12 +155,12 @@ export const JudgeHintPopup = () => {
                     }
                     setEditMode(false);
                   }}
-                  className="text-darkGrey">
-                  <XCircle size={29} weight="fill" />
+                  className="text-darkGrey bg-offWhite p-1 rounded-md hover:bg-lightGrey">
+                  <X size={24} />
                 </button>
               </div>
             </div>
-            <div className="flex gap-2 mx-20 p-3 bg-lightOrange rounded-lg font-bold text-darkOrange">
+            <div className="flex gap-2 mx-20 p-3 bg-yellow-100 rounded-lg font-bold text-darkGrey">
               <span>
                 <WarningCircle size={40} />
               </span>
@@ -166,7 +168,7 @@ export const JudgeHintPopup = () => {
                 Hinweise von Richter:innen sind öffentlich und können von den
                 anderen Parteien eingesehen werden. Sie können einen Hinweis
                 nachträglich bearbeiten und löschen, bis zu dem Zeitpunkt der
-                Übermittlung dieser Version des Basisdokuments.
+                Übermittlung dieser Version des Basisdokuments an die anderen Parteien.
               </p>
             </div>
             {/*body*/}
@@ -174,7 +176,7 @@ export const JudgeHintPopup = () => {
               <div className="space-y-2">
                 <label
                   htmlFor="hint_popup_input"
-                  className="leading-relaxed text-lg font-bold text-darkGrey">
+                  className="leading-relaxed text-base font-bold text-darkGrey">
                   Titel
                 </label>
                 <input
@@ -183,18 +185,18 @@ export const JudgeHintPopup = () => {
                     setTitle(e.target.value);
                   }}
                   id="hint_popup_input"
-                  className="w-full px-2 py-3 bg-offWhite block rounded text-mediumGrey focus:outline-none"
+                  className="w-full px-2 py-2 text-sm bg-offWhite block rounded text-mediumGrey focus:outline-none"
                   placeholder="Titel eingeben..."></input>
               </div>
               <div>
-                <label className="my-4 text-lg leading-relaxed font-bold text-darkGrey">
+                <label className="my-4 text-base leading-relaxed font-bold text-darkGrey">
                   Text
                 </label>
                 <Editor
                   defaultEditorState={editorState}
                   onEditorStateChange={setEditorState}
                   wrapperClassName={cx("w-full focus:outline-none")}
-                  editorClassName="p-3 bg-offWhite text-mediumGrey rounded min-h-[140px]"
+                  editorClassName="p-2 text-sm bg-offWhite text-mediumGrey rounded min-h-[100px] max-h-[200px]"
                   placeholder="Text eingeben..."
                   toolbarClassName={cx("p-2 border-none border-white")}
                   toolbar={toolbarOptions}
@@ -204,15 +206,18 @@ export const JudgeHintPopup = () => {
                 <label className="my-4 text-lg leading-relaxed font-bold text-darkGrey">
                   Verweis auf einen Beitrag hinzufügen
                 </label>
-                <div className="flex flex-row w-fit p-3 items-center rounded-lg bg-offWhite text-darkGrey gap-3">
+                <div className="flex flex-row w-fit p-2 items-center rounded-lg bg-offWhite text-darkGrey gap-3">
                   <span className="text-sm">Beitrag auswählen:</span>
                   <div className="flex flex-row items-center justify-center border-lightGrey border border-solid p-2 rounded-lg">
                     <DropdownMenu.Root modal={false}>
-                      <DropdownMenu.Trigger className="justify-center bg-darkGrey rounded flex items-center h-8 w-8">
-                        <Quotes size={16} color="white" weight="regular" />
+                      <DropdownMenu.Trigger className="justify-center bg-darkGrey rounded flex items-center h-6 w-6">
+                        <Quotes size={14} color="white" weight="regular" />
                       </DropdownMenu.Trigger>
                       <DropdownMenu.Portal>
                         <DropdownMenu.Content className="flex flex-col gap-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
+                          {entries.length === 0 && (
+                            <div className="p-2 text-sm">Es sind keine Beiträge im Basisdokument vorhanden.</div>
+                          )}
                           {entries &&
                             entries.map((entry: IEntry) => (
                               <DropdownMenu.Item
