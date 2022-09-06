@@ -18,7 +18,6 @@ export const SidebarHeader = () => {
         "flex flex-row items-center h-14 border-b-[0.5px] border-lightGrey px-4 w-[350px]",
         {
           "justify-between": isSidebarOpen,
-          "justify-end": !isSidebarOpen,
         }
       )}>
       <div
@@ -39,7 +38,6 @@ export const SidebarHeader = () => {
           }}
         />
       </div>
-
       <div
         className={cx("flex flex-row gap-3", {
           hidden: !isSidebarOpen,
