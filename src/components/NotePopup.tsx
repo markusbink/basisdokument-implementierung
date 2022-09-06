@@ -213,7 +213,7 @@ export const NotePopup = () => {
                       <DropdownMenu.Portal>
                         <DropdownMenu.Content className="flex flex-col gap-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
                           {entries.length === 0 && (
-                            <div className="p-2">
+                            <div className="p-2 text-sm">
                               Es sind keine Beiträge im Basisdokument vorhanden.
                             </div>
                           )}
