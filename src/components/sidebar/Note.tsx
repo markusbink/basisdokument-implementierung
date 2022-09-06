@@ -61,8 +61,16 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
         {note.associatedEntry && (
           <a
             href={`#${entryCode}`}
-            className="flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer
-              bg-darkGrey hover:bg-mediumGrey text-lightGrey text-[10px] font-semibold rounded-xl">
+            className={cx(
+              "flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer text-[10px] font-semibold rounded-xl",
+              {
+                "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
+                "bg-lightPurple text-darkPurple hover:bg-darkPurple hover:text-lightPurple":
+                  entryCode?.charAt(0) === "K",
+                "bg-lightPetrol text-darkPetrol hover:bg-darkPetrol hover:text-lightPetrol":
+                  entryCode?.charAt(0) === "B",
+              }
+            )}>
             <Eye size={16} weight="bold" className="inline"></Eye>
             {`${entryCode ? entryCode : "nicht verfügbar"}`}
           </a>

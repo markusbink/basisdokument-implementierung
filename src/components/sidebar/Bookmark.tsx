@@ -5,6 +5,7 @@ import { IBookmark } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
+import cx from "classnames";
 
 export interface BookmarkProps {
   bookmark: IBookmark;
@@ -79,8 +80,15 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
         {entryCode ? (
           <a
             href={`#${entryCode}`}
-            className="flex items-center gap-1 px-1.5 py-0.25 rounded-xl bg-darkGrey hover:bg-mediumGrey
-          text-lightGrey text-[10px] font-semibold cursor-pointer min-w-fit">
+            className={cx(
+              "flex items-center gap-1 px-1.5 py-0.25 rounded-xl text-[10px] font-semibold cursor-pointer min-w-fit",
+              {
+                "bg-lightPurple text-darkPurple hover:bg-darkPurple hover:text-lightPurple":
+                  entryCode.charAt(0) === "K",
+                "bg-lightPetrol text-darkPetrol hover:bg-darkPetrol hover:text-lightPetrol":
+                  entryCode.charAt(0) === "B",
+              }
+            )}>
             <Eye size={16} weight="bold" className="inline"></Eye>
             {`${entryCode}`}
           </a>
