@@ -2,7 +2,7 @@ import cx from "classnames";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
-import { useCase, useHints, useUser } from "../../contexts";
+import { useCase, useHeaderContext, useHints, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IHint } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
@@ -19,6 +19,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
   const { entries, currentVersion } = useCase();
   const { hints, setHints } = useHints();
   const { user } = useUser();
+  const { versionHistory } = useHeaderContext();
   const {
     setShowJudgeHintPopup,
     setTitle,
@@ -78,12 +79,9 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
           <div className="flex justify-between items-center mb-3">
             <div className="">
               <div className="font-bold">{hint.author}</div>
-              <div className="opacity-40">
-                {/* {`${String(hint.timestamp.getDate()).padStart(2, "0")}.
-            ${String(hint.timestamp.getMonth()).padStart(2, "0")}.
-            ${hint.timestamp.getFullYear()}`} */}
-                {"Timestamp"}
-              </div>
+              {hint.version !== currentVersion ? (
+                <div className="opacity-40">{`${new Date(Date.parse(versionHistory[hint.version-1].timestamp)).toLocaleString("de-DE")}`}</div>
+              ) : null}
             </div>
 
             {hint.version === currentVersion && user?.role === "Richter:in" ? (
