@@ -1,3 +1,4 @@
+import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import {
   createContext,
   Dispatch,
@@ -11,6 +12,21 @@ interface IHintContext {
   hints: IHint[];
   setHints: Dispatch<SetStateAction<IHint[]>>;
   updateHint: (hint: IHint) => void;
+  showJudgeHintPopup: boolean;
+  setShowJudgeHintPopup: Dispatch<SetStateAction<boolean>>;
+  editorState: any;
+  setEditorState: any;
+  contentState: any;
+  title: string;
+  setTitle: Dispatch<SetStateAction<string>>;
+  openedHintId: string;
+  setOpenedHintId: Dispatch<SetStateAction<string>>;
+  showErrorText: boolean;
+  setShowErrorText: Dispatch<SetStateAction<boolean>>;
+  associatedEntryId: string;
+  setAssociatedEntryId: Dispatch<SetStateAction<string>>;
+  editMode: boolean;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
 }
 
 export const HintContext = createContext<IHintContext | null>(null);
@@ -21,6 +37,23 @@ interface HintProviderProps {
 
 export const HintProvider: React.FC<HintProviderProps> = ({ children }) => {
   const [hints, setHints] = useState<IHint[]>([]);
+  const [showJudgeHintPopup, setShowJudgeHintPopup] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [showErrorText, setShowErrorText] = useState<boolean>(false);
+  const [associatedEntryId, setAssociatedEntryId] = useState<string>("");
+  const [openedHintId, setOpenedHintId] = useState<string>("");
+
+  const [editorState, setEditorState] = useState(() => {
+    const blocksFromHTML = convertFromHTML("");
+    const contentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    return EditorState.createWithContent(contentState);
+  });
+  const [title, setTitle] = useState<string>("");
+
+  const contentState = editorState.getCurrentContent();
 
   const updateHint = (hint: IHint) => {
     setHints(hints.map((e) => (e.id === hint.id ? hint : e)));
@@ -32,7 +65,23 @@ export const HintProvider: React.FC<HintProviderProps> = ({ children }) => {
         hints,
         setHints,
         updateHint,
-      }}>
+        showJudgeHintPopup,
+        setShowJudgeHintPopup,
+        contentState,
+        editorState,
+        setEditorState,
+        title,
+        setTitle,
+        showErrorText,
+        setShowErrorText,
+        setOpenedHintId,
+        openedHintId,
+        associatedEntryId,
+        setAssociatedEntryId,
+        editMode,
+        setEditMode,
+      }}
+    >
       {children}
     </HintContext.Provider>
   );

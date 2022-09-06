@@ -1,46 +1,23 @@
-import { useState } from "react";
 import { SidebarHeader } from "./SidebarHeader";
-import { SidebarNotes } from "./SidebarNotes";
 import cx from "classnames";
-import { SidebarHints } from "./SidebarHints";
-import { SidebarBookmarks } from "./SidebarBookmarks";
-
-const sidebars = [
-  {
-    name: "Notes",
-    jsxElem: <SidebarNotes key="Notes"></SidebarNotes>,
-  },
-  {
-    name: "Hints",
-    jsxElem: <SidebarHints key="Hints"></SidebarHints>,
-  },
-  {
-    name: "Bookmarks",
-    jsxElem: <SidebarBookmarks key="Bookmarks"></SidebarBookmarks>,
-  },
-];
+import { useSidebar } from "../../contexts/SidebarContext";
 
 export const Sidebar = () => {
-  const [activeSidebar, setActiveSidebar] = useState<string>(sidebars[0].name);
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const { sidebars, isSidebarOpen, activeSidebar } = useSidebar();
 
   return (
     <aside
       className={cx(
-        "shadow-lg divide-y-[1px] divide-lightGrey transition-width duration-300",
+        "h-full overflow-y-clip shadow-lg transition-width duration-300",
         {
-          "w-[65px] min-w-[65px] max-w-[65px]": !sidebarOpen,
-          "w-[350px] min-w-[350px] max-w-[350px]": sidebarOpen,
+          "w-[65px] overflow-hidden": !isSidebarOpen,
+          "w-[400px]": isSidebarOpen,
         }
       )}>
-      <SidebarHeader
-        setActiveSidebar={setActiveSidebar}
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
+      <SidebarHeader/>
       {sidebars.map(
         (sidebar) =>
-          sidebar.name === activeSidebar && sidebarOpen && sidebar.jsxElem
+          sidebar.name === activeSidebar && isSidebarOpen && sidebar.jsxElem
       )}
     </aside>
   );

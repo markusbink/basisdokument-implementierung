@@ -2,7 +2,6 @@ import { CaretDown, CaretRight, Plus } from "phosphor-react";
 import { useState } from "react";
 import { Button } from "../Button";
 import { Note } from "./Note";
-import { NotePopup } from "../NotePopup";
 import { useNotes } from "../../contexts/NoteContext";
 
 export const SidebarNotes = () => {
@@ -10,9 +9,8 @@ export const SidebarNotes = () => {
     useState<boolean>(true);
   const [notesWithReferenceOpen, setNotesWithReferenceOpen] =
     useState<boolean>(true);
-  const [showModal, setShowModal] = useState(false);
 
-  const { notes } = useNotes();
+  const { notes, setShowNotePopup } = useNotes();
 
   return (
     <div className="flex flex-col gap-3 flex-1 h-[calc(100%_-_3.5rem)] overflow-auto">
@@ -20,7 +18,9 @@ export const SidebarNotes = () => {
         <div className="font-bold text-darkGrey text-lg">Notizen</div>
         <Button
           key="createNote"
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setShowNotePopup(true);
+          }}
           bgColor="bg-darkGrey hover:bg-mediumGrey"
           size="sm"
           textColor="text-white"
@@ -77,9 +77,6 @@ export const SidebarNotes = () => {
           </div>
         </div>
       )}
-      {showModal ? (
-        <NotePopup isVisible={showModal} onClose={() => setShowModal(false)} />
-      ) : null}
     </div>
   );
 };

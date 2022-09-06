@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import { CustomToastContainer } from "./components/CustomToastContainer";
 import "react-toastify/dist/ReactToastify.css";
-import { BookmarkProvider, CaseProvider, HeaderProvider, HintProvider, NoteProvider, SectionProvider, UserProvider } from "./contexts";
+import {
+  BookmarkProvider,
+  CaseProvider,
+  HeaderProvider,
+  HintProvider,
+  NoteProvider,
+  SectionProvider,
+  UserProvider,
+} from "./contexts";
 import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 import { OnboardingProvider } from "./contexts/OnboardingContext";
+import { SidebarProvider } from "./contexts/SidebarContext";
 
 const registerKeyListener = (e: KeyboardEvent) => {
   if (e.key === "r" && e.metaKey) {
@@ -29,11 +38,19 @@ export const App = () => {
           <SectionProvider>
             <HeaderProvider>
               <CaseProvider>
-                <NoteProvider>
-                  <HintProvider>
-                    <BookmarkProvider>{isAuthenticated ? <Main /> : <Auth setIsAuthenticated={setIsAuthenticated} />}</BookmarkProvider>
-                  </HintProvider>
-                </NoteProvider>
+                <SidebarProvider>
+                  <NoteProvider>
+                    <HintProvider>
+                      <BookmarkProvider>
+                        {isAuthenticated ? (
+                          <Main />
+                        ) : (
+                          <Auth setIsAuthenticated={setIsAuthenticated} />
+                        )}
+                      </BookmarkProvider>
+                    </HintProvider>
+                  </NoteProvider>
+                </SidebarProvider>
               </CaseProvider>
             </HeaderProvider>
           </SectionProvider>

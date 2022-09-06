@@ -64,7 +64,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
         </span>
       )}
       <div
-        className={cx("flex items-start justify-start gap-2 w-full", {
+        className={cx("flex items-start justify-between gap-2 w-full", {
           "py-3": user?.role !== UserRole.Judge,
         })}>
         {isEditing ? (
@@ -99,7 +99,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
             {title}
           </h2>
         )}
-        {}
+
         {((!isOld && user?.role !== UserRole.Judge) ||
           user?.role === UserRole.Judge) && (
           <SectionDropdown sectionId={id} version={version} />

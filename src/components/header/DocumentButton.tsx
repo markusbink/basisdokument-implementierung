@@ -49,7 +49,7 @@ export const DocumentButton = () => {
           {showDownloadMenu ? <CaretUp size={12} className="text-white" weight="bold" /> : <CaretDown size={12} className="text-white" weight="bold" />}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
-          <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 gap-4">
+          <DropdownMenu.Content side="bottom" align="start" className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 gap-4 z-40">
             <div className="flex flex-col align-middle justify-center items-center gap-2 bg-offWhite rounded-md p-3 pl-2 pr-2 h-full">
               <UserCircle size={24} className="text-darkGrey" weight="fill" />
               <div className="text-center">

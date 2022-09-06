@@ -11,7 +11,7 @@ export const SidebarBookmarks = () => {
         Lesezeichen
       </div>
       {bookmarks.length <= 0 && (
-        <span className="mt-7 text-darkGrey opacity-40 text-center text-sm">
+        <span className="mt-7 text-darkGrey opacity-40 text-center text-sm px-4">
           Indem Sie auf das <BookmarkSimple size={14} className="inline" />
           -Icon bei einem Beitrag klicken, wird dieser unter Ihren Lesezeichen
           gespeichert. Ihre Lesezeichen erscheinen dann in dieser Ansicht und

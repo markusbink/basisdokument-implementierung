@@ -13,14 +13,17 @@ import React, { useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useCase, useHeaderContext } from "../../contexts";
+import { useCase, useHeaderContext, useNotes, useHints } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEntry, UserRole, Tool } from "../../types";
+import { IEntry, UserRole, Tool, IBookmark, SidebarState } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
 import { EntryList } from "./EntryList";
 import { LitigiousCheck } from "./LitigiousCheck";
+import { useBookmarks } from "../../contexts";
+import { v4 as uuidv4 } from "uuid";
+import { useSidebar } from "../../contexts/SidebarContext";
 
 interface EntryProps {
   entry: IEntry;
@@ -50,6 +53,8 @@ export const Entry: React.FC<EntryProps> = ({
     highlightElementsWithSpecificVersion,
     selectedVersion,
   } = useHeaderContext();
+  const { setShowNotePopup, setAssociatedEntryId } = useNotes();
+  const { setShowJudgeHintPopup } = useHints();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -68,6 +73,8 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
+  const { setBookmarks, deleteBookmarkByReference } = useBookmarks();
+  const { setActiveSidebar } = useSidebar();
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
@@ -97,12 +104,36 @@ export const Entry: React.FC<EntryProps> = ({
 
   const bookmarkEntry = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsMenuOpen(false);
+    if (isBookmarked) {
+      deleteBookmarkByReference(entry.id);
+    } else {
+      setIsMenuOpen(false);
+      setBookmarks((oldBoomarks) => {
+        const newBookmark: IBookmark = {
+          id: uuidv4(),
+          title: `Lesezeichen zu ${entry.entryCode}`,
+          associatedEntry: entry.id,
+          isInEditMode: true,
+        };
+        const newBookmarks = [...oldBoomarks, newBookmark];
+        return newBookmarks;
+      });
+      setActiveSidebar(SidebarState.Bookmarks);
+    }
   };
 
   const addNote = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
+    setShowNotePopup(true);
+    setAssociatedEntryId(entry.id);
+  };
+
+  const addHint = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMenuOpen(false);
+    setShowJudgeHintPopup(true);
+    setAssociatedEntryId(entry.id);
   };
 
   const toggleMenu = (e: React.MouseEvent) => {
@@ -120,6 +151,7 @@ export const Entry: React.FC<EntryProps> = ({
     entryCode: string,
     sectionId: string
   ) => {
+    deleteBookmarkByReference(entryId);
     setEntries((prevEntries) =>
       prevEntries
         .filter((entry) => entry.id !== entryId)
@@ -163,8 +195,6 @@ export const Entry: React.FC<EntryProps> = ({
       return newEntries;
     });
   };
-
-  const addHint = () => {};
 
   return (
     <>
@@ -254,7 +284,12 @@ export const Entry: React.FC<EntryProps> = ({
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Tooltip text="Zu Lesezeichen hinzufügen">
+                  <Tooltip
+                    text={
+                      isBookmarked
+                        ? "Lesezeichen zu diesem Beitrag entfernen"
+                        : "Zu Lesezeichen hinzufügen"
+                    }>
                     <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
                       <BookmarkSimple
                         size={20}
@@ -403,15 +438,15 @@ export const Entry: React.FC<EntryProps> = ({
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Button
-              bgColor="bg-lightGrey"
-              textColor="text-mediumGrey font-bold"
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
               onClick={() => {
                 setIsEditErrorVisible(false);
               }}>
               Abbrechen
             </Button>
             <Button
-              bgColor="bg-lightRed"
+              bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
                 setIsEditErrorVisible(false);
@@ -431,21 +466,21 @@ export const Entry: React.FC<EntryProps> = ({
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Button
-              bgColor="bg-lightGrey"
-              textColor="text-mediumGrey font-bold"
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
               onClick={() => {
                 setIsDeleteErrorVisible(false);
               }}>
               Abbrechen
             </Button>
             <Button
-              bgColor="bg-lightRed"
+              bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
                 setIsDeleteErrorVisible(false);
                 deleteEntry(entry.id, entry.entryCode, entry.sectionId);
               }}>
-              Beitrag Löschen
+              Beitrag löschen
             </Button>
           </div>
         </div>

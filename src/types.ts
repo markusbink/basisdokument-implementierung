@@ -2,6 +2,7 @@ export interface IBookmark {
   id: string;
   title: string;
   associatedEntry: string;
+  isInEditMode?: boolean;
 }
 
 export interface IHint {
@@ -20,6 +21,12 @@ export interface INote {
   author: string;
   timestamp: Date;
   associatedEntry?: string;
+}
+
+export interface ISidebar {
+  name: SidebarState;
+  jsxElem: JSX.Element;
+  icon: JSX.Element;
 }
 
 export interface IUser {
@@ -41,6 +48,12 @@ export enum Sorting {
 export enum UsageMode {
   Open,
   Create
+}
+
+export enum SidebarState {
+  Notes,
+  Hints,
+  Bookmarks
 }
 
 export interface ISection {
