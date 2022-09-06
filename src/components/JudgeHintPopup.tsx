@@ -160,7 +160,7 @@ export const JudgeHintPopup = () => {
                 </button>
               </div>
             </div>
-            <div className="flex gap-2 mx-20 p-3 bg-yellow-100 rounded-lg font-bold text-darkGrey">
+            <div className="flex gap-2 mx-20 p-3 bg-offWhite rounded-lg font-bold text-darkGrey">
               <span>
                 <WarningCircle size={40} />
               </span>
@@ -211,7 +211,7 @@ export const JudgeHintPopup = () => {
                   <span className="text-sm">Beitrag auswählen:</span>
                   <div className="flex flex-row items-center justify-center border-lightGrey border border-solid p-2 rounded-lg">
                     <DropdownMenu.Root modal={false}>
-                      <DropdownMenu.Trigger className="justify-center bg-darkGrey rounded flex items-center h-6 w-6">
+                      <DropdownMenu.Trigger className="justify-center bg-darkGrey hover:bg-mediumGrey rounded flex items-center h-6 w-6">
                         <Quotes size={14} color="white" weight="regular" />
                       </DropdownMenu.Trigger>
                       <DropdownMenu.Portal>
@@ -262,13 +262,13 @@ export const JudgeHintPopup = () => {
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end">
-              <Button
-                size="sm"
+              <button
+                className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
                 onClick={() => {
                   addHint();
                 }}>
                 Hinweis {`${editMode ? "speichern" : "hinzufügen"}`}
-              </Button>
+              </button>
             </div>
           </div>
         </div>
