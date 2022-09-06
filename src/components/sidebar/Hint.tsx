@@ -16,7 +16,14 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries } = useCase();
-  const entryCode = getEntryCode(entries, hint.associatedEntry);
+
+  let entryCode;
+  if (hint.associatedEntry) {
+    try {
+      entryCode = getEntryCode(entries, hint.associatedEntry);
+    } catch {}
+  }
+
   const { user } = useUser();
 
   const editHint = (e: React.MouseEvent) => {
@@ -37,14 +44,15 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
             className={cx(
               "flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer text-[10px] font-semibold rounded-xl",
               {
+                "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
                 "bg-lightPurple text-darkPurple hover:bg-darkPurple hover:text-lightPurple":
-                  entryCode.charAt(0) === "K",
+                  entryCode?.charAt(0) === "K",
                 "bg-lightPetrol text-darkPetrol hover:bg-darkPetrol hover:text-lightPetrol":
-                  entryCode.charAt(0) === "B",
+                  entryCode?.charAt(0) === "B",
               }
             )}>
             <Eye size={16} weight="bold" className="inline"></Eye>
-            {`${entryCode}`}
+            {`${entryCode ? entryCode : "nicht verfügbar"}`}
           </a>
         )}
 

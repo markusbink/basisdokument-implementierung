@@ -13,7 +13,7 @@ import React, { useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useCase, useHeaderContext } from "../../contexts";
+import { useCase, useHeaderContext, useNotes } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEntry, UserRole, Tool, IBookmark } from "../../types";
 import { Button } from "../Button";
@@ -53,6 +53,7 @@ export const Entry: React.FC<EntryProps> = ({
     highlightElementsWithSpecificVersion,
     selectedVersion,
   } = useHeaderContext();
+  const { setShowNotePopup, setAssociatedEntryId } = useNotes();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -119,6 +120,8 @@ export const Entry: React.FC<EntryProps> = ({
   const addNote = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
+    setShowNotePopup(true);
+    setAssociatedEntryId(entry.id);
   };
 
   const toggleMenu = (e: React.MouseEvent) => {
@@ -420,15 +423,15 @@ export const Entry: React.FC<EntryProps> = ({
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Button
-              bgColor="bg-lightGrey"
-              textColor="text-mediumGrey font-bold"
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
               onClick={() => {
                 setIsEditErrorVisible(false);
               }}>
               Abbrechen
             </Button>
             <Button
-              bgColor="bg-lightRed"
+              bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
                 setIsEditErrorVisible(false);
@@ -448,21 +451,21 @@ export const Entry: React.FC<EntryProps> = ({
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Button
-              bgColor="bg-lightGrey"
-              textColor="text-mediumGrey font-bold"
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
               onClick={() => {
                 setIsDeleteErrorVisible(false);
               }}>
               Abbrechen
             </Button>
             <Button
-              bgColor="bg-lightRed"
+              bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
                 setIsDeleteErrorVisible(false);
                 deleteEntry(entry.id, entry.entryCode, entry.sectionId);
               }}>
-              Beitrag Löschen
+              Beitrag löschen
             </Button>
           </div>
         </div>

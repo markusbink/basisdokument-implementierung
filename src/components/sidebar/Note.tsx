@@ -1,7 +1,8 @@
 import cx from "classnames";
+import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
-import { useCase } from "../../contexts";
+import { useCase, useNotes } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { INote } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
@@ -16,15 +17,42 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries } = useCase();
-  const entryCode = getEntryCode(entries, note.associatedEntry);
+  const { notes, setNotes } = useNotes();
+  const {
+    setShowNotePopup,
+    setTitle,
+    setEditorState,
+    setOpenedNoteId,
+    setAssociatedEntryId,
+    setEditMode,
+  } = useNotes();
+
+  let entryCode;
+  if (note.associatedEntry) {
+    try {
+      entryCode = getEntryCode(entries, note.associatedEntry);
+    } catch {}
+  }
 
   const editNote = (e: React.MouseEvent) => {
     setIsMenuOpen(false);
-    //TODO open popup
+    setShowNotePopup(true);
+    setTitle(note.title);
+    setOpenedNoteId(note.id);
+    setEditMode(true);
+    if (note.associatedEntry) {
+      setAssociatedEntryId(note.associatedEntry);
+    }
+    const blocksFromHTML = convertFromHTML(note.text);
+    const contentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    setEditorState(EditorState.createWithContent(contentState));
   };
 
   const deleteNote = (e: React.MouseEvent) => {
-    //TODO
+    setNotes(notes.filter((item) => item.id !== note.id));
   };
 
   return (
@@ -36,14 +64,15 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
             className={cx(
               "flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer text-[10px] font-semibold rounded-xl",
               {
+                "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
                 "bg-lightPurple text-darkPurple hover:bg-darkPurple hover:text-lightPurple":
-                  entryCode.charAt(0) === "K",
+                  entryCode?.charAt(0) === "K",
                 "bg-lightPetrol text-darkPetrol hover:bg-darkPetrol hover:text-lightPetrol":
-                  entryCode.charAt(0) === "B",
+                  entryCode?.charAt(0) === "B",
               }
             )}>
             <Eye size={16} weight="bold" className="inline"></Eye>
-            {`${entryCode}`}
+            {`${entryCode ? entryCode : "nicht verfügbar"}`}
           </a>
         )}
 

@@ -85,20 +85,18 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     <>
       <div
         className={cx(
-          "flex flex-col mt-4  transition-all rounded-lg bg-white shadow",
+          "flex flex-col mt-4 transition-all rounded-lg bg-white shadow",
           {
-            "w-1/2": !isExpanded,
+            "w-[calc(50%_-_12px)]": !isExpanded,
             "w-full": isExpanded,
             "self-start": isPlaintiff,
             "self-end": !isPlaintiff,
           }
-        )}
-      >
+        )}>
         {/* NewEntry Header */}
         <EntryHeader
           className="rounded-b-none cursor-default"
-          isPlaintiff={isPlaintiff}
-        >
+          isPlaintiff={isPlaintiff}>
           <EditText
             inputClassName={cx(
               "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
@@ -153,8 +151,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
               textColor="text-mediumGrey font-bold"
               onClick={() => {
                 setIsErrorVisible(false);
-              }}
-            >
+              }}>
               Abbrechen
             </Button>
             <Button
@@ -163,8 +160,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
               onClick={() => {
                 setIsErrorVisible(false);
                 setIsNewEntryVisible(false);
-              }}
-            >
+              }}>
               Verwerfen
             </Button>
           </div>
