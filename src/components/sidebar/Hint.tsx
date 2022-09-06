@@ -28,13 +28,6 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
     //TODO
   };
 
-  console.log(hint.associatedEntry);
-  console.log(user?.role);
-  console.log(UserRole.Judge);
-  console.log(user?.role !== UserRole.Judge);
-  console.log(entryCode);
-  console.log(entryCode.charAt(0) !== user?.role.charAt(0));
-
   return (
     <div>
       <div className="flex flex-col bg-offWhite mt-4 rounded-xl text-darkGrey text-xs font-medium">
