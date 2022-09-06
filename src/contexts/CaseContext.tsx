@@ -42,7 +42,7 @@ interface CaseProviderProps {
  * @param entries The entries to group.
  * @returns Object containing the grouped entries.
  */
-const groupEntriesBySectionAndParent = (entries: IEntry[]) => {
+export const groupEntriesBySectionAndParent = (entries: IEntry[]) => {  
   const groupedEntries = entries.reduce((acc, entry) => {
     acc[entry.sectionId] ||= {};
     if (entry.associatedEntry) {

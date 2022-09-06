@@ -71,12 +71,12 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
         <Button
           position="end"
           bgColor={cx({
-            "bg-lightPurple": isPlaintiff,
-            "bg-lightPetrol": !isPlaintiff,
+            "bg-lightPurple hover:bg-darkPurple": isPlaintiff,
+            "bg-lightPetrol hover:bg-darkPetrol": !isPlaintiff,
           })}
           textColor={cx("font-bold text-sm uppercase tracking-wider", {
-            "text-darkPurple": isPlaintiff,
-            "text-darkPetrol": !isPlaintiff,
+            "text-darkPurple hover:text-lightPurple": isPlaintiff,
+            "text-darkPetrol hover:text-lightPetrol": !isPlaintiff,
           })}
           size="sm"
           onClick={toggleMetaData}
@@ -152,12 +152,12 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                     <Button
                       size="sm"
                       bgColor={cx({
-                        "bg-darkPurple": isPlaintiff,
-                        "bg-darkPetrol": !isPlaintiff,
+                        "bg-darkPurple hover:bg-darkPurple/25": isPlaintiff,
+                        "bg-darkPetrol hover:bg-darkPetrol/25": !isPlaintiff,
                       })}
                       textColor={cx({
-                        "text-lightPurple": isPlaintiff,
-                        "text-lightPetrol": !isPlaintiff,
+                        "text-lightPurple hover:text-darkPurple": isPlaintiff,
+                        "text-lightPetrol hover:text-darkPetrol": !isPlaintiff,
                       })}
                       onClick={() => setIsEditing(true)}
                       icon={<Plus size={18} />}>

@@ -20,9 +20,7 @@ export const Button: React.FC<ButtonProps> = ({
   textColor = "text-white",
   size = "md",
   disabled = false,
-  hasText = true,
   alternativePadding = "",
-  gap = "gap-3",
   onClick,
   children,
   position = "start",
@@ -31,16 +29,16 @@ export const Button: React.FC<ButtonProps> = ({
     <button
       onClick={onClick}
       className={cx(
-        `flex items-center
+        `flex items-center justify-center text-center rounded-lg transition-all
         ${size} text-${size} ${bgColor} ${alternativePadding}
-        ${textColor} ${gap} rounded-lg`,
+        ${textColor}`,
         {
           disabled: disabled,
           "flex-row-reverse": position === "end",
+          "gap-3": !!icon,
         }
-      )}
-    >
-      <span>{icon}</span>
+      )}>
+      {icon && <span>{icon}</span>}
       {children}
     </button>
   );
