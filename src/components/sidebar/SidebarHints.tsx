@@ -75,14 +75,6 @@ export const SidebarHints = () => {
               (hint) =>
                 hint.associatedEntry && <Hint key={hint.id} hint={hint} />
             )}
-          MIT BEZUG AUF BEITRAG
-        </div>
-        <div>
-          {hintsWithReferenceOpen &&
-            hints.map(
-              (hint) =>
-                hint.associatedEntry && <Hint key={hint.id} hint={hint} />
-            )}
         </div>
       </div>
     </div>
