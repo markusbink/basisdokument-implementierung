@@ -14,7 +14,6 @@ export const SidebarHints = () => {
     useState<boolean>(true);
   const { hints, setShowJudgeHintPopup, showJudgeHintPopup } = useHints();
   const { user } = useUser();
-  const isJudge = user?.role === UserRole.Judge;
 
   return (
     <div className="flex flex-col gap-3 flex-1 overflow-hidden">
