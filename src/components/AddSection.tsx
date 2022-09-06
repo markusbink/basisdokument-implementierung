@@ -21,7 +21,12 @@ export const AddSection = () => {
 
   return (
     <div className="flex justify-end border-t-[1px] border-lightGrey pt-4 mt-8">
-      <Button onClick={handleClick} size="md" icon={<Plus weight="bold" />}>
+      <Button
+        bgColor="bg-darkGrey hover:bg-darkGrey/60"
+        textColor="text-white"
+        onClick={handleClick}
+        size="md"
+        icon={<Plus weight="bold" />}>
         Gliederungspunkt hinzufügen
       </Button>
     </div>

@@ -12,9 +12,7 @@ export const SidebarHints = () => {
     useState<boolean>(true);
   const [hintsWithoutReferenceOpen, setHintsWithoutReferenceOpen] =
     useState<boolean>(true);
-  const [showModal, setShowModal] = useState(false);
-
-  const { hints } = useHints();
+  const { hints, setShowJudgeHintPopup, showJudgeHintPopup } = useHints();
   const { user } = useUser();
   const isJudge = user?.role === UserRole.Judge;
 
@@ -24,10 +22,10 @@ export const SidebarHints = () => {
         <div className="font-bold text-darkGrey text-lg">
           Hinweise (nach §139 ZPO)
         </div>
-        {isJudge && (
+        {user?.role === UserRole.Judge && (
           <Button
             key="createHint"
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowJudgeHintPopup(true)}
             bgColor="bg-darkGrey hover:bg-mediumGrey"
             size="sm"
             textColor="text-white"
@@ -38,7 +36,7 @@ export const SidebarHints = () => {
       </div>
       {hints.length <= 0 && (
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm">
-          {isJudge
+          {user?.role === UserRole.Judge
             ? "Hinweise, die Sie zu Beiträgen verfassen, erscheinen in dieser Ansicht. Nur Sie können Hinweise verfassen."
             : "Hinweise nach §139 ZPO erscheinen in dieser Ansicht, sobald die Richterin oder der Richter welche verfasst hat."}
         </div>
@@ -83,12 +81,7 @@ export const SidebarHints = () => {
           </div>
         </div>
       )}
-      {showModal ? (
-        <JudgeHintPopup
-          isVisible={showModal}
-          onClose={() => setShowModal(false)}
-        />
-      ) : null}
+      {showJudgeHintPopup ? <JudgeHintPopup /> : null}
     </div>
   );
 };
