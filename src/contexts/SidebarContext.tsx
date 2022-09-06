@@ -9,27 +9,25 @@ import {
 import { SidebarBookmarks } from "../components/sidebar/SidebarBookmarks";
 import { SidebarHints } from "../components/sidebar/SidebarHints";
 import { SidebarNotes } from "../components/sidebar/SidebarNotes";
-
-interface ISidebar {
-  name: string;
-  jsxElem: JSX.Element;
-  icon: JSX.Element;
-}
+import { ISidebar, SidebarState } from "../types";
 
 const sidebars: ISidebar[] = [
   {
-    name: "Notes",
-    jsxElem: <SidebarNotes key="Notes"></SidebarNotes>,
+    name: SidebarState.Notes,
+    jsxElem: <SidebarNotes key={SidebarState.Notes.toString()}></SidebarNotes>,
     icon: <Notepad size={20} />,
   },
   {
-    name: "Hints",
-    jsxElem: <SidebarHints key="Hints"></SidebarHints>,
+    name: SidebarState.Hints,
+    jsxElem: <SidebarHints key={SidebarState.Hints.toString()}></SidebarHints>,
     icon: <Scales size={20} />,
   },
   {
-    name: "Bookmarks",
-    jsxElem: <SidebarBookmarks key="Bookmarks"></SidebarBookmarks>,
+    name: SidebarState.Bookmarks,
+    jsxElem: (
+      <SidebarBookmarks
+        key={SidebarState.Bookmarks.toString()}></SidebarBookmarks>
+    ),
     icon: <Bookmarks size={20} />,
   },
 ];
@@ -38,8 +36,8 @@ interface ISidebarContext {
   sidebars: ISidebar[];
   isSidebarOpen: boolean;
   setIsSidebarOpen: Dispatch<SetStateAction<boolean>>;
-  activeSidebar: string;
-  setActiveSidebar: Dispatch<SetStateAction<string>>;
+  activeSidebar: SidebarState;
+  setActiveSidebar: Dispatch<SetStateAction<SidebarState>>;
 }
 
 export const SidebarContext = createContext<ISidebarContext | null>(null);
@@ -52,7 +50,9 @@ export const SidebarProvider: React.FC<SidebarProviderProps> = ({
   children,
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
-  const [activeSidebar, setActiveSidebar] = useState<string>(sidebars[0].name);
+  const [activeSidebar, setActiveSidebar] = useState<SidebarState>(
+    sidebars[0].name
+  );
   return (
     <SidebarContext.Provider
       value={{
