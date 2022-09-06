@@ -1,5 +1,4 @@
 import { XCircle, WarningCircle, Quotes, X } from "phosphor-react";
-import { Button } from "./Button";
 import cx from "classnames";
 import {
   ContentState,
