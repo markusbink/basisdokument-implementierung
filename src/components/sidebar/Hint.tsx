@@ -1,9 +1,9 @@
 import cx from "classnames";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import { useRef, useState } from "react";
-import { useCase, useUser } from "../../contexts";
+import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IHint, UserRole } from "../../types";
+import { IHint } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
 
@@ -23,8 +23,6 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
       entryCode = getEntryCode(entries, hint.associatedEntry);
     } catch {}
   }
-
-  const { user } = useUser();
 
   const editHint = (e: React.MouseEvent) => {
     setIsMenuOpen(false);
