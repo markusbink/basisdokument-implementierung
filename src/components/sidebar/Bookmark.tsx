@@ -43,35 +43,32 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
 
   return (
     <div className="flex justify-between gap-2 items-center bg-offWhite rounded-lg mb-2 p-2 font-medium">
-      <BookmarkSimple
-        size={18}
-        weight="fill"
-        className="fill-darkGrey min-w-fit"
-      />
-
-      {bookmark.isInEditMode ? (
-        <input
-          autoFocus={true}
-          type="text"
-          name="title"
-          placeholder="Titel vergeben..."
-          maxLength={43}
-          className="max-w-[55%] focus:outline focus:outline-offWhite focus:bg-offWhite"
-          value={bookmark.title}
-          onBlur={() => setBookmarkEditMode(bookmark, false)}
-          onChange={handleChange}
-        />
-      ) : (
-        <div
-          className="break-words grow max-w-[55%]"
-          onDoubleClick={() => {
-            setBookmarkEditMode(bookmark, true);
-          }}>
-          <Tooltip text="Doppelklick, um zu Editieren">
-            {bookmark.title}
-          </Tooltip>
-        </div>
-      )}
+      <BookmarkSimple size={32} weight="fill" className="text-darkGrey" />
+      <div className="flex flex-row justify-start w-full">
+        {bookmark.isInEditMode ? (
+          <input
+            autoFocus={true}
+            type="text"
+            name="title"
+            placeholder="Titel vergeben..."
+            maxLength={43}
+            className="focus:outline focus:outline-offWhite focus:bg-offWhite p-0 m-0"
+            value={bookmark.title}
+            onBlur={() => setBookmarkEditMode(bookmark, false)}
+            onChange={handleChange}
+          />
+        ) : (
+          <span
+            className="break-words grow p-0 m-0"
+            onDoubleClick={() => {
+              setBookmarkEditMode(bookmark, true);
+            }}>
+            <Tooltip text="Doppelklick, um zu Editieren">
+              {bookmark.title}
+            </Tooltip>
+          </span>
+        )}
+      </div>
 
       <div className="flex items-center gap-2">
         {entryCode ? (
@@ -99,7 +96,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           hasText={false}
           alternativePadding="p-1"
           onClick={deleteBookmark}
-          icon={<Trash size={16} />}></Button>
+          icon={<Trash size={16}/>}></Button>
       </div>
     </div>
   );

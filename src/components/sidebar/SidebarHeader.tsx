@@ -15,7 +15,7 @@ export const SidebarHeader = () => {
   return (
     <div
       className={cx(
-        "flex flex-row items-center h-14 border-b-[0.5px] border-lightGrey px-4",
+        "flex flex-row items-center h-14 border-b-[0.5px] border-lightGrey px-4 w-[350px]",
         {
           "justify-between": isSidebarOpen,
           "justify-end": !isSidebarOpen,
