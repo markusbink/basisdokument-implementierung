@@ -129,7 +129,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     // check if file exists and validate
     if (usage === UsageMode.Open) {
       if (
-        (!basisdokumentFilename.endsWith(".json") &&
+        (!basisdokumentFilename.endsWith(".json") ||
           typeof basisdokumentFile !== "string") ||
         !basisdokumentFile
       ) {
@@ -146,7 +146,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         }
       }
       if (editFile) {
-        if (!editFilename.endsWith(".json") && typeof editFile !== "string") {
+        if (!editFilename.endsWith(".json") || typeof editFile !== "string") {
           setErrorText(
             "Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!"
           );

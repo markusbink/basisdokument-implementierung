@@ -168,7 +168,8 @@ export const JudgeHintPopup = () => {
                 Hinweise von Richter:innen sind öffentlich und können von den
                 anderen Parteien eingesehen werden. Sie können einen Hinweis
                 nachträglich bearbeiten und löschen, bis zu dem Zeitpunkt der
-                Übermittlung dieser Version des Basisdokuments an die anderen Parteien.
+                Übermittlung dieser Version des Basisdokuments an die anderen
+                Parteien.
               </p>
             </div>
             {/*body*/}
@@ -216,7 +217,9 @@ export const JudgeHintPopup = () => {
                       <DropdownMenu.Portal>
                         <DropdownMenu.Content className="flex flex-col gap-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
                           {entries.length === 0 && (
-                            <div className="p-2 text-sm">Es sind keine Beiträge im Basisdokument vorhanden.</div>
+                            <div className="p-2 text-sm">
+                              Es sind keine Beiträge im Basisdokument vorhanden.
+                            </div>
                           )}
                           {entries &&
                             entries.map((entry: IEntry) => (
@@ -260,6 +263,7 @@ export const JudgeHintPopup = () => {
             {/*footer*/}
             <div className="flex items-center justify-end">
               <Button
+                size="sm"
                 onClick={() => {
                   addHint();
                 }}>

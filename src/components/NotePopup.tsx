@@ -255,6 +255,7 @@ export const NotePopup = () => {
             {/*footer*/}
             <div className="flex items-center justify-end">
               <Button
+              size="sm"
                 onClick={() => {
                   addNote();
                 }}>
