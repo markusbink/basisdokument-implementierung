@@ -5,6 +5,7 @@ import {
   convertToRaw,
   EditorState,
 } from "draft-js";
+import { stateFromHTML } from "draft-js-import-html";
 import draftToHtml from "draftjs-to-html";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useRef, useState } from "react";
@@ -15,7 +16,12 @@ import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
 
 const toolbarOptions = {
-  options: ["inline", "list", "textAlign"],
+  options: ["blockType", "inline", "list", "textAlign"],
+  blockType: {
+    inDropdown: true,
+    options: ["Normal", "H3"],
+    className: ["!mb-0 hover:shadow-none rounded text-black"],
+  },
   inline: {
     className: ["!mb-0"],
     options: ["bold", "italic", "underline", "strikethrough"],
@@ -47,13 +53,11 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   onSave,
   defaultContent,
 }) => {
+  console.log({ defaultContent });
+
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
-    const blocksFromHTML = convertFromHTML(defaultContent || "");
-    const contentState = ContentState.createFromBlockArray(
-      blocksFromHTML.contentBlocks,
-      blocksFromHTML.entityMap
-    );
+    const contentState = stateFromHTML(defaultContent || "");
 
     return EditorState.createWithContent(contentState);
   });

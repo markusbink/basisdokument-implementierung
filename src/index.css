@@ -147,15 +147,26 @@ body {
   @apply my-0;
 }
 
+.rdw-block-wrapper {
+  @apply my-0;
+}
+
+.rdw-dropdown-selectedtext {
+  @apply text-black font-normal;
+}
+
 .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
   @apply hidden;
 }
 
-.rdw-suggestion-dropdown {
+.rdw-suggestion-dropdown,
+.rdw-dropdown-optionwrapper,
+.rdw-dropdown-optionwrapper:hover {
   @apply shadow-lg rounded-lg p-1;
 }
 
-.rdw-suggestion-option {
+.rdw-suggestion-option,
+.rdw-dropdownoption-default {
   @apply p-2 rounded border-none hover:bg-offWhite;
 }
 
@@ -173,6 +184,10 @@ body {
 
 .rdw-justify-aligned-block > div {
   @apply text-justify;
+}
+
+h3 {
+  @apply text-xl font-bold mb-5 leading-5;
 }
 
 /* SwiperJS Pagination Dots */
@@ -208,6 +223,10 @@ ul > ul {
 
 ul > ul > ul {
   list-style-type: square;
+}
+
+p {
+  min-height: 20px;
 }
 
 p:not(:last-child) {
