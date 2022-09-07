@@ -5,7 +5,6 @@ import { IBookmark } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
-import cx from "classnames";
 
 export interface BookmarkProps {
   bookmark: IBookmark;
