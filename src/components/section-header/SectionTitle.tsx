@@ -2,7 +2,6 @@ import cx from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useCase, useSection, useUser } from "../../contexts";
 import { UserRole } from "../../types";
-import { SectionDropdown } from "./SectionDropdown";
 
 interface SectionTitleProps {
   id: string;
