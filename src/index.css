@@ -162,12 +162,12 @@ body {
 .rdw-suggestion-dropdown,
 .rdw-dropdown-optionwrapper,
 .rdw-dropdown-optionwrapper:hover {
-  @apply shadow-lg rounded-lg p-1;
+  @apply shadow-lg rounded-lg !p-1;
 }
 
 .rdw-suggestion-option,
 .rdw-dropdownoption-default {
-  @apply p-2 rounded border-none hover:bg-offWhite;
+  @apply p-2 rounded border-none hover:bg-offWhite w-full;
 }
 
 .rdw-left-aligned-block > div {

@@ -1,12 +1,7 @@
 import cx from "classnames";
-import {
-  ContentState,
-  convertFromHTML,
-  convertToRaw,
-  EditorState,
-} from "draft-js";
-import { stateFromHTML } from "draft-js-import-html";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
@@ -57,7 +52,12 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
 
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
-    const contentState = stateFromHTML(defaultContent || "");
+    const blocksFromHtml = htmlToDraft(defaultContent || "");
+    const { contentBlocks, entityMap } = blocksFromHtml;
+    const contentState = ContentState.createFromBlockArray(
+      contentBlocks,
+      entityMap
+    );
 
     return EditorState.createWithContent(contentState);
   });
