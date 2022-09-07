@@ -26,6 +26,8 @@ export default interface IHeaderContext {
   versionHistory: IVersion[];
   selectedVersion: number;
   sectionListHeader: ISection[];
+  showEntrySorting: boolean;
+  setShowEntrySorting: React.Dispatch<React.SetStateAction<boolean>>;
   setSectionListHeader: React.Dispatch<React.SetStateAction<ISection[]>>;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
@@ -59,6 +61,8 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   // Define States
   const [showDropdownHeader, setShowDropdownHeader] =
     useState<IHeaderContext["showDropdownHeader"]>(false);
+  const [showEntrySorting, setShowEntrySorting] =
+    useState<IHeaderContext["showEntrySorting"]>(false);
 
   const [searchbarValue, setSearchbarValue] =
     useState<IHeaderContext["searchbarValue"]>("");
@@ -116,6 +120,8 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         versionHistory,
         selectedVersion,
         sectionListHeader,
+        showEntrySorting,
+        setShowEntrySorting,
         setSectionListHeader,
         setSelectedVersion,
         setVersionHistory,

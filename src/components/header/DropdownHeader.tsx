@@ -4,10 +4,11 @@ import { HighlighterButton } from "./HighlighterButton";
 import { SortingSelector } from "./SortingSelector";
 import { SortingMenu } from "./SortingMenu";
 import { VersionSelector } from "./VersionSelector";
-import { useHeaderContext } from "../../contexts";
-import { Tool } from "../../types";
+import { useHeaderContext, useUser } from "../../contexts";
+import { Tool, UserRole } from "../../types";
 import { SelectionForeground } from "phosphor-react";
 import { Tooltip } from "../Tooltip";
+import Switch from "@mui/material/Switch";
 
 export enum Sorting {
   Privat,
@@ -25,8 +26,11 @@ export const DropdownHeader: React.FC<any> = () => {
     hideEntriesHighlighter,
     setHighlightElementsWithSpecificVersion,
     highlightElementsWithSpecificVersion,
-    setCurrentTool
+    setCurrentTool,
+    showEntrySorting,
+    setShowEntrySorting,
   } = useHeaderContext();
+  const { user } = useUser();
 
   const { getCurrentTool } = useHeaderContext();
 
@@ -80,6 +84,32 @@ export const DropdownHeader: React.FC<any> = () => {
             setSelectedSorting={setSelectedSorting}
           />
           {selectedSorting === Sorting.Privat ? <SortingMenu /> : null}
+          {user?.role === UserRole.Judge ? (
+            <div className="flex flex-row items-center gap-2">
+              <Tooltip
+                asChild
+                text="Erlaubt Ihnen die Verschiebung von Beiträgen innerhalb einzelner Gliederungspunkte. Die Sortierung der Beiträge ist nur für Sie sichtbar.">
+                <div
+                  className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
+                  onClick={() => {
+                    setShowEntrySorting(!showEntrySorting);
+                  }}>
+                  <input
+                    className="small-checkbox accent-darkGrey cursor-pointer"
+                    type="checkbox"
+                    checked={showEntrySorting}
+                    onChange={() => setShowEntrySorting(!showEntrySorting)}
+                  />
+                  <div>
+                    <img
+                      className="w-6 h-6"
+                      src={`${process.env.PUBLIC_URL}/icons/entry-sorting-icon.svg`}
+                      alt="sorting entry icon"></img>
+                  </div>
+                </div>
+              </Tooltip>
+            </div>
+          ) : null}
         </div>
       </div>
       <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
@@ -91,15 +121,18 @@ export const DropdownHeader: React.FC<any> = () => {
           className={cx(
             `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
             {
-              "opacity-30":
-                getCurrentTool.id !== Tool.Cursor,
+              "opacity-30": getCurrentTool.id !== Tool.Cursor,
             }
           )}
           onClick={() => {
             console.log(getCurrentTool.id);
-            
+
             if (getCurrentTool.id !== Tool.Cursor) {
-              setCurrentTool({ id: Tool.Cursor, iconNode: "Cursor", germanTitle: "Maus" })
+              setCurrentTool({
+                id: Tool.Cursor,
+                iconNode: "Cursor",
+                germanTitle: "Maus",
+              });
             }
           }}>
           <div className="flex flex-row gap-2">
