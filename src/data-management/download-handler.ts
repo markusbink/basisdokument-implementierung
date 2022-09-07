@@ -301,11 +301,11 @@ export function downloadBasisdokument(
   basisdokumentObject["litigiousChecks"] = litigiousChecks;
   downloadObjectAsJSON(
     basisdokumentObject,
-    "basisdokument_version_" + currentVersion + "_case_" + currentVersion
+    "basisdokument_version_" + currentVersion + "_az_" + caseId
   );
   downloadBasisdokumentAsPDF(
     basisdokumentObject,
-    "basisdokument_version_" + currentVersion + "_case_" + currentVersion
+    "basisdokument_version_" + currentVersion + "_az_" + caseId
   );
 }
 
@@ -329,6 +329,6 @@ export function downloadEditFile(
   editFileObject["individualSorting"] = individualSorting;
   downloadObjectAsJSON(
     editFileObject,
-    "bearbeitungsdatei_version_" + currentVersion + "_case_" + currentVersion
+    "bearbeitungsdatei_version_" + currentVersion + "_az_" + caseId
   );
 }
