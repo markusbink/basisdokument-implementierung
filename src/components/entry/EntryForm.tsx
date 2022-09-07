@@ -111,7 +111,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         editorClassName="p-6 min-h-[300px] overflow-visible"
         placeholder="Text eingeben..."
         toolbarClassName={cx(
-          "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"
+          "p-2 relative rounded-none border border-x-0 border-t-0 bg-white border-lightGrey leading-none sticky -top-[112px] z-10"
         )}
         toolbar={toolbarOptions}
         toolbarCustomButtons={
