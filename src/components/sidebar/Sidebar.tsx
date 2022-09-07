@@ -11,7 +11,7 @@ export const Sidebar = () => {
         "h-full overflow-y-clip shadow-lg transition-width duration-300",
         {
           "w-[65px] overflow-hidden": !isSidebarOpen,
-          "w-[400px]": isSidebarOpen,
+          "w-[350px]": isSidebarOpen,
         }
       )}>
       <SidebarHeader/>
