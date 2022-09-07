@@ -43,7 +43,8 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { currentVersion, groupedEntries, setEntries } = useCase();
+  const { currentVersion, groupedEntries, setEntries, setHighlightedEntries } =
+    useCase();
   const {
     versionHistory,
     showColumnView,
@@ -194,6 +195,11 @@ export const Entry: React.FC<EntryProps> = ({
       newEntries[entryIndex].author = authorName || entry.author;
       return newEntries;
     });
+
+    // Remove highlighter if entry was edited since it is no longer the same
+    setHighlightedEntries((prevEntries) =>
+      prevEntries.filter((prevEntry) => prevEntry.entryId !== entry.id)
+    );
   };
 
   return (
