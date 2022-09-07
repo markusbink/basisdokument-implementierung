@@ -97,6 +97,13 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           trigger: "#",
           suggestions,
         }}
+        localization={{
+          locale: "de",
+          translations: {
+            "components.controls.blocktype.normal": "Text",
+            "components.controls.blocktype.h3": "Überschrift",
+          },
+        }}
         defaultEditorState={editorState}
         stripPastedStyles={true}
         onEditorStateChange={setEditorState}
