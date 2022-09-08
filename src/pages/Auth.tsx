@@ -129,8 +129,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     // check if file exists and validate
     if (usage === UsageMode.Open) {
       if (
-        (!basisdokumentFilename.endsWith(".json") ||
-          typeof basisdokumentFile !== "string") ||
+        !basisdokumentFilename.endsWith(".json") ||
+        typeof basisdokumentFile !== "string" ||
         !basisdokumentFile
       ) {
         setErrorText(
@@ -288,6 +288,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <div className="flex flex-row w-auto mt-4 gap-4">
             <button
               onClick={() => {
+                if (usage !== UsageMode.Open) {
+                  setErrorText("");
+                }
                 setUsage(UsageMode.Open);
               }}
               className={cx(
@@ -300,6 +303,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             </button>
             <button
               onClick={() => {
+                if (usage !== UsageMode.Create) {
+                  setErrorText("");
+                }
                 setUsage(UsageMode.Create);
               }}
               className={cx(
