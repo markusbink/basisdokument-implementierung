@@ -98,6 +98,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         let result = e.target.result;
         setBasisdokumentFile(result);
       };
+      e.target.value = "";
     } catch (error) {}
   };
 
@@ -110,6 +111,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         let result = e.target.result;
         setEditFile(result);
       };
+      e.target.value = "";
     } catch (error) {}
   };
 
@@ -429,6 +431,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                     <button
                       onClick={() => {
                         setBasisdokumentFilename("");
+                        setBasisdokumentFile(undefined);
                       }}
                       className="bg-lightRed hover:bg-marker-red rounded-md p-1">
                       <Trash size={24} color={"darkRed"} />
@@ -456,6 +459,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                     <button
                       onClick={() => {
                         setEditFilename("");
+                        setEditFile(undefined);
                       }}
                       className="bg-lightRed hover:bg-marker-red rounded-md p-1">
                       <Trash size={24} color={"darkRed"} />
