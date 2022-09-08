@@ -52,7 +52,10 @@ export const Entry: React.FC<EntryProps> = ({
     getCurrentTool,
     highlightElementsWithSpecificVersion,
     selectedVersion,
+    showEntrySorting,
+    setShowEntrySorting,
   } = useHeaderContext();
+
   const { setShowNotePopup, setAssociatedEntryId } = useNotes();
   const { setShowJudgeHintPopup } = useHints();
 
@@ -216,8 +219,9 @@ export const Entry: React.FC<EntryProps> = ({
           })}>
           <div
             className={cx("transition-all", {
-              "w-[calc(50%_-_12px)]": !isExpanded && showColumnView,
-              "w-full": isExpanded || !showColumnView,
+              "w-[calc(50%_-_12px)]":
+                !isExpanded && showColumnView && !showEntrySorting,
+              "w-full": isExpanded || !showColumnView || showEntrySorting,
             })}>
             {/* Entry */}
             <div

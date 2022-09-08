@@ -1,6 +1,9 @@
 import { useDrag, useDrop } from "react-dnd";
-import { useCase } from "../contexts";
+import { useCase, useUser } from "../contexts";
 import cx from "classnames";
+import { getEntryById } from "../contexts/CaseContext";
+import { Entry } from "./entry";
+import { UserRole } from "../types";
 
 export const JudgeDiscussion = () => {
   const { individualEntrySorting } = useCase();
@@ -12,7 +15,9 @@ export const JudgeDiscussion = () => {
           <h3>{section.sectionId}</h3>
           <EntryRow>
             {Object.keys(section.columns).map((column, x) => (
-              <DroppableColumn position={{ x, y }}>
+              <DroppableColumn
+                columnRole={x === 0 ? UserRole.Plaintiff : UserRole.Defendant}
+                position={{ x, y }}>
                 {section.columns[x].map((entryId: string, index) => (
                   <DragEntry
                     entryId={entryId}
@@ -42,10 +47,16 @@ const DragEntry = ({
   position: { x: number; y: number };
   index: number;
 }) => {
+  const { user } = useUser();
+  const { entries } = useCase();
+  const entry = getEntryById(entries, entryId);
+
+  console.log(entry?.id);
+
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.ENTRY,
-      item: { position, index },
+      item: { position, index, role: entry?.role },
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
       }),
@@ -56,19 +67,24 @@ const DragEntry = ({
   return (
     <div
       ref={drag}
-      className={cx("p-2 bg-black/10", {
+      className={cx({
         "bg-black/20": isDragging,
       })}>
-      {entryId}
+      <>
+        {entryId}
+        {entry && <Entry viewedBy={user!.role} entry={entry} />}
+      </>
     </div>
   );
 };
 
 const DroppableColumn = ({
   position,
+  columnRole,
   children,
 }: {
   position: { x: number; y: number };
+  columnRole: UserRole;
   children: React.ReactNode;
 }) => {
   const { individualEntrySorting, setIndividualEntrySorting } = useCase();
@@ -98,9 +114,14 @@ const DroppableColumn = ({
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.ENTRY,
     drop: (_: any, monitor) => {
+      console.log(monitor.getItem());
       const oldPosition = monitor.getItem().position;
       const indexInsideColumn = monitor.getItem().index;
       moveItem(oldPosition, position, indexInsideColumn);
+    },
+    canDrop: (_: any, monitor) => {
+      const role = monitor.getItem().role;
+      return role === columnRole;
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
