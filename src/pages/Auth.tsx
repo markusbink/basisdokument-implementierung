@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { Upload } from "phosphor-react";
-import { SetStateAction, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
 import { Button } from "../components/Button";
@@ -49,7 +49,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
   const [newVersionMode, setNewVersionMode] =
     useState<IStateUserInput["newVersionMode"]>(false);
-  const [isValidUserInput, setIsValidUserInput] = useState<boolean>(true);
 
   // Refs
   const basisdokumentFileUploadRef = useRef<HTMLInputElement>(null);
@@ -125,7 +124,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   const validateUserInput = () => {
     // Before checking every user input we set the validation state to true.
-    // TODO let inputIsValid: boolean = true;
+    let inputIsValid: boolean = true;
 
     // check if file exists and validate
     if (usage === UsageMode.Open) {
@@ -137,13 +136,13 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         setErrorText(
           "Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!"
         );
-        setIsValidUserInput(false);
+        inputIsValid = false;
       } else {
         if (jsonToObject(basisdokumentFile).fileType !== "basisdokument") {
           setErrorText(
             "Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!"
           );
-          setIsValidUserInput(false);
+          inputIsValid = false;
         }
       }
       if (editFile) {
@@ -151,43 +150,43 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           setErrorText(
             "Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!"
           );
-          setIsValidUserInput(false);
+          inputIsValid = false;
         } else {
           if (jsonToObject(editFile).fileType !== "editFile") {
             setErrorText(
               "Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!"
             );
-            setIsValidUserInput(false);
+            inputIsValid = false;
           }
         }
       }
     }
     if (caseId === "" && usage === UsageMode.Create) {
       setErrorText("Bitte geben Sie ein gültiges Aktenzeichen an!");
-      setIsValidUserInput(false);
+      inputIsValid = false;
     }
 
     if (prename === "" || surname === "") {
       setErrorText(
         "Bitte geben Sie sowohl Ihren Vornamen als auch einen Nachnamen an!"
       );
-      setIsValidUserInput(false);
+      inputIsValid = false;
     }
     if (!role) {
       setErrorText(
         "Bitte spezifizieren Sie, ob Sie das Basisdokument als Klagepartei, Beklagtenpartei oder Richter:in bearbeiten möchten!"
       );
-      setIsValidUserInput(false);
+      inputIsValid = false;
     }
 
     if (usage !== UsageMode.Open && usage !== UsageMode.Create) {
       setErrorText(
         "Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen oder erstellen möchten!"
       );
-      setIsValidUserInput(false);
+      inputIsValid = false;
     }
 
-    if (isValidUserInput) {
+    if (inputIsValid === true) {
       let basisdokumentObject, editFileObject;
 
       if (usage === UsageMode.Open && typeof basisdokumentFile == "string") {
@@ -289,7 +288,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <div className="flex flex-row w-auto mt-4 gap-4">
             <button
               onClick={() => {
-                setIsValidUserInput(true);
+                if (usage !== UsageMode.Open) {
+                  setErrorText("");
+                }
                 setUsage(UsageMode.Open);
               }}
               className={cx(
@@ -302,7 +303,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             </button>
             <button
               onClick={() => {
-                setIsValidUserInput(true);
+                if (usage !== UsageMode.Create) {
+                  setErrorText("");
+                }
                 setUsage(UsageMode.Create);
               }}
               className={cx(
@@ -315,6 +318,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             </button>
           </div>
         </div>
+
         <div>
           <p className="font-light">
             Ich möchte das Basisdokument bearbeiten in der Funktion:{" "}
@@ -471,7 +475,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         ) : null}
 
         <div>
-          {!isValidUserInput && errorText !== "" ? (
+          {errorText !== "" ? (
             <div className="flex bg-lightRed p-4 rounded-md">
               <p className="text-darkRed">
                 <span className="font-bold">Fehler:</span> {errorText}
