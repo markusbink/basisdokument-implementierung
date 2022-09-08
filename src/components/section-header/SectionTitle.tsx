@@ -83,8 +83,6 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
             }}
             onChange={changeTitle}
             onBlur={() => {
-              console.log("onblur");
-
               if (title.length > 0) {
                 setIsEditing(false);
               }

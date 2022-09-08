@@ -1,14 +1,13 @@
-import React from "react";
 import cx from "classnames";
-import { HighlighterButton } from "./HighlighterButton";
-import { SortingSelector } from "./SortingSelector";
-import { SortingMenu } from "./SortingMenu";
-import { VersionSelector } from "./VersionSelector";
+import { SelectionForeground } from "phosphor-react";
+import React from "react";
 import { useHeaderContext, useUser } from "../../contexts";
 import { Tool, UserRole } from "../../types";
-import { SelectionForeground } from "phosphor-react";
 import { Tooltip } from "../Tooltip";
-import Switch from "@mui/material/Switch";
+import { HighlighterButton } from "./HighlighterButton";
+import { SortingMenu } from "./SortingMenu";
+import { SortingSelector } from "./SortingSelector";
+import { VersionSelector } from "./VersionSelector";
 
 export enum Sorting {
   Privat,
