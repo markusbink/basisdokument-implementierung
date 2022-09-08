@@ -423,7 +423,7 @@ export const Entry: React.FC<EntryProps> = ({
           )}
         </div>
       </div>
-      {thread?.length > 0 && (
+      {thread?.length > 0 && !showEntrySorting && (
         <div
           className={cx({
             flex: !showColumnView,
