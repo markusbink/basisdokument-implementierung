@@ -108,14 +108,14 @@ export const Entry: React.FC<EntryProps> = ({
       deleteBookmarkByReference(entry.id);
     } else {
       setIsMenuOpen(false);
-      setBookmarks((oldBoomarks) => {
+      setBookmarks((oldBookmarks) => {
         const newBookmark: IBookmark = {
           id: uuidv4(),
-          title: `Lesezeichen ${oldBoomarks.length + 1}`,
+          title: `Lesezeichen ${oldBookmarks.length + 1}`,
           associatedEntry: entry.id,
           isInEditMode: true,
         };
-        const newBookmarks = [...oldBoomarks, newBookmark];
+        const newBookmarks = [...oldBookmarks, newBookmark];
         return newBookmarks;
       });
       setActiveSidebar(SidebarState.Bookmarks);
