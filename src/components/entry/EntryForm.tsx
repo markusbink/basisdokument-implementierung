@@ -1,11 +1,7 @@
 import cx from "classnames";
-import {
-  ContentState,
-  convertFromHTML,
-  convertToRaw,
-  EditorState,
-} from "draft-js";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
@@ -15,7 +11,12 @@ import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
 
 const toolbarOptions = {
-  options: ["inline", "list", "textAlign"],
+  options: ["blockType", "inline", "list", "textAlign"],
+  blockType: {
+    inDropdown: true,
+    options: ["Normal", "H3"],
+    className: ["!mb-0 hover:shadow-none rounded text-black"],
+  },
   inline: {
     className: ["!mb-0"],
     options: ["bold", "italic", "underline", "strikethrough"],
@@ -47,12 +48,15 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   onSave,
   defaultContent,
 }) => {
+  console.log({ defaultContent });
+
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
-    const blocksFromHTML = convertFromHTML(defaultContent || "");
+    const blocksFromHtml = htmlToDraft(defaultContent || "");
+    const { contentBlocks, entityMap } = blocksFromHtml;
     const contentState = ContentState.createFromBlockArray(
-      blocksFromHTML.contentBlocks,
-      blocksFromHTML.entityMap
+      contentBlocks,
+      entityMap
     );
 
     return EditorState.createWithContent(contentState);
@@ -93,6 +97,13 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           trigger: "#",
           suggestions,
         }}
+        localization={{
+          locale: "de",
+          translations: {
+            "components.controls.blocktype.normal": "Text",
+            "components.controls.blocktype.h3": "Überschrift",
+          },
+        }}
         defaultEditorState={editorState}
         stripPastedStyles={true}
         onEditorStateChange={setEditorState}
@@ -100,7 +111,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         editorClassName="p-6 min-h-[300px] overflow-visible"
         placeholder="Text eingeben..."
         toolbarClassName={cx(
-          "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"
+          "p-2 relative rounded-none border border-x-0 border-t-0 bg-white border-lightGrey leading-none sticky -top-[112px] z-10"
         )}
         toolbar={toolbarOptions}
         toolbarCustomButtons={

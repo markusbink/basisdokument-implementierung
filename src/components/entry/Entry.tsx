@@ -43,7 +43,8 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { currentVersion, groupedEntries, setEntries } = useCase();
+  const { currentVersion, groupedEntries, setEntries, setHighlightedEntries } =
+    useCase();
   const {
     versionHistory,
     showColumnView,
@@ -108,14 +109,14 @@ export const Entry: React.FC<EntryProps> = ({
       deleteBookmarkByReference(entry.id);
     } else {
       setIsMenuOpen(false);
-      setBookmarks((oldBoomarks) => {
+      setBookmarks((oldBookmarks) => {
         const newBookmark: IBookmark = {
           id: uuidv4(),
-          title: `Lesezeichen zu ${entry.entryCode}`,
+          title: `Lesezeichen ${oldBookmarks.length + 1}`,
           associatedEntry: entry.id,
           isInEditMode: true,
         };
-        const newBookmarks = [...oldBoomarks, newBookmark];
+        const newBookmarks = [...oldBookmarks, newBookmark];
         return newBookmarks;
       });
       setActiveSidebar(SidebarState.Bookmarks);
@@ -194,6 +195,11 @@ export const Entry: React.FC<EntryProps> = ({
       newEntries[entryIndex].author = authorName || entry.author;
       return newEntries;
     });
+
+    // Remove highlighter if entry was edited since it is no longer the same
+    setHighlightedEntries((prevEntries) =>
+      prevEntries.filter((prevEntry) => prevEntry.entryId !== entry.id)
+    );
   };
 
   return (
@@ -377,6 +383,8 @@ export const Entry: React.FC<EntryProps> = ({
                     setIsEditErrorVisible(true);
                   }}
                   onSave={(plainText: string, rawHtml: string) => {
+                    console.log({ rawHtml });
+
                     updateEntry(plainText, rawHtml);
                     setIsExpanded(false);
                   }}
