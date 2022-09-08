@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { Upload } from "phosphor-react";
+import { Trash, Upload } from "phosphor-react";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
@@ -129,8 +129,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     // check if file exists and validate
     if (usage === UsageMode.Open) {
       if (
-        (!basisdokumentFilename.endsWith(".json") ||
-          typeof basisdokumentFile !== "string") ||
+        !basisdokumentFilename.endsWith(".json") ||
+        typeof basisdokumentFile !== "string" ||
         !basisdokumentFile
       ) {
         setErrorText(
@@ -416,6 +416,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                       type="file"
                       onChange={handleBasisdokumentFileUploadChange}
                     />
+                    {basisdokumentFilename}
+                    {basisdokumentFilename && (
+                      <button
+                        onClick={() => {
+                          // TODO
+                        }}
+                        className="bg-lightRed hover:bg-marker-red rounded-md pl-2 pr-2 p-1">
+                        <Trash size={24} color={"darkRed"} />
+                      </button>
+                    )}
                     <button
                       onClick={() => {
                         basisdokumentFileUploadRef?.current?.click();
@@ -423,7 +433,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                       className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
                       <Upload size={24} color={"white"} />
                     </button>
-                    <p className="text-black">{basisdokumentFilename}</p>
                   </label>
                 </div>
                 <div className="flex flex-row items-center justify-center gap-4">
@@ -434,6 +443,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                       type="file"
                       onChange={handleEditFileUploadChange}
                     />
+                    {editFilename}
+                    {editFilename && (
+                      <button
+                        onClick={() => {
+                          // TODO
+                        }}
+                        className="bg-lightRed hover:bg-marker-red rounded-md pl-2 pr-2 p-1">
+                        <Trash size={24} color={"darkRed"} />
+                      </button>
+                    )}
                     <button
                       onClick={() => {
                         editFileUploadRef?.current?.click();
@@ -441,7 +460,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                       className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
                       <Upload size={24} color={"white"} />
                     </button>
-                    <p className="text-black">{editFilename}</p>
                   </label>
                 </div>
               </div>
