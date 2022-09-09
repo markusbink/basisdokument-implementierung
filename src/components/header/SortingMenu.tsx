@@ -108,13 +108,13 @@ export const SortingMenu = () => {
           {sectionList.length !== 0 ? (
             <div className="flex justify-end mt-2">
               <div
-                className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey hover:bg-mediumGrey text-white text-[10px] font-bold p-1 rounded-md"
+                className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey hover:bg-mediumGrey text-white text-[10px] font-bold px-1.5 py-1 rounded-md"
                 onClick={() => {
                   resetPrivateSorting();
                 }}
               >
                 <ClockClockwise size={16} />
-                <p>Sortierung zurücksetzen</p>
+                <span>Sortierung zurücksetzen</span>
               </div>
             </div>
           ) : null}
