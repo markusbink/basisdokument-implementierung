@@ -54,8 +54,8 @@ export const Entry: React.FC<EntryProps> = ({
     highlightElementsWithSpecificVersion,
     selectedVersion,
   } = useHeaderContext();
-  const { setShowNotePopup, setAssociatedEntryId } = useNotes();
-  const { setShowJudgeHintPopup } = useHints();
+  const { setShowNotePopup,setAssociatedEntryIdNote } = useNotes();
+  const { setShowJudgeHintPopup, setAssociatedEntryIdHint } = useHints();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -127,14 +127,14 @@ export const Entry: React.FC<EntryProps> = ({
     e.stopPropagation();
     setIsMenuOpen(false);
     setShowNotePopup(true);
-    setAssociatedEntryId(entry.id);
+    setAssociatedEntryIdNote(entry.id);
   };
 
   const addHint = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
-    setShowJudgeHintPopup(true);
-    setAssociatedEntryId(entry.id);
+    setShowJudgeHintPopup(true);    
+    setAssociatedEntryIdHint(entry.id);
   };
 
   const toggleMenu = (e: React.MouseEvent) => {
