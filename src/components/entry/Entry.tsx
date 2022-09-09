@@ -402,7 +402,7 @@ export const Entry: React.FC<EntryProps> = ({
                   "text-darkPurple": isPlaintiff,
                   "text-darkPetrol": !isPlaintiff,
                 })}>
-                Text verfassen
+                Auf diesen Beitrag Bezug nehmen
               </Button>
             )}
           </div>
