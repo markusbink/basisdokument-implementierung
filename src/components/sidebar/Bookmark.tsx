@@ -78,7 +78,7 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           // </Tooltip>
         )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 whitespace-nowrap">
         {entryCode ? (
           <a
             href={`#${entryCode}`}
