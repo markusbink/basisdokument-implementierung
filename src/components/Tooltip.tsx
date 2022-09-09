@@ -2,7 +2,7 @@ import * as RadixTooltip from "@radix-ui/react-tooltip";
 
 interface TooltipProps {
   children?: React.ReactNode;
-  text?: string;
+  text?: string | React.ReactNode;
   asChild?: boolean;
   position?: "top" | "bottom" | "left" | "right";
 }
@@ -22,8 +22,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         <RadixTooltip.Content
           className="bg-darkGrey text-offWhite text-[12px] rounded px-2 py-1 leading-none"
           side={position}
-          sideOffset={5}
-        >
+          sideOffset={5}>
           {text}
 
           <RadixTooltip.Arrow
