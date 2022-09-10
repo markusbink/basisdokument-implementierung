@@ -67,7 +67,8 @@ export const ColorSelectorListItem: React.FC<IProps> = ({
           </span>
         )}
       </div>
-      <Tooltip text="Markierung umbenennen">
+      <Tooltip
+        text={inputSelected ? "Benennung bestätigen" : "Markierung umbenennen"}>
         <div className="hover:bg-offWhite rounded-md p-1">
           {inputSelected ? (
             <Check onClick={() => setInputSelected(false)} weight="bold" />
