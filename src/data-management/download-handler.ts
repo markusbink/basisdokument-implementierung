@@ -268,6 +268,15 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     }
   }
 
+  doc.addPage();
+  doc.setFontSize(8);
+  doc.text(".................................................................................................................................", 10, 60);
+  doc.text("Vorname, Nachname", 10, 64);
+  doc.text(".................................................................................................................................", 10, 90);
+  doc.text("Ort, Datum", 10, 94);
+  doc.text("...........................................................................", 10, 120);
+  doc.text("Unterschrift", 10, 124);
+
   let stringHtml = basisdokumentDOMRepresentation.outerHTML;
   doc
     .html(stringHtml, {
