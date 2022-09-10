@@ -394,15 +394,16 @@ export const Entry: React.FC<EntryProps> = ({
             {/* Button to add response */}
             {canAddEntry && !isNewEntryVisible && (
               <Button
-                onClick={showNewEntry}
-                icon={<ArrowBendLeftUp weight="bold" size={18} />}
                 size="sm"
-                bgColor="transparent"
-                textColor={cx("font-bold", {
-                  "text-darkPurple": isPlaintiff,
-                  "text-darkPetrol": !isPlaintiff,
-                })}>
-                Text verfassen
+                alternativePadding="mt-2"
+                bgColor="bg-lightGrey hover:bg-mediumGrey"
+                textColor={cx("font-semibold", {
+                  "text-darkPurple hover:text-lightPurple": isPlaintiff,
+                  "text-darkPetrol hover:text-lightPetrol": !isPlaintiff,
+                })}
+                onClick={showNewEntry}
+                icon={<ArrowBendLeftUp weight="bold" size={18} />}>
+                Auf diesen Beitrag Bezug nehmen
               </Button>
             )}
           </div>
