@@ -23,8 +23,8 @@ interface IHintContext {
   setOpenedHintId: Dispatch<SetStateAction<string>>;
   showErrorText: boolean;
   setShowErrorText: Dispatch<SetStateAction<boolean>>;
-  associatedEntryId: string;
-  setAssociatedEntryId: Dispatch<SetStateAction<string>>;
+  associatedEntryIdHint: string;
+  setAssociatedEntryIdHint: Dispatch<SetStateAction<string>>;
   editMode: boolean;
   setEditMode: Dispatch<SetStateAction<boolean>>;
 }
@@ -40,7 +40,7 @@ export const HintProvider: React.FC<HintProviderProps> = ({ children }) => {
   const [showJudgeHintPopup, setShowJudgeHintPopup] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [showErrorText, setShowErrorText] = useState<boolean>(false);
-  const [associatedEntryId, setAssociatedEntryId] = useState<string>("");
+  const [associatedEntryIdHint, setAssociatedEntryIdHint] = useState<string>("");
   const [openedHintId, setOpenedHintId] = useState<string>("");
 
   const [editorState, setEditorState] = useState(() => {
@@ -76,8 +76,8 @@ export const HintProvider: React.FC<HintProviderProps> = ({ children }) => {
         setShowErrorText,
         setOpenedHintId,
         openedHintId,
-        associatedEntryId,
-        setAssociatedEntryId,
+        associatedEntryIdHint,
+        setAssociatedEntryIdHint,
         editMode,
         setEditMode,
       }}

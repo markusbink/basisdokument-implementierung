@@ -54,8 +54,8 @@ export const Entry: React.FC<EntryProps> = ({
     highlightElementsWithSpecificVersion,
     selectedVersion,
   } = useHeaderContext();
-  const { setShowNotePopup, setAssociatedEntryId } = useNotes();
-  const { setShowJudgeHintPopup } = useHints();
+  const { setShowNotePopup,setAssociatedEntryIdNote } = useNotes();
+  const { setShowJudgeHintPopup, setAssociatedEntryIdHint } = useHints();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
   const thread = groupedEntries[entry.sectionId][entry.id];
@@ -135,14 +135,14 @@ export const Entry: React.FC<EntryProps> = ({
     e.stopPropagation();
     setIsMenuOpen(false);
     setShowNotePopup(true);
-    setAssociatedEntryId(entry.id);
+    setAssociatedEntryIdNote(entry.id);
   };
 
   const addHint = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
-    setShowJudgeHintPopup(true);
-    setAssociatedEntryId(entry.id);
+    setShowJudgeHintPopup(true);    
+    setAssociatedEntryIdHint(entry.id);
   };
 
   const toggleMenu = (e: React.MouseEvent) => {
@@ -406,15 +406,16 @@ export const Entry: React.FC<EntryProps> = ({
             {/* Button to add response */}
             {canAddEntry && !isNewEntryVisible && (
               <Button
-                onClick={showNewEntry}
-                icon={<ArrowBendLeftUp weight="bold" size={18} />}
                 size="sm"
-                bgColor="transparent"
-                textColor={cx("font-bold", {
-                  "text-darkPurple": isPlaintiff,
-                  "text-darkPetrol": !isPlaintiff,
-                })}>
-                Text verfassen
+                alternativePadding="mt-2"
+                bgColor="bg-lightGrey hover:bg-mediumGrey"
+                textColor={cx("font-semibold", {
+                  "text-darkPurple hover:text-lightPurple": isPlaintiff,
+                  "text-darkPetrol hover:text-lightPetrol": !isPlaintiff,
+                })}
+                onClick={showNewEntry}
+                icon={<ArrowBendLeftUp weight="bold" size={18} />}>
+                Auf diesen Beitrag Bezug nehmen
               </Button>
             )}
           </div>

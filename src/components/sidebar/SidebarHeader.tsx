@@ -27,7 +27,7 @@ export const SidebarHeader = () => {
         })}>
         <Button
           key={"sidebarActive"}
-          bgColor="transparent"
+          bgColor="transparent hover:bg-lightGrey"
           size="sm"
           textColor="font-bold text-darkGrey"
           hasText={false}
@@ -46,7 +46,9 @@ export const SidebarHeader = () => {
           <Button
             key={sidebar.name}
             bgColor={
-              sidebar.name === activeSidebar ? "bg-offWhite" : "transparent"
+              sidebar.name === activeSidebar
+                ? "bg-offWhite hover:bg-lightGrey"
+                : "transparent hover:bg-lightGrey"
             }
             size="sm"
             textColor="font-bold text-darkGrey"
