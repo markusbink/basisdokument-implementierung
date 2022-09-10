@@ -23,7 +23,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setTitle,
     setEditorState,
     setOpenedNoteId,
-    setAssociatedEntryId,
+    setAssociatedEntryIdNote,
     setEditMode,
   } = useNotes();
 
@@ -41,7 +41,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setOpenedNoteId(note.id);
     setEditMode(true);
     if (note.associatedEntry) {
-      setAssociatedEntryId(note.associatedEntry);
+      setAssociatedEntryIdNote(note.associatedEntry);
     }
     const blocksFromHTML = convertFromHTML(note.text);
     const contentState = ContentState.createFromBlockArray(

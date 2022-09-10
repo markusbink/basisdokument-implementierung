@@ -12,6 +12,7 @@ import { DocumentButton } from "../header/DocumentButton";
 import { ColorSelector } from "./ColorSelector";
 import { ToolSelector } from "./ToolSelector";
 import cx from "classnames";
+import { Tooltip } from "../Tooltip";
 
 export const MainHeader = () => {
   const {
@@ -59,7 +60,10 @@ export const MainHeader = () => {
         <div
           className={cx(
             "flex flex-row bg-offWhite rounded-md pl-2 pr-2 h-8 items-center w-full max-w-[300px]",
-            { "outline outline-1,5 outline-offset-0 outline-darkGrey": searchbarValue !== "" }
+            {
+              "outline outline-1,5 outline-offset-0 outline-darkGrey":
+                searchbarValue !== "",
+            }
           )}>
           <div>
             <MagnifyingGlass
@@ -90,18 +94,24 @@ export const MainHeader = () => {
       </div>
       {/* actions on the right side */}
       <div className="flex flex-row gap-4 justify-end items-center">
-        <div
-          className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8 cursor-pointer"
-          onClick={() => {
-            setIsOnboardingVisible(true);
-          }}>
-          <Question size={16} className="text-darkGrey" />
-        </div>
-        <ColorSelector />
-        <ToolSelector
-          getCurrentTool={getCurrentTool}
-          setCurrentTool={setCurrentTool}
-        />
+        <Tooltip text="Hilfe">
+          <div
+            className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8 cursor-pointer"
+            onClick={() => {
+              setIsOnboardingVisible(true);
+            }}>
+            <Question size={16} className="text-darkGrey" />
+          </div>
+        </Tooltip>
+        <Tooltip text="Markierungsfarbe auswählen">
+          <ColorSelector />
+        </Tooltip>
+        <Tooltip text="Werkzeug auswählen">
+          <ToolSelector
+            getCurrentTool={getCurrentTool}
+            setCurrentTool={setCurrentTool}
+          />
+        </Tooltip>
       </div>
     </div>
   );

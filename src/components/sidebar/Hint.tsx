@@ -25,7 +25,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
     setTitle,
     setEditorState,
     setOpenedHintId,
-    setAssociatedEntryId,
+    setAssociatedEntryIdHint,
     setEditMode,
   } = useHints();
 
@@ -43,7 +43,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
     setOpenedHintId(hint.id);
     setEditMode(true);
     if (hint.associatedEntry) {
-      setAssociatedEntryId(hint.associatedEntry);
+      setAssociatedEntryIdHint(hint.associatedEntry);
     }
     const blocksFromHTML = convertFromHTML(hint.text);
     const contentState = ContentState.createFromBlockArray(
