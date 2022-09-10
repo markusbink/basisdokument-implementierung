@@ -83,7 +83,9 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
           <div className="flex justify-between items-center mb-3">
             <div className="">
               <div className="font-bold">{note.author}</div>
-              <div className="opacity-40">{`${new Date(Date.parse(String(note.timestamp))).toLocaleString("de-DE")}`}</div>
+              <div className="opacity-40">{`${new Date(
+                Date.parse(String(note.timestamp))
+              ).toLocaleString("de-DE")}`}</div>
             </div>
 
             <div ref={ref} className="self-end relative">
@@ -101,7 +103,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
                 }}
                 icon={<DotsThree size={20} weight="bold" />}></Button>{" "}
               {isMenuOpen ? (
-                <ul className="absolute right-0 bottom-8 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
+                <ul className="absolute right-0 bottom-2 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
                   <li
                     tabIndex={0}
                     onClick={editNote}
