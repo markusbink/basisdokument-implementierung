@@ -87,8 +87,7 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
           <Tooltip text="Mehr Optionen">
             <DotsThree
               size={20}
-              weight="bold"
-              className="rounded-md hover:bg-darkPurple hover:text-lightPurple"
+              className="rounded-md hover:bg-darkGrey hover:text-white"
             />
           </Tooltip>
         </span>
@@ -96,29 +95,54 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           align="end"
-          className="bg-darkGrey rounded-lg shadow-lg z-50">
+          className="bg-white rounded-lg shadow-lg z-50 p-2">
           {!isOld && (
-            <DropdownMenu.Item onClick={() => deleteSection()}>
-              <Button icon={<Trash size={18} />} size="sm">
+            <DropdownMenu.Item
+              onClick={() => deleteSection()}
+              className=" hover:bg-offWhite rounded-md">
+              <Button
+                icon={<Trash size={18} />}
+                size="sm"
+                bgColor="transparent"
+                textColor="text-darkGrey">
                 Gliederungspunkt löschen
               </Button>
             </DropdownMenu.Item>
           )}
           {user?.role === UserRole.Judge && (
             <>
-              <DropdownMenu.Item onClick={() => resetLitigiousChecks()}>
-                <Button icon={<Circle size={18} />} size="sm">
-                  Alle Streitigkeitsmarkierungen zurücksetzen
+              <DropdownMenu.Item
+                onClick={() => resetLitigiousChecks()}
+                className=" hover:bg-offWhite rounded-md">
+                <Button
+                  icon={<Circle size={18} />}
+                  size="sm"
+                  bgColor="transparent"
+                  textColor="text-darkGrey">
+                  Alle Streitigkeitsmarkierungen des Gliederungspunktes
+                  zurücksetzen
                 </Button>
               </DropdownMenu.Item>
-              <DropdownMenu.Item onClick={() => setAllNotLitigious()}>
-                <Button icon={<CheckCircle size={18} />} size="sm">
-                  Alle Beiträge als unstreitig markieren
+              <DropdownMenu.Item
+                className=" hover:bg-offWhite rounded-md"
+                onClick={() => setAllNotLitigious()}>
+                <Button
+                  icon={<CheckCircle size={18} />}
+                  size="sm"
+                  bgColor="transparent"
+                  textColor="text-darkGrey">
+                  Alle Beiträge des Gliederungspunktes als unstreitig markieren
                 </Button>
               </DropdownMenu.Item>
-              <DropdownMenu.Item onClick={() => setAllLitigious()}>
-                <Button icon={<XCircle size={18} />} size="sm">
-                  Alle Beiträge als streitig markieren
+              <DropdownMenu.Item
+                onClick={() => setAllLitigious()}
+                className=" hover:bg-offWhite rounded-md">
+                <Button
+                  icon={<XCircle size={18} />}
+                  size="sm"
+                  bgColor="transparent"
+                  textColor="text-darkGrey">
+                  Alle Beiträge des Gliederungspunktes als streitig markieren
                 </Button>
               </DropdownMenu.Item>
             </>
