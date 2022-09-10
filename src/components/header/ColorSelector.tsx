@@ -58,7 +58,7 @@ export const ColorSelector = () => {
         </div>
       </div>
       {showColorSelectorMenu ? (
-        <div className="absolute select-none top-full right-0 flex flex-col bg-white shadow-md mt-4 rounded-lg p-4 gap-1 z-20">
+        <div className="absolute text-left select-none top-full right-0 flex flex-col bg-white shadow-md mt-4 rounded-lg p-4 gap-1 z-20">
           {/* Iterate through list with this element */}
           {colorSelection &&
             colorSelection.length > 0 &&
