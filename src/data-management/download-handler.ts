@@ -297,13 +297,34 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   let stringHtml = basisdokumentDOMRepresentation.outerHTML;
   console.log(stringHtml);
-  
 
   doc
     .html(stringHtml, {
       margin: 15,
     })
-    .then(() => doc.save(fileName));
+    .then(() => {
+      doc.addPage();
+      doc.setFontSize(8);
+      doc.text(
+        ".................................................................................................................................",
+        10,
+        60
+      );
+      doc.text("Vorname, Nachname", 10, 64);
+      doc.text(
+        ".................................................................................................................................",
+        10,
+        90
+      );
+      doc.text("Ort, Datum", 10, 94);
+      doc.text(
+        "...........................................................................",
+        10,
+        120
+      );
+      doc.text("Unterschrift", 10, 124);
+      doc.save(fileName);
+    });
 }
 
 export function downloadBasisdokument(
