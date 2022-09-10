@@ -74,7 +74,7 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
-  const { setBookmarks, deleteBookmarkByReference } = useBookmarks();
+  const { bookmarks, setBookmarks, deleteBookmarkByReference } = useBookmarks();
   const { setActiveSidebar } = useSidebar();
 
   const isJudge = viewedBy === UserRole.Judge;
@@ -121,6 +121,14 @@ export const Entry: React.FC<EntryProps> = ({
       });
       setActiveSidebar(SidebarState.Bookmarks);
     }
+  };
+
+  const getBookmarkTitle = () => {
+    if (!isBookmarked) return;
+    const bm = bookmarks.find(
+      (bookmark) => bookmark.associatedEntry === entry.id
+    );
+    return bm ? bm.title : "";
   };
 
   const addNote = (e: React.MouseEvent) => {
@@ -292,9 +300,13 @@ export const Entry: React.FC<EntryProps> = ({
                 <div className="flex gap-2">
                   <Tooltip
                     text={
-                      isBookmarked
-                        ? "Lesezeichen zu diesem Beitrag entfernen"
-                        : "Zu Lesezeichen hinzufügen"
+                      isBookmarked ? (
+                        <span>
+                          Lesezeichen <b>{getBookmarkTitle()}</b> entfernen
+                        </span>
+                      ) : (
+                        "Zu Lesezeichen hinzufügen"
+                      )
                     }>
                     <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
                       <BookmarkSimple
