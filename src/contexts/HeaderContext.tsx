@@ -36,12 +36,12 @@ export default interface IHeaderContext {
   setShowDropdownHeader: React.Dispatch<React.SetStateAction<boolean>>;
   setHighlighterData: React.Dispatch<
     React.SetStateAction<{
-      red: boolean;
-      orange: boolean;
       yellow: boolean;
-      green: boolean;
-      blue: boolean;
+      orange: boolean;
+      red: boolean;
       purple: boolean;
+      blue: boolean;
+      green: boolean;
     }>
   >;
   setHideEntriesHighlighter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -76,12 +76,12 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
     germanTitle: "Maus",
   });
   const [highlighterData, setHighlighterData] = useState({
-    red: true,
-    orange: true,
     yellow: true,
-    green: true,
-    blue: true,
+    orange: true,
+    red: true,
     purple: true,
+    blue: true,
+    green: true,
   });
   const [hideEntriesHighlighter, setHideEntriesHighlighter] =
     useState<IHeaderContext["hideEntriesHighlighter"]>(false);

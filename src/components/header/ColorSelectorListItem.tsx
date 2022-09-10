@@ -11,7 +11,13 @@ interface IProps {
   handleChange: any;
 }
 
-export const ColorSelectorListItem: React.FC<IProps> = ({ highlighter, setCurrentColorSelection, setShowColorSelectorMenu, getColorCode, handleChange }) => {
+export const ColorSelectorListItem: React.FC<IProps> = ({
+  highlighter,
+  setCurrentColorSelection,
+  setShowColorSelectorMenu,
+  getColorCode,
+  handleChange,
+}) => {
   const [inputSelected, setInputSelected] = useState<boolean>(false);
 
   return (
@@ -26,11 +32,13 @@ export const ColorSelectorListItem: React.FC<IProps> = ({ highlighter, setCurren
             });
             setShowColorSelectorMenu(false);
           }
-        }}
-      >
+        }}>
         {/*Color Circle*/}
         <div className="flex flex-row items-center justify-center p-2 gap-2">
-          <div className={`flex items-center justify-center w-5 h-5 shadow-inner shadow-2xl ${getColorCode(highlighter.color)} rounded-full `}>
+          <div
+            className={`flex items-center justify-center w-5 h-5 shadow-inner shadow-2xl ${getColorCode(
+              highlighter.color
+            )} rounded-full `}>
             <div className="border-white w-3 h-3 bg-transparent rounded-full bg-transparent border-[1px]"></div>
           </div>
         </div>
@@ -54,19 +62,24 @@ export const ColorSelectorListItem: React.FC<IProps> = ({ highlighter, setCurren
             }}
           />
         ) : (
-          <span className="w-[150px] text-sm font-medium text-clip overflow-hidden whitespace-nowrap">{highlighter.label}</span>
+          <span className="w-[150px] text-sm font-medium text-clip overflow-hidden whitespace-nowrap">
+            {highlighter.label}
+          </span>
         )}
       </div>
-      <Tooltip text="Markierung umbenennen">
-        {inputSelected ? (
-          <Check onClick={() => setInputSelected(false)} weight="bold" />
-        ) : (
-          <Pencil
-            onClick={() => {
-              setInputSelected(true);
-            }}
-          />
-        )}
+      <Tooltip
+        text={inputSelected ? "Benennung bestätigen" : "Markierung umbenennen"}>
+        <div className="hover:bg-offWhite rounded-md p-1">
+          {inputSelected ? (
+            <Check onClick={() => setInputSelected(false)} weight="bold" />
+          ) : (
+            <Pencil
+              onClick={() => {
+                setInputSelected(true);
+              }}
+            />
+          )}
+        </div>
       </Tooltip>
     </div>
   );
