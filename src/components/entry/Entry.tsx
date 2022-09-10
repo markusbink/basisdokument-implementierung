@@ -74,7 +74,7 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const [lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters] =
     useState<boolean>(false);
-  const { setBookmarks, deleteBookmarkByReference } = useBookmarks();
+  const { setBookmarks, deleteBookmarkByReference, bookmarks } = useBookmarks();
   const { setActiveSidebar } = useSidebar();
 
   const isJudge = viewedBy === UserRole.Judge;
@@ -122,6 +122,15 @@ export const Entry: React.FC<EntryProps> = ({
       setActiveSidebar(SidebarState.Bookmarks);
     }
   };
+
+  const getBookmark = () => {
+    return bookmarks.find((bookmark: IBookmark) => {
+      if (bookmark.associatedEntry === entry.id) {
+        return true;
+      }
+      return false;
+    })
+  }
 
   const addNote = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -293,7 +302,7 @@ export const Entry: React.FC<EntryProps> = ({
                   <Tooltip
                     text={
                       isBookmarked
-                        ? "Lesezeichen zu diesem Beitrag entfernen"
+                        ? "Lesezeichen: "+ getBookmark()?.title
                         : "Zu Lesezeichen hinzufügen"
                     }>
                     <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
