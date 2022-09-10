@@ -4,7 +4,6 @@ import { useUser } from "../contexts";
 import { UserRole } from "../types";
 import { Button } from "./Button";
 import { NewEntry } from "./entry";
-import cx from "classnames";
 
 interface AddEntryButtonsProps {
   sectionId: string;
