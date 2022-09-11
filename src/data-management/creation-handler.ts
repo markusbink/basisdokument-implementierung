@@ -1,11 +1,20 @@
 import { IStateUserInput } from "../types";
 
-export function createBasisdokument(prename: IStateUserInput["prename"], surname: IStateUserInput["surname"], role: IStateUserInput["role"], caseId: IStateUserInput["caseId"]) {
+export function createBasisdokument(
+  prename: IStateUserInput["prename"],
+  surname: IStateUserInput["surname"],
+  role: IStateUserInput["role"],
+  caseId: IStateUserInput["caseId"]
+) {
   const basisdokumentObject: any = {};
   basisdokumentObject["caseId"] = caseId;
   basisdokumentObject["currentVersion"] = 1;
   basisdokumentObject["versions"] = [];
-  basisdokumentObject["versions"].push({ author: prename + " " + surname, role: role, timestamp: "" });
+  basisdokumentObject["versions"].push({
+    author: prename + " " + surname,
+    role: role,
+    timestamp: "",
+  });
   basisdokumentObject["metadata"] = { plaintiff: "", defendant: "" };
   basisdokumentObject["entries"] = [];
   basisdokumentObject["sections"] = [];
@@ -14,7 +23,13 @@ export function createBasisdokument(prename: IStateUserInput["prename"], surname
   return basisdokumentObject;
 }
 
-export function createEditFile(prename: IStateUserInput["prename"], surname: IStateUserInput["surname"], role: IStateUserInput["role"], caseId: IStateUserInput["caseId"], version: number) {
+export function createEditFile(
+  prename: IStateUserInput["prename"],
+  surname: IStateUserInput["surname"],
+  role: IStateUserInput["role"],
+  caseId: IStateUserInput["caseId"],
+  version: number
+) {
   const editFileObject: any = {};
   editFileObject["caseId"] = caseId;
   editFileObject["currentVersion"] = version;
@@ -30,5 +45,6 @@ export function createEditFile(prename: IStateUserInput["prename"], surname: ISt
   editFileObject["notes"] = [];
   editFileObject["bookmarks"] = [];
   editFileObject["individualSorting"] = [];
+  editFileObject["individualEntrySorting"] = [];
   return editFileObject;
 }

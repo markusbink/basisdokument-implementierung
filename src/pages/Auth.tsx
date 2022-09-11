@@ -62,6 +62,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setLitigiousChecks,
     setCurrentVersion,
     setHighlightedEntries,
+    setIndividualEntrySorting,
   } = useCase();
   const { setVersionHistory, setColorSelection, setCurrentColorSelection } =
     useHeaderContext();
@@ -129,8 +130,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     // check if file exists and validate
     if (usage === UsageMode.Open) {
       if (
-        (!basisdokumentFilename.endsWith(".json") ||
-          typeof basisdokumentFile !== "string") ||
+        !basisdokumentFilename.endsWith(".json") ||
+        typeof basisdokumentFile !== "string" ||
         !basisdokumentFile
       ) {
         setErrorText(
@@ -261,6 +262,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setCurrentColorSelection(editFile.highlighter[0]);
     setIndividualSorting(editFile.individualSorting);
     setHighlightedEntries(editFile.highlightedEntries);
+    setIndividualEntrySorting(editFile.individualEntrySorting);
   };
 
   return (

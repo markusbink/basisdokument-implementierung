@@ -1,4 +1,4 @@
-import { IStateUserInput } from "../types";
+import { IndividualEntrySortingEntry, IStateUserInput } from "../types";
 
 export function updateSortingsIfVersionIsDifferent(
   basisdokumentObject: any,
@@ -6,9 +6,16 @@ export function updateSortingsIfVersionIsDifferent(
 ) {
   let sortingsOriginalOrderFromBasisdokumentFile: string[] = [];
   let sortingsFromEditFile: string[] = [];
+  let individualEntrySortingFromEditFile: IndividualEntrySortingEntry[] = [];
 
   for (const i in editFileObject["individualSorting"]) {
     sortingsFromEditFile.push(editFileObject["individualSorting"][i]);
+  }
+
+  for (const i in editFileObject["individualEntrySorting"]) {
+    individualEntrySortingFromEditFile.push(
+      editFileObject["individualEntrySorting"][i]
+    );
   }
 
   for (const i in basisdokumentObject["sections"]) {
@@ -29,12 +36,14 @@ export function updateSortingsIfVersionIsDifferent(
       sortingsFromEditFile = sortingsFromEditFile.filter((e) => e !== key);
     }
   });
+
   editFileObject["individualSorting"] = sortingsFromEditFile;
+  editFileObject["individualEntrySorting"] = individualEntrySortingFromEditFile;
   return editFileObject;
 }
 
-export function jsonToObject(json:string) {
- return JSON.parse(json);
+export function jsonToObject(json: string) {
+  return JSON.parse(json);
 }
 
 export function openBasisdokument(

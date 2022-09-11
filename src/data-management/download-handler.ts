@@ -7,6 +7,7 @@ import {
   IHint,
   ILitigiousCheck,
   IMetaData,
+  IndividualEntrySortingEntry,
   INote,
   ISection,
   IVersion,
@@ -316,7 +317,8 @@ export function downloadEditFile(
   colorSelection: IHighlighter[],
   notes: INote[],
   bookmarks: IBookmark[],
-  individualSorting: string[]
+  individualSorting: string[],
+  individualEntrySorting: IndividualEntrySortingEntry[]
 ) {
   let editFileObject: any = {};
   editFileObject["caseId"] = caseId;
@@ -327,6 +329,7 @@ export function downloadEditFile(
   editFileObject["notes"] = notes;
   editFileObject["bookmarks"] = bookmarks;
   editFileObject["individualSorting"] = individualSorting;
+  editFileObject["individualEntrySorting"] = individualEntrySorting;
   downloadObjectAsJSON(
     editFileObject,
     "bearbeitungsdatei_version_" + currentVersion + "_az_" + caseId
