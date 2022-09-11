@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/44339207/189520503-e6486caf-d90b-4bf9-b090-98c90c49317b.png" width="100%">
+  <img src="https://user-images.githubusercontent.com/44339207/189520665-5497d963-c68a-4188-a2b0-859851b58973.png" width="100%">
 </p>
 
 # Basisdokument
