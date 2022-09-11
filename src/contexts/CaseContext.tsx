@@ -111,14 +111,6 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
         return acc;
       }, [] as IndividualEntrySortingEntry[]);
       setIndividualEntrySorting(initialSorting);
-
-      // const individualSortingBySection = initialSorting.reduce((acc, entry) => {
-      //   acc[entry.sectionId] ||= [];
-      //   acc[entry.sectionId].push(entry);
-      //   return acc;
-      // }, {} as { [key: string]: IndividualEntrySortingEntry[] });
-
-      // console.log({ individualSortingBySection });
     }
   }, [entries, individualEntrySorting]);
 

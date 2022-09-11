@@ -30,7 +30,7 @@ export const JudgeDiscussion = () => {
               <div className="space-y-4">
                 {entriesForSection.map((entrySection, y) => {
                   return (
-                    <EntryRow>
+                    <EntryRow key={entrySection.rowId}>
                       {Object.keys(entrySection.columns).map((_, x) => (
                         <DroppableColumn
                           columnRole={
