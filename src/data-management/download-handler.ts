@@ -22,7 +22,7 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   });
 
   // Save the file
-  saveAs(fileToSave, fileName);
+  saveAs(fileToSave, fileName+".json");
 }
 
 function resetFontSize(parentElement: any) {
