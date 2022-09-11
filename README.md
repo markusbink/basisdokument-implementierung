@@ -2,7 +2,7 @@
   <img src="https://user-images.githubusercontent.com/44339207/189524995-fa130521-2814-493b-8998-f54b630e8a88.png" width="100%">
 </p>
 
-Aktuelle Version verfügbar unter: https://markusbink.github.io/basisdokument-implementierung/
+<b>Aktuelle Version verfügbar unter:</b> https://markusbink.github.io/basisdokument-implementierung/
 
 # Basisdokument
 
