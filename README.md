@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/44339207/189524995-fa130521-2814-493b-8998-f54b630e8a88.png" width="100%">
+</p>
+
+<b>Aktuelle Version verfügbar unter:</b> https://markusbink.github.io/basisdokument-implementierung/
+
 # Basisdokument
 
 *Course: MEI-M26 Projektseminar (P-(D-)36633 Praxisseminar) im M.Sc. Medieninformatik, Sommersemester 2022*

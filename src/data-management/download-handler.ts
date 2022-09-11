@@ -22,7 +22,7 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   });
 
   // Save the file
-  saveAs(fileToSave, fileName);
+  saveAs(fileToSave, fileName+".json");
 }
 
 function resetFontSize(parentElement: any) {
@@ -295,11 +295,24 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     element.style.margin = "0px";
   }
 
+  let allStrongItems = basisdokumentDOMRepresentation.querySelectorAll("strong");
+  for (let index = 0; index < allStrongItems.length; index++) {
+    const element = allStrongItems[index];
+    element.style.marginBottom = "1px";
+  }
+
+  let allItalicItems = basisdokumentDOMRepresentation.querySelectorAll("i");
+  for (let index = 0; index < allItalicItems.length; index++) {
+    const element = allItalicItems[index];
+    element.style.marginBottom = "1px";
+  }
+
   let stringHtml = basisdokumentDOMRepresentation.outerHTML;
   console.log(stringHtml);
 
   doc
     .html(stringHtml, {
+      autoPaging: 'text',
       margin: 15,
     })
     .then(() => {

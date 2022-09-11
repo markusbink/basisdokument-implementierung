@@ -1,11 +1,12 @@
 import { BookmarkSimple, Eye, Trash } from "phosphor-react";
-import React from "react";
+import React, { useState } from "react";
 import { useBookmarks, useCase } from "../../contexts";
 import { IBookmark } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import cx from "classnames";
+import { ErrorPopup } from "../ErrorPopup";
 
 export interface BookmarkProps {
   bookmark: IBookmark;
@@ -14,6 +15,8 @@ export interface BookmarkProps {
 export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
   const { setBookmarks, setBookmarkEditMode } = useBookmarks();
   const { entries } = useCase();
+  const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
+    useState<boolean>(false);
 
   let entryCode;
   try {
@@ -111,10 +114,37 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
           textColor="text-darkRed"
           hasText={false}
           alternativePadding="p-1"
-          onClick={deleteBookmark}
+          onClick={() => setIsDeleteErrorVisible(true)}
           icon={<Trash size={16} />}
         />
       </div>
+      <ErrorPopup isVisible={isDeleteErrorVisible}>
+        <div className="flex flex-col items-center justify-center space-y-8">
+          <p className="text-center text-base">
+            Sind Sie sicher, dass Sie das Lesezeichen <b>{bookmark.title}</b>{" "}
+            löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+              }}>
+              Abbrechen
+            </Button>
+            <Button
+              bgColor="bg-lightRed hover:bg-darkRed/25"
+              textColor="text-darkRed font-bold"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+                deleteBookmark();
+              }}>
+              Lesezeichen löschen
+            </Button>
+          </div>
+        </div>
+      </ErrorPopup>
     </div>
   );
 };
