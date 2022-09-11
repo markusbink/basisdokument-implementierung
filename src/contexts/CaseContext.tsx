@@ -11,15 +11,11 @@ import {
   IHighlightedEntry,
   ILitigiousCheck,
   IMetaData,
+  IndividualEntrySortingEntry,
   UserRole,
 } from "../types";
 import { useSection } from "./SectionContext";
-
-export interface IndividualEntrySortingEntry {
-  sectionId: string;
-  columns: string[][]; // [0] = plaintiff, [1] = defendant
-}
-
+import { v4 as uuidv4 } from "uuid";
 interface ICaseContext {
   caseId: string;
   setCaseId: Dispatch<SetStateAction<string>>;
@@ -100,32 +96,29 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
       const initialSorting = entries.reduce((acc, entry) => {
         // if the accumulator array already contains a section with the sectionId, add the entryId to the respective column
         // else create a new entry with the sectionId and add the entryId to the respective column
-        const existingSection = acc.find(
-          (accEntry) => accEntry.sectionId === entry.sectionId
-        );
-        if (existingSection) {
-          if (entry.role === UserRole.Plaintiff) {
-            existingSection.columns[0].push(entry.id);
-          } else {
-            existingSection.columns[1].push(entry.id);
-          }
+        const newSection: IndividualEntrySortingEntry = {
+          sectionId: entry.sectionId,
+          rowId: uuidv4(),
+          columns: [[], []],
+        };
+        if (entry.role === UserRole.Plaintiff) {
+          newSection.columns[0].push(entry.id);
         } else {
-          const newSection: IndividualEntrySortingEntry = {
-            sectionId: entry.sectionId,
-            columns: [[], []],
-          };
-          if (entry.role === UserRole.Plaintiff) {
-            newSection.columns[0].push(entry.id);
-          } else {
-            newSection.columns[1].push(entry.id);
-          }
-          acc.push(newSection);
+          newSection.columns[1].push(entry.id);
         }
+        acc.push(newSection);
 
         return acc;
       }, [] as IndividualEntrySortingEntry[]);
-
       setIndividualEntrySorting(initialSorting);
+
+      // const individualSortingBySection = initialSorting.reduce((acc, entry) => {
+      //   acc[entry.sectionId] ||= [];
+      //   acc[entry.sectionId].push(entry);
+      //   return acc;
+      // }, {} as { [key: string]: IndividualEntrySortingEntry[] });
+
+      // console.log({ individualSortingBySection });
     }
   }, [entries, individualEntrySorting]);
 

@@ -1,7 +1,13 @@
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useCase, useHeaderContext, useSection, useUser } from "../contexts";
-import { IEntry, ISection, Sorting, UserRole } from "../types";
+import {
+  IEntry,
+  IndividualEntrySortingEntry,
+  ISection,
+  Sorting,
+  UserRole,
+} from "../types";
 import { getOriginalSortingPosition } from "../util/get-original-sorting-position";
 import { AddEntryButtons } from "./AddEntryButtons";
 import { AddSection } from "./AddSection";
@@ -13,6 +19,7 @@ import React, { Dispatch, useEffect, useState } from "react";
 import { getEntryById } from "../contexts/CaseContext";
 import { userInfo } from "os";
 import { JudgeDiscussion } from "./JudgeDiscussion";
+import { DraggableEntry, DroppableColumn, EntryRow } from "./judge-sorting";
 
 export const Discussion = () => {
   const { groupedEntries, individualEntrySorting, setIndividualEntrySorting } =
@@ -87,7 +94,52 @@ export const Discussion = () => {
               </div>
             );
           })} */}
-          <JudgeDiscussion />
+          {getRequestedSorting(sectionList).map((section, index) => {
+            const entriesForSection: IndividualEntrySortingEntry[] =
+              individualEntrySorting.filter(
+                (sectionSorting) => sectionSorting.sectionId === section.id
+              );
+
+            return (
+              <div key={section.id}>
+                <SectionHeader
+                  sectionId={getOriginalSortingPosition(
+                    sectionList,
+                    section.id
+                  )}
+                  section={section}
+                  position={index}
+                />
+                {entriesForSection.map((entrySection, y) => {
+                  return (
+                    <div className="space-y-4">
+                      <EntryRow>
+                        {Object.keys(entrySection.columns).map((_, x) => (
+                          <DroppableColumn
+                            columnRole={
+                              x === 0 ? UserRole.Plaintiff : UserRole.Defendant
+                            }
+                            position={{ x, y: entrySection.rowId }}>
+                            {entrySection.columns[x].map(
+                              (entryId: string, index) => (
+                                <DraggableEntry
+                                  entryId={entryId}
+                                  position={{ x, y: entrySection.rowId }}
+                                  index={index}
+                                />
+                              )
+                            )}
+                          </DroppableColumn>
+                        ))}
+                      </EntryRow>
+                    </div>
+                  );
+                })}
+                <AddEntryButtons sectionId={section.id} />
+              </div>
+            );
+          })}
+
           <AddSection />
         </div>
       </div>
