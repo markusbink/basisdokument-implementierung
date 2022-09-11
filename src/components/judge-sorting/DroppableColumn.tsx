@@ -51,7 +51,7 @@ export const DroppableColumn = ({
     setIndividualEntrySorting(newSorting);
   };
 
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: IDragItemType.ENTRY,
     drop: (_: any, monitor) => {
       const oldPosition = monitor.getItem().position;
@@ -64,15 +64,19 @@ export const DroppableColumn = ({
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop(),
     }),
   }));
 
   return (
     <div
       ref={drop}
-      className={cx("column p-4 border border-red-500 text-black", {
-        "bg-red-100": isOver,
-      })}>
+      className={cx(
+        "column p-4 rounded-lg border-2 border-dotted border-gray-400  text-black",
+        {
+          "bg-blue-600/25": isOver && canDrop,
+        }
+      )}>
       {children}
     </div>
   );

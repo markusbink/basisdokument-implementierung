@@ -21,15 +21,15 @@ export const JudgeDiscussion = () => {
             );
 
           return (
-            <div key={section.id}>
+            <div className="space-y-2" key={section.id}>
               <SectionHeader
                 sectionId={getOriginalSortingPosition(sectionList, section.id)}
                 section={section}
                 position={index}
               />
-              {entriesForSection.map((entrySection, y) => {
-                return (
-                  <div className="space-y-4">
+              <div className="space-y-4">
+                {entriesForSection.map((entrySection, y) => {
+                  return (
                     <EntryRow>
                       {Object.keys(entrySection.columns).map((_, x) => (
                         <DroppableColumn
@@ -49,9 +49,9 @@ export const JudgeDiscussion = () => {
                         </DroppableColumn>
                       ))}
                     </EntryRow>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
               <AddEntryButtons sectionId={section.id} />
             </div>
           );
