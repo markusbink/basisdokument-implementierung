@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/44339207/189520503-e6486caf-d90b-4bf9-b090-98c90c49317b.png" width="100%">
+</p>
+
 # Basisdokument
 
 *Course: MEI-M26 Projektseminar (P-(D-)36633 Praxisseminar) im M.Sc. Medieninformatik, Sommersemester 2022*
