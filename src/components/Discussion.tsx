@@ -20,6 +20,7 @@ import { getEntryById } from "../contexts/CaseContext";
 import { userInfo } from "os";
 import { JudgeDiscussion } from "./JudgeDiscussion";
 import { DraggableEntry, DroppableColumn, EntryRow } from "./judge-sorting";
+import { getRequestedSorting } from "../util/get-requested-sorting";
 
 export const Discussion = () => {
   const { groupedEntries, individualEntrySorting, setIndividualEntrySorting } =
@@ -31,20 +32,8 @@ export const Discussion = () => {
     selectedVersion,
     versionHistory,
     highlightElementsWithSpecificVersion,
+    showEntrySorting,
   } = useHeaderContext();
-
-  const getRequestedSorting = (sectionList: ISection[]) => {
-    if (selectedSorting === Sorting.Privat) {
-      let privateSorting: ISection[] = [];
-      individualSorting.forEach((id: string) => {
-        let section: any = sectionList.find((section) => section.id === id);
-        privateSorting.push(section);
-      });
-      return privateSorting;
-    } else {
-      return sectionList;
-    }
-  };
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -74,72 +63,36 @@ export const Discussion = () => {
             <MetaData owner={UserRole.Plaintiff} />
             <MetaData owner={UserRole.Defendant} />
           </div>
-          {/* {getRequestedSorting(sectionList).map((section, index) => {
-            const sectionEntries = groupedEntries[section.id];
+          {selectedSorting === Sorting.Privat && showEntrySorting ? (
+            <JudgeDiscussion />
+          ) : (
+            <>
+              {getRequestedSorting(
+                sectionList,
+                individualSorting,
+                selectedSorting
+              ).map((section, index) => {
+                const sectionEntries = groupedEntries[section.id];
 
-            return (
-              <div key={section.id}>
-                <SectionHeader
-                  sectionId={getOriginalSortingPosition(
-                    sectionList,
-                    section.id
-                  )}
-                  section={section}
-                  position={index}
-                />
-                <div className="space-y-4">
-                  <EntryList entries={sectionEntries?.parent || []} />
-                  <AddEntryButtons sectionId={section.id} />
-                </div>
-              </div>
-            );
-          })} */}
-          {getRequestedSorting(sectionList).map((section, index) => {
-            const entriesForSection: IndividualEntrySortingEntry[] =
-              individualEntrySorting.filter(
-                (sectionSorting) => sectionSorting.sectionId === section.id
-              );
-
-            return (
-              <div key={section.id}>
-                <SectionHeader
-                  sectionId={getOriginalSortingPosition(
-                    sectionList,
-                    section.id
-                  )}
-                  section={section}
-                  position={index}
-                />
-                {entriesForSection.map((entrySection, y) => {
-                  return (
+                return (
+                  <div key={section.id}>
+                    <SectionHeader
+                      sectionId={getOriginalSortingPosition(
+                        sectionList,
+                        section.id
+                      )}
+                      section={section}
+                      position={index}
+                    />
                     <div className="space-y-4">
-                      <EntryRow>
-                        {Object.keys(entrySection.columns).map((_, x) => (
-                          <DroppableColumn
-                            columnRole={
-                              x === 0 ? UserRole.Plaintiff : UserRole.Defendant
-                            }
-                            position={{ x, y: entrySection.rowId }}>
-                            {entrySection.columns[x].map(
-                              (entryId: string, index) => (
-                                <DraggableEntry
-                                  entryId={entryId}
-                                  position={{ x, y: entrySection.rowId }}
-                                  index={index}
-                                />
-                              )
-                            )}
-                          </DroppableColumn>
-                        ))}
-                      </EntryRow>
+                      <EntryList entries={sectionEntries?.parent || []} />
+                      <AddEntryButtons sectionId={section.id} />
                     </div>
-                  );
-                })}
-                <AddEntryButtons sectionId={section.id} />
-              </div>
-            );
-          })}
-
+                  </div>
+                );
+              })}
+            </>
+          )}
           <AddSection />
         </div>
       </div>
