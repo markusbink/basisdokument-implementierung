@@ -1,6 +1,7 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/44339207/189520665-5497d963-c68a-4188-a2b0-859851b58973.png" width="100%">
+  <img src="https://user-images.githubusercontent.com/44339207/189524995-fa130521-2814-493b-8998-f54b630e8a88.png" width="100%">
 </p>
+
 
 # Basisdokument
 
