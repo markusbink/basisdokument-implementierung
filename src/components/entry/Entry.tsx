@@ -43,7 +43,12 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { currentVersion, groupedEntries, setEntries } = useCase();
+  const {
+    currentVersion,
+    groupedEntries,
+    setEntries,
+    setIndividualEntrySorting,
+  } = useCase();
   const {
     versionHistory,
     showColumnView,
@@ -53,7 +58,6 @@ export const Entry: React.FC<EntryProps> = ({
     highlightElementsWithSpecificVersion,
     selectedVersion,
     showEntrySorting,
-    setShowEntrySorting,
   } = useHeaderContext();
 
   const { setShowNotePopup, setAssociatedEntryId } = useNotes();
@@ -179,6 +183,20 @@ export const Entry: React.FC<EntryProps> = ({
           return entry;
         })
     );
+
+    setIndividualEntrySorting((prevSorting) => {
+      const newSorting = [...prevSorting];
+      // Remove the row from the sorting array if one of the columns contains the entryId
+      const columnIndex = isPlaintiff ? 0 : 1;
+      const indexOfRowToDelete = newSorting.findIndex((row) =>
+        row.columns[columnIndex].includes(entryId)
+      );
+      if (indexOfRowToDelete !== -1) {
+        newSorting.splice(indexOfRowToDelete, 1);
+      }
+
+      return newSorting;
+    });
   };
 
   const updateEntry = (plainText: string, rawHtml: string) => {
