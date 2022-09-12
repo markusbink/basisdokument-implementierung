@@ -24,6 +24,8 @@ export const DroppableColumn = ({
     to: { x: number; y: string },
     indexOfEntry: number
   ) => {
+    console.log({ indexOfEntry });
+
     const newSorting = [...individualEntrySorting];
     // Remove dragged item by the rowId
     const draggedItem = newSorting.find((item) => item.rowId === from.y)
@@ -42,10 +44,10 @@ export const DroppableColumn = ({
       1
     );
 
-    // Add dropped item by the rowId
+    // Add dropped item at the end of the column
     newSorting
       .find((item) => item.rowId === to.y)
-      ?.columns[to.x].unshift(draggedItem!!);
+      ?.columns[to.x].push(draggedItem!!);
 
     // Update State
     setIndividualEntrySorting(newSorting);
