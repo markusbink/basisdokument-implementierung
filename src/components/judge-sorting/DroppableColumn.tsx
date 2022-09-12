@@ -1,17 +1,20 @@
-import { useDrop } from "react-dnd";
-import { useCase } from "../../contexts";
-import { IDragItemType, UserRole } from "../../types";
 import cx from "classnames";
 import { Plus } from "phosphor-react";
+import { useDrop } from "react-dnd";
+import { v4 as uuidv4 } from "uuid";
+import { useCase } from "../../contexts";
+import { IDragItemType, UserRole } from "../../types";
 
-export const DroppableColumn = ({
-  position,
-  columnRole,
-  children,
-}: {
+interface DroppableColumnProps {
   position: { sectionId: string; rowId: string };
   columnRole: UserRole;
   children: React.ReactNode;
+}
+
+export const DroppableColumn: React.FC<DroppableColumnProps> = ({
+  position,
+  columnRole,
+  children,
 }) => {
   const { individualEntrySorting, setIndividualEntrySorting } = useCase();
 
@@ -47,6 +50,20 @@ export const DroppableColumn = ({
     setIndividualEntrySorting(newSorting);
   };
 
+  const addRowAfter = (sectionId: string, rowId: string) => {
+    const newSorting = { ...individualEntrySorting };
+    const rowIndex = newSorting[sectionId].findIndex(
+      (row) => row.rowId === rowId
+    );
+    const newRow = {
+      rowId: uuidv4(),
+      columns: [[], []],
+    };
+
+    newSorting[sectionId].splice(rowIndex + 1, 0, newRow);
+    setIndividualEntrySorting(newSorting);
+  };
+
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: IDragItemType.ENTRY,
     drop: (_: any, monitor) => {
@@ -74,7 +91,9 @@ export const DroppableColumn = ({
         }
       )}>
       {children}
-      <button className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-darkGrey text-white p-1 rounded-full">
+      <button
+        onClick={() => addRowAfter(position.sectionId, position.rowId)}
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-darkGrey text-white p-1 rounded-full">
         <Plus width={18} height={18} weight="bold" />
       </button>
     </div>
