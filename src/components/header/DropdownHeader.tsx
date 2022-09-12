@@ -83,7 +83,8 @@ export const DropdownHeader: React.FC<any> = () => {
             setSelectedSorting={setSelectedSorting}
           />
           {selectedSorting === Sorting.Privat ? <SortingMenu /> : null}
-          {user?.role === UserRole.Judge ? (
+          {user?.role === UserRole.Judge &&
+          selectedSorting === Sorting.Privat ? (
             <div className="flex flex-row items-center gap-2">
               <Tooltip
                 asChild
