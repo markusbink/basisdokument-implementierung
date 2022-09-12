@@ -25,7 +25,7 @@ export const JudgeDiscussion = () => {
                 position={index}
               />
               <div className="space-y-8">
-                {entriesForSection.map((entrySection, index) => {
+                {entriesForSection?.map((entrySection, index) => {
                   return (
                     <EntryRow
                       key={entrySection.rowId}
