@@ -2,6 +2,7 @@ import { useDrop } from "react-dnd";
 import { useCase } from "../../contexts";
 import { IDragItemType, UserRole } from "../../types";
 import cx from "classnames";
+import { Plus } from "phosphor-react";
 
 export const DroppableColumn = ({
   position,
@@ -24,8 +25,6 @@ export const DroppableColumn = ({
     to: { x: number; y: string },
     indexOfEntry: number
   ) => {
-    console.log({ indexOfEntry });
-
     const newSorting = [...individualEntrySorting];
     // Remove dragged item by the rowId
     const draggedItem = newSorting.find((item) => item.rowId === from.y)
@@ -74,12 +73,15 @@ export const DroppableColumn = ({
     <div
       ref={drop}
       className={cx(
-        "column p-4 rounded-lg border-2 border-dotted border-gray-400  text-black",
+        "relative column p-4 rounded-lg border-2 border-dotted border-gray-400  text-black",
         {
           "bg-blue-600/25": isOver && canDrop,
         }
       )}>
       {children}
+      <button className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-darkGrey text-white p-1 rounded-full">
+        <Plus width={18} height={18} weight="bold" />
+      </button>
     </div>
   );
 };

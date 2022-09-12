@@ -11,6 +11,8 @@ export const JudgeDiscussion = () => {
   const { individualSorting, sectionList } = useSection();
   const { selectedSorting } = useHeaderContext();
 
+  console.log({ individualEntrySorting });
+
   return (
     <>
       {getRequestedSorting(sectionList, individualSorting, selectedSorting).map(
@@ -27,7 +29,7 @@ export const JudgeDiscussion = () => {
                 section={section}
                 position={index}
               />
-              <div className="space-y-4">
+              <div className="space-y-8">
                 {entriesForSection.map((entrySection, y) => {
                   return (
                     <EntryRow key={entrySection.rowId}>
