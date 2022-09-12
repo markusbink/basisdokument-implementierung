@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { useCase, useSection } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
-import { IEntry, UserRole } from "../../types";
+import { IEntry, IndividualEntrySortingEntry, UserRole } from "../../types";
 import { getOriginalSortingPosition } from "../../util/get-original-sorting-position";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -33,7 +33,8 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
   const [authorName, setAuthorName] = useState<string>("");
   const { user } = useUser();
-  const { currentVersion, entries, setEntries } = useCase();
+  const { currentVersion, entries, setEntries, setIndividualEntrySorting } =
+    useCase();
   const { sectionList } = useSection();
 
   const isPlaintiff = roleForNewEntry === UserRole.Plaintiff;
@@ -63,7 +64,19 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       entry.associatedEntry = associatedEntry;
     }
 
+    const individualEntrySortingEntry: IndividualEntrySortingEntry = {
+      sectionId: entry.sectionId,
+      rowId: uuidv4(),
+      columns: [[], []],
+    };
+    const columnIndex = isPlaintiff ? 0 : 1;
+    individualEntrySortingEntry.columns[columnIndex].push(entry.id);
+
     setEntries((prevEntries) => [...prevEntries, entry]);
+    setIndividualEntrySorting((prevEntrySorting) => [
+      ...prevEntrySorting,
+      individualEntrySortingEntry,
+    ]);
     setIsNewEntryVisible(false);
     setIsExpanded(false);
   };
