@@ -199,6 +199,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           role
         );
         if (editFile) {
+          console.log("Opening edit file");
+
           editFileObject = openEditFile(
             basisdokumentFile,
             editFile,
@@ -212,6 +214,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             basisdokumentObject.caseId,
             basisdokumentObject.currentVersion
           );
+
           editFileObject = updateSortingsIfVersionIsDifferent(
             basisdokumentObject,
             editFileObject

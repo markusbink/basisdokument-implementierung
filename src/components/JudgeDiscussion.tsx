@@ -33,6 +33,7 @@ export const JudgeDiscussion = () => {
                     <EntryRow key={entrySection.rowId}>
                       {Object.keys(entrySection.columns).map((_, x) => (
                         <DroppableColumn
+                          key={`${entrySection.rowId}-${x}`}
                           columnRole={
                             x === 0 ? UserRole.Plaintiff : UserRole.Defendant
                           }
@@ -40,6 +41,7 @@ export const JudgeDiscussion = () => {
                           {entrySection.columns[x].map(
                             (entryId: string, index) => (
                               <DraggableEntry
+                                key={entryId}
                                 entryId={entryId}
                                 position={{ x, y: entrySection.rowId }}
                                 index={index}
