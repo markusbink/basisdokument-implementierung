@@ -65,7 +65,6 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     }
 
     const individualEntrySortingEntry: IndividualEntrySortingEntry = {
-      sectionId: entry.sectionId,
       rowId: uuidv4(),
       columns: [[], []],
     };
@@ -73,10 +72,13 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     individualEntrySortingEntry.columns[columnIndex].push(entry.id);
 
     setEntries((prevEntries) => [...prevEntries, entry]);
-    setIndividualEntrySorting((prevEntrySorting) => [
-      ...prevEntrySorting,
-      individualEntrySortingEntry,
-    ]);
+
+    setIndividualEntrySorting((prevEntrySorting) => {
+      const newEntrySorting = { ...prevEntrySorting };
+      newEntrySorting[sectionId].push(individualEntrySortingEntry);
+      return newEntrySorting;
+    });
+
     setIsNewEntryVisible(false);
     setIsExpanded(false);
   };

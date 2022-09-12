@@ -31,9 +31,9 @@ interface ICaseContext {
   setHighlightedEntries: Dispatch<SetStateAction<IHighlightedEntry[]>>;
   currentVersion: number;
   setCurrentVersion: Dispatch<SetStateAction<number>>;
-  individualEntrySorting: IndividualEntrySortingEntry[];
+  individualEntrySorting: { [key: string]: IndividualEntrySortingEntry[] };
   setIndividualEntrySorting: Dispatch<
-    SetStateAction<IndividualEntrySortingEntry[]>
+    SetStateAction<{ [key: string]: IndividualEntrySortingEntry[] }>
   >;
 }
 
@@ -84,32 +84,37 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
     };
   }>({});
   const [currentVersion, setCurrentVersion] = useState<number>(0);
-  const [individualEntrySorting, setIndividualEntrySorting] = useState<
-    IndividualEntrySortingEntry[]
-  >([]);
+  const [individualEntrySorting, setIndividualEntrySorting] = useState<{
+    [key: string]: IndividualEntrySortingEntry[];
+  }>({});
 
   useEffect(() => {
-    if (individualEntrySorting.length === 0 && entries.length > 0) {
-      // set the initial sorting based on the entries with the following shape:
-      //{sectionId: string, columns: {plaintiff: string[], defendant: string[]}}
-
+    if (
+      Object.keys(individualEntrySorting).length === 0 &&
+      entries.length > 0
+    ) {
+      // set the initial sorting based on the entries
       const initialSorting = entries.reduce((acc, entry) => {
         // if the accumulator array already contains a section with the sectionId, add the entryId to the respective column
         // else create a new entry with the sectionId and add the entryId to the respective column
-        const newSection: IndividualEntrySortingEntry = {
-          sectionId: entry.sectionId,
+        acc[entry.sectionId] ||= [];
+
+        const entrySorting: IndividualEntrySortingEntry = {
           rowId: uuidv4(),
           columns: [[], []],
         };
+
         if (entry.role === UserRole.Plaintiff) {
-          newSection.columns[0].push(entry.id);
+          entrySorting.columns[0].push(entry.id);
         } else {
-          newSection.columns[1].push(entry.id);
+          entrySorting.columns[1].push(entry.id);
         }
-        acc.push(newSection);
+
+        acc[entry.sectionId].push(entrySorting);
 
         return acc;
-      }, [] as IndividualEntrySortingEntry[]);
+      }, {} as { [key: string]: IndividualEntrySortingEntry[] });
+
       setIndividualEntrySorting(initialSorting);
     }
   }, [entries, individualEntrySorting]);

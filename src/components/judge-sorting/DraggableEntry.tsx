@@ -11,7 +11,7 @@ export const DraggableEntry = ({
   index,
 }: {
   entryId: string;
-  position: { x: number; y: string };
+  position: { sectionId: string; rowId: string; column: number };
   index: number;
 }) => {
   const { user } = useUser();

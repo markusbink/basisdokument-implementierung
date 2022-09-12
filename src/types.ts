@@ -79,7 +79,6 @@ export enum IDragItemType {
 }
 
 export interface IndividualEntrySortingEntry {
-  sectionId: string;
   rowId: string;
   columns: string[][]; // [0] = plaintiff, [1] = defendant
 }

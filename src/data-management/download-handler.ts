@@ -318,7 +318,7 @@ export function downloadEditFile(
   notes: INote[],
   bookmarks: IBookmark[],
   individualSorting: string[],
-  individualEntrySorting: IndividualEntrySortingEntry[]
+  individualEntrySorting: { [key: string]: IndividualEntrySortingEntry[] }
 ) {
   let editFileObject: any = {};
   editFileObject["caseId"] = caseId;

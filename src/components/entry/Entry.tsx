@@ -15,7 +15,14 @@ import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext, useNotes, useHints } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEntry, UserRole, Tool, IBookmark, SidebarState } from "../../types";
+import {
+  IEntry,
+  UserRole,
+  Tool,
+  IBookmark,
+  SidebarState,
+  IndividualEntrySortingEntry,
+} from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
@@ -184,18 +191,31 @@ export const Entry: React.FC<EntryProps> = ({
         })
     );
 
-    setIndividualEntrySorting((prevSorting) => {
-      const newSorting = [...prevSorting];
-      // Remove the row from the sorting array if one of the columns contains the entryId
+    setIndividualEntrySorting((prevEntrySorting) => {
+      let newEntrySorting: { [key: string]: IndividualEntrySortingEntry[] } = {
+        ...prevEntrySorting,
+      };
       const columnIndex = isPlaintiff ? 0 : 1;
-      const indexOfRowToDelete = newSorting.findIndex((row) =>
-        row.columns[columnIndex].includes(entryId)
-      );
-      if (indexOfRowToDelete !== -1) {
-        newSorting.splice(indexOfRowToDelete, 1);
-      }
 
-      return newSorting;
+      // Remove the entry from the sorting array
+      newEntrySorting = Object.keys(prevEntrySorting).reduce(
+        (acc, sectionId) => {
+          const sectionSorting = newEntrySorting[sectionId].map((row) => {
+            if (row.columns[columnIndex].includes(entryId)) {
+              row.columns[columnIndex].filter((id) => id !== entryId);
+              return row;
+            }
+            return row;
+          });
+
+          acc[sectionId] = sectionSorting;
+
+          return acc;
+        },
+        {} as { [key: string]: IndividualEntrySortingEntry[] }
+      );
+
+      return newEntrySorting;
     });
   };
 

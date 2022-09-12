@@ -13,7 +13,9 @@ export function updateSortingsIfVersionIsDifferent(
   let sortingsOriginalOrderFromBasisdokumentFile: string[] = [];
   let sortingsFromEditFile: string[] = [];
   let entries: IEntry[] = [];
-  let individualEntrySortingFromEditFile: IndividualEntrySortingEntry[] = [];
+  let individualEntrySortingFromEditFile: {
+    [key: string]: IndividualEntrySortingEntry[];
+  } = {};
 
   for (const i in editFileObject["individualSorting"]) {
     sortingsFromEditFile.push(editFileObject["individualSorting"][i]);
@@ -25,15 +27,9 @@ export function updateSortingsIfVersionIsDifferent(
     );
   }
 
-  for (const i in editFileObject["individualEntrySorting"]) {
-    individualEntrySortingFromEditFile.push(
-      editFileObject["individualEntrySorting"][i]
-    );
-  }
-
-  for (const i in basisdokumentObject["entries"]) {
-    entries.push(basisdokumentObject["entries"][i]);
-  }
+  individualEntrySortingFromEditFile =
+    editFileObject["individualEntrySorting"] || {};
+  entries = basisdokumentObject["entries"];
 
   // we need to add sections in the edit file that are in the uploaded basisdokument but not in the edit file
   sortingsOriginalOrderFromBasisdokumentFile.forEach((key) => {
@@ -51,46 +47,72 @@ export function updateSortingsIfVersionIsDifferent(
 
   // add rows to individualEntrySorting that are in the uploaded basisdokument but not in the edit file
   entries.forEach((entry) => {
-    // if the entry is not in the columns of the individualEntrySorting, we need to add it
     const columnIndex = entry.role === UserRole.Plaintiff ? 0 : 1;
 
+    // if the entry is not in the columns of the individualEntrySorting, we need to add it
     if (
-      !individualEntrySortingFromEditFile.some((individualEntry) =>
-        individualEntry.columns[columnIndex].includes(entry.id)
+      !individualEntrySortingFromEditFile[entry.sectionId]?.some(
+        (individualEntry) =>
+          individualEntry.columns.some((column) => column.includes(entry.id))
       )
     ) {
-      const individualEntrySortingEntry: IndividualEntrySortingEntry = {
-        sectionId: entry.sectionId,
+      const entrySorting: IndividualEntrySortingEntry = {
         rowId: uuidv4(),
         columns: [[], []],
       };
-      individualEntrySortingEntry.columns[columnIndex].push(entry.id);
-      individualEntrySortingFromEditFile.push(individualEntrySortingEntry);
+
+      entrySorting.columns[columnIndex].push(entry.id);
+      individualEntrySortingFromEditFile[entry.sectionId]?.push(entrySorting);
     }
   });
 
   // Remove entryIds from columns of the individualEntrySorting that are not in the uploaded basisdokument entries
-  individualEntrySortingFromEditFile = individualEntrySortingFromEditFile.map(
-    (individualEntry) => {
-      individualEntry.columns[0] = individualEntry.columns[0].filter(
-        (entryId) => entries.some((entry) => entry.id === entryId)
-      );
-      individualEntry.columns[1] = individualEntry.columns[1].filter(
-        (entryId) => entries.some((entry) => entry.id === entryId)
-      );
-      return individualEntry;
-    }
-  );
+  individualEntrySortingFromEditFile = Object.keys(
+    individualEntrySortingFromEditFile
+  ).reduce((acc, sectionId) => {
+    const entrySorting: IndividualEntrySortingEntry[] =
+      individualEntrySortingFromEditFile[sectionId];
+
+    const entryIds = entries
+      .filter((entry) => entry.sectionId === sectionId)
+      .map((entry) => entry.id);
+
+    const newEntrySorting = entrySorting.map((entrySorting) => {
+      const newColumns = entrySorting.columns.map((column) => {
+        return column.filter((entryId) => entryIds.includes(entryId));
+      });
+
+      return {
+        ...entrySorting,
+        columns: newColumns,
+      };
+    });
+
+    return {
+      ...acc,
+      [sectionId]: newEntrySorting,
+    } as { [key: string]: IndividualEntrySortingEntry[] };
+  }, individualEntrySortingFromEditFile);
 
   // Remove empty rows from individualEntrySorting
-  individualEntrySortingFromEditFile =
-    individualEntrySortingFromEditFile.filter((individualEntry) => {
-      // Remove row if it is empty
-      return individualEntry.columns.some((column) => column.length > 0);
+  individualEntrySortingFromEditFile = Object.keys(
+    individualEntrySortingFromEditFile
+  ).reduce((acc, sectionId) => {
+    const entrySorting = individualEntrySortingFromEditFile[sectionId];
+
+    const newEntrySorting = entrySorting.filter((entrySorting) => {
+      return entrySorting.columns.some((column) => column.length > 0);
     });
+
+    return {
+      ...acc,
+      [sectionId]: newEntrySorting,
+    } as { [key: string]: IndividualEntrySortingEntry[] };
+  }, individualEntrySortingFromEditFile);
 
   editFileObject["individualSorting"] = sortingsFromEditFile;
   editFileObject["individualEntrySorting"] = individualEntrySortingFromEditFile;
+
   return editFileObject;
 }
 

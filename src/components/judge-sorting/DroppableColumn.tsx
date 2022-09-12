@@ -9,7 +9,7 @@ export const DroppableColumn = ({
   columnRole,
   children,
 }: {
-  position: { x: number; y: string };
+  position: { sectionId: string; rowId: string };
   columnRole: UserRole;
   children: React.ReactNode;
 }) => {
@@ -17,36 +17,31 @@ export const DroppableColumn = ({
 
   /**
    * Moves an item from one list to another list.
-   * @param from The coordinates of the item to move.
-   * @param to The coordinates of the item to move to.
+   * @param from Position of the entry being dragged
+   * @param to New position the entry is being dropped
+   * @param indexOfEntry Index of the entry being dragged
    */
   const moveItem = (
-    from: { x: number; y: string; indexOfEntry: number },
-    to: { x: number; y: string },
+    from: { sectionId: string; rowId: string; column: number },
+    to: { sectionId: string; rowId: string },
     indexOfEntry: number
   ) => {
-    const newSorting = [...individualEntrySorting];
+    const newSorting = { ...individualEntrySorting };
     // Remove dragged item by the rowId
-    const draggedItem = newSorting.find((item) => item.rowId === from.y)
-      ?.columns[from.x][indexOfEntry];
-
-    const draggedItemIndex = newSorting.findIndex(
-      (item) => item.rowId === from.y
+    const rowIndex = newSorting[from.sectionId].findIndex(
+      (row) => row.rowId === from.rowId
     );
+    const draggedItem = newSorting[from.sectionId][rowIndex].columns[
+      from.column
+    ].splice(indexOfEntry, 1)[0];
 
-    const draggedItemColumnIndex = newSorting[
-      draggedItemIndex
-    ].columns.findIndex((column) => column[indexOfEntry] === draggedItem);
-
-    newSorting[draggedItemIndex].columns[draggedItemColumnIndex].splice(
-      indexOfEntry,
-      1
+    // Add dragged item to the new rowId
+    const newRowIndex = newSorting[to.sectionId].findIndex(
+      (row) => row.rowId === to.rowId
     );
-
-    // Add dropped item at the end of the column
-    newSorting
-      .find((item) => item.rowId === to.y)
-      ?.columns[to.x].push(draggedItem!!);
+    newSorting[to.sectionId][newRowIndex].columns[from.column].push(
+      draggedItem
+    );
 
     // Update State
     setIndividualEntrySorting(newSorting);

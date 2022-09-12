@@ -1,5 +1,5 @@
 import { useCase, useHeaderContext, useSection } from "../contexts";
-import { IndividualEntrySortingEntry, UserRole } from "../types";
+import { UserRole } from "../types";
 import { getOriginalSortingPosition } from "../util/get-original-sorting-position";
 import { getRequestedSorting } from "../util/get-requested-sorting";
 import { AddEntryButtons } from "./AddEntryButtons";
@@ -11,16 +11,11 @@ export const JudgeDiscussion = () => {
   const { individualSorting, sectionList } = useSection();
   const { selectedSorting } = useHeaderContext();
 
-  console.log({ individualEntrySorting });
-
   return (
     <>
       {getRequestedSorting(sectionList, individualSorting, selectedSorting).map(
         (section, index) => {
-          const entriesForSection: IndividualEntrySortingEntry[] =
-            individualEntrySorting.filter(
-              (sectionSorting) => sectionSorting.sectionId === section.id
-            );
+          const entriesForSection = individualEntrySorting[section.id];
 
           return (
             <div className="space-y-2" key={section.id}>
@@ -30,7 +25,7 @@ export const JudgeDiscussion = () => {
                 position={index}
               />
               <div className="space-y-8">
-                {entriesForSection.map((entrySection, y) => {
+                {entriesForSection.map((entrySection, index) => {
                   return (
                     <EntryRow key={entrySection.rowId}>
                       {Object.keys(entrySection.columns).map((_, x) => (
@@ -39,13 +34,20 @@ export const JudgeDiscussion = () => {
                           columnRole={
                             x === 0 ? UserRole.Plaintiff : UserRole.Defendant
                           }
-                          position={{ x, y: entrySection.rowId }}>
+                          position={{
+                            sectionId: section.id,
+                            rowId: entrySection.rowId,
+                          }}>
                           {entrySection.columns[x].map(
                             (entryId: string, index) => (
                               <DraggableEntry
                                 key={entryId}
                                 entryId={entryId}
-                                position={{ x, y: entrySection.rowId }}
+                                position={{
+                                  sectionId: section.id,
+                                  rowId: entrySection.rowId,
+                                  column: x,
+                                }}
                                 index={index}
                               />
                             )
