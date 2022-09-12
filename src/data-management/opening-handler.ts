@@ -69,6 +69,26 @@ export function updateSortingsIfVersionIsDifferent(
     }
   });
 
+  // Remove entryIds from columns of the individualEntrySorting that are not in the uploaded basisdokument entries
+  individualEntrySortingFromEditFile = individualEntrySortingFromEditFile.map(
+    (individualEntry) => {
+      individualEntry.columns[0] = individualEntry.columns[0].filter(
+        (entryId) => entries.some((entry) => entry.id === entryId)
+      );
+      individualEntry.columns[1] = individualEntry.columns[1].filter(
+        (entryId) => entries.some((entry) => entry.id === entryId)
+      );
+      return individualEntry;
+    }
+  );
+
+  // Remove empty rows from individualEntrySorting
+  individualEntrySortingFromEditFile =
+    individualEntrySortingFromEditFile.filter((individualEntry) => {
+      // Remove row if it is empty
+      return individualEntry.columns.some((column) => column.length > 0);
+    });
+
   editFileObject["individualSorting"] = sortingsFromEditFile;
   editFileObject["individualEntrySorting"] = individualEntrySortingFromEditFile;
   return editFileObject;
