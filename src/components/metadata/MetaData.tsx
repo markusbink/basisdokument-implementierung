@@ -111,6 +111,12 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                   [`bg-${getTheme(selectedTheme)?.primaryRight} text-${
                     getTheme(selectedTheme)?.secondaryRight
                   }`]: !isPlaintiff && isMenuOpen,
+                  [`hover-text-${
+                    getTheme(selectedTheme)?.secondaryLeft
+                  }`]: isPlaintiff,
+                  [`hover-text-${
+                    getTheme(selectedTheme)?.secondaryRight
+                  }`]: !isPlaintiff,
                 })}
                 onClick={toggleMenu}
                 isPlaintiff={isPlaintiff}>
