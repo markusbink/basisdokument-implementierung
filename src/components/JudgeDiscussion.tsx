@@ -25,12 +25,13 @@ export const JudgeDiscussion = () => {
                 position={index}
               />
               <div className="space-y-20">
-                {entriesForSection?.map((entrySection, index) => {
+                {entriesForSection?.map((entrySection) => {
                   return (
                     <EntryRow
                       key={entrySection.rowId}
                       sectionId={section.id}
                       rowId={entrySection.rowId}
+                      isLitigious={entrySection.isLitigious}
                       hasChildren={entrySection.columns.some(
                         (column) => column.length > 0
                       )}>

@@ -1,52 +1,63 @@
 import cx from "classnames";
 import { Check, Scales, X } from "phosphor-react";
 import { useRef, useState } from "react";
-import { useCase } from "../../contexts";
+import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 
 interface LitigiousCheckProps {
   rowId: string;
+  isLitigious: boolean | undefined;
 }
 
-export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({ rowId }) => {
+export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
+  rowId,
+  isLitigious,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLSpanElement>(null);
-  const { litigiousChecks, setLitigiousChecks } = useCase();
+  const { setIndividualEntrySorting } = useCase();
   useOutsideClick(menuRef, () => closeMenu());
-
-  const isLitigious = litigiousChecks.filter(
-    (check) => check.entryId === rowId
-  )[0]?.isLitigious;
 
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
   const removeLitigiousCheck = () => {
-    setLitigiousChecks(
-      litigiousChecks.filter((check) => check.entryId !== rowId)
-    );
+    setIndividualEntrySorting((prev) => {
+      const newSorting = { ...prev };
+      Object.keys(newSorting).forEach((sectionId) => {
+        newSorting[sectionId] = newSorting[sectionId].map((row) => {
+          if (row.rowId === rowId) {
+            return {
+              ...row,
+              isLitigious: undefined,
+            };
+          }
+          return row;
+        });
+      });
+      return newSorting;
+    });
+    closeMenu();
   };
 
   const setLitigiousCheck = (isLitigious: boolean) => {
     // Create new litigious check if it doesn't exist yet in the litigious checks array
-    if (
-      !litigiousChecks.filter(
-        (litigiousCheck) => litigiousCheck.entryId === rowId
-      )[0]
-    ) {
-      setLitigiousChecks([...litigiousChecks, { entryId: rowId, isLitigious }]);
-    }
-    // Otherwise, update the litigious check in the litigious checks array
-    else {
-      setLitigiousChecks(
-        litigiousChecks.map((litigiousCheck) =>
-          litigiousCheck.entryId === rowId
-            ? { ...litigiousCheck, isLitigious }
-            : litigiousCheck
-        )
-      );
-    }
+    setIndividualEntrySorting((prev) => {
+      const newSorting = { ...prev };
+      Object.keys(newSorting).forEach((sectionId) => {
+        newSorting[sectionId] = newSorting[sectionId].map((row) => {
+          if (row.rowId === rowId) {
+            return {
+              ...row,
+              isLitigious,
+            };
+          }
+          return row;
+        });
+      });
+      return newSorting;
+    });
   };
 
   return (

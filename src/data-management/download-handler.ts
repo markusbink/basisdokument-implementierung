@@ -5,7 +5,6 @@ import {
   IHighlightedEntry,
   IHighlighter,
   IHint,
-  ILitigiousCheck,
   IMetaData,
   IndividualEntrySortingEntry,
   INote,
@@ -284,8 +283,7 @@ export function downloadBasisdokument(
   metaData: IMetaData | null,
   entries: IEntry[],
   sectionList: ISection[],
-  hints: IHint[],
-  litigiousChecks: ILitigiousCheck[]
+  hints: IHint[]
 ) {
   let basisdokumentObject: any = {};
   basisdokumentObject["caseId"] = caseId;
@@ -299,7 +297,6 @@ export function downloadBasisdokument(
   basisdokumentObject["entries"] = entries;
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
-  basisdokumentObject["litigiousChecks"] = litigiousChecks;
   downloadObjectAsJSON(
     basisdokumentObject,
     "basisdokument_version_" + currentVersion + "_az_" + caseId

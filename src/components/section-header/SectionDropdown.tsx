@@ -15,14 +15,10 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   version,
 }) => {
   const { user } = useUser();
-  const { entries, currentVersion, setLitigiousChecks } = useCase();
+  const { currentVersion, setIndividualEntrySorting } = useCase();
   const { setSectionList } = useSection();
 
   const isOld = version < currentVersion;
-  const sectionEntries = entries.filter(
-    (entry) => entry.sectionId === sectionId
-  );
-  const sectionEntriesIds = sectionEntries.map((entry) => entry.id);
 
   const deleteSection = () => {
     setSectionList((prevSectionList) =>
@@ -31,52 +27,50 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   };
 
   const resetLitigiousChecks = () => {
-    setLitigiousChecks((prevLitigiousChecks) =>
-      prevLitigiousChecks.filter(
-        (litigiousCheck) => !sectionEntriesIds.includes(litigiousCheck.entryId)
-      )
-    );
+    setIndividualEntrySorting((prevIndividualEntrySorting) => {
+      const newSorting = { ...prevIndividualEntrySorting };
+
+      Object.keys(newSorting).forEach((sectionId) => {
+        newSorting[sectionId] = newSorting[sectionId].map((row) => ({
+          ...row,
+          isLitigious: undefined,
+        }));
+      });
+      return newSorting;
+    });
   };
 
   const setAllLitigious = () => {
     // If sectionEntriesIds are already in the litigiousChecks array, update them to be litigious.
-    setLitigiousChecks((prevLitigiousChecks) => {
-      const newLitigiousChecks = [...prevLitigiousChecks];
-      sectionEntriesIds.forEach((entryId) => {
-        const litigiousCheck = newLitigiousChecks.find(
-          (litigiousCheck) => litigiousCheck.entryId === entryId
-        );
-        if (litigiousCheck) {
-          litigiousCheck.isLitigious = true;
-        } else {
-          newLitigiousChecks.push({
-            entryId,
+    setIndividualEntrySorting((prevIndividualEntrySorting) => {
+      const newSorting = { ...prevIndividualEntrySorting };
+
+      Object.keys(newSorting).forEach((sortingSectionId) => {
+        if (sortingSectionId === sectionId) {
+          newSorting[sectionId] = newSorting[sectionId].map((row) => ({
+            ...row,
             isLitigious: true,
-          });
+          }));
         }
       });
-      return newLitigiousChecks;
+      return newSorting;
     });
   };
 
   const setAllNotLitigious = () => {
     // If sectionEntriesIds are already in the litigiousChecks array, update them to be litigious.
-    setLitigiousChecks((prevLitigiousChecks) => {
-      const newLitigiousChecks = [...prevLitigiousChecks];
-      sectionEntriesIds.forEach((entryId) => {
-        const litigiousCheck = newLitigiousChecks.find(
-          (litigiousCheck) => litigiousCheck.entryId === entryId
-        );
-        if (litigiousCheck) {
-          litigiousCheck.isLitigious = false;
-        } else {
-          newLitigiousChecks.push({
-            entryId,
+    setIndividualEntrySorting((prevIndividualEntrySorting) => {
+      const newSorting = { ...prevIndividualEntrySorting };
+
+      Object.keys(newSorting).forEach((sortingSectionId) => {
+        if (sortingSectionId === sectionId) {
+          newSorting[sectionId] = newSorting[sectionId].map((row) => ({
+            ...row,
             isLitigious: false,
-          });
+          }));
         }
       });
-      return newLitigiousChecks;
+      return newSorting;
     });
   };
 

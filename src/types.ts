@@ -80,6 +80,7 @@ export enum IDragItemType {
 
 export interface IndividualEntrySortingEntry {
   rowId: string;
+  isLitigious?: boolean;
   columns: string[][]; // [0] = plaintiff, [1] = defendant
 }
 
@@ -100,11 +101,6 @@ export interface IHighlighter {
 export interface IMetaData {
   plaintiff: string;
   defendant: string;
-}
-
-export interface ILitigiousCheck {
-  entryId: string;
-  isLitigious: boolean;
 }
 
 export interface IHighlightedEntry {

@@ -12,7 +12,6 @@ import {
   IHighlightedEntry,
   IHighlighter,
   IHint,
-  ILitigiousCheck,
   IMetaData,
   INote,
   ISection,
@@ -27,7 +26,6 @@ interface IProps {
   entries: IEntry[];
   sectionList: ISection[];
   hints: IHint[];
-  litigiousChecks: ILitigiousCheck[];
   highlightedEntries: IHighlightedEntry[];
   colorSelection: IHighlighter[];
   notes: INote[];
@@ -43,7 +41,6 @@ export const DownloadBasisdokumentButton: React.FC<IProps> = ({
   entries,
   sectionList,
   hints,
-  litigiousChecks,
   highlightedEntries,
   colorSelection,
   notes,
@@ -61,8 +58,7 @@ export const DownloadBasisdokumentButton: React.FC<IProps> = ({
         metaData,
         entries,
         sectionList,
-        hints,
-        litigiousChecks
+        hints
       );
     }, 100);
     setTimeout(() => {

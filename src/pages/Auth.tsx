@@ -59,7 +59,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setCaseId: setCaseIdContext,
     setEntries,
     setMetaData,
-    setLitigiousChecks,
     setCurrentVersion,
     setHighlightedEntries,
     setIndividualEntrySorting,
@@ -199,8 +198,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           role
         );
         if (editFile) {
-          console.log("Opening edit file");
-
           editFileObject = openEditFile(
             basisdokumentFile,
             editFile,
@@ -253,7 +250,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
     setMetaData(basisdokument.metaData);
-    setLitigiousChecks(basisdokument.litigiousChecks);
     setCurrentVersion(basisdokument.currentVersion);
     setCaseIdContext(basisdokument.caseId);
   };

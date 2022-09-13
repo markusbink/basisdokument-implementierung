@@ -35,7 +35,6 @@ export const DocumentButton = () => {
     currentVersion,
     metaData,
     entries,
-    litigiousChecks,
     highlightedEntries,
     individualEntrySorting,
   } = useCase();
@@ -59,8 +58,7 @@ export const DocumentButton = () => {
         metaData,
         entries,
         sectionList,
-        hints,
-        litigiousChecks
+        hints
       );
     }, 100);
     setTimeout(() => {
@@ -120,7 +118,6 @@ export const DocumentButton = () => {
               entries={entries}
               sectionList={sectionList}
               hints={hints}
-              litigiousChecks={litigiousChecks}
               highlightedEntries={highlightedEntries}
               colorSelection={colorSelection}
               notes={notes}

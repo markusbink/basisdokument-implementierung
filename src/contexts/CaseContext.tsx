@@ -9,7 +9,6 @@ import {
 import {
   IEntry,
   IHighlightedEntry,
-  ILitigiousCheck,
   IMetaData,
   IndividualEntrySortingEntry,
   UserRole,
@@ -21,8 +20,6 @@ interface ICaseContext {
   setCaseId: Dispatch<SetStateAction<string>>;
   metaData: IMetaData;
   setMetaData: Dispatch<SetStateAction<IMetaData>>;
-  litigiousChecks: ILitigiousCheck[];
-  setLitigiousChecks: Dispatch<SetStateAction<ILitigiousCheck[]>>;
   entries: IEntry[];
   setEntries: Dispatch<SetStateAction<IEntry[]>>;
   groupedEntries: { [key: string]: { [key: string]: IEntry[] } };
@@ -74,7 +71,6 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
     plaintiff: "",
     defendant: "",
   });
-  const [litigiousChecks, setLitigiousChecks] = useState<ILitigiousCheck[]>([]);
   const [highlightedEntries, setHighlightedEntries] = useState<
     IHighlightedEntry[]
   >([]);
@@ -138,8 +134,6 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
         setCurrentVersion,
         metaData,
         setMetaData,
-        litigiousChecks,
-        setLitigiousChecks,
         entries,
         setEntries,
         groupedEntries,

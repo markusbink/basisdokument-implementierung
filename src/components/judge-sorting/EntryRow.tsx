@@ -9,6 +9,7 @@ import { LitigiousCheck } from "../entry/LitigiousCheck";
 interface EntryRowProps {
   sectionId: string;
   rowId: string;
+  isLitigious: boolean | undefined;
   hasChildren: boolean;
   children: React.ReactNode;
 }
@@ -16,6 +17,7 @@ interface EntryRowProps {
 export const EntryRow: React.FC<EntryRowProps> = ({
   sectionId,
   rowId,
+  isLitigious,
   hasChildren,
   children,
 }) => {
@@ -97,7 +99,7 @@ export const EntryRow: React.FC<EntryRowProps> = ({
           }
         )}>
         <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2  z-20">
-          <LitigiousCheck rowId={rowId} />
+          <LitigiousCheck rowId={rowId} isLitigious={isLitigious} />
         </span>
         {children}
         <button
