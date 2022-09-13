@@ -1,3 +1,13 @@
+export interface ITheme {
+  id: string,
+  title: string;
+  primaryLeftBackgroundColor: string;
+  secondaryLeftBackgroundColor: string;
+  primaryRightBackgroundColor: string;
+  secondaryRightBackgroundColor: string;
+  contentColor: string;
+}
+
 export interface IBookmark {
   id: string;
   title: string;
