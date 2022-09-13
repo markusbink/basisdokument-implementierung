@@ -6,6 +6,7 @@ import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useCase, useHeaderContext } from "../../contexts";
+import { themeData } from "../../themes/theme-data";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
@@ -48,7 +49,6 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   onSave,
   defaultContent,
 }) => {
-
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
     const blocksFromHtml = htmlToDraft(defaultContent || "");
@@ -61,7 +61,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     return EditorState.createWithContent(contentState);
   });
 
-  const { showColumnView } = useHeaderContext();
+  const { showColumnView, selectedTheme } = useHeaderContext();
   const { entries } = useCase();
   const editorRef = useRef<Editor>(null);
   const suggestions = entries.map((entry) => ({
@@ -82,11 +82,21 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     editorRef.current?.focusEditor();
   }, []);
 
+  const getTheme = (id: string) => {
+    return themeData.find((theme) => {
+      if (theme.id === id) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  };
+
   return (
     <div
       className={cx("border border-t-0 rounded-b-lg", {
-        "border-lightPurple": isPlaintiff,
-        "border-lightPetrol": !isPlaintiff,
+        [`border-${getTheme(selectedTheme)?.secondaryLeft}`]: isPlaintiff,
+        [`border-${getTheme(selectedTheme)?.secondaryRight}`]: !isPlaintiff,
         "RichEditor-hidePlaceholder": hidePlaceholder,
       })}>
       <Editor

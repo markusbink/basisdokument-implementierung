@@ -1,0 +1,79 @@
+.bg-yellowDark,
+.hover-bg-yellowDark:hover {
+  background-color: #854d0e;
+}
+
+.text-yellowDark,
+.hover-text-yellowDark:hover {
+  color: #854d0e;
+}
+
+.bg-yellowLight,
+.hover-bg-yellowLight:hover {
+  background-color: #fef08a;
+}
+
+.text-yellowLight,
+.hover-text-yellowLight:hover {
+  color: #fef08a;
+}
+
+.bg-redDark,
+.hover-bg-redDark:hover {
+  background-color: #991b1b;
+}
+
+.text-redDark,
+.hover-text-redDark:hover {
+  color: #991b1b;
+}
+
+.bg-redLight,
+.hover-bg-redLight:hover {
+  background-color: #fecaca;
+}
+
+.text-redLight,
+.hover-text-redLight:hover {
+  color: #fecaca;
+}
+
+.bg-darkPurple,
+.hover-bg-darkPurple:hover {
+  background-color: #3f3f67;
+}
+
+.text-darkPurple,
+.hover-text-darkPurple:hover {
+  color: #3f3f67;
+}
+
+.bg-darkPetrol,
+.hover-bg-darkPetrol:hover {
+  background-color: #375c62;
+}
+
+.text-darkPetrol,
+.hover-text-darkPetrol:hover {
+  color: #375c62;
+}
+
+.bg-lightPurple,
+.hover-bg-lightPurple:hover {
+  background-color: #dddde6;
+}
+
+.text-lightPurple,
+.hover-text-lightPurple:hover {
+  color: #dddde6;
+}
+
+.bg-lightPetrol,
+.hover-bg-lightPetrol:hover {
+  background-color: #c2e3e9;
+}
+
+.text-lightPetrol,
+.hover-text-lightPetrol:hover {
+  color: #c2e3e9;
+}

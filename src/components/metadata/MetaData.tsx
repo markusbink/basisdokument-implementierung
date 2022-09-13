@@ -2,8 +2,9 @@ import cx from "classnames";
 import { CaretDown, CaretUp, DotsThree, Pencil, Plus } from "phosphor-react";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { useCase, useUser } from "../../contexts";
+import { useCase, useHeaderContext, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { getTheme } from "../../themes/getTheme";
 import { UserRole } from "../../types";
 import { Button } from "../Button";
 import { Action } from "../entry";
@@ -25,6 +26,8 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
   const { metaData, setMetaData } = useCase();
   const menuRef = useRef(null);
   useOutsideClick(menuRef, () => setIsMenuOpen(false));
+
+  const { selectedTheme } = useHeaderContext();
 
   const isPlaintiff = owner === UserRole.Plaintiff;
   const isJudge = user?.role === UserRole.Judge;
@@ -71,12 +74,20 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
         <Button
           position="end"
           bgColor={cx({
-            "bg-lightPurple hover:bg-darkPurple": isPlaintiff,
-            "bg-lightPetrol hover:bg-darkPetrol": !isPlaintiff,
+            [`bg-${getTheme(selectedTheme)?.secondaryLeft} hover-bg-${
+              getTheme(selectedTheme)?.primaryLeft
+            }`]: isPlaintiff,
+            [`bg-${getTheme(selectedTheme)?.secondaryRight} hover-bg-${
+              getTheme(selectedTheme)?.primaryRight
+            }`]: !isPlaintiff,
           })}
           textColor={cx("font-bold text-sm uppercase tracking-wider", {
-            "text-darkPurple hover:text-lightPurple": isPlaintiff,
-            "text-darkPetrol hover:text-lightPetrol": !isPlaintiff,
+            [`text-${getTheme(selectedTheme)?.primaryLeft} hover-text-${
+              getTheme(selectedTheme)?.secondaryLeft
+            }`]: isPlaintiff,
+            [`text-${getTheme(selectedTheme)?.primaryRight} hover-text-${
+              getTheme(selectedTheme)?.secondaryRight
+            }`]: !isPlaintiff,
           })}
           size="sm"
           onClick={toggleMetaData}
@@ -94,8 +105,12 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
             <Tooltip text="Mehr Optionen">
               <Action
                 className={cx("relative", {
-                  "bg-darkPurple text-lightPurple": isPlaintiff && isMenuOpen,
-                  "bg-darkPetrol text-lightPetrol": !isPlaintiff && isMenuOpen,
+                  [`text-${getTheme(selectedTheme)?.primaryLeft} text-${
+                    getTheme(selectedTheme)?.secondaryLeft
+                  }`]: isPlaintiff && isMenuOpen,
+                  [`text-${getTheme(selectedTheme)?.primaryRight} text-${
+                    getTheme(selectedTheme)?.secondaryRight
+                  }`]: !isPlaintiff && isMenuOpen,
                 })}
                 onClick={toggleMenu}
                 isPlaintiff={isPlaintiff}>

@@ -1,10 +1,10 @@
 export interface ITheme {
   id: string,
   title: string;
-  primaryLeftBackgroundColor: string;
-  secondaryLeftBackgroundColor: string;
-  primaryRightBackgroundColor: string;
-  secondaryRightBackgroundColor: string;
+  primaryLeft: string;
+  secondaryLeft: string;
+  primaryRight: string;
+  secondaryRight: string;
   contentColor: string;
 }
 
