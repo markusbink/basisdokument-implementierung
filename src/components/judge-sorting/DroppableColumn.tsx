@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { useDrop } from "react-dnd";
-import { useCase, useSection } from "../../contexts";
+import { useCase } from "../../contexts";
 import { IDragItemType, UserRole } from "../../types";
 
 interface DroppableColumnProps {
@@ -15,7 +15,6 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
   children,
 }) => {
   const { setIndividualEntrySorting } = useCase();
-  const { sectionList } = useSection();
 
   /**
    * Moves an item from one list to another list.
