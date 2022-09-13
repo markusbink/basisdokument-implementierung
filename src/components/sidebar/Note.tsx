@@ -2,8 +2,9 @@ import cx from "classnames";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
-import { useCase, useNotes } from "../../contexts";
+import { useCase, useHeaderContext, useNotes } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { getTheme } from "../../themes/getTheme";
 import { INote } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
@@ -29,6 +30,8 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setAssociatedEntryIdNote,
     setEditMode,
   } = useNotes();
+
+  const { selectedTheme } = useHeaderContext();
 
   let entryCode;
   if (note.associatedEntry) {
@@ -68,9 +71,16 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
               "flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer text-[10px] font-semibold rounded-xl",
               {
                 "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
-                "bg-lightPurple text-darkPurple hover:bg-darkPurple hover:text-lightPurple":
-                  entryCode?.charAt(0) === "K",
-                "bg-lightPetrol text-darkPetrol hover:bg-darkPetrol hover:text-lightPetrol":
+                [`bg-${getTheme(selectedTheme)?.secondaryLeft} text-${
+                  getTheme(selectedTheme)?.primaryLeft
+                } hover-bg-${getTheme(selectedTheme)?.primaryLeft} hover-text-${
+                  getTheme(selectedTheme)?.secondaryLeft
+                }`]: entryCode?.charAt(0) === "K",
+                [`bg-${getTheme(selectedTheme)?.secondaryRight} text-${
+                  getTheme(selectedTheme)?.primaryRight
+                } hover-bg-${
+                  getTheme(selectedTheme)?.primaryRight
+                } hover-text-${getTheme(selectedTheme)?.secondaryRight}`]:
                   entryCode?.charAt(0) === "B",
               }
             )}>

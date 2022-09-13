@@ -8,7 +8,7 @@ import {
 } from "@funktechno/texthighlighter/lib/index";
 import { IHighlightedEntry, Tool } from "../../types";
 import { getColorHexForColor } from "../../util/get-hex-code-for-marker";
-import { themeData } from "../../themes/theme-data";
+import { getTheme } from "../../themes/getTheme";
 
 interface EntryBodyProps {
   isPlaintiff: boolean;
@@ -192,15 +192,6 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
     return htmlElementOfEntryText.innerHTML;
   };
 
-  const getTheme = (id: string) => {
-    return themeData.find((theme) => {
-      if (theme.id === id) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-  };
   return (
     <div
       className={cx(

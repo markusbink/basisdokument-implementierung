@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useCase, useHeaderContext, useSection, useUser } from "../../contexts";
-import { themeData } from "../../themes/theme-data";
+import { getTheme } from "../../themes/getTheme";
 import { UserRole } from "../../types";
 
 interface SectionTitleProps {
@@ -50,24 +50,14 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
     }
   }, [title]);
 
-  const getTheme = (id: string) => {
-    return themeData.find((theme) => {
-      if (theme.id === id) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-  };
-
   return (
     <div className={cx("flex w-full flex-col")}>
       <span
         className={cx(
           "text-xs font-bold rounded-md px-2 py-1 w-fit uppercase text-darkGrey",
           {
-            [`bg-${getTheme(selectedTheme)?.secondaryLeft}`]: role === UserRole.Plaintiff,
-            [`bg-${getTheme(selectedTheme)?.secondaryRight}`]: role === UserRole.Defendant,
+            [`bg-${getTheme(selectedTheme)?.secondaryLeft} text-${getTheme(selectedTheme)?.primaryLeft}`]: role === UserRole.Plaintiff,
+            [`bg-${getTheme(selectedTheme)?.secondaryRight} text-${getTheme(selectedTheme)?.primaryRight}`]: role === UserRole.Defendant,
           }
         )}>
         {role}

@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { useHeaderContext } from "../../contexts";
-import { themeData } from "../../themes/theme-data";
+import { getTheme } from "../../themes/getTheme";
 
 interface ActionProps extends React.HTMLAttributes<HTMLDivElement> {
   onClick?: (e: React.MouseEvent) => void;
@@ -15,26 +15,19 @@ export const Action: React.FC<ActionProps> = ({
   className,
   ...restProps
 }) => {
-  const {
-    selectedTheme,
-  } = useHeaderContext();
-  const getTheme = (id: string) => {
-    return themeData.find((theme) => {
-      if (theme.id === id) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-  };
+  const { selectedTheme } = useHeaderContext();
   return (
     <div
       onClick={onClick}
       className={cx(
         "rounded-md p-1 cursor-pointer",
         {
-          [`hover-bg-${getTheme(selectedTheme)?.primaryLeft}`]: isPlaintiff,
-          [`hover-bg-${getTheme(selectedTheme)?.primaryRight}`]: !isPlaintiff,
+          [`hover-bg-${getTheme(selectedTheme)?.primaryLeft} hover-text-${
+            getTheme(selectedTheme)?.secondaryLeft
+          }`]: isPlaintiff,
+          [`hover-bg-${getTheme(selectedTheme)?.primaryRight} hover-text-${
+            getTheme(selectedTheme)?.secondaryLeft
+          }`]: !isPlaintiff,
         },
         className
       )}

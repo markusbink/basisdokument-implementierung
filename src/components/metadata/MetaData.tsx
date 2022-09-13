@@ -146,8 +146,12 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           className={cx(
             "flex flex-col rounded-lg shadow text-sm overflow-hidden",
             {
-              "bg-lightPurple text-darkPurple": isPlaintiff,
-              "bg-lightPetrol text-darkPetrol": !isPlaintiff,
+              [`bg-${getTheme(selectedTheme)?.secondaryLeft} text-${
+                getTheme(selectedTheme)?.primaryLeft
+              }`]: isPlaintiff,
+              [`bg-${getTheme(selectedTheme)?.secondaryRight} text-${
+                getTheme(selectedTheme)?.primaryRight
+              }`]: !isPlaintiff,
             }
           )}>
           {isEditing ? (

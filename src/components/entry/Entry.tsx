@@ -24,7 +24,7 @@ import { LitigiousCheck } from "./LitigiousCheck";
 import { useBookmarks } from "../../contexts";
 import { v4 as uuidv4 } from "uuid";
 import { useSidebar } from "../../contexts/SidebarContext";
-import { themeData } from "../../themes/theme-data";
+import { getTheme } from "../../themes/getTheme";
 
 interface EntryProps {
   entry: IEntry;
@@ -210,16 +210,6 @@ export const Entry: React.FC<EntryProps> = ({
     setHighlightedEntries((prevEntries) =>
       prevEntries.filter((prevEntry) => prevEntry.entryId !== entry.id)
     );
-  };
-
-  const getTheme = (id: string) => {
-    return themeData.find((theme) => {
-      if (theme.id === id) {
-        return true;
-      } else {
-        return false;
-      }
-    });
   };
 
   return (
@@ -431,14 +421,7 @@ export const Entry: React.FC<EntryProps> = ({
                 size="sm"
                 alternativePadding="mt-2"
                 bgColor="bg-lightGrey hover:bg-mediumGrey"
-                textColor={cx("font-semibold", {
-                  [`text-${getTheme(selectedTheme)?.primaryLeft} hover:text-${
-                    getTheme(selectedTheme)?.secondaryLeft
-                  }`]: isPlaintiff,
-                  [`text-${getTheme(selectedTheme)?.primaryRight} hover:text-${
-                    getTheme(selectedTheme)?.secondaryRight
-                  }`]: !isPlaintiff,
-                })}
+                textColor="text-darkGrey hover:text-offWhite"
                 onClick={showNewEntry}
                 icon={<ArrowBendLeftUp weight="bold" size={18} />}>
                 Auf diesen Beitrag Bezug nehmen
