@@ -1,6 +1,7 @@
 import { useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, CaretUp } from "phosphor-react";
+import { useHeaderContext } from "../../contexts";
 
 enum Sorting {
   Privat,
@@ -17,6 +18,8 @@ export const SortingSelector: React.FC<IProps> = ({
   setSelectedSorting,
 }) => {
   const [showSelectMenu, setShowDownloadMenu] = useState<boolean>(false);
+  const { setShowEntrySorting } = useHeaderContext();
+
   return (
     <DropdownMenu.Root
       modal={false}
@@ -42,6 +45,7 @@ export const SortingSelector: React.FC<IProps> = ({
             className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
             onClick={() => {
               setSelectedSorting(Sorting.Original);
+              setShowEntrySorting(false);
             }}>
             <div className="text-darkGrey text-sm font-medium">Original</div>
           </DropdownMenu.Item>

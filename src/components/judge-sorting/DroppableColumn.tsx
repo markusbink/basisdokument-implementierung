@@ -93,7 +93,7 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
       {children}
       <button
         onClick={() => addRowAfter(position.sectionId, position.rowId)}
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-darkGrey text-white p-1 rounded-full">
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-darkGrey hover:bg-mediumGrey text-white p-1 rounded-full">
         <Plus width={18} height={18} weight="bold" />
       </button>
     </div>

@@ -1,4 +1,5 @@
 import cx from "classnames";
+import { Trash } from "phosphor-react";
 import { useRef, useState } from "react";
 import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
@@ -69,14 +70,15 @@ export const EntryRow: React.FC<EntryRowProps> = ({
               "fixed list-none bg-darkGrey rounded-lg text-sm z-20 m-0"
             )}>
             <li
-              className="text-white px-3 py-2 cursor-pointer hover:bg-white/10 transition-all"
+              className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all"
               onClick={() => deleteEmptyRow(sectionId, rowId)}>
-              Delete empty row
+              <Trash width={18} height={18} /> Leere Zeile löschen
             </li>
             <li
-              className="text-white px-3 py-2 cursor-pointer hover:bg-white/10 transition-all"
+              className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all"
               onClick={() => deleteAllEmptyRows(sectionId)}>
-              Delete all empty rows
+              <Trash width={18} height={18} />
+              Alle leeren Zeilen löschen
             </li>
           </ul>
         )}
