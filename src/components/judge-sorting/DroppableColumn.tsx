@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { useDrop } from "react-dnd";
-import { useCase } from "../../contexts";
+import { useCase, useSection } from "../../contexts";
 import { IDragItemType, UserRole } from "../../types";
 
 interface DroppableColumnProps {
@@ -14,7 +14,8 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
   columnRole,
   children,
 }) => {
-  const { individualEntrySorting, setIndividualEntrySorting } = useCase();
+  const { setIndividualEntrySorting } = useCase();
+  const { sectionList } = useSection();
 
   /**
    * Moves an item from one list to another list.
@@ -27,25 +28,30 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
     to: { sectionId: string; rowId: string },
     indexOfEntry: number
   ) => {
-    const newSorting = { ...individualEntrySorting };
-    // Remove dragged item by the rowId
-    const rowIndex = newSorting[from.sectionId].findIndex(
-      (row) => row.rowId === from.rowId
-    );
-    const draggedItem = newSorting[from.sectionId][rowIndex].columns[
-      from.column
-    ].splice(indexOfEntry, 1)[0];
-
-    // Add dragged item to the new rowId
-    const newRowIndex = newSorting[to.sectionId].findIndex(
-      (row) => row.rowId === to.rowId
-    );
-    newSorting[to.sectionId][newRowIndex].columns[from.column].push(
-      draggedItem
-    );
-
     // Update State
-    setIndividualEntrySorting(newSorting);
+    setIndividualEntrySorting((prevEntrySorting) => {
+      const newSorting = { ...prevEntrySorting };
+
+      // Remove dragged item by the rowId
+      const rowIndex = newSorting[from.sectionId].findIndex(
+        (row) => row.rowId === from.rowId
+      );
+
+      const draggedItem = newSorting[from.sectionId][rowIndex].columns[
+        from.column
+      ].splice(indexOfEntry, 1)[0];
+
+      // Add dragged item to the new rowId
+      const newRowIndex = newSorting[to.sectionId].findIndex(
+        (row) => row.rowId === to.rowId
+      );
+
+      newSorting[to.sectionId][newRowIndex].columns[from.column].push(
+        draggedItem
+      );
+
+      return newSorting;
+    });
   };
 
   const [{ isOver, canDrop }, drop] = useDrop(() => ({

@@ -125,8 +125,6 @@ export const DropdownHeader: React.FC<any> = () => {
             }
           )}
           onClick={() => {
-            console.log(getCurrentTool.id);
-
             if (getCurrentTool.id !== Tool.Cursor) {
               setCurrentTool({
                 id: Tool.Cursor,
