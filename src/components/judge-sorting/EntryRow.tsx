@@ -40,6 +40,19 @@ export const EntryRow: React.FC<EntryRowProps> = ({
       (row) => row.rowId === rowId
     );
     newSorting[sectionId].splice(rowIndex, 1);
+
+    // Add a new empty row to each section if it has no rows yet
+    Object.keys(newSorting).forEach((sectionId) => {
+      if (newSorting[sectionId].length === 0) {
+        const newRow = {
+          rowId: uuidv4(),
+          columns: [[], []],
+        };
+
+        newSorting[sectionId].push(newRow);
+      }
+    });
+
     setIndividualEntrySorting(newSorting);
   };
 
@@ -53,14 +66,14 @@ export const EntryRow: React.FC<EntryRowProps> = ({
       );
     });
 
-    const newRow = {
-      rowId: uuidv4(),
-      columns: [[], []],
-    };
-
     // Add a new empty row to each section if it has no rows yet
     Object.keys(newSorting).forEach((sectionId) => {
       if (newSorting[sectionId].length === 0) {
+        const newRow = {
+          rowId: uuidv4(),
+          columns: [[], []],
+        };
+
         newSorting[sectionId].push(newRow);
       }
     });
