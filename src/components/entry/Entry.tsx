@@ -27,7 +27,6 @@ import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
 import { EntryList } from "./EntryList";
-import { LitigiousCheck } from "./LitigiousCheck";
 import { useBookmarks } from "../../contexts";
 import { v4 as uuidv4 } from "uuid";
 import { useSidebar } from "../../contexts/SidebarContext";
@@ -269,7 +268,6 @@ export const Entry: React.FC<EntryProps> = ({
                   highlightElementsWithSpecificVersion,
                 isHighlighted,
               })}>
-              {isJudge && <LitigiousCheck entryId={entry.id} />}
               <EntryHeader
                 isPlaintiff={isPlaintiff}
                 isBodyOpen={isBodyOpen}

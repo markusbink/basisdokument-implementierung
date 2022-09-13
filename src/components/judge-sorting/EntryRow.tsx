@@ -4,6 +4,7 @@ import { forwardRef, useRef, useState } from "react";
 import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { v4 as uuidv4 } from "uuid";
+import { LitigiousCheck } from "../entry/LitigiousCheck";
 
 interface EntryRowProps {
   sectionId: string;
@@ -74,13 +75,16 @@ export const EntryRow: React.FC<EntryRowProps> = ({
           setIsContextMenuOpen(true);
         }}
         className={cx(
-          "relative rounded-lg select-none grid grid-cols-2 gap-6 border-dashed p-6 border ",
+          "relative rounded-lg select-none grid grid-cols-2 gap-6 border-dashed p-6 pt-10 border ",
           {
             "border border-mediumGrey/50":
               !isContextMenuOpen || (isContextMenuOpen && hasChildren),
             "!border-2 border-blue-600": isContextMenuOpen && !hasChildren,
           }
         )}>
+        <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2  z-20">
+          <LitigiousCheck rowId={rowId} />
+        </span>
         {children}
         <button
           onClick={() => addRowAfter(sectionId, rowId)}
