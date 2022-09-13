@@ -125,7 +125,7 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
               icon={<Check size={12} weight="bold" />}
               isLitigious={false}
             />
-            Als unstreitig markieren
+            Als unstrittig markieren
           </li>
           <li
             role="button"
@@ -140,7 +140,7 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
               icon={<Lightning size={12} weight="bold" />}
               isLitigious={true}
             />
-            Als streitig markieren
+            Als strittig markieren
           </li>
         </ul>
       )}
