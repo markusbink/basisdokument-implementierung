@@ -64,7 +64,6 @@ export const JudgeDiscussion = () => {
                   );
                 })}
               </div>
-              <AddEntryButtons sectionId={section.id} />
             </div>
           );
         }
