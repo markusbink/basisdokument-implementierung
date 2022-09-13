@@ -6,8 +6,9 @@ import { EditText } from "react-edit-text";
 import "react-edit-text/dist/index.css";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import { useCase, useSection } from "../../contexts";
+import { useCase, useHeaderContext, useSection } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
+import { getTheme } from "../../themes/getTheme";
 import { IEntry, UserRole } from "../../types";
 import { getOriginalSortingPosition } from "../../util/get-original-sorting-position";
 import { Button } from "../Button";
@@ -29,6 +30,9 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   sectionId,
   associatedEntry,
 }) => {
+  const {
+    selectedTheme,
+  } = useHeaderContext();
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
   const [authorName, setAuthorName] = useState<string>("");
@@ -101,13 +105,13 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             inputClassName={cx(
               "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
               {
-                "border-darkPurple": isPlaintiff,
-                "border-darkPetrol": !isPlaintiff,
+                [`border-${getTheme(selectedTheme)?.primaryLeft}`]: isPlaintiff,
+                [`border-${getTheme(selectedTheme)?.primaryRight}`]: !isPlaintiff,
               }
             )}
             className={cx("font-bold p-0 my-0 flex items-center mr-2", {
-              "text-darkPurple": isPlaintiff,
-              "text-darkPetrol": !isPlaintiff,
+              [`text-${getTheme(selectedTheme)?.primaryLeft}`]: isPlaintiff,
+              [`text-${getTheme(selectedTheme)?.primaryLeft}`]: !isPlaintiff,
             })}
             value={authorName}
             onChange={(e) => {

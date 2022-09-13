@@ -6,7 +6,7 @@ import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useCase, useHeaderContext } from "../../contexts";
-import { themeData } from "../../themes/theme-data";
+import { getTheme } from "../../themes/getTheme";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
@@ -81,16 +81,6 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     // Focus the editor when the component is mounted.
     editorRef.current?.focusEditor();
   }, []);
-
-  const getTheme = (id: string) => {
-    return themeData.find((theme) => {
-      if (theme.id === id) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-  };
 
   return (
     <div

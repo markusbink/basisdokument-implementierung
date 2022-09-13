@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { useHeaderContext } from "../../contexts";
-import { themeData } from "../../themes/theme-data";
+import { getTheme } from "../../themes/getTheme";
 
 interface EntryHeaderProps {
   isPlaintiff: boolean;
@@ -20,15 +20,6 @@ export const EntryHeader: React.FC<EntryHeaderProps> = ({
   const {
     selectedTheme,
   } = useHeaderContext();
-  const getTheme = (id: string) => {
-    return themeData.find((theme) => {
-      if (theme.id === id) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-  };
   return (
     <div
       onClick={toggleBody}

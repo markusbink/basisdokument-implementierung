@@ -1,12 +1,13 @@
 import { BookmarkSimple, Eye, Trash } from "phosphor-react";
 import React, { useState } from "react";
-import { useBookmarks, useCase } from "../../contexts";
+import { useBookmarks, useCase, useHeaderContext } from "../../contexts";
 import { IBookmark } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import cx from "classnames";
 import { ErrorPopup } from "../ErrorPopup";
+import { getTheme } from "../../themes/getTheme";
 
 export interface BookmarkProps {
   bookmark: IBookmark;
@@ -15,6 +16,7 @@ export interface BookmarkProps {
 export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
   const { setBookmarks, setBookmarkEditMode } = useBookmarks();
   const { entries } = useCase();
+  const { selectedTheme } = useHeaderContext();
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
 
@@ -89,9 +91,16 @@ export const Bookmark: React.FC<BookmarkProps> = ({ bookmark }) => {
               "flex items-center gap-1 px-1.5 py-0.25 rounded-xl text-[10px] font-semibold cursor-pointer min-w-fit grow",
               {
                 "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
-                "bg-lightPurple text-darkPurple hover:bg-darkPurple hover:text-lightPurple":
-                  entryCode?.charAt(0) === "K",
-                "bg-lightPetrol text-darkPetrol hover:bg-darkPetrol hover:text-lightPetrol":
+                [`bg-${getTheme(selectedTheme)?.secondaryLeft} text-${
+                  getTheme(selectedTheme)?.primaryLeft
+                } hover-bg-${getTheme(selectedTheme)?.primaryLeft} hover-text-${
+                  getTheme(selectedTheme)?.secondaryLeft
+                }`]: entryCode?.charAt(0) === "K",
+                [`bg-${getTheme(selectedTheme)?.secondaryRight} text-${
+                  getTheme(selectedTheme)?.primaryRight
+                } hover-bg-${
+                  getTheme(selectedTheme)?.primaryRight
+                } hover-text-${getTheme(selectedTheme)?.secondaryRight}`]:
                   entryCode?.charAt(0) === "B",
               }
             )}>
