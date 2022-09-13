@@ -69,7 +69,7 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
     <div
       ref={drop}
       className={cx(
-        "relative column space-y-4 p-4 pb-8 border border-gray-300 rounded-lg text-black",
+        "relative column space-y-4 p-4 border border-gray-300 rounded-lg text-black",
         {
           "bg-blue-600/25": isOver && canDrop,
           "bg-gray-200/50": !isOver,

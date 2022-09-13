@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { Plus, Trash } from "phosphor-react";
-import { useRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { v4 as uuidv4 } from "uuid";
@@ -71,11 +71,16 @@ export const EntryRow: React.FC<EntryRowProps> = ({
         onContextMenu={(e) => {
           e.preventDefault();
           setContextMenuPosition({ x: e.clientX, y: e.clientY });
-          console.log({ x: e.clientX, y: e.clientY });
-
           setIsContextMenuOpen(true);
         }}
-        className="relative rounded-lg select-none grid grid-cols-2 gap-6 border border-dashed border-mediumGrey/50 p-6">
+        className={cx(
+          "relative rounded-lg select-none grid grid-cols-2 gap-6 border-dashed p-6 border ",
+          {
+            "border border-mediumGrey/50":
+              !isContextMenuOpen || (isContextMenuOpen && hasChildren),
+            "!border-2 border-blue-600": isContextMenuOpen && !hasChildren,
+          }
+        )}>
         {children}
         <button
           onClick={() => addRowAfter(sectionId, rowId)}
@@ -83,26 +88,45 @@ export const EntryRow: React.FC<EntryRowProps> = ({
           <Plus width={18} height={18} weight="bold" />
         </button>
         {isContextMenuOpen && !hasChildren && (
-          <ul
+          <ContextMenu
             ref={contextMenuRef}
-            style={{ top: contextMenuPosition.y, left: contextMenuPosition.x }}
-            className={cx(
-              "fixed list-none bg-darkGrey rounded-lg text-sm z-20 m-0"
-            )}>
-            <li
-              className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all"
-              onClick={() => deleteEmptyRow(sectionId, rowId)}>
-              <Trash width={18} height={18} /> Leere Zeile löschen
-            </li>
-            <li
-              className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all"
-              onClick={() => deleteAllEmptyRows(sectionId)}>
-              <Trash width={18} height={18} />
-              Alle leeren Zeilen löschen
-            </li>
-          </ul>
+            position={contextMenuPosition}
+            deleteEmptyRow={() => deleteEmptyRow(sectionId, rowId)}
+            deleteAllEmptyRows={() => deleteAllEmptyRows(sectionId)}
+          />
         )}
       </div>
     </>
   );
 };
+
+interface ContextMenuProps {
+  position: { x: number; y: number };
+  deleteEmptyRow: () => void;
+  deleteAllEmptyRows: () => void;
+}
+
+const ContextMenu = forwardRef<HTMLUListElement, ContextMenuProps>(
+  ({ position, deleteEmptyRow, deleteAllEmptyRows }, ref) => {
+    return (
+      <ul
+        ref={ref}
+        style={{ top: position.y, left: position.x }}
+        className={cx(
+          "fixed list-none bg-darkGrey rounded-lg text-sm z-20 m-0"
+        )}>
+        <li
+          className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all"
+          onClick={deleteEmptyRow}>
+          <Trash width={18} height={18} /> Leere Zeile löschen
+        </li>
+        <li
+          className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all"
+          onClick={deleteAllEmptyRows}>
+          <Trash width={18} height={18} />
+          Alle leeren Zeilen löschen
+        </li>
+      </ul>
+    );
+  }
+);
