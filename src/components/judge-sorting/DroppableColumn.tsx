@@ -1,7 +1,5 @@
 import cx from "classnames";
-import { Plus } from "phosphor-react";
 import { useDrop } from "react-dnd";
-import { v4 as uuidv4 } from "uuid";
 import { useCase } from "../../contexts";
 import { IDragItemType, UserRole } from "../../types";
 
@@ -50,20 +48,6 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
     setIndividualEntrySorting(newSorting);
   };
 
-  const addRowAfter = (sectionId: string, rowId: string) => {
-    const newSorting = { ...individualEntrySorting };
-    const rowIndex = newSorting[sectionId].findIndex(
-      (row) => row.rowId === rowId
-    );
-    const newRow = {
-      rowId: uuidv4(),
-      columns: [[], []],
-    };
-
-    newSorting[sectionId].splice(rowIndex + 1, 0, newRow);
-    setIndividualEntrySorting(newSorting);
-  };
-
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: IDragItemType.ENTRY,
     drop: (_: any, monitor) => {
@@ -85,17 +69,13 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
     <div
       ref={drop}
       className={cx(
-        "relative column p-4 rounded-lg border-2 border-dotted border-gray-400  text-black",
+        "relative column space-y-4 p-4 pb-8 border rounded-lg text-black",
         {
           "bg-blue-600/25": isOver && canDrop,
+          "bg-gray-200": !isOver,
         }
       )}>
       {children}
-      <button
-        onClick={() => addRowAfter(position.sectionId, position.rowId)}
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-darkGrey hover:bg-mediumGrey text-white p-1 rounded-full">
-        <Plus width={18} height={18} weight="bold" />
-      </button>
     </div>
   );
 };

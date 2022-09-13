@@ -33,7 +33,8 @@ export const DraggableEntry = ({
     <div
       ref={drag}
       className={cx({
-        "outline-dotted outline-offset-4 rounded": isDragging,
+        "outline-dotted outline-offset-4 rounded cursor-grabbing": isDragging,
+        "cursor-grab": !isDragging,
       })}>
       <>{entry && <Entry viewedBy={user!.role} entry={entry} />}</>
     </div>

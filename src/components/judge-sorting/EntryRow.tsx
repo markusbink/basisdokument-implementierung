@@ -1,8 +1,9 @@
 import cx from "classnames";
-import { Trash } from "phosphor-react";
+import { Plus, Trash } from "phosphor-react";
 import { useRef, useState } from "react";
 import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { v4 as uuidv4 } from "uuid";
 
 interface EntryRowProps {
   sectionId: string;
@@ -50,6 +51,20 @@ export const EntryRow: React.FC<EntryRowProps> = ({
     setIndividualEntrySorting(newSorting);
   };
 
+  const addRowAfter = (sectionId: string, rowId: string) => {
+    const newSorting = { ...individualEntrySorting };
+    const rowIndex = newSorting[sectionId].findIndex(
+      (row) => row.rowId === rowId
+    );
+    const newRow = {
+      rowId: uuidv4(),
+      columns: [[], []],
+    };
+
+    newSorting[sectionId].splice(rowIndex + 1, 0, newRow);
+    setIndividualEntrySorting(newSorting);
+  };
+
   return (
     <>
       <div
@@ -60,8 +75,13 @@ export const EntryRow: React.FC<EntryRowProps> = ({
 
           setIsContextMenuOpen(true);
         }}
-        className="relative rounded-lg select-none grid grid-cols-2 gap-6">
+        className="relative rounded-lg select-none grid grid-cols-2 gap-6 border border-dashed border-mediumGrey/50 p-6">
         {children}
+        <button
+          onClick={() => addRowAfter(sectionId, rowId)}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-darkGrey hover:bg-mediumGrey text-white p-1 rounded-full">
+          <Plus width={18} height={18} weight="bold" />
+        </button>
         {isContextMenuOpen && !hasChildren && (
           <ul
             ref={contextMenuRef}
