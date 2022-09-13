@@ -111,12 +111,10 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                   [`bg-${getTheme(selectedTheme)?.primaryRight} text-${
                     getTheme(selectedTheme)?.secondaryRight
                   }`]: !isPlaintiff && isMenuOpen,
-                  [`hover-text-${
-                    getTheme(selectedTheme)?.secondaryLeft
-                  }`]: isPlaintiff,
-                  [`hover-text-${
-                    getTheme(selectedTheme)?.secondaryRight
-                  }`]: !isPlaintiff,
+                  [`hover-text-${getTheme(selectedTheme)?.secondaryLeft}`]:
+                    isPlaintiff,
+                  [`hover-text-${getTheme(selectedTheme)?.secondaryRight}`]:
+                    !isPlaintiff,
                 })}
                 onClick={toggleMenu}
                 isPlaintiff={isPlaintiff}>
@@ -177,12 +175,24 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                     <Button
                       size="sm"
                       bgColor={cx({
-                        "bg-darkPurple hover:bg-darkPurple/25": isPlaintiff,
-                        "bg-darkPetrol hover:bg-darkPetrol/25": !isPlaintiff,
+                        [`bg-${
+                          getTheme(selectedTheme)?.primaryLeft
+                        } hover-bg-25-${getTheme(selectedTheme)?.primaryLeft}`]:
+                          isPlaintiff,
+                        [`bg-${
+                          getTheme(selectedTheme)?.primaryRight
+                        } hover-bg-25-${getTheme(selectedTheme)?.primaryRight}`]:
+                          !isPlaintiff,
                       })}
                       textColor={cx({
-                        "text-lightPurple hover:text-darkPurple": isPlaintiff,
-                        "text-lightPetrol hover:text-darkPetrol": !isPlaintiff,
+                        [`text-${
+                          getTheme(selectedTheme)?.secondaryLeft
+                        } hover-text-${getTheme(selectedTheme)?.primaryLeft}`]:
+                          isPlaintiff,
+                        [`text-${
+                          getTheme(selectedTheme)?.secondaryRight
+                        } hover-text-${getTheme(selectedTheme)?.primaryRight}`]:
+                          !isPlaintiff,
                       })}
                       onClick={() => setIsEditing(true)}
                       icon={<Plus size={18} />}>

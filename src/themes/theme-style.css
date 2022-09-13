@@ -15,6 +15,10 @@
   border-color: #854d0e;
 }
 
+.hover-bg-25-yellowDark:hover {
+  background-color: #854d0e2a;
+}
+
 .bg-yellowLight,
 .hover-bg-yellowLight:hover {
   background-color: #fef08a;
@@ -28,6 +32,10 @@
 .border-yellowLight,
 .hover-border-yellowLight:hover {
   border-color: #fef08a;
+}
+
+.hover-bg-25-yellowLight:hover {
+  background-color: #fef08a2a;
 }
 
 /* Right Color | Summer Theme */
@@ -47,6 +55,10 @@
   border-color: #991b1b;
 }
 
+.hover-bg-25-redDark:hover {
+  background-color: #991b1b2a;
+}
+
 .bg-redLight,
 .hover-bg-redLight:hover {
   background-color: #fecaca;
@@ -60,6 +72,10 @@
 .border-redLight,
 .hover-border-redLight:hover {
   border-color: #fecaca;
+}
+
+.hover-bg-25-redLight:hover {
+  background-color: #fecaca2a;
 }
 
 /* Left Color | Summer Theme */
@@ -79,6 +95,10 @@
   border-color: #dddde6;
 }
 
+.hover-bg-25-lightPurple:hover {
+  background-color: #dddde62a;
+}
+
 .bg-lightPetrol,
 .hover-bg-lightPetrol:hover {
   background-color: #c2e3e9;
@@ -92,6 +112,10 @@
 .border-lightPetrol,
 .hover-border-lightPetrol:hover {
   border-color: #c2e3e9;
+}
+
+.hover-bg-25-lightPetrol:hover {
+  background-color: #c2e3e92a;
 }
 
 /* Right Color | Lavendel Theme */
@@ -111,6 +135,10 @@
   border-color: #3f3f67;
 }
 
+.hover-bg-25-darkPurple:hover {
+  background-color: #3f3f672a;
+}
+
 .bg-darkPetrol,
 .hover-bg-darkPetrol:hover {
   background-color: #375c62;
@@ -124,4 +152,8 @@
 .border-darkPetrol,
 .hover-border-darkPetrol:hover {
   border-color: #375c62;
+}
+
+.hover-bg-25-darkPetrol:hover {
+  background-color: #375c622a;
 }
