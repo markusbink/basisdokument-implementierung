@@ -1,5 +1,12 @@
 import cx from "classnames";
-import { Check, Scales, X } from "phosphor-react";
+import {
+  Check,
+  CheckCircle,
+  Lightning,
+  Scales,
+  ThumbsUp,
+  X,
+} from "phosphor-react";
 import { useRef, useState } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
@@ -82,7 +89,7 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
       )}
       {isLitigious && (
         <>
-          <X size={14} weight="bold" /> Strittig
+          <Lightning size={14} weight="bold" /> Strittig
         </>
       )}
       {isLitigious === false && (
@@ -91,27 +98,29 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
         </>
       )}
       {isMenuOpen && (
-        <ul className="absolute top-full p-2 !m-0 !mt-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+        <ul className="absolute top-full p-2 !m-0 !mt-2 bg-white text-darkGrey rounded-xl shadow-lg z-50">
           <li
+            role="button"
             tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
               removeLitigiousCheck();
               setIsMenuOpen(false);
             }}
-            className="flex items-center gap-2 p-2 !mt-0 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+            className="flex whitespace-nowrap items-center gap-2 p-2 !mt-0 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
             <CircleWithIcon isLitigious={null} />
             Zurücksetzen
           </li>
 
           <li
+            role="button"
             tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
               setLitigiousCheck(false);
               setIsMenuOpen(false);
             }}
-            className="flex items-center gap-2 p-2 !mt-0 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+            className="flex whitespace-nowrap items-center gap-2 p-2 !mt-0 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
             <CircleWithIcon
               icon={<Check size={12} weight="bold" />}
               isLitigious={false}
@@ -119,15 +128,16 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({
             Als unstreitig markieren
           </li>
           <li
+            role="button"
             tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
               setLitigiousCheck(true);
               setIsMenuOpen(false);
             }}
-            className="flex items-center gap-2 p-2 !mt-0 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+            className="flex whitespace-nowrap items-center gap-2 p-2 !mt-0 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
             <CircleWithIcon
-              icon={<X size={12} weight="bold" />}
+              icon={<Lightning size={12} weight="bold" />}
               isLitigious={true}
             />
             Als streitig markieren
