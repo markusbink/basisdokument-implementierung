@@ -41,13 +41,27 @@ export const EntryRow: React.FC<EntryRowProps> = ({
     setIndividualEntrySorting(newSorting);
   };
 
-  const deleteAllEmptyRows = (sectionId: string) => {
+  const deleteAllEmptyRows = () => {
     const newSorting = { ...individualEntrySorting };
 
-    // Remove all rows that have no entries in the columns
-    newSorting[sectionId] = newSorting[sectionId].filter((row) =>
-      row.columns.some((column) => column.length > 0)
-    );
+    // Remove all empty rows
+    Object.keys(newSorting).forEach((sectionId) => {
+      newSorting[sectionId] = newSorting[sectionId].filter((row) =>
+        row.columns.some((column) => column.length > 0)
+      );
+    });
+
+    const newRow = {
+      rowId: uuidv4(),
+      columns: [[], []],
+    };
+
+    // Add a new empty row to each section if it has no rows yet
+    Object.keys(newSorting).forEach((sectionId) => {
+      if (newSorting[sectionId].length === 0) {
+        newSorting[sectionId].push(newRow);
+      }
+    });
 
     setIndividualEntrySorting(newSorting);
   };
@@ -96,7 +110,7 @@ export const EntryRow: React.FC<EntryRowProps> = ({
             ref={contextMenuRef}
             position={contextMenuPosition}
             deleteEmptyRow={() => deleteEmptyRow(sectionId, rowId)}
-            deleteAllEmptyRows={() => deleteAllEmptyRows(sectionId)}
+            deleteAllEmptyRows={() => deleteAllEmptyRows()}
           />
         )}
       </div>
@@ -117,7 +131,7 @@ const ContextMenu = forwardRef<HTMLUListElement, ContextMenuProps>(
         ref={ref}
         style={{ top: position.y, left: position.x }}
         className={cx(
-          "fixed list-none bg-darkGrey rounded-lg text-sm z-20 m-0"
+          "fixed list-none bg-darkGrey rounded-lg text-sm z-50 m-0"
         )}>
         <li
           className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all"
