@@ -30,6 +30,7 @@
   border-color: #fef08a;
 }
 
+/* Right Color | Summer Theme */
 
 .bg-redDark,
 .hover-bg-redDark:hover {
@@ -46,7 +47,6 @@
   border-color: #991b1b;
 }
 
-
 .bg-redLight,
 .hover-bg-redLight:hover {
   background-color: #fecaca;
@@ -62,37 +62,7 @@
   border-color: #fecaca;
 }
 
-/* Left Color | Lavendel Theme */
-
-.bg-darkPurple,
-.hover-bg-darkPurple:hover {
-  background-color: #3f3f67;
-}
-
-.text-darkPurple,
-.hover-text-darkPurple:hover {
-  color: #3f3f67;
-}
-
-.border-darkPurple,
-.hover-border-darkPurple:hover {
-  border-color: #3f3f67;
-}
-
-.bg-darkPetrol,
-.hover-bg-darkPetrol:hover {
-  background-color: #375c62;
-}
-
-.text-darkPetrol,
-.hover-text-darkPetrol:hover {
-  color: #375c62;
-}
-
-.border-darkPetrol,
-.hover-border-darkPetrol:hover {
-  border-color: #375c62;
-}
+/* Left Color | Summer Theme */
 
 .bg-lightPurple,
 .hover-bg-lightPurple:hover {
@@ -122,4 +92,36 @@
 .border-lightPetrol,
 .hover-border-lightPetrol:hover {
   border-color: #c2e3e9;
+}
+
+/* Right Color | Lavendel Theme */
+
+.bg-darkPurple,
+.hover-bg-darkPurple:hover {
+  background-color: #3f3f67;
+}
+
+.text-darkPurple,
+.hover-text-darkPurple:hover {
+  color: #3f3f67;
+}
+
+.border-darkPurple,
+.hover-border-darkPurple:hover {
+  border-color: #3f3f67;
+}
+
+.bg-darkPetrol,
+.hover-bg-darkPetrol:hover {
+  background-color: #375c62;
+}
+
+.text-darkPetrol,
+.hover-text-darkPetrol:hover {
+  color: #375c62;
+}
+
+.border-darkPetrol,
+.hover-border-darkPetrol:hover {
+  border-color: #375c62;
 }
