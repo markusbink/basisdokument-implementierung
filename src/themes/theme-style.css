@@ -1,84 +1,4 @@
-/* Left Color | Summer Theme */
-
-.bg-yellowDark,
-.hover-bg-yellowDark:hover {
-  background-color: #854d0e;
-}
-
-.text-yellowDark,
-.hover-text-yellowDark:hover {
-  color: #854d0e;
-}
-
-.border-yellowDark,
-.hover-border-yellowDark:hover {
-  border-color: #854d0e;
-}
-
-.hover-bg-25-yellowDark:hover {
-  background-color: #854d0e2a;
-}
-
-.bg-yellowLight,
-.hover-bg-yellowLight:hover {
-  background-color: #fef08a;
-}
-
-.text-yellowLight,
-.hover-text-yellowLight:hover {
-  color: #fef08a;
-}
-
-.border-yellowLight,
-.hover-border-yellowLight:hover {
-  border-color: #fef08a;
-}
-
-.hover-bg-25-yellowLight:hover {
-  background-color: #fef08a2a;
-}
-
-/* Right Color | Summer Theme */
-
-.bg-redDark,
-.hover-bg-redDark:hover {
-  background-color: #991b1b;
-}
-
-.text-redDark,
-.hover-text-redDark:hover {
-  color: #991b1b;
-}
-
-.border-redDark,
-.hover-border-redDark:hover {
-  border-color: #991b1b;
-}
-
-.hover-bg-25-redDark:hover {
-  background-color: #991b1b2a;
-}
-
-.bg-redLight,
-.hover-bg-redLight:hover {
-  background-color: #fecaca;
-}
-
-.text-redLight,
-.hover-text-redLight:hover {
-  color: #fecaca;
-}
-
-.border-redLight,
-.hover-border-redLight:hover {
-  border-color: #fecaca;
-}
-
-.hover-bg-25-redLight:hover {
-  background-color: #fecaca2a;
-}
-
-/* Left Color | Summer Theme */
+/* Left Color | Lavender Theme */
 
 .bg-lightPurple,
 .hover-bg-lightPurple:hover {
@@ -118,7 +38,7 @@
   background-color: #c2e3e92a;
 }
 
-/* Right Color | Lavendel Theme */
+/* Right Color | Lavender Theme */
 
 .bg-darkPurple,
 .hover-bg-darkPurple:hover {
@@ -156,4 +76,164 @@
 
 .hover-bg-25-darkPetrol:hover {
   background-color: #375c622a;
+}
+
+/* Left Color | Sunset Theme */
+
+.bg-yellow,
+.hover-bg-yellow:hover {
+  background-color: #8e6411;
+}
+
+.text-yellow,
+.hover-text-yellow:hover {
+  color: #8e6411;
+}
+
+.border-yellow,
+.hover-border-yellow:hover {
+  border-color: #8e6411;
+}
+
+.hover-bg-25-yellow:hover {
+  background-color: #8e64112a;
+}
+
+.bg-lightYellow,
+.hover-bg-lightYellow:hover {
+  background-color: #efe2cd;
+}
+
+.text-lightYellow,
+.hover-text-lightYellow:hover {
+  color: #efe2cd;
+}
+
+.border-lightYellow,
+.hover-border-lightYellow:hover {
+  border-color: #efe2cd;
+}
+
+.hover-bg-25-lightYellow:hover {
+  background-color: #efe2cd;
+}
+
+/* Right Color | Sunset Theme */
+
+.bg-softGreen,
+.hover-bg-softGreen:hover {
+  background-color: #698771;
+}
+
+.text-softGreen,
+.hover-text-softGreen:hover {
+  color: #698771;
+}
+
+.border-softGreen,
+.hover-border-softGreen:hover {
+  border-color: #698771;
+}
+
+.hover-bg-25-softGreen:hover {
+  background-color: #6987712a;
+}
+
+.bg-lightGreen,
+.hover-bg-lightGreen:hover {
+  background-color: #d5eedc;
+}
+
+.text-lightGreen,
+.hover-text-lightGreen:hover {
+  color: #d5eedc;
+}
+
+.border-lightGreen,
+.hover-border-lightGreen:hover {
+  border-color: #d5eedc;
+}
+
+.hover-bg-25-lightGreen:hover {
+  background-color: #d5eedc2a;
+}
+
+/* Left Color | Forest Theme */
+
+.bg-darkBlue,
+.hover-bg-darkBlue:hover {
+  background-color: #105e80;
+}
+
+.text-darkBlue,
+.hover-text-darkBlue:hover {
+  color: #105e80;
+}
+
+.border-darkBlue,
+.hover-border-darkBlue:hover {
+  border-color: #105e80;
+}
+
+.hover-bg-25-darkBlue:hover {
+  background-color: #105e802a;
+}
+
+.bg-lightBlue,
+.hover-bg-lightBlue:hover {
+  background-color: #c0dce8;
+}
+
+.text-lightBlue,
+.hover-text-lightBlue:hover {
+  color: #c0dce8;
+}
+
+.border-lightBlue,
+.hover-border-lightBlue:hover {
+  border-color: #c0dce8;
+}
+
+.hover-bg-25-lightBlue:hover {
+  background-color: #c0dce8;
+}
+
+/* Right Color | Forest Theme */
+
+.bg-leafGreen,
+.hover-bg-leafGreen:hover {
+  background-color: #2B6706;
+}
+
+.text-leafGreen,
+.hover-text-leafGreen:hover {
+  color: #2B6706;
+}
+
+.border-leafGreen,
+.hover-border-leafGreen:hover {
+  border-color: #2B6706;
+}
+
+.hover-bg-25-leafGreen:hover {
+  background-color: #2B67062a;
+}
+
+.bg-lightLeafGreen,
+.hover-bg-lightLeafGreen:hover {
+  background-color: #d1ebd8;
+}
+
+.text-lightLeafGreen,
+.hover-text-lightLeafGreen:hover {
+  color: #d1ebd8;
+}
+
+.border-lightLeafGreen,
+.hover-border-lightLeafGreen:hover {
+  border-color: #d1ebd8;
+}
+
+.hover-bg-25-lightLeafGreen:hover {
+  background-color: #d1ebd82a;
 }

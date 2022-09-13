@@ -5,7 +5,6 @@ export interface ITheme {
   secondaryLeft: string;
   primaryRight: string;
   secondaryRight: string;
-  contentColor: string;
 }
 
 export interface IBookmark {
