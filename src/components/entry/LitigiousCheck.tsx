@@ -80,7 +80,7 @@ export const LitigiousCheck: React.FC<LitigiousCheckProps> = ({ rowId }) => {
         </>
       )}
       {isMenuOpen && (
-        <ul className="absolute top-full p-2 !mt-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+        <ul className="absolute top-full p-2 !m-0 !mt-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
           <li
             tabIndex={0}
             onClick={(e) => {
