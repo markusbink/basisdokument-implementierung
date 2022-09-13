@@ -24,6 +24,7 @@ import {
 } from "../../data-management/download-handler";
 import { Tooltip } from "../Tooltip";
 import { themeData } from "../../themes/theme-data";
+import Cookies from "js-cookie";
 import cx from "classnames";
 
 export const DocumentButton = () => {
@@ -119,13 +120,14 @@ export const DocumentButton = () => {
               <div className="flex flex-row gap-2">
                 {themeData.map((theme, index) => {
                   return (
-                    <Tooltip text="Lavender" key={index}>
+                    <Tooltip text={theme.title} key={index}>
                       <div
                         className={cx(
                           `flex flex-row rounded-full hover:border hover:border-darkGrey hover:border-[2px] w-14 h-14 items-center justify-center cursor-pointer`,
                           { "border-[3px] border-darkGrey": theme.id === selectedTheme }
                         )}
                         onClick={() => {
+                          Cookies.set("theme", theme.id)
                           setSelectedTheme(theme.id);
                         }}>
                         <div

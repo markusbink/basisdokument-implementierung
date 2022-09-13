@@ -7,6 +7,7 @@ import {
   ITool,
   Tool,
 } from "../types";
+import Cookies from "js-cookie";
 
 // Define Interfaces
 interface HeaderProviderProps {
@@ -65,8 +66,18 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const [searchbarValue, setSearchbarValue] =
     useState<IHeaderContext["searchbarValue"]>("");
 
+  let themeFromCookie = Cookies.get("theme");
+
+  let theme: string;
+  if (themeFromCookie) {
+    theme = themeFromCookie;
+  } else {
+    theme = "lavender";
+    Cookies.set("theme", "lavender");
+  }
+
   const [selectedTheme, setSelectedTheme] =
-    useState<IHeaderContext["selectedTheme"]>("lavender");
+    useState<IHeaderContext["selectedTheme"]>(theme);
 
   const [showColumnView, setShowColumnView] =
     useState<IHeaderContext["showColumnView"]>(true);
