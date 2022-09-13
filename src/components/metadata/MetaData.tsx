@@ -105,10 +105,10 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
             <Tooltip text="Mehr Optionen">
               <Action
                 className={cx("relative", {
-                  [`text-${getTheme(selectedTheme)?.primaryLeft} text-${
+                  [`bg-${getTheme(selectedTheme)?.primaryLeft} text-${
                     getTheme(selectedTheme)?.secondaryLeft
                   }`]: isPlaintiff && isMenuOpen,
-                  [`text-${getTheme(selectedTheme)?.primaryRight} text-${
+                  [`bg-${getTheme(selectedTheme)?.primaryRight} text-${
                     getTheme(selectedTheme)?.secondaryRight
                   }`]: !isPlaintiff && isMenuOpen,
                 })}
