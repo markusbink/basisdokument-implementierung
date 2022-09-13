@@ -426,7 +426,7 @@ export const Entry: React.FC<EntryProps> = ({
               )}
             </div>
             {/* Button to add response */}
-            {canAddEntry && !isNewEntryVisible && (
+            {canAddEntry && !isNewEntryVisible && !showEntrySorting && (
               <Button
                 onClick={showNewEntry}
                 icon={<ArrowBendLeftUp weight="bold" size={18} />}
