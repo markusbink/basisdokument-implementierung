@@ -42,7 +42,8 @@ export const DocumentButton = () => {
     highlightedEntries,
   } = useCase();
   const { sectionList, individualSorting } = useSection();
-  const { versionHistory, colorSelection } = useHeaderContext();
+  const { versionHistory, colorSelection, selectedTheme, setSelectedTheme } =
+    useHeaderContext();
   const { hints } = useHints();
   const { notes } = useNotes();
   const { bookmarks } = useBookmarks();
@@ -119,9 +120,22 @@ export const DocumentButton = () => {
                 {themeData.map((theme, index) => {
                   return (
                     <Tooltip text="Lavender" key={index}>
-                      <div className="flex flex-row rounded-full hover:border hover:border-darkGrey hover:border-[2px] w-14 h-14 items-center justify-center cursor-pointer">
-                        <div className={cx(`h-12 w-6 ${theme.secondaryLeftBackgroundColor} rounded-l-full`)}></div>
-                        <div className={cx(`h-12 w-6 ${theme.secondaryRightBackgroundColor} rounded-r-full`)}></div>
+                      <div
+                        className={cx(
+                          `flex flex-row rounded-full hover:border hover:border-darkGrey hover:border-[2px] w-14 h-14 items-center justify-center cursor-pointer`,
+                          { "border-[3px] border-darkGrey": theme.id === selectedTheme }
+                        )}
+                        onClick={() => {
+                          setSelectedTheme(theme.id);
+                        }}>
+                        <div
+                          className={cx(
+                            `h-12 w-6 ${theme.secondaryLeftBackgroundColor} rounded-l-full`
+                          )}></div>
+                        <div
+                          className={cx(
+                            `h-12 w-6 ${theme.secondaryRightBackgroundColor} rounded-r-full`
+                          )}></div>
                       </div>
                     </Tooltip>
                   );

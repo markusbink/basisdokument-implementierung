@@ -14,6 +14,7 @@ interface HeaderProviderProps {
 }
 
 export default interface IHeaderContext {
+  selectedTheme: string;
   showDropdownHeader: boolean;
   showColumnView: boolean;
   getCurrentTool: ITool;
@@ -26,6 +27,7 @@ export default interface IHeaderContext {
   versionHistory: IVersion[];
   selectedVersion: number;
   sectionListHeader: ISection[];
+  setSelectedTheme: React.Dispatch<React.SetStateAction<string>>;
   setSectionListHeader: React.Dispatch<React.SetStateAction<ISection[]>>;
   setSelectedVersion: React.Dispatch<React.SetStateAction<number>>;
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
@@ -62,6 +64,9 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
 
   const [searchbarValue, setSearchbarValue] =
     useState<IHeaderContext["searchbarValue"]>("");
+
+  const [selectedTheme, setSelectedTheme] =
+    useState<IHeaderContext["selectedTheme"]>("lavender");
 
   const [showColumnView, setShowColumnView] =
     useState<IHeaderContext["showColumnView"]>(true);
@@ -104,6 +109,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   return (
     <HeaderContext.Provider
       value={{
+        selectedTheme,
         showDropdownHeader,
         showColumnView,
         getCurrentTool,
@@ -116,6 +122,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         versionHistory,
         selectedVersion,
         sectionListHeader,
+        setSelectedTheme,
         setSectionListHeader,
         setSelectedVersion,
         setVersionHistory,
