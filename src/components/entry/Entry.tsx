@@ -24,6 +24,7 @@ import { LitigiousCheck } from "./LitigiousCheck";
 import { useBookmarks } from "../../contexts";
 import { v4 as uuidv4 } from "uuid";
 import { useSidebar } from "../../contexts/SidebarContext";
+import { getTheme } from "../../themes/getTheme";
 
 interface EntryProps {
   entry: IEntry;
@@ -53,8 +54,9 @@ export const Entry: React.FC<EntryProps> = ({
     getCurrentTool,
     highlightElementsWithSpecificVersion,
     selectedVersion,
+    selectedTheme,
   } = useHeaderContext();
-  const { setShowNotePopup,setAssociatedEntryIdNote } = useNotes();
+  const { setShowNotePopup, setAssociatedEntryIdNote } = useNotes();
   const { setShowJudgeHintPopup, setAssociatedEntryIdHint } = useHints();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
@@ -141,7 +143,7 @@ export const Entry: React.FC<EntryProps> = ({
   const addHint = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
-    setShowJudgeHintPopup(true);    
+    setShowJudgeHintPopup(true);
     setAssociatedEntryIdHint(entry.id);
   };
 
@@ -252,8 +254,12 @@ export const Entry: React.FC<EntryProps> = ({
                       className={cx(
                         "rounded-full px-3 py-1 text-xs font-semibold",
                         {
-                          "bg-darkPurple text-lightPurple": isPlaintiff,
-                          "bg-darkPetrol text-lightPetrol": !isPlaintiff,
+                          [`bg-${getTheme(selectedTheme)?.primaryPlaintiff} text-${
+                            getTheme(selectedTheme)?.secondaryPlaintiff
+                          }`]: isPlaintiff,
+                          [`bg-${getTheme(selectedTheme)?.primaryDefendant} text-${
+                            getTheme(selectedTheme)?.secondaryDefendant
+                          }`]: !isPlaintiff,
                         }
                       )}>
                       {entry.entryCode}
@@ -263,15 +269,19 @@ export const Entry: React.FC<EntryProps> = ({
                         inputClassName={cx(
                           "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
                           {
-                            "border-darkPurple": isPlaintiff,
-                            "border-darkPetrol": !isPlaintiff,
+                            [`border-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
+                              isPlaintiff,
+                            [`border-${getTheme(selectedTheme)?.primaryDefendant}`]:
+                              !isPlaintiff,
                           }
                         )}
                         className={cx(
                           "font-bold p-0 my-0 flex items-center mr-2",
                           {
-                            "text-darkPurple": isPlaintiff,
-                            "text-darkPetrol": !isPlaintiff,
+                            [`text-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
+                              isPlaintiff,
+                            [`text-${getTheme(selectedTheme)?.primaryDefendant}`]:
+                              !isPlaintiff,
                           }
                         )}
                         value={authorName}
@@ -325,10 +335,12 @@ export const Entry: React.FC<EntryProps> = ({
                       <Tooltip text="Mehr Optionen">
                         <Action
                           className={cx({
-                            "bg-darkPurple text-lightPurple":
-                              isPlaintiff && isMenuOpen,
-                            "bg-darkPetrol text-lightPetrol":
-                              !isPlaintiff && isMenuOpen,
+                            [`bg-${getTheme(selectedTheme)?.primaryPlaintiff} text-${
+                              getTheme(selectedTheme)?.secondaryPlaintiff
+                            }`]: isPlaintiff && isMenuOpen,
+                            [`bg-${getTheme(selectedTheme)?.primaryDefendant} text-${
+                              getTheme(selectedTheme)?.secondaryDefendant
+                            }`]: !isPlaintiff && isMenuOpen,
                           })}
                           onClick={toggleMenu}
                           isPlaintiff={isPlaintiff}>
@@ -409,10 +421,7 @@ export const Entry: React.FC<EntryProps> = ({
                 size="sm"
                 alternativePadding="mt-2"
                 bgColor="bg-lightGrey hover:bg-mediumGrey"
-                textColor={cx("font-semibold", {
-                  "text-darkPurple hover:text-lightPurple": isPlaintiff,
-                  "text-darkPetrol hover:text-lightPetrol": !isPlaintiff,
-                })}
+                textColor="text-darkGrey hover:text-offWhite"
                 onClick={showNewEntry}
                 icon={<ArrowBendLeftUp weight="bold" size={18} />}>
                 Auf diesen Beitrag Bezug nehmen

@@ -8,6 +8,7 @@ import {
 } from "@funktechno/texthighlighter/lib/index";
 import { IHighlightedEntry, Tool } from "../../types";
 import { getColorHexForColor } from "../../util/get-hex-code-for-marker";
+import { getTheme } from "../../themes/getTheme";
 
 interface EntryBodyProps {
   isPlaintiff: boolean;
@@ -33,6 +34,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
     currentColorSelection,
     getCurrentTool,
     highlighterData,
+    selectedTheme,
   } = useHeaderContext();
   const { setHighlightedEntries, highlightedEntries } = useCase();
 
@@ -195,8 +197,8 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
       className={cx(
         `p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`,
         {
-          "border-lightPurple": isPlaintiff,
-          "border-lightPetrol": !isPlaintiff,
+          [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]: isPlaintiff,
+          [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]: !isPlaintiff,
         }
       )}>
       {searchbarValue === "" &&

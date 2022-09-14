@@ -1,6 +1,7 @@
 import cx from "classnames";
 import { useEffect, useRef, useState } from "react";
-import { useCase, useSection, useUser } from "../../contexts";
+import { useCase, useHeaderContext, useSection, useUser } from "../../contexts";
+import { getTheme } from "../../themes/getTheme";
 import { UserRole } from "../../types";
 
 interface SectionTitleProps {
@@ -39,6 +40,10 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
     });
   };
 
+  const {
+    selectedTheme,
+  } = useHeaderContext();
+
   useEffect(() => {
     if (!title) {
       setIsEditing(true);
@@ -49,10 +54,10 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
     <div className={cx("flex w-full flex-col")}>
       <span
         className={cx(
-          "text-xs font-bold rounded-md px-2 py-1 w-fit uppercase",
+          "text-xs font-bold rounded-md px-2 py-1 w-fit uppercase text-darkGrey",
           {
-            "bg-lightPurple text-darkPurple": role === UserRole.Plaintiff,
-            "bg-lightPetrol text-darkPetrol": role === UserRole.Defendant,
+            [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${getTheme(selectedTheme)?.primaryPlaintiff}`]: role === UserRole.Plaintiff,
+            [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${getTheme(selectedTheme)?.primaryDefendant}`]: role === UserRole.Defendant,
           }
         )}>
         {role}

@@ -93,7 +93,7 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
               <DotsThree
                 size={20}
                 weight="bold"
-                className="rounded-md hover:bg-darkPurple hover:text-lightPurple"
+                className={`rounded-md hover:bg-darkGrey hover:text-lightGrey`}
               />
             </Tooltip>
           </span>
