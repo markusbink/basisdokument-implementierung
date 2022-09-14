@@ -1,9 +1,9 @@
+import cx from "classnames";
 import { useDrag } from "react-dnd";
 import { useCase, useUser } from "../../contexts";
 import { getEntryById } from "../../contexts/CaseContext";
 import { IDragItemType } from "../../types";
 import { Entry } from "../entry";
-import cx from "classnames";
 
 export const DraggableEntry = ({
   entryId,
