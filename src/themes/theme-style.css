@@ -122,21 +122,21 @@
 
 .bg-softGreen,
 .hover-bg-softGreen:hover {
-  background-color: #698771;
+  background-color: #97b9a0;
 }
 
 .text-softGreen,
 .hover-text-softGreen:hover {
-  color: #698771;
+  color: #97b9a0;
 }
 
 .border-softGreen,
 .hover-border-softGreen:hover {
-  border-color: #698771;
+  border-color: #97b9a0;
 }
 
 .hover-bg-25-softGreen:hover {
-  background-color: #6987712a;
+  background-color: #97b9a02a;
 }
 
 .bg-lightGreen,
@@ -202,21 +202,21 @@
 
 .bg-leafGreen,
 .hover-bg-leafGreen:hover {
-  background-color: #2B6706;
+  background-color: #2b6706;
 }
 
 .text-leafGreen,
 .hover-text-leafGreen:hover {
-  color: #2B6706;
+  color: #2b6706;
 }
 
 .border-leafGreen,
 .hover-border-leafGreen:hover {
-  border-color: #2B6706;
+  border-color: #2b6706;
 }
 
 .hover-bg-25-leafGreen:hover {
-  background-color: #2B67062a;
+  background-color: #2b67062a;
 }
 
 .bg-lightLeafGreen,
@@ -236,4 +236,65 @@
 
 .hover-bg-25-lightLeafGreen:hover {
   background-color: #d1ebd82a;
+}
+
+/* Left Color | Sunset Theme */
+
+.bg-darkOrange,
+.hover-bg-darkOrange:hover {
+  background-color: #91632e;
+}
+
+.text-darkOrange,
+.hover-text-darkOrange:hover {
+  color: #91632e;
+}
+
+.border-darkOrange,
+.hover-border-darkOrange:hover {
+  border-color: #91632e;
+}
+
+.hover-bg-25-darkOrange:hover {
+  background-color: #91632e2a;
+}
+
+.bg-lightOrange,
+.hover-bg-lightOrange:hover {
+  background-color: #f8cc9a;
+}
+
+.text-lightOrange,
+.hover-text-lightOrange:hover {
+  color: #f8cc9a;
+}
+
+.border-lightOrange,
+.hover-border-lightOrange:hover {
+  border-color: #f8cc9a;
+}
+
+.hover-bg-25-lightOrange:hover {
+  background-color: #f8cc9a2a;
+}
+
+/* Right Color | Sunset Theme */
+
+.bg-darkGreen,
+.hover-bg-darkGreen:hover {
+  background-color: #3c5041;
+}
+
+.text-darkGreen,
+.hover-text-darkGreen:hover {
+  color: #3c5041;
+}
+
+.border-darkGreen,
+.hover-border-darkGreen:hover {
+  border-color: #3c5041;
+}
+
+.hover-bg-25-darkGreen:hover {
+  background-color: #3c50412a;
 }

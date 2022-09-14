@@ -10,12 +10,12 @@ export const themeData: ITheme[] = [
     secondaryDefendant: "lightPetrol",
   },
   {
-    id: "sunset",
-    title: "Sunset",
-    primaryPlaintiff: "yellow",
-    secondaryPlaintiff: "lightYellow",
-    primaryDefendant: "softGreen",
-    secondaryDefendant: "lightGreen",
+    id: "adventure",
+    title: "Adventure",
+    primaryPlaintiff: "darkOrange",
+    secondaryPlaintiff: "lightOrange",
+    primaryDefendant: "darkGreen",
+    secondaryDefendant: "softGreen",
   },
   {
     id: "dreams",
