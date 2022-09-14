@@ -1,14 +1,7 @@
 import cx from "classnames";
-import {
-  Check,
-  CheckCircle,
-  Lightning,
-  Scales,
-  ThumbsUp,
-  X,
-} from "phosphor-react";
+import { Check, Lightning, Scales } from "phosphor-react";
 import { useRef, useState } from "react";
-import { useCase, useHeaderContext } from "../../contexts";
+import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 
 interface LitigiousCheckProps {

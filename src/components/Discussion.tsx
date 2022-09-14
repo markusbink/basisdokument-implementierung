@@ -1,30 +1,18 @@
-import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useCase, useHeaderContext, useSection, useUser } from "../contexts";
-import {
-  IEntry,
-  IndividualEntrySortingEntry,
-  ISection,
-  Sorting,
-  UserRole,
-} from "../types";
+import { useCase, useHeaderContext, useSection } from "../contexts";
+import { Sorting, UserRole } from "../types";
 import { getOriginalSortingPosition } from "../util/get-original-sorting-position";
+import { getRequestedSorting } from "../util/get-requested-sorting";
 import { AddEntryButtons } from "./AddEntryButtons";
 import { AddSection } from "./AddSection";
-import { Entry, EntryList } from "./entry";
+import { EntryList } from "./entry";
+import { JudgeDiscussion } from "./JudgeDiscussion";
 import { MetaData } from "./metadata/MetaData";
 import { SectionHeader } from "./section-header/SectionHeader";
-import cx from "classnames";
-import React, { Dispatch, useEffect, useState } from "react";
-import { getEntryById } from "../contexts/CaseContext";
-import { userInfo } from "os";
-import { JudgeDiscussion } from "./JudgeDiscussion";
-import { DraggableEntry, DroppableColumn, EntryRow } from "./judge-sorting";
-import { getRequestedSorting } from "../util/get-requested-sorting";
 
 export const Discussion = () => {
-  const { groupedEntries, individualEntrySorting, setIndividualEntrySorting } =
-    useCase();
+  const { groupedEntries } = useCase();
   const { sectionList, individualSorting } = useSection();
 
   const {
