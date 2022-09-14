@@ -113,17 +113,18 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
               <>
                 <DropdownMenu.Item onClick={() => resetLitigiousChecks()}>
                   <Button icon={<Circle size={18} />} size="sm">
-                    Alle Streitigkeitsmarkierungen zurücksetzen
+                    Alle Streitigkeitsmarkierungen des Gliederungspunktes
+                  zurücksetzen
                   </Button>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item onClick={() => setAllNotLitigious()}>
                   <Button icon={<CheckCircle size={18} />} size="sm">
-                    Alle Beiträge als unstreitig markieren
+                    Alle Beiträge des Gliederungspunktes als unstreitig markieren
                   </Button>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item onClick={() => setAllLitigious()}>
                   <Button icon={<XCircle size={18} />} size="sm">
-                    Alle Beiträge als streitig markieren
+                    Alle Beiträge des Gliederungspunktes als streitig markieren
                   </Button>
                 </DropdownMenu.Item>
               </>
