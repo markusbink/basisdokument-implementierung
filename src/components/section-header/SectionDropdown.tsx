@@ -15,15 +15,28 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   version,
 }) => {
   const { user } = useUser();
-  const { currentVersion, setIndividualEntrySorting } = useCase();
-  const { setSectionList } = useSection();
+  const { currentVersion, setIndividualEntrySorting, setEntries } = useCase();
+  const { setSectionList, setIndividualSorting } = useSection();
 
   const isOld = version < currentVersion;
 
   const deleteSection = () => {
+    // Remove entries that belong to the section
+    setEntries((entries) =>
+      entries.filter((entry) => entry.sectionId !== sectionId)
+    );
+
+    // Remove the section
     setSectionList((prevSectionList) =>
       prevSectionList.filter((section) => section.id !== sectionId)
     );
+    setIndividualSorting((prevIndividualSorting) =>
+      prevIndividualSorting.filter((id) => id !== sectionId)
+    );
+    setIndividualEntrySorting((prevIndividualEntrySorting) => {
+      const { [sectionId]: _, ...rest } = prevIndividualEntrySorting;
+      return rest;
+    });
   };
 
   const resetLitigiousChecks = () => {

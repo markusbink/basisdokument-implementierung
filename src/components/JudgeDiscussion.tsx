@@ -2,7 +2,6 @@ import { useCase, useHeaderContext, useSection } from "../contexts";
 import { UserRole } from "../types";
 import { getOriginalSortingPosition } from "../util/get-original-sorting-position";
 import { getRequestedSorting } from "../util/get-requested-sorting";
-import { AddEntryButtons } from "./AddEntryButtons";
 import { DraggableEntry, DroppableColumn, EntryRow } from "./judge-sorting";
 import { SectionHeader } from "./section-header/SectionHeader";
 
