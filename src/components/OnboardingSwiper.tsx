@@ -85,6 +85,12 @@ const sliderItems = [
     title: "Hinweise der Richter:innen nach §139 ZPO",
     desc: "Richter:innen können Hinweise an die beiden Parteien verfassen. Ähnlich wie bei den Notizen, ist es auch hier möglich, dass sich ein Hinweis der Richter:innen auf einen bestimmten Beitrag bezieht. Zusätzlich können Richter:innen Beiträge als „streitig“ und „unstreitig“ kennzeichnen. Dies kann über das farbliche Icon an den Beiträgen erkannt werden.",
   },
+  {
+    imageSrc: ".mp4",
+    //imageAlt: "bla",
+    title: "Viel Erfolg bei der Bearbeitung Ihres Falles!",
+    desc:"Sollte Ihnen später etwas unklar sein, können Sie jederzeit über das Hilfe-Icon zu diesem Guide zurückkehren.",
+  },
 ];
 const SwiperButtonNext = () => {
   const swiper = useSwiper();
