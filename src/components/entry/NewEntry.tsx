@@ -75,7 +75,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
 
     setIndividualEntrySorting((prevEntrySorting) => {
       const newEntrySorting = { ...prevEntrySorting };
-      newEntrySorting[sectionId].push(individualEntrySortingEntry);
+      newEntrySorting[sectionId]?.push(individualEntrySortingEntry);
       return newEntrySorting;
     });
 
