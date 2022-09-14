@@ -23,10 +23,12 @@
     "cx": "^22.8.1",
     "date-fns": "^2.29.2",
     "draft-js": "^0.11.7",
+    "draft-js-import-html": "^1.4.1",
     "draftjs-to-html": "^0.9.1",
     "file-saver": "^2.0.5",
     "gh-pages": "^4.0.0",
     "highlight-react": "^0.1.13",
+    "html-to-draftjs": "^1.5.0",
     "js-cookie": "^3.0.1",
     "jspdf": "^2.5.1",
     "phosphor-react": "^1.4.1",
@@ -71,6 +73,7 @@
     ]
   },
   "devDependencies": {
+    "@types/html-to-draftjs": "^1.4.0",
     "@types/react-edit-text": "^5.0.1",
     "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.8",

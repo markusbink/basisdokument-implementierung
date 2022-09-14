@@ -35,12 +35,12 @@ export function createEditFile(
   editFileObject["currentVersion"] = version;
   editFileObject["highlightedEntries"] = [];
   editFileObject["highlighter"] = [
-    { color: "red", label: "Markierung 1" },
+    { color: "yellow", label: "Markierung 1" },
     { color: "orange", label: "Markierung 2" },
-    { color: "yellow", label: "Markierung 3" },
-    { color: "green", label: "Markierung 4" },
+    { color: "red", label: "Markierung 3" },
+    { color: "purple", label: "Markierung 4" },
     { color: "blue", label: "Markierung 5" },
-    { color: "purple", label: "Markierung 6" },
+    { color: "green", label: "Markierung 6" },
   ];
   editFileObject["notes"] = [];
   editFileObject["bookmarks"] = [];

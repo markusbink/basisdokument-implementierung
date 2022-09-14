@@ -2,11 +2,13 @@ import cx from "classnames";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
-import { useCase, useNotes } from "../../contexts";
+import { useCase, useHeaderContext, useNotes } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { getTheme } from "../../themes/getTheme";
 import { INote } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
+import { ErrorPopup } from "../ErrorPopup";
 
 export interface NoteProps {
   note: INote;
@@ -14,6 +16,8 @@ export interface NoteProps {
 
 export const Note: React.FC<NoteProps> = ({ note }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
+    useState<boolean>(false);
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries } = useCase();
@@ -23,9 +27,11 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setTitle,
     setEditorState,
     setOpenedNoteId,
-    setAssociatedEntryId,
+    setAssociatedEntryIdNote,
     setEditMode,
   } = useNotes();
+
+  const { selectedTheme } = useHeaderContext();
 
   let entryCode;
   if (note.associatedEntry) {
@@ -41,7 +47,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setOpenedNoteId(note.id);
     setEditMode(true);
     if (note.associatedEntry) {
-      setAssociatedEntryId(note.associatedEntry);
+      setAssociatedEntryIdNote(note.associatedEntry);
     }
     const blocksFromHTML = convertFromHTML(note.text);
     const contentState = ContentState.createFromBlockArray(
@@ -51,7 +57,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setEditorState(EditorState.createWithContent(contentState));
   };
 
-  const deleteNote = (e: React.MouseEvent) => {
+  const deleteNote = () => {
     setNotes(notes.filter((item) => item.id !== note.id));
   };
 
@@ -65,9 +71,16 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
               "flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer text-[10px] font-semibold rounded-xl",
               {
                 "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
-                "bg-lightPurple text-darkPurple hover:bg-darkPurple hover:text-lightPurple":
-                  entryCode?.charAt(0) === "K",
-                "bg-lightPetrol text-darkPetrol hover:bg-darkPetrol hover:text-lightPetrol":
+                [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                  getTheme(selectedTheme)?.primaryPlaintiff
+                } hover-bg-${getTheme(selectedTheme)?.primaryPlaintiff} hover-text-${
+                  getTheme(selectedTheme)?.secondaryPlaintiff
+                }`]: entryCode?.charAt(0) === "K",
+                [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                  getTheme(selectedTheme)?.primaryDefendant
+                } hover-bg-${
+                  getTheme(selectedTheme)?.primaryDefendant
+                } hover-text-${getTheme(selectedTheme)?.secondaryDefendant}`]:
                   entryCode?.charAt(0) === "B",
               }
             )}>
@@ -83,7 +96,9 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
           <div className="flex justify-between items-center mb-3">
             <div className="">
               <div className="font-bold">{note.author}</div>
-              <div className="opacity-40">{`${new Date(Date.parse(String(note.timestamp))).toLocaleString("de-DE")}`}</div>
+              <div className="opacity-40">{`${new Date(
+                Date.parse(String(note.timestamp))
+              ).toLocaleString("de-DE")}`}</div>
             </div>
 
             <div ref={ref} className="self-end relative">
@@ -101,7 +116,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
                 }}
                 icon={<DotsThree size={20} weight="bold" />}></Button>{" "}
               {isMenuOpen ? (
-                <ul className="absolute right-0 bottom-8 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
+                <ul className="absolute right-0 bottom-2 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
                   <li
                     tabIndex={0}
                     onClick={editNote}
@@ -111,7 +126,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
                   </li>
                   <li
                     tabIndex={0}
-                    onClick={deleteNote}
+                    onClick={() => setIsDeleteErrorVisible(true)}
                     className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                     <Trash size={16} />
                     Löschen
@@ -122,6 +137,33 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
           </div>
         </div>
       </div>
+      <ErrorPopup isVisible={isDeleteErrorVisible}>
+        <div className="flex flex-col items-center justify-center space-y-8">
+          <p className="text-center text-base font-normal">
+            Sind Sie sicher, dass Sie die Notiz <b>{note.title}</b> löschen
+            möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+              }}>
+              Abbrechen
+            </Button>
+            <Button
+              bgColor="bg-lightRed hover:bg-darkRed/25"
+              textColor="text-darkRed font-bold"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+                deleteNote();
+              }}>
+              Notiz löschen
+            </Button>
+          </div>
+        </div>
+      </ErrorPopup>
     </div>
   );
 };

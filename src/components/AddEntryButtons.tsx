@@ -42,7 +42,7 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
               textColor="text-white"
               onClick={() => handleClick(UserRole.Plaintiff)}
               icon={<Plus size={18} weight="bold" />}>
-              Beitrag hinzufügen
+              Neuen Beitrag hinzufügen
             </Button>
           )}
         </div>
@@ -55,7 +55,7 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
               textColor="text-white"
               onClick={() => handleClick(UserRole.Defendant)}
               icon={<Plus size={18} weight="bold" />}>
-              Beitrag hinzufügen
+              Neuen Beitrag hinzufügen
             </Button>
           )}
         </div>

@@ -22,6 +22,10 @@ import {
   downloadBasisdokument,
   downloadEditFile,
 } from "../../data-management/download-handler";
+import { Tooltip } from "../Tooltip";
+import { themeData } from "../../themes/theme-data";
+import Cookies from "js-cookie";
+import cx from "classnames";
 
 export const DocumentButton = () => {
   const { user } = useUser();
@@ -35,11 +39,12 @@ export const DocumentButton = () => {
     currentVersion,
     metaData,
     entries,
-    highlightedEntries,
     individualEntrySorting,
+    highlightedEntries,
   } = useCase();
   const { sectionList, individualSorting } = useSection();
-  const { versionHistory, colorSelection } = useHeaderContext();
+  const { versionHistory, colorSelection, selectedTheme, setSelectedTheme } =
+    useHeaderContext();
   const { hints } = useHints();
   const { notes } = useNotes();
   const { bookmarks } = useBookmarks();
@@ -108,6 +113,38 @@ export const DocumentButton = () => {
                   {user!.name}
                 </p>
                 <p className="text-sm text-darkGrey">{user!.role}</p>
+              </div>
+            </div>
+            <div className="flex flex-col align-middle justify-center items-center gap-2 bg-offWhite rounded-md p-3 pl-2 pr-2 h-full">
+              <p className="font-bold text-sm">Erscheinungsbild</p>
+              <div className="flex flex-row gap-2">
+                {themeData.map((theme, index) => {
+                  return (
+                    <Tooltip text={theme.title} key={index}>
+                      <div
+                        className={cx(
+                          `flex flex-row rounded-full hover:border hover:border-darkGrey hover:border-[2px] w-14 h-14 items-center justify-center cursor-pointer`,
+                          {
+                            "border-[3px] border-darkGrey":
+                              theme.id === selectedTheme,
+                          }
+                        )}
+                        onClick={() => {
+                          Cookies.set("theme", theme.id);
+                          setSelectedTheme(theme.id);
+                        }}>
+                        <div
+                          className={cx(
+                            `h-12 w-6 bg-${theme.primaryPlaintiff} rounded-l-full`
+                          )}></div>
+                        <div
+                          className={cx(
+                            `h-12 w-6 bg-${theme.primaryDefendant} rounded-r-full`
+                          )}></div>
+                      </div>
+                    </Tooltip>
+                  );
+                })}
               </div>
             </div>
             <DownloadBasisdokumentButton

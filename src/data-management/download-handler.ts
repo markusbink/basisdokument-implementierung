@@ -22,7 +22,7 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   });
 
   // Save the file
-  saveAs(fileToSave, fileName);
+  saveAs(fileToSave, fileName+".json");
 }
 
 function resetFontSize(parentElement: any) {
@@ -54,7 +54,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   // Main Title "Basisdokument"
   let mainTitleEl = document.createElement("h1");
-  mainTitleEl.style.fontSize = "4px";
+  mainTitleEl.style.fontSize = "5px";
   mainTitleEl.style.fontWeight = "bold";
   mainTitleEl.innerHTML = "Basisdokument";
   basisdokumentDOMRepresentation.appendChild(mainTitleEl);
@@ -268,12 +268,76 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     }
   }
 
+  // Remove default margins
+  let allParagraphs = basisdokumentDOMRepresentation.querySelectorAll("p");
+  for (let index = 0; index < allParagraphs.length; index++) {
+    const element = allParagraphs[index];
+    element.style.minHeight = "1px";
+    element.style.marginBottom = "1px";
+  }
+
+  let allLists = basisdokumentDOMRepresentation.querySelectorAll("ul");
+  for (let index = 0; index < allLists.length; index++) {
+    const element = allLists[index];
+    element.style.margin = "1px";
+    element.style.marginLeft = "4px";
+  }
+  let allNumberedLists = basisdokumentDOMRepresentation.querySelectorAll("ol");
+  for (let index = 0; index < allNumberedLists.length; index++) {
+    const element = allNumberedLists[index];
+    element.style.margin = "1px";
+    element.style.marginLeft = "4px";
+  }
+
+  let allListItems = basisdokumentDOMRepresentation.querySelectorAll("li");
+  for (let index = 0; index < allListItems.length; index++) {
+    const element = allListItems[index];
+    element.style.margin = "0px";
+  }
+
+  let allStrongItems = basisdokumentDOMRepresentation.querySelectorAll("strong");
+  for (let index = 0; index < allStrongItems.length; index++) {
+    const element = allStrongItems[index];
+    element.style.marginBottom = "1px";
+  }
+
+  let allItalicItems = basisdokumentDOMRepresentation.querySelectorAll("i");
+  for (let index = 0; index < allItalicItems.length; index++) {
+    const element = allItalicItems[index];
+    element.style.marginBottom = "1px";
+  }
+
   let stringHtml = basisdokumentDOMRepresentation.outerHTML;
+  console.log(stringHtml);
+
   doc
     .html(stringHtml, {
+      autoPaging: 'text',
       margin: 15,
     })
-    .then(() => doc.save(fileName));
+    .then(() => {
+      doc.addPage();
+      doc.setFontSize(8);
+      doc.text(
+        ".................................................................................................................................",
+        10,
+        60
+      );
+      doc.text("Vorname, Nachname", 10, 64);
+      doc.text(
+        ".................................................................................................................................",
+        10,
+        90
+      );
+      doc.text("Ort, Datum", 10, 94);
+      doc.text(
+        "...........................................................................",
+        10,
+        120
+      );
+      doc.text("Unterschrift", 10, 124);
+      doc.save(fileName);
+    });
 }
 
 export function downloadBasisdokument(

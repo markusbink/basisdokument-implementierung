@@ -1,0 +1,300 @@
+/* Left Color | Lavender Theme */
+
+.bg-lightPurple,
+.hover-bg-lightPurple:hover {
+  background-color: #dddde6;
+}
+
+.text-lightPurple,
+.hover-text-lightPurple:hover {
+  color: #dddde6;
+}
+
+.border-lightPurple,
+.hover-border-lightPurple:hover {
+  border-color: #dddde6;
+}
+
+.hover-bg-25-lightPurple:hover {
+  background-color: #dddde62a;
+}
+
+.bg-lightPetrol,
+.hover-bg-lightPetrol:hover {
+  background-color: #c2e3e9;
+}
+
+.text-lightPetrol,
+.hover-text-lightPetrol:hover {
+  color: #c2e3e9;
+}
+
+.border-lightPetrol,
+.hover-border-lightPetrol:hover {
+  border-color: #c2e3e9;
+}
+
+.hover-bg-25-lightPetrol:hover {
+  background-color: #c2e3e92a;
+}
+
+/* Right Color | Lavender Theme */
+
+.bg-darkPurple,
+.hover-bg-darkPurple:hover {
+  background-color: #3f3f67;
+}
+
+.text-darkPurple,
+.hover-text-darkPurple:hover {
+  color: #3f3f67;
+}
+
+.border-darkPurple,
+.hover-border-darkPurple:hover {
+  border-color: #3f3f67;
+}
+
+.hover-bg-25-darkPurple:hover {
+  background-color: #3f3f672a;
+}
+
+.bg-darkPetrol,
+.hover-bg-darkPetrol:hover {
+  background-color: #375c62;
+}
+
+.text-darkPetrol,
+.hover-text-darkPetrol:hover {
+  color: #375c62;
+}
+
+.border-darkPetrol,
+.hover-border-darkPetrol:hover {
+  border-color: #375c62;
+}
+
+.hover-bg-25-darkPetrol:hover {
+  background-color: #375c622a;
+}
+
+/* Left Color | Sunset Theme */
+
+.bg-yellow,
+.hover-bg-yellow:hover {
+  background-color: #8e6411;
+}
+
+.text-yellow,
+.hover-text-yellow:hover {
+  color: #8e6411;
+}
+
+.border-yellow,
+.hover-border-yellow:hover {
+  border-color: #8e6411;
+}
+
+.hover-bg-25-yellow:hover {
+  background-color: #8e64112a;
+}
+
+.bg-lightYellow,
+.hover-bg-lightYellow:hover {
+  background-color: #efe2cd;
+}
+
+.text-lightYellow,
+.hover-text-lightYellow:hover {
+  color: #efe2cd;
+}
+
+.border-lightYellow,
+.hover-border-lightYellow:hover {
+  border-color: #efe2cd;
+}
+
+.hover-bg-25-lightYellow:hover {
+  background-color: #efe2cd;
+}
+
+/* Right Color | Sunset Theme */
+
+.bg-softGreen,
+.hover-bg-softGreen:hover {
+  background-color: #97b9a0;
+}
+
+.text-softGreen,
+.hover-text-softGreen:hover {
+  color: #97b9a0;
+}
+
+.border-softGreen,
+.hover-border-softGreen:hover {
+  border-color: #97b9a0;
+}
+
+.hover-bg-25-softGreen:hover {
+  background-color: #97b9a02a;
+}
+
+.bg-lightGreen,
+.hover-bg-lightGreen:hover {
+  background-color: #d5eedc;
+}
+
+.text-lightGreen,
+.hover-text-lightGreen:hover {
+  color: #d5eedc;
+}
+
+.border-lightGreen,
+.hover-border-lightGreen:hover {
+  border-color: #d5eedc;
+}
+
+.hover-bg-25-lightGreen:hover {
+  background-color: #d5eedc2a;
+}
+
+/* Left Color | Forest Theme */
+
+.bg-darkBlue,
+.hover-bg-darkBlue:hover {
+  background-color: #105e80;
+}
+
+.text-darkBlue,
+.hover-text-darkBlue:hover {
+  color: #105e80;
+}
+
+.border-darkBlue,
+.hover-border-darkBlue:hover {
+  border-color: #105e80;
+}
+
+.hover-bg-25-darkBlue:hover {
+  background-color: #105e802a;
+}
+
+.bg-lightBlue,
+.hover-bg-lightBlue:hover {
+  background-color: #c0dce8;
+}
+
+.text-lightBlue,
+.hover-text-lightBlue:hover {
+  color: #c0dce8;
+}
+
+.border-lightBlue,
+.hover-border-lightBlue:hover {
+  border-color: #c0dce8;
+}
+
+.hover-bg-25-lightBlue:hover {
+  background-color: #c0dce8;
+}
+
+/* Right Color | Forest Theme */
+
+.bg-leafGreen,
+.hover-bg-leafGreen:hover {
+  background-color: #2b6706;
+}
+
+.text-leafGreen,
+.hover-text-leafGreen:hover {
+  color: #2b6706;
+}
+
+.border-leafGreen,
+.hover-border-leafGreen:hover {
+  border-color: #2b6706;
+}
+
+.hover-bg-25-leafGreen:hover {
+  background-color: #2b67062a;
+}
+
+.bg-lightLeafGreen,
+.hover-bg-lightLeafGreen:hover {
+  background-color: #d1ebd8;
+}
+
+.text-lightLeafGreen,
+.hover-text-lightLeafGreen:hover {
+  color: #d1ebd8;
+}
+
+.border-lightLeafGreen,
+.hover-border-lightLeafGreen:hover {
+  border-color: #d1ebd8;
+}
+
+.hover-bg-25-lightLeafGreen:hover {
+  background-color: #d1ebd82a;
+}
+
+/* Left Color | Sunset Theme */
+
+.bg-darkOrange,
+.hover-bg-darkOrange:hover {
+  background-color: #91632e;
+}
+
+.text-darkOrange,
+.hover-text-darkOrange:hover {
+  color: #91632e;
+}
+
+.border-darkOrange,
+.hover-border-darkOrange:hover {
+  border-color: #91632e;
+}
+
+.hover-bg-25-darkOrange:hover {
+  background-color: #91632e2a;
+}
+
+.bg-lightOrange,
+.hover-bg-lightOrange:hover {
+  background-color: #f8cc9a;
+}
+
+.text-lightOrange,
+.hover-text-lightOrange:hover {
+  color: #f8cc9a;
+}
+
+.border-lightOrange,
+.hover-border-lightOrange:hover {
+  border-color: #f8cc9a;
+}
+
+.hover-bg-25-lightOrange:hover {
+  background-color: #f8cc9a2a;
+}
+
+/* Right Color | Sunset Theme */
+
+.bg-darkGreen,
+.hover-bg-darkGreen:hover {
+  background-color: #3c5041;
+}
+
+.text-darkGreen,
+.hover-text-darkGreen:hover {
+  color: #3c5041;
+}
+
+.border-darkGreen,
+.hover-border-darkGreen:hover {
+  border-color: #3c5041;
+}
+
+.hover-bg-25-darkGreen:hover {
+  background-color: #3c50412a;
+}

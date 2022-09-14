@@ -1,3 +1,12 @@
+export interface ITheme {
+  id: string,
+  title: string;
+  primaryPlaintiff: string;
+  secondaryPlaintiff: string;
+  primaryDefendant: string;
+  secondaryDefendant: string;
+}
+
 export interface IBookmark {
   id: string;
   title: string;

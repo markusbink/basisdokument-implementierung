@@ -4,9 +4,11 @@ import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
 import { useCase, useHeaderContext, useHints, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { getTheme } from "../../themes/getTheme";
 import { IHint } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
+import { ErrorPopup } from "../ErrorPopup";
 
 export interface HintProps {
   hint: IHint;
@@ -15,17 +17,19 @@ export interface HintProps {
 export const Hint: React.FC<HintProps> = ({ hint }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const ref = useRef(null);
+  const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
+    useState<boolean>(false);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries, currentVersion } = useCase();
   const { hints, setHints } = useHints();
   const { user } = useUser();
-  const { versionHistory } = useHeaderContext();
+  const { versionHistory, selectedTheme } = useHeaderContext();
   const {
     setShowJudgeHintPopup,
     setTitle,
     setEditorState,
     setOpenedHintId,
-    setAssociatedEntryId,
+    setAssociatedEntryIdHint,
     setEditMode,
   } = useHints();
 
@@ -43,7 +47,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
     setOpenedHintId(hint.id);
     setEditMode(true);
     if (hint.associatedEntry) {
-      setAssociatedEntryId(hint.associatedEntry);
+      setAssociatedEntryIdHint(hint.associatedEntry);
     }
     const blocksFromHTML = convertFromHTML(hint.text);
     const contentState = ContentState.createFromBlockArray(
@@ -53,7 +57,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
     setEditorState(EditorState.createWithContent(contentState));
   };
 
-  const deleteHint = (e: React.MouseEvent) => {
+  const deleteHint = () => {
     setHints(hints.filter((item) => item.id !== hint.id));
   };
 
@@ -67,9 +71,16 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
               "flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer text-[10px] font-semibold rounded-xl",
               {
                 "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
-                "bg-lightPurple text-darkPurple hover:bg-darkPurple hover:text-lightPurple":
-                  entryCode?.charAt(0) === "K",
-                "bg-lightPetrol text-darkPetrol hover:bg-darkPetrol hover:text-lightPetrol":
+                [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                  getTheme(selectedTheme)?.primaryPlaintiff
+                } hover-bg-${getTheme(selectedTheme)?.primaryPlaintiff} hover-text-${
+                  getTheme(selectedTheme)?.secondaryPlaintiff
+                }`]: entryCode?.charAt(0) === "K",
+                [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                  getTheme(selectedTheme)?.primaryDefendant
+                } hover-bg-${
+                  getTheme(selectedTheme)?.primaryDefendant
+                } hover-text-${getTheme(selectedTheme)?.secondaryDefendant}`]:
                   entryCode?.charAt(0) === "B",
               }
             )}>
@@ -113,7 +124,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
                   }}
                   icon={<DotsThree size={20} weight="bold" />}></Button>{" "}
                 {isMenuOpen ? (
-                  <ul className="absolute right-0 bottom-8 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
+                  <ul className="absolute right-0 bottom-2 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
                     <li
                       tabIndex={0}
                       onClick={editHint}
@@ -124,7 +135,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
 
                     <li
                       tabIndex={0}
-                      onClick={deleteHint}
+                      onClick={() => setIsDeleteErrorVisible(true)}
                       className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                       <Trash size={16} />
                       Löschen
@@ -136,6 +147,33 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
           </div>
         </div>
       </div>
+      <ErrorPopup isVisible={isDeleteErrorVisible}>
+        <div className="flex flex-col items-center justify-center space-y-8">
+          <p className="text-center text-base font-normal">
+            Sind Sie sicher, dass Sie den Hinweis <b>{hint.title}</b> löschen
+            möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+              }}>
+              Abbrechen
+            </Button>
+            <Button
+              bgColor="bg-lightRed hover:bg-darkRed/25"
+              textColor="text-darkRed font-bold"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+                deleteHint();
+              }}>
+              Hinweis löschen
+            </Button>
+          </div>
+        </div>
+      </ErrorPopup>
     </div>
   );
 };

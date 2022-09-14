@@ -2,8 +2,9 @@ import cx from "classnames";
 import { CaretDown, CaretUp, DotsThree, Pencil, Plus } from "phosphor-react";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { useCase, useUser } from "../../contexts";
+import { useCase, useHeaderContext, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { getTheme } from "../../themes/getTheme";
 import { UserRole } from "../../types";
 import { Button } from "../Button";
 import { Action } from "../entry";
@@ -25,6 +26,8 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
   const { metaData, setMetaData } = useCase();
   const menuRef = useRef(null);
   useOutsideClick(menuRef, () => setIsMenuOpen(false));
+
+  const { selectedTheme } = useHeaderContext();
 
   const isPlaintiff = owner === UserRole.Plaintiff;
   const isJudge = user?.role === UserRole.Judge;
@@ -71,12 +74,20 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
         <Button
           position="end"
           bgColor={cx({
-            "bg-lightPurple hover:bg-darkPurple": isPlaintiff,
-            "bg-lightPetrol hover:bg-darkPetrol": !isPlaintiff,
+            [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} hover-bg-${
+              getTheme(selectedTheme)?.primaryPlaintiff
+            }`]: isPlaintiff,
+            [`bg-${getTheme(selectedTheme)?.secondaryDefendant} hover-bg-${
+              getTheme(selectedTheme)?.primaryDefendant
+            }`]: !isPlaintiff,
           })}
           textColor={cx("font-bold text-sm uppercase tracking-wider", {
-            "text-darkPurple hover:text-lightPurple": isPlaintiff,
-            "text-darkPetrol hover:text-lightPetrol": !isPlaintiff,
+            [`text-${getTheme(selectedTheme)?.primaryPlaintiff} hover-text-${
+              getTheme(selectedTheme)?.secondaryPlaintiff
+            }`]: isPlaintiff,
+            [`text-${getTheme(selectedTheme)?.primaryDefendant} hover-text-${
+              getTheme(selectedTheme)?.secondaryDefendant
+            }`]: !isPlaintiff,
           })}
           size="sm"
           onClick={toggleMetaData}
@@ -94,8 +105,16 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
             <Tooltip text="Mehr Optionen">
               <Action
                 className={cx("relative", {
-                  "bg-darkPurple text-lightPurple": isPlaintiff && isMenuOpen,
-                  "bg-darkPetrol text-lightPetrol": !isPlaintiff && isMenuOpen,
+                  [`bg-${getTheme(selectedTheme)?.primaryPlaintiff} text-${
+                    getTheme(selectedTheme)?.secondaryPlaintiff
+                  }`]: isPlaintiff && isMenuOpen,
+                  [`bg-${getTheme(selectedTheme)?.primaryDefendant} text-${
+                    getTheme(selectedTheme)?.secondaryDefendant
+                  }`]: !isPlaintiff && isMenuOpen,
+                  [`hover-text-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
+                    isPlaintiff,
+                  [`hover-text-${getTheme(selectedTheme)?.secondaryDefendant}`]:
+                    !isPlaintiff,
                 })}
                 onClick={toggleMenu}
                 isPlaintiff={isPlaintiff}>
@@ -125,8 +144,12 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           className={cx(
             "flex flex-col rounded-lg shadow text-sm overflow-hidden",
             {
-              "bg-lightPurple text-darkPurple": isPlaintiff,
-              "bg-lightPetrol text-darkPetrol": !isPlaintiff,
+              [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                getTheme(selectedTheme)?.primaryPlaintiff
+              }`]: isPlaintiff,
+              [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                getTheme(selectedTheme)?.primaryDefendant
+              }`]: !isPlaintiff,
             }
           )}>
           {isEditing ? (
@@ -152,12 +175,24 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                     <Button
                       size="sm"
                       bgColor={cx({
-                        "bg-darkPurple hover:bg-darkPurple/25": isPlaintiff,
-                        "bg-darkPetrol hover:bg-darkPetrol/25": !isPlaintiff,
+                        [`bg-${
+                          getTheme(selectedTheme)?.primaryPlaintiff
+                        } hover-bg-25-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
+                          isPlaintiff,
+                        [`bg-${
+                          getTheme(selectedTheme)?.primaryDefendant
+                        } hover-bg-25-${getTheme(selectedTheme)?.primaryDefendant}`]:
+                          !isPlaintiff,
                       })}
                       textColor={cx({
-                        "text-lightPurple hover:text-darkPurple": isPlaintiff,
-                        "text-lightPetrol hover:text-darkPetrol": !isPlaintiff,
+                        [`text-${
+                          getTheme(selectedTheme)?.secondaryPlaintiff
+                        } hover-text-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
+                          isPlaintiff,
+                        [`text-${
+                          getTheme(selectedTheme)?.secondaryDefendant
+                        } hover-text-${getTheme(selectedTheme)?.primaryDefendant}`]:
+                          !isPlaintiff,
                       })}
                       onClick={() => setIsEditing(true)}
                       icon={<Plus size={18} />}>

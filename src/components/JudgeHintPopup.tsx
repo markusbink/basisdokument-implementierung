@@ -45,8 +45,8 @@ export const JudgeHintPopup = () => {
     updateHint,
     setOpenedHintId,
     openedHintId,
-    associatedEntryId,
-    setAssociatedEntryId,
+    associatedEntryIdHint,
+    setAssociatedEntryIdHint,
     setHints,
     hints,
     editMode,
@@ -73,7 +73,7 @@ export const JudgeHintPopup = () => {
     setShowJudgeHintPopup(false);
     setShowErrorText(false);
     setOpenedHintId("");
-    setAssociatedEntryId("");
+    setAssociatedEntryIdHint("");
     setEditMode(false);
   };
 
@@ -92,8 +92,8 @@ export const JudgeHintPopup = () => {
           author: user?.name,
           version: currentVersion,
         };
-        if (associatedEntryId !== "") {
-          editedHint["associatedEntry"] = associatedEntryId;
+        if (associatedEntryIdHint !== "") {
+          editedHint["associatedEntry"] = associatedEntryIdHint;
         }
         updateHint(editedHint);
       } else {
@@ -105,8 +105,8 @@ export const JudgeHintPopup = () => {
             author: user?.name,
             version: currentVersion,
           };
-          if (associatedEntryId !== "") {
-            newHint["associatedEntry"] = associatedEntryId;
+          if (associatedEntryIdHint !== "") {
+            newHint["associatedEntry"] = associatedEntryIdHint;
           }
           setHints([...hints, newHint]);
         }
@@ -115,9 +115,9 @@ export const JudgeHintPopup = () => {
     }
   };
 
-  const getEntryCode = () => {
+  const getEntryCode = () => {    
     let entry = entries.find((obj) => {
-      return obj.id === associatedEntryId;
+      return obj.id === associatedEntryIdHint;
     });
     if (entry) {
       return entry.entryCode;
@@ -214,7 +214,7 @@ export const JudgeHintPopup = () => {
                         <Quotes size={14} color="white" weight="regular" />
                       </DropdownMenu.Trigger>
                       <DropdownMenu.Portal>
-                        <DropdownMenu.Content className="flex flex-col gap-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
+                        <DropdownMenu.Content className="flex flex-col gap-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2  overflow-auto">
                           {entries.length === 0 && (
                             <div className="p-2 text-sm">
                               Es sind keine Beiträge im Basisdokument vorhanden.
@@ -225,7 +225,7 @@ export const JudgeHintPopup = () => {
                               <DropdownMenu.Item
                                 key={entry.id}
                                 onClick={() => {
-                                  setAssociatedEntryId(entry.id);
+                                  setAssociatedEntryIdHint(entry.id);
                                 }}
                                 className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 w-full rounded-md cursor-pointer"
                                 role="menuitem"
@@ -236,14 +236,14 @@ export const JudgeHintPopup = () => {
                         </DropdownMenu.Content>
                       </DropdownMenu.Portal>
                     </DropdownMenu.Root>
-                    {associatedEntryId !== "" ? (
+                    {associatedEntryIdHint !== "" ? (
                       <div className="flex items-center gap-2 cursor-pointer rounded-full pl-3 pr-1 py-1 mx-1 text-xs font-semibold bg-darkGrey text-white">
                         {getEntryCode()}
                         <XCircle
                           size={20}
                           weight="fill"
                           onClick={() => {
-                            setAssociatedEntryId("");
+                            setAssociatedEntryIdHint("");
                           }}
                         />
                       </div>

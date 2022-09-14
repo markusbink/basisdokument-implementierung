@@ -45,8 +45,8 @@ export const NotePopup = () => {
     updateNote,
     setOpenedNoteId,
     openedNoteId,
-    associatedEntryId,
-    setAssociatedEntryId,
+    associatedEntryIdNote,
+    setAssociatedEntryIdNote,
     setNotes,
     notes,
     editMode,
@@ -73,7 +73,7 @@ export const NotePopup = () => {
     setShowNotePopup(false);
     setShowErrorText(false);
     setOpenedNoteId("");
-    setAssociatedEntryId("");
+    setAssociatedEntryIdNote("");
     setEditMode(false);
   };
 
@@ -92,8 +92,8 @@ export const NotePopup = () => {
           author: user?.name,
           timestamp: new Date(),
         };
-        if (associatedEntryId !== "") {
-          editedNote["associatedEntry"] = associatedEntryId;
+        if (associatedEntryIdNote !== "") {
+          editedNote["associatedEntry"] = associatedEntryIdNote;
         }
         updateNote(editedNote);
       } else {
@@ -105,8 +105,8 @@ export const NotePopup = () => {
             author: user?.name,
             timestamp: new Date(),
           };
-          if (associatedEntryId !== "") {
-            newNote["associatedEntry"] = associatedEntryId;
+          if (associatedEntryIdNote !== "") {
+            newNote["associatedEntry"] = associatedEntryIdNote;
           }
           setNotes([...notes, newNote]);
         }
@@ -117,7 +117,7 @@ export const NotePopup = () => {
 
   const getEntryCode = () => {
     let entry = entries.find((obj) => {
-      return obj.id === associatedEntryId;
+      return obj.id === associatedEntryIdNote;
     });
     if (entry) {
       return entry.entryCode;
@@ -210,7 +210,7 @@ export const NotePopup = () => {
                         <Quotes size={14} color="white" weight="regular" />
                       </DropdownMenu.Trigger>
                       <DropdownMenu.Portal>
-                        <DropdownMenu.Content className="flex flex-col gap-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
+                        <DropdownMenu.Content className="flex flex-col gap-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2 overflow-auto">
                           {entries.length === 0 && (
                             <div className="p-2 text-sm">
                               Es sind keine Beiträge im Basisdokument vorhanden.
@@ -221,7 +221,7 @@ export const NotePopup = () => {
                               <DropdownMenu.Item
                                 key={entry.id}
                                 onClick={() => {
-                                  setAssociatedEntryId(entry.id);
+                                  setAssociatedEntryIdNote(entry.id);
                                 }}
                                 className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 w-full rounded-md cursor-pointer"
                                 role="menuitem"
@@ -232,14 +232,14 @@ export const NotePopup = () => {
                         </DropdownMenu.Content>
                       </DropdownMenu.Portal>
                     </DropdownMenu.Root>
-                    {associatedEntryId !== "" ? (
+                    {associatedEntryIdNote !== "" ? (
                       <div className="flex items-center gap-2 cursor-pointer rounded-full pl-3 pr-1 py-1 mx-1 text-xs font-semibold bg-darkGrey text-white">
                         {getEntryCode()}
                         <XCircle
                           size={20}
                           weight="fill"
                           onClick={() => {
-                            setAssociatedEntryId("");
+                            setAssociatedEntryIdNote("");
                           }}
                         />
                       </div>
