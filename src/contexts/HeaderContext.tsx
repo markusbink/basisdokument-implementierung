@@ -66,7 +66,7 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const [searchbarValue, setSearchbarValue] =
     useState<IHeaderContext["searchbarValue"]>("");
 
-  let themeFromCookie = Cookies.get("theme");
+  const themeFromCookie = Cookies.get("theme");
 
   let theme: string;
   if (themeFromCookie) {

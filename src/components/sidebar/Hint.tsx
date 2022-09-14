@@ -71,16 +71,16 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
               "flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer text-[10px] font-semibold rounded-xl",
               {
                 "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
-                [`bg-${getTheme(selectedTheme)?.secondaryLeft} text-${
-                  getTheme(selectedTheme)?.primaryLeft
-                } hover-bg-${getTheme(selectedTheme)?.primaryLeft} hover-text-${
-                  getTheme(selectedTheme)?.secondaryLeft
+                [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                  getTheme(selectedTheme)?.primaryPlaintiff
+                } hover-bg-${getTheme(selectedTheme)?.primaryPlaintiff} hover-text-${
+                  getTheme(selectedTheme)?.secondaryPlaintiff
                 }`]: entryCode?.charAt(0) === "K",
-                [`bg-${getTheme(selectedTheme)?.secondaryRight} text-${
-                  getTheme(selectedTheme)?.primaryRight
+                [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                  getTheme(selectedTheme)?.primaryDefendant
                 } hover-bg-${
-                  getTheme(selectedTheme)?.primaryRight
-                } hover-text-${getTheme(selectedTheme)?.secondaryRight}`]:
+                  getTheme(selectedTheme)?.primaryDefendant
+                } hover-text-${getTheme(selectedTheme)?.secondaryDefendant}`]:
                   entryCode?.charAt(0) === "B",
               }
             )}>

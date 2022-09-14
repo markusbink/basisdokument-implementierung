@@ -22,11 +22,11 @@ export const Action: React.FC<ActionProps> = ({
       className={cx(
         "rounded-md p-1 cursor-pointer",
         {
-          [`hover-bg-${getTheme(selectedTheme)?.primaryLeft} hover-text-${
-            getTheme(selectedTheme)?.secondaryLeft
+          [`hover-bg-${getTheme(selectedTheme)?.primaryPlaintiff} hover-text-${
+            getTheme(selectedTheme)?.secondaryPlaintiff
           }`]: isPlaintiff,
-          [`hover-bg-${getTheme(selectedTheme)?.primaryRight} hover-text-${
-            getTheme(selectedTheme)?.secondaryLeft
+          [`hover-bg-${getTheme(selectedTheme)?.primaryDefendant} hover-text-${
+            getTheme(selectedTheme)?.secondaryDefendant
           }`]: !isPlaintiff,
         },
         className

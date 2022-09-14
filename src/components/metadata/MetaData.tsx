@@ -74,19 +74,19 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
         <Button
           position="end"
           bgColor={cx({
-            [`bg-${getTheme(selectedTheme)?.secondaryLeft} hover-bg-${
-              getTheme(selectedTheme)?.primaryLeft
+            [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} hover-bg-${
+              getTheme(selectedTheme)?.primaryPlaintiff
             }`]: isPlaintiff,
-            [`bg-${getTheme(selectedTheme)?.secondaryRight} hover-bg-${
-              getTheme(selectedTheme)?.primaryRight
+            [`bg-${getTheme(selectedTheme)?.secondaryDefendant} hover-bg-${
+              getTheme(selectedTheme)?.primaryDefendant
             }`]: !isPlaintiff,
           })}
           textColor={cx("font-bold text-sm uppercase tracking-wider", {
-            [`text-${getTheme(selectedTheme)?.primaryLeft} hover-text-${
-              getTheme(selectedTheme)?.secondaryLeft
+            [`text-${getTheme(selectedTheme)?.primaryPlaintiff} hover-text-${
+              getTheme(selectedTheme)?.secondaryPlaintiff
             }`]: isPlaintiff,
-            [`text-${getTheme(selectedTheme)?.primaryRight} hover-text-${
-              getTheme(selectedTheme)?.secondaryRight
+            [`text-${getTheme(selectedTheme)?.primaryDefendant} hover-text-${
+              getTheme(selectedTheme)?.secondaryDefendant
             }`]: !isPlaintiff,
           })}
           size="sm"
@@ -105,15 +105,15 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
             <Tooltip text="Mehr Optionen">
               <Action
                 className={cx("relative", {
-                  [`bg-${getTheme(selectedTheme)?.primaryLeft} text-${
-                    getTheme(selectedTheme)?.secondaryLeft
+                  [`bg-${getTheme(selectedTheme)?.primaryPlaintiff} text-${
+                    getTheme(selectedTheme)?.secondaryPlaintiff
                   }`]: isPlaintiff && isMenuOpen,
-                  [`bg-${getTheme(selectedTheme)?.primaryRight} text-${
-                    getTheme(selectedTheme)?.secondaryRight
+                  [`bg-${getTheme(selectedTheme)?.primaryDefendant} text-${
+                    getTheme(selectedTheme)?.secondaryDefendant
                   }`]: !isPlaintiff && isMenuOpen,
-                  [`hover-text-${getTheme(selectedTheme)?.secondaryLeft}`]:
+                  [`hover-text-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
                     isPlaintiff,
-                  [`hover-text-${getTheme(selectedTheme)?.secondaryRight}`]:
+                  [`hover-text-${getTheme(selectedTheme)?.secondaryDefendant}`]:
                     !isPlaintiff,
                 })}
                 onClick={toggleMenu}
@@ -144,11 +144,11 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           className={cx(
             "flex flex-col rounded-lg shadow text-sm overflow-hidden",
             {
-              [`bg-${getTheme(selectedTheme)?.secondaryLeft} text-${
-                getTheme(selectedTheme)?.primaryLeft
+              [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                getTheme(selectedTheme)?.primaryPlaintiff
               }`]: isPlaintiff,
-              [`bg-${getTheme(selectedTheme)?.secondaryRight} text-${
-                getTheme(selectedTheme)?.primaryRight
+              [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                getTheme(selectedTheme)?.primaryDefendant
               }`]: !isPlaintiff,
             }
           )}>
@@ -176,22 +176,22 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                       size="sm"
                       bgColor={cx({
                         [`bg-${
-                          getTheme(selectedTheme)?.primaryLeft
-                        } hover-bg-25-${getTheme(selectedTheme)?.primaryLeft}`]:
+                          getTheme(selectedTheme)?.primaryPlaintiff
+                        } hover-bg-25-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
                           isPlaintiff,
                         [`bg-${
-                          getTheme(selectedTheme)?.primaryRight
-                        } hover-bg-25-${getTheme(selectedTheme)?.primaryRight}`]:
+                          getTheme(selectedTheme)?.primaryDefendant
+                        } hover-bg-25-${getTheme(selectedTheme)?.primaryDefendant}`]:
                           !isPlaintiff,
                       })}
                       textColor={cx({
                         [`text-${
-                          getTheme(selectedTheme)?.secondaryLeft
-                        } hover-text-${getTheme(selectedTheme)?.primaryLeft}`]:
+                          getTheme(selectedTheme)?.secondaryPlaintiff
+                        } hover-text-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
                           isPlaintiff,
                         [`text-${
-                          getTheme(selectedTheme)?.secondaryRight
-                        } hover-text-${getTheme(selectedTheme)?.primaryRight}`]:
+                          getTheme(selectedTheme)?.secondaryDefendant
+                        } hover-text-${getTheme(selectedTheme)?.primaryDefendant}`]:
                           !isPlaintiff,
                       })}
                       onClick={() => setIsEditing(true)}

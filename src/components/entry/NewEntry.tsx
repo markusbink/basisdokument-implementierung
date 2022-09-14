@@ -105,13 +105,13 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             inputClassName={cx(
               "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
               {
-                [`border-${getTheme(selectedTheme)?.primaryLeft}`]: isPlaintiff,
-                [`border-${getTheme(selectedTheme)?.primaryRight}`]: !isPlaintiff,
+                [`border-${getTheme(selectedTheme)?.primaryPlaintiff}`]: isPlaintiff,
+                [`border-${getTheme(selectedTheme)?.primaryDefendant}`]: !isPlaintiff,
               }
             )}
             className={cx("font-bold p-0 my-0 flex items-center mr-2", {
-              [`text-${getTheme(selectedTheme)?.primaryLeft}`]: isPlaintiff,
-              [`text-${getTheme(selectedTheme)?.primaryRight}`]: !isPlaintiff,
+              [`text-${getTheme(selectedTheme)?.primaryPlaintiff}`]: isPlaintiff,
+              [`text-${getTheme(selectedTheme)?.primaryDefendant}`]: !isPlaintiff,
             })}
             value={authorName}
             onChange={(e) => {

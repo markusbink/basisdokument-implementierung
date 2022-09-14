@@ -1,10 +1,10 @@
 export interface ITheme {
   id: string,
   title: string;
-  primaryLeft: string;
-  secondaryLeft: string;
-  primaryRight: string;
-  secondaryRight: string;
+  primaryPlaintiff: string;
+  secondaryPlaintiff: string;
+  primaryDefendant: string;
+  secondaryDefendant: string;
 }
 
 export interface IBookmark {

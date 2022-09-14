@@ -56,8 +56,8 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
         className={cx(
           "text-xs font-bold rounded-md px-2 py-1 w-fit uppercase text-darkGrey",
           {
-            [`bg-${getTheme(selectedTheme)?.secondaryLeft} text-${getTheme(selectedTheme)?.primaryLeft}`]: role === UserRole.Plaintiff,
-            [`bg-${getTheme(selectedTheme)?.secondaryRight} text-${getTheme(selectedTheme)?.primaryRight}`]: role === UserRole.Defendant,
+            [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${getTheme(selectedTheme)?.primaryPlaintiff}`]: role === UserRole.Plaintiff,
+            [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${getTheme(selectedTheme)?.primaryDefendant}`]: role === UserRole.Defendant,
           }
         )}>
         {role}

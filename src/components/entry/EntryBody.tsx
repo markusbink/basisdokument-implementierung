@@ -197,8 +197,8 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
       className={cx(
         `p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`,
         {
-          [`border-${getTheme(selectedTheme)?.secondaryLeft}`]: isPlaintiff,
-          [`border-${getTheme(selectedTheme)?.secondaryRight}`]: !isPlaintiff,
+          [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]: isPlaintiff,
+          [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]: !isPlaintiff,
         }
       )}>
       {searchbarValue === "" &&

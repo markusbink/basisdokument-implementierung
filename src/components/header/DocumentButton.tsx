@@ -132,11 +132,11 @@ export const DocumentButton = () => {
                         }}>
                         <div
                           className={cx(
-                            `h-12 w-6 bg-${theme.primaryLeft} rounded-l-full`
+                            `h-12 w-6 bg-${theme.primaryPlaintiff} rounded-l-full`
                           )}></div>
                         <div
                           className={cx(
-                            `h-12 w-6 bg-${theme.primaryRight} rounded-r-full`
+                            `h-12 w-6 bg-${theme.primaryDefendant} rounded-r-full`
                           )}></div>
                       </div>
                     </Tooltip>

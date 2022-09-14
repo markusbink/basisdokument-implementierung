@@ -26,8 +26,8 @@ export const EntryHeader: React.FC<EntryHeaderProps> = ({
       className={cx(
         "flex items-center justify-between rounded-t-lg px-6 py-3 cursor-pointer  select-none",
         {
-          [`bg-${getTheme(selectedTheme)?.secondaryLeft} text-${getTheme(selectedTheme)?.primaryLeft}`]: isPlaintiff,
-          [`bg-${getTheme(selectedTheme)?.secondaryRight} text-${getTheme(selectedTheme)?.primaryRight}`]: !isPlaintiff,
+          [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${getTheme(selectedTheme)?.primaryPlaintiff}`]: isPlaintiff,
+          [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${getTheme(selectedTheme)?.primaryDefendant}`]: !isPlaintiff,
           "rounded-b-lg": !isBodyOpen,
         },
         className

@@ -254,11 +254,11 @@ export const Entry: React.FC<EntryProps> = ({
                       className={cx(
                         "rounded-full px-3 py-1 text-xs font-semibold",
                         {
-                          [`bg-${getTheme(selectedTheme)?.primaryLeft} text-${
-                            getTheme(selectedTheme)?.secondaryLeft
+                          [`bg-${getTheme(selectedTheme)?.primaryPlaintiff} text-${
+                            getTheme(selectedTheme)?.secondaryPlaintiff
                           }`]: isPlaintiff,
-                          [`bg-${getTheme(selectedTheme)?.primaryRight} text-${
-                            getTheme(selectedTheme)?.secondaryRight
+                          [`bg-${getTheme(selectedTheme)?.primaryDefendant} text-${
+                            getTheme(selectedTheme)?.secondaryDefendant
                           }`]: !isPlaintiff,
                         }
                       )}>
@@ -269,18 +269,18 @@ export const Entry: React.FC<EntryProps> = ({
                         inputClassName={cx(
                           "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
                           {
-                            [`border-${getTheme(selectedTheme)?.primaryLeft}`]:
+                            [`border-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
                               isPlaintiff,
-                            [`border-${getTheme(selectedTheme)?.primaryRight}`]:
+                            [`border-${getTheme(selectedTheme)?.primaryDefendant}`]:
                               !isPlaintiff,
                           }
                         )}
                         className={cx(
                           "font-bold p-0 my-0 flex items-center mr-2",
                           {
-                            [`text-${getTheme(selectedTheme)?.primaryLeft}`]:
+                            [`text-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
                               isPlaintiff,
-                            [`text-${getTheme(selectedTheme)?.primaryRight}`]:
+                            [`text-${getTheme(selectedTheme)?.primaryDefendant}`]:
                               !isPlaintiff,
                           }
                         )}
@@ -335,11 +335,11 @@ export const Entry: React.FC<EntryProps> = ({
                       <Tooltip text="Mehr Optionen">
                         <Action
                           className={cx({
-                            [`bg-${getTheme(selectedTheme)?.primaryLeft} text-${
-                              getTheme(selectedTheme)?.secondaryLeft
+                            [`bg-${getTheme(selectedTheme)?.primaryPlaintiff} text-${
+                              getTheme(selectedTheme)?.secondaryPlaintiff
                             }`]: isPlaintiff && isMenuOpen,
-                            [`bg-${getTheme(selectedTheme)?.primaryRight} text-${
-                              getTheme(selectedTheme)?.secondaryRight
+                            [`bg-${getTheme(selectedTheme)?.primaryDefendant} text-${
+                              getTheme(selectedTheme)?.secondaryDefendant
                             }`]: !isPlaintiff && isMenuOpen,
                           })}
                           onClick={toggleMenu}
