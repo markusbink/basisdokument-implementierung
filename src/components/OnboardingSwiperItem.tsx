@@ -1,23 +1,25 @@
-interface OnboardingSliderItemProps {
+interface OnboardingSwiperItemProps {
   imageSrc: string;
-  imageAlt: string;
+  //imageAlt: string;
   title: string;
   desc: string;
 }
 
 export const OnboardingSliderItem = ({
   imageSrc,
-  imageAlt,
+ //imageAlt,
   title,
   desc,
-}: OnboardingSliderItemProps) => {
+}: OnboardingSwiperItemProps) => {
   return (
     <div>
       <div className="bg-gradient-to-tr from-lightPetrol to-lightPurple lg:p-8 p-4">
-        <img
+        <video
+        autoPlay
+        loop
           className="overflow-hidden rounded-md shadow-xl w-full max-w-xl h-auto mx-auto"
           src={`${process.env.PUBLIC_URL}/${imageSrc}`}
-          alt={imageAlt}
+          //alt={imageAlt}
         />
       </div>
       <div className="p-4 max-w-[800px] m-auto">
