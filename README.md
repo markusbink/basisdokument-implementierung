@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/44339207/189524995-fa130521-2814-493b-8998-f54b630e8a88.png" width="100%">
+</p>
+
+<b>Aktuelle Version verfügbar unter:</b> https://markusbink.github.io/basisdokument-implementierung/
+
 # Basisdokument
 
 *Course: MEI-M26 Projektseminar (P-(D-)36633 Praxisseminar) im M.Sc. Medieninformatik, Sommersemester 2022*
@@ -6,9 +12,9 @@
 
 *Projectteam: Markus Bink, Martina Emmert, Nils Constantin Hellwig, Michelle Lanzinger, Nicole Schönwerth*
 
-## About this application
+## About
 
-This app enables lawyers to create their previous analogue correspondence in a digital environment. It offers a variety of useful features that aim to ease the process of working on cases while also making the process more time efficient. The app is based on the works of the last semester by [Hahn, Röhr & Sautmann (2021)](https://github.com/kindOfCurly/PS-Basisdokument/wiki/Projekt-Log) and [Freisleben, Schwarz & Zels (2021)](https://elearning.uni-regensburg.de/mod/resource/view.php?id=2172773) The division of the prototypes from previous semesters was discarded due to the newly emerged requirements. All previous and new requirements have been merged into one application that can be used by all parties (Plaintiff, Defendant, Judge). The app allows them to create and edit a "Basisdokument". The current list of features can be seen in the corresponding [Wiki](https://github.com/markusbink/basisdokument-implementierung/wiki/07-Beschreibung-der-Anwendung).
+This app enables lawyers and judges to create their previous analogue correspondence in a digital environment. It offers a variety of useful features that aim to ease the process of working on cases while also making the process more time efficient. The app is based on the works of the last semester by [Hahn, Röhr & Sautmann (2021)](https://github.com/kindOfCurly/PS-Basisdokument/wiki/Projekt-Log) and [Freisleben, Schwarz & Zels (2021)](https://elearning.uni-regensburg.de/mod/resource/view.php?id=2172773) The division of the prototypes from previous semesters was discarded due to the newly emerged requirements. All previous and new requirements have been merged into one application that can be used by all parties (Plaintiff, Defendant, Judge). The app allows them to create and edit a "Basisdokument". The current list of features can be seen in the corresponding [Wiki](https://github.com/markusbink/basisdokument-implementierung/wiki/07-Beschreibung-der-Anwendung).
 
 ## Motivation
 

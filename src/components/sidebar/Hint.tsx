@@ -7,6 +7,7 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IHint } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
+import { ErrorPopup } from "../ErrorPopup";
 
 export interface HintProps {
   hint: IHint;
@@ -15,6 +16,8 @@ export interface HintProps {
 export const Hint: React.FC<HintProps> = ({ hint }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const ref = useRef(null);
+  const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
+    useState<boolean>(false);
   useOutsideClick(ref, () => setIsMenuOpen(false));
   const { entries, currentVersion } = useCase();
   const { hints, setHints } = useHints();
@@ -53,7 +56,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
     setEditorState(EditorState.createWithContent(contentState));
   };
 
-  const deleteHint = (e: React.MouseEvent) => {
+  const deleteHint = () => {
     setHints(hints.filter((item) => item.id !== hint.id));
   };
 
@@ -124,7 +127,7 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
 
                     <li
                       tabIndex={0}
-                      onClick={deleteHint}
+                      onClick={() => setIsDeleteErrorVisible(true)}
                       className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                       <Trash size={16} />
                       Löschen
@@ -136,6 +139,33 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
           </div>
         </div>
       </div>
+      <ErrorPopup isVisible={isDeleteErrorVisible}>
+        <div className="flex flex-col items-center justify-center space-y-8">
+          <p className="text-center text-base font-normal">
+            Sind Sie sicher, dass Sie den Hinweis <b>{hint.title}</b> löschen
+            möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+              }}>
+              Abbrechen
+            </Button>
+            <Button
+              bgColor="bg-lightRed hover:bg-darkRed/25"
+              textColor="text-darkRed font-bold"
+              onClick={() => {
+                setIsDeleteErrorVisible(false);
+                deleteHint();
+              }}>
+              Hinweis löschen
+            </Button>
+          </div>
+        </div>
+      </ErrorPopup>
     </div>
   );
 };
