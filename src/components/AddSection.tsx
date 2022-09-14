@@ -1,11 +1,12 @@
-import { Button } from "./Button";
 import { Plus } from "phosphor-react";
-import { useCase, useSection } from "../contexts";
 import { v4 as uuidv4 } from "uuid";
-import { ISection } from "../types";
+import { useCase, useSection } from "../contexts";
+import { IndividualEntrySortingEntry, ISection } from "../types";
+import { Button } from "./Button";
 
 export const AddSection = () => {
   const { setSectionList, setIndividualSorting } = useSection();
+  const { setIndividualEntrySorting } = useCase();
   const { currentVersion } = useCase();
 
   const handleClick = () => {
@@ -17,6 +18,16 @@ export const AddSection = () => {
     };
     setSectionList((prev) => [...prev, section]);
     setIndividualSorting((prev) => [...prev, section.id]);
+
+    const newIndividualEntrySorting: IndividualEntrySortingEntry = {
+      columns: [[], []],
+      rowId: uuidv4(),
+    };
+
+    setIndividualEntrySorting((prev) => ({
+      ...prev,
+      ...{ [section.id]: [newIndividualEntrySorting] },
+    }));
   };
 
   return (

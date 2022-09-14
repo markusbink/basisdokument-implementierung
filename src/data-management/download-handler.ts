@@ -5,8 +5,8 @@ import {
   IHighlightedEntry,
   IHighlighter,
   IHint,
-  ILitigiousCheck,
   IMetaData,
+  IndividualEntrySortingEntry,
   INote,
   ISection,
   IVersion,
@@ -347,8 +347,7 @@ export function downloadBasisdokument(
   metaData: IMetaData | null,
   entries: IEntry[],
   sectionList: ISection[],
-  hints: IHint[],
-  litigiousChecks: ILitigiousCheck[]
+  hints: IHint[]
 ) {
   let basisdokumentObject: any = {};
   basisdokumentObject["caseId"] = caseId;
@@ -362,7 +361,6 @@ export function downloadBasisdokument(
   basisdokumentObject["entries"] = entries;
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
-  basisdokumentObject["litigiousChecks"] = litigiousChecks;
   downloadObjectAsJSON(
     basisdokumentObject,
     "basisdokument_version_" + currentVersion + "_az_" + caseId
@@ -380,7 +378,8 @@ export function downloadEditFile(
   colorSelection: IHighlighter[],
   notes: INote[],
   bookmarks: IBookmark[],
-  individualSorting: string[]
+  individualSorting: string[],
+  individualEntrySorting: { [key: string]: IndividualEntrySortingEntry[] }
 ) {
   let editFileObject: any = {};
   editFileObject["caseId"] = caseId;
@@ -391,6 +390,7 @@ export function downloadEditFile(
   editFileObject["notes"] = notes;
   editFileObject["bookmarks"] = bookmarks;
   editFileObject["individualSorting"] = individualSorting;
+  editFileObject["individualEntrySorting"] = individualEntrySorting;
   downloadObjectAsJSON(
     editFileObject,
     "bearbeitungsdatei_version_" + currentVersion + "_az_" + caseId

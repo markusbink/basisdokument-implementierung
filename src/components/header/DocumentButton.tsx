@@ -39,7 +39,7 @@ export const DocumentButton = () => {
     currentVersion,
     metaData,
     entries,
-    litigiousChecks,
+    individualEntrySorting,
     highlightedEntries,
   } = useCase();
   const { sectionList, individualSorting } = useSection();
@@ -63,8 +63,7 @@ export const DocumentButton = () => {
         metaData,
         entries,
         sectionList,
-        hints,
-        litigiousChecks
+        hints
       );
     }, 100);
     setTimeout(() => {
@@ -75,7 +74,8 @@ export const DocumentButton = () => {
         colorSelection,
         notes,
         bookmarks,
-        individualSorting
+        individualSorting,
+        individualEntrySorting
       );
     }, 200);
     setTimeout(() => {
@@ -124,10 +124,13 @@ export const DocumentButton = () => {
                       <div
                         className={cx(
                           `flex flex-row rounded-full hover:border hover:border-darkGrey hover:border-[2px] w-14 h-14 items-center justify-center cursor-pointer`,
-                          { "border-[3px] border-darkGrey": theme.id === selectedTheme }
+                          {
+                            "border-[3px] border-darkGrey":
+                              theme.id === selectedTheme,
+                          }
                         )}
                         onClick={() => {
-                          Cookies.set("theme", theme.id)
+                          Cookies.set("theme", theme.id);
                           setSelectedTheme(theme.id);
                         }}>
                         <div
@@ -152,7 +155,6 @@ export const DocumentButton = () => {
               entries={entries}
               sectionList={sectionList}
               hints={hints}
-              litigiousChecks={litigiousChecks}
               highlightedEntries={highlightedEntries}
               colorSelection={colorSelection}
               notes={notes}

@@ -56,13 +56,13 @@ export enum Sorting {
 
 export enum UsageMode {
   Open,
-  Create
+  Create,
 }
 
 export enum SidebarState {
   Notes,
   Hints,
-  Bookmarks
+  Bookmarks,
 }
 
 export interface ISection {
@@ -81,6 +81,16 @@ export interface IEntry {
   role: "Klagepartei" | "Beklagtenpartei";
   sectionId: string;
   associatedEntry?: string;
+}
+
+export enum IDragItemType {
+  ENTRY = "entry",
+}
+
+export interface IndividualEntrySortingEntry {
+  rowId: string;
+  isLitigious?: boolean;
+  columns: string[][]; // [0] = plaintiff, [1] = defendant
 }
 
 export interface BasisdokumentData {
@@ -102,11 +112,6 @@ export interface IMetaData {
   defendant: string;
 }
 
-export interface ILitigiousCheck {
-  entryId: string;
-  isLitigious: boolean;
-}
-
 export interface IHighlightedEntry {
   entryId: string;
   highlightedText: string;
@@ -121,7 +126,7 @@ export interface IVersion {
 export enum Tool {
   Eraser,
   Cursor,
-  Highlighter
+  Highlighter,
 }
 
 export interface ITool {

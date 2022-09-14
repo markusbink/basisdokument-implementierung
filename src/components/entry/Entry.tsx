@@ -15,12 +15,18 @@ import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext, useNotes, useHints } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEntry, UserRole, Tool, IBookmark, SidebarState } from "../../types";
+import {
+  IEntry,
+  UserRole,
+  Tool,
+  IBookmark,
+  SidebarState,
+  IndividualEntrySortingEntry,
+} from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
 import { EntryList } from "./EntryList";
-import { LitigiousCheck } from "./LitigiousCheck";
 import { useBookmarks } from "../../contexts";
 import { v4 as uuidv4 } from "uuid";
 import { useSidebar } from "../../contexts/SidebarContext";
@@ -44,8 +50,14 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { currentVersion, groupedEntries, setEntries, setHighlightedEntries } =
-    useCase();
+  const {
+    currentVersion,
+    groupedEntries,
+    setEntries,
+    setHighlightedEntries,
+    setIndividualEntrySorting,
+  } = useCase();
+
   const {
     versionHistory,
     showColumnView,
@@ -55,7 +67,9 @@ export const Entry: React.FC<EntryProps> = ({
     highlightElementsWithSpecificVersion,
     selectedVersion,
     selectedTheme,
+    showEntrySorting,
   } = useHeaderContext();
+
   const { setShowNotePopup, setAssociatedEntryIdNote } = useNotes();
   const { setShowJudgeHintPopup, setAssociatedEntryIdHint } = useHints();
 
@@ -187,6 +201,33 @@ export const Entry: React.FC<EntryProps> = ({
           return entry;
         })
     );
+
+    setIndividualEntrySorting((prevEntrySorting) => {
+      let newEntrySorting: { [key: string]: IndividualEntrySortingEntry[] } = {
+        ...prevEntrySorting,
+      };
+      const columnIndex = isPlaintiff ? 0 : 1;
+
+      // Remove the entry from the sorting array
+      newEntrySorting = Object.keys(prevEntrySorting).reduce(
+        (acc, sectionId) => {
+          const sectionSorting = newEntrySorting[sectionId].map((row) => {
+            if (row.columns[columnIndex].includes(entryId)) {
+              row.columns[columnIndex].filter((id) => id !== entryId);
+              return row;
+            }
+            return row;
+          });
+
+          acc[sectionId] = sectionSorting;
+
+          return acc;
+        },
+        {} as { [key: string]: IndividualEntrySortingEntry[] }
+      );
+
+      return newEntrySorting;
+    });
   };
 
   const updateEntry = (plainText: string, rawHtml: string) => {
@@ -232,8 +273,9 @@ export const Entry: React.FC<EntryProps> = ({
           })}>
           <div
             className={cx("transition-all", {
-              "w-[calc(50%_-_12px)]": !isExpanded && showColumnView,
-              "w-full": isExpanded || !showColumnView,
+              "w-[calc(50%_-_12px)]":
+                !isExpanded && showColumnView && !showEntrySorting,
+              "w-full": isExpanded || !showColumnView || showEntrySorting,
             })}>
             {/* Entry */}
             <div
@@ -243,7 +285,6 @@ export const Entry: React.FC<EntryProps> = ({
                   highlightElementsWithSpecificVersion,
                 isHighlighted,
               })}>
-              {isJudge && <LitigiousCheck entryId={entry.id} />}
               <EntryHeader
                 isPlaintiff={isPlaintiff}
                 isBodyOpen={isBodyOpen}
@@ -254,10 +295,14 @@ export const Entry: React.FC<EntryProps> = ({
                       className={cx(
                         "rounded-full px-3 py-1 text-xs font-semibold",
                         {
-                          [`bg-${getTheme(selectedTheme)?.primaryPlaintiff} text-${
+                          [`bg-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          } text-${
                             getTheme(selectedTheme)?.secondaryPlaintiff
                           }`]: isPlaintiff,
-                          [`bg-${getTheme(selectedTheme)?.primaryDefendant} text-${
+                          [`bg-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          } text-${
                             getTheme(selectedTheme)?.secondaryDefendant
                           }`]: !isPlaintiff,
                         }
@@ -269,19 +314,23 @@ export const Entry: React.FC<EntryProps> = ({
                         inputClassName={cx(
                           "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
                           {
-                            [`border-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
-                              isPlaintiff,
-                            [`border-${getTheme(selectedTheme)?.primaryDefendant}`]:
-                              !isPlaintiff,
+                            [`border-${
+                              getTheme(selectedTheme)?.primaryPlaintiff
+                            }`]: isPlaintiff,
+                            [`border-${
+                              getTheme(selectedTheme)?.primaryDefendant
+                            }`]: !isPlaintiff,
                           }
                         )}
                         className={cx(
                           "font-bold p-0 my-0 flex items-center mr-2",
                           {
-                            [`text-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
-                              isPlaintiff,
-                            [`text-${getTheme(selectedTheme)?.primaryDefendant}`]:
-                              !isPlaintiff,
+                            [`text-${
+                              getTheme(selectedTheme)?.primaryPlaintiff
+                            }`]: isPlaintiff,
+                            [`text-${
+                              getTheme(selectedTheme)?.primaryDefendant
+                            }`]: !isPlaintiff,
                           }
                         )}
                         value={authorName}
@@ -335,10 +384,14 @@ export const Entry: React.FC<EntryProps> = ({
                       <Tooltip text="Mehr Optionen">
                         <Action
                           className={cx({
-                            [`bg-${getTheme(selectedTheme)?.primaryPlaintiff} text-${
+                            [`bg-${
+                              getTheme(selectedTheme)?.primaryPlaintiff
+                            } text-${
                               getTheme(selectedTheme)?.secondaryPlaintiff
                             }`]: isPlaintiff && isMenuOpen,
-                            [`bg-${getTheme(selectedTheme)?.primaryDefendant} text-${
+                            [`bg-${
+                              getTheme(selectedTheme)?.primaryDefendant
+                            } text-${
                               getTheme(selectedTheme)?.secondaryDefendant
                             }`]: !isPlaintiff && isMenuOpen,
                           })}
@@ -416,7 +469,7 @@ export const Entry: React.FC<EntryProps> = ({
               )}
             </div>
             {/* Button to add response */}
-            {canAddEntry && !isNewEntryVisible && (
+            {canAddEntry && !isNewEntryVisible && !showEntrySorting && (
               <Button
                 size="sm"
                 alternativePadding="mt-2"
@@ -449,7 +502,7 @@ export const Entry: React.FC<EntryProps> = ({
           )}
         </div>
       </div>
-      {thread?.length > 0 && (
+      {thread?.length > 0 && !showEntrySorting && (
         <div
           className={cx({
             flex: !showColumnView,

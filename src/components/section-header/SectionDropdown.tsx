@@ -17,70 +17,78 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   version,
 }) => {
   const { user } = useUser();
-  const { entries, currentVersion, setLitigiousChecks } = useCase();
-  const { setSectionList } = useSection();
+  const { currentVersion, setIndividualEntrySorting, setEntries } = useCase();
+  const { setSectionList, setIndividualSorting } = useSection();
+
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
 
   const isOld = version < currentVersion;
-  const sectionEntries = entries.filter(
-    (entry) => entry.sectionId === sectionId
-  );
-  const sectionEntriesIds = sectionEntries.map((entry) => entry.id);
 
   const deleteSection = () => {
+    // Remove entries that belong to the section
+    setEntries((entries) =>
+      entries.filter((entry) => entry.sectionId !== sectionId)
+    );
+
+    // Remove the section
     setSectionList((prevSectionList) =>
       prevSectionList.filter((section) => section.id !== sectionId)
     );
+    setIndividualSorting((prevIndividualSorting) =>
+      prevIndividualSorting.filter((id) => id !== sectionId)
+    );
+    setIndividualEntrySorting((prevIndividualEntrySorting) => {
+      const { [sectionId]: _, ...rest } = prevIndividualEntrySorting;
+      return rest;
+    });
   };
 
   const resetLitigiousChecks = () => {
-    setLitigiousChecks((prevLitigiousChecks) =>
-      prevLitigiousChecks.filter(
-        (litigiousCheck) => !sectionEntriesIds.includes(litigiousCheck.entryId)
-      )
-    );
+    setIndividualEntrySorting((prevIndividualEntrySorting) => {
+      const newSorting = { ...prevIndividualEntrySorting };
+
+      Object.keys(newSorting).forEach((sectionId) => {
+        newSorting[sectionId] = newSorting[sectionId].map((row) => ({
+          ...row,
+          isLitigious: undefined,
+        }));
+      });
+      return newSorting;
+    });
   };
 
   const setAllLitigious = () => {
     // If sectionEntriesIds are already in the litigiousChecks array, update them to be litigious.
-    setLitigiousChecks((prevLitigiousChecks) => {
-      const newLitigiousChecks = [...prevLitigiousChecks];
-      sectionEntriesIds.forEach((entryId) => {
-        const litigiousCheck = newLitigiousChecks.find(
-          (litigiousCheck) => litigiousCheck.entryId === entryId
-        );
-        if (litigiousCheck) {
-          litigiousCheck.isLitigious = true;
-        } else {
-          newLitigiousChecks.push({
-            entryId,
+    setIndividualEntrySorting((prevIndividualEntrySorting) => {
+      const newSorting = { ...prevIndividualEntrySorting };
+
+      Object.keys(newSorting).forEach((sortingSectionId) => {
+        if (sortingSectionId === sectionId) {
+          newSorting[sectionId] = newSorting[sectionId].map((row) => ({
+            ...row,
             isLitigious: true,
-          });
+          }));
         }
       });
-      return newLitigiousChecks;
+      return newSorting;
     });
   };
 
   const setAllNotLitigious = () => {
     // If sectionEntriesIds are already in the litigiousChecks array, update them to be litigious.
-    setLitigiousChecks((prevLitigiousChecks) => {
-      const newLitigiousChecks = [...prevLitigiousChecks];
-      sectionEntriesIds.forEach((entryId) => {
-        const litigiousCheck = newLitigiousChecks.find(
-          (litigiousCheck) => litigiousCheck.entryId === entryId
-        );
-        if (litigiousCheck) {
-          litigiousCheck.isLitigious = false;
-        } else {
-          newLitigiousChecks.push({
-            entryId,
+    setIndividualEntrySorting((prevIndividualEntrySorting) => {
+      const newSorting = { ...prevIndividualEntrySorting };
+
+      Object.keys(newSorting).forEach((sortingSectionId) => {
+        if (sortingSectionId === sectionId) {
+          newSorting[sectionId] = newSorting[sectionId].map((row) => ({
+            ...row,
             isLitigious: false,
-          });
+          }));
         }
       });
-      return newLitigiousChecks;
+      return newSorting;
     });
   };
 
@@ -114,12 +122,13 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
                 <DropdownMenu.Item onClick={() => resetLitigiousChecks()}>
                   <Button icon={<Circle size={18} />} size="sm">
                     Alle Streitigkeitsmarkierungen des Gliederungspunktes
-                  zurücksetzen
+                    zurücksetzen
                   </Button>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item onClick={() => setAllNotLitigious()}>
                   <Button icon={<CheckCircle size={18} />} size="sm">
-                    Alle Beiträge des Gliederungspunktes als unstreitig markieren
+                    Alle Beiträge des Gliederungspunktes als unstreitig
+                    markieren
                   </Button>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item onClick={() => setAllLitigious()}>

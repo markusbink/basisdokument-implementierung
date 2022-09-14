@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useCase, useHeaderContext, useSection } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
 import { getTheme } from "../../themes/getTheme";
-import { IEntry, UserRole } from "../../types";
+import { IEntry, IndividualEntrySortingEntry, UserRole } from "../../types";
 import { getOriginalSortingPosition } from "../../util/get-original-sorting-position";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -30,14 +30,13 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   sectionId,
   associatedEntry,
 }) => {
-  const {
-    selectedTheme,
-  } = useHeaderContext();
+  const { selectedTheme } = useHeaderContext();
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
   const [authorName, setAuthorName] = useState<string>("");
   const { user } = useUser();
-  const { currentVersion, entries, setEntries } = useCase();
+  const { currentVersion, entries, setEntries, setIndividualEntrySorting } =
+    useCase();
   const { sectionList } = useSection();
 
   const isPlaintiff = roleForNewEntry === UserRole.Plaintiff;
@@ -67,7 +66,21 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       entry.associatedEntry = associatedEntry;
     }
 
+    const individualEntrySortingEntry: IndividualEntrySortingEntry = {
+      rowId: uuidv4(),
+      columns: [[], []],
+    };
+    const columnIndex = isPlaintiff ? 0 : 1;
+    individualEntrySortingEntry.columns[columnIndex].push(entry.id);
+
     setEntries((prevEntries) => [...prevEntries, entry]);
+
+    setIndividualEntrySorting((prevEntrySorting) => {
+      const newEntrySorting = { ...prevEntrySorting };
+      newEntrySorting[sectionId]?.push(individualEntrySortingEntry);
+      return newEntrySorting;
+    });
+
     setIsNewEntryVisible(false);
     setIsExpanded(false);
   };
@@ -105,13 +118,17 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             inputClassName={cx(
               "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
               {
-                [`border-${getTheme(selectedTheme)?.primaryPlaintiff}`]: isPlaintiff,
-                [`border-${getTheme(selectedTheme)?.primaryDefendant}`]: !isPlaintiff,
+                [`border-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
+                  isPlaintiff,
+                [`border-${getTheme(selectedTheme)?.primaryDefendant}`]:
+                  !isPlaintiff,
               }
             )}
             className={cx("font-bold p-0 my-0 flex items-center mr-2", {
-              [`text-${getTheme(selectedTheme)?.primaryPlaintiff}`]: isPlaintiff,
-              [`text-${getTheme(selectedTheme)?.primaryDefendant}`]: !isPlaintiff,
+              [`text-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
+                isPlaintiff,
+              [`text-${getTheme(selectedTheme)?.primaryDefendant}`]:
+                !isPlaintiff,
             })}
             value={authorName}
             onChange={(e) => {
