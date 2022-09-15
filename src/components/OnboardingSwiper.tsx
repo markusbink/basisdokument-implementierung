@@ -86,7 +86,7 @@ const SwiperButtonNext = () => {
       className="nextEl mx-16 select-all w-10 h-10"
       onClick={() => swiper.slideNext()}
     >
-      <ArrowSquareRight size={42} className="fill-darkGrey" weight="fill" />
+      <ArrowSquareRight size={42} className="text-darkGrey hover:text-mediumGrey" weight="fill" />
     </button>
   );
 };
@@ -98,7 +98,7 @@ const SwiperButtonPrev = () => {
       className="prevEl mx-16 select-all w-10 h-10"
       onClick={() => swiper.slidePrev()}
     >
-      <ArrowSquareLeft size={42} className="fill-darkGrey" weight="fill" />
+      <ArrowSquareLeft size={42} className="text-darkGrey hover:text-mediumGrey" weight="fill" />
     </button>
   );
 };
