@@ -1,13 +1,11 @@
 interface OnboardingSwiperItemProps {
-  imageSrc: string;
-  //imageAlt: string;
+  videoSrc: string;
   title: string;
   desc: string;
 }
 
 export const OnboardingSliderItem = ({
-  imageSrc,
- //imageAlt,
+  videoSrc,
   title,
   desc,
 }: OnboardingSwiperItemProps) => {
@@ -18,8 +16,7 @@ export const OnboardingSliderItem = ({
         autoPlay
         loop
           className="overflow-hidden rounded-md shadow-xl w-full max-w-xl h-auto mx-auto"
-          src={`${process.env.PUBLIC_URL}/${imageSrc}`}
-          //alt={imageAlt}
+          src={`${process.env.PUBLIC_URL}/${videoSrc}`}
         />
       </div>
       <div className="p-4 max-w-[800px] m-auto">
