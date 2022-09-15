@@ -40,7 +40,7 @@ export const SortingSelector: React.FC<IProps> = ({
         <DropdownMenu.Content
           side="bottom"
           align="start"
-          className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 w-[100px] z-20">
+          className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 w-[100px] z-50">
           <DropdownMenu.Item
             className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
             onClick={() => {
