@@ -6,9 +6,10 @@ import { EditText } from "react-edit-text";
 import "react-edit-text/dist/index.css";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import { useCase, useSection } from "../../contexts";
+import { useCase, useHeaderContext, useSection } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
-import { IEntry, UserRole } from "../../types";
+import { getTheme } from "../../themes/getTheme";
+import { IEntry, IndividualEntrySortingEntry, UserRole } from "../../types";
 import { getOriginalSortingPosition } from "../../util/get-original-sorting-position";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -17,7 +18,7 @@ import { EntryForm } from "./EntryForm";
 import { EntryHeader } from "./EntryHeader";
 
 interface NewEntryProps {
-  roleForNewEntry: "Kläger" | "Beklagter";
+  roleForNewEntry: "Klagepartei" | "Beklagtenpartei";
   setIsNewEntryVisible: Dispatch<SetStateAction<boolean>>;
   sectionId: string;
   associatedEntry?: string;
@@ -29,11 +30,13 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   sectionId,
   associatedEntry,
 }) => {
+  const { selectedTheme } = useHeaderContext();
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
   const [authorName, setAuthorName] = useState<string>("");
   const { user } = useUser();
-  const { currentVersion, entries, setEntries } = useCase();
+  const { currentVersion, entries, setEntries, setIndividualEntrySorting } =
+    useCase();
   const { sectionList } = useSection();
 
   const isPlaintiff = roleForNewEntry === UserRole.Plaintiff;
@@ -63,7 +66,21 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       entry.associatedEntry = associatedEntry;
     }
 
+    const individualEntrySortingEntry: IndividualEntrySortingEntry = {
+      rowId: uuidv4(),
+      columns: [[], []],
+    };
+    const columnIndex = isPlaintiff ? 0 : 1;
+    individualEntrySortingEntry.columns[columnIndex].push(entry.id);
+
     setEntries((prevEntries) => [...prevEntries, entry]);
+
+    setIndividualEntrySorting((prevEntrySorting) => {
+      const newEntrySorting = { ...prevEntrySorting };
+      newEntrySorting[sectionId]?.push(individualEntrySortingEntry);
+      return newEntrySorting;
+    });
+
     setIsNewEntryVisible(false);
     setIsExpanded(false);
   };
@@ -85,31 +102,33 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     <>
       <div
         className={cx(
-          "flex flex-col mt-4  transition-all rounded-lg bg-white shadow",
+          "flex flex-col mt-4 transition-all rounded-lg bg-white shadow",
           {
-            "w-1/2": !isExpanded,
+            "w-[calc(50%_-_12px)]": !isExpanded,
             "w-full": isExpanded,
             "self-start": isPlaintiff,
             "self-end": !isPlaintiff,
           }
-        )}
-      >
+        )}>
         {/* NewEntry Header */}
         <EntryHeader
           className="rounded-b-none cursor-default"
-          isPlaintiff={isPlaintiff}
-        >
+          isPlaintiff={isPlaintiff}>
           <EditText
             inputClassName={cx(
               "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
               {
-                "border-darkPurple": isPlaintiff,
-                "border-darkPetrol": !isPlaintiff,
+                [`border-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
+                  isPlaintiff,
+                [`border-${getTheme(selectedTheme)?.primaryDefendant}`]:
+                  !isPlaintiff,
               }
             )}
             className={cx("font-bold p-0 my-0 flex items-center mr-2", {
-              "text-darkPurple": isPlaintiff,
-              "text-darkPetrol": !isPlaintiff,
+              [`text-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
+                isPlaintiff,
+              [`text-${getTheme(selectedTheme)?.primaryDefendant}`]:
+                !isPlaintiff,
             })}
             value={authorName}
             onChange={(e) => {
@@ -153,8 +172,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
               textColor="text-mediumGrey font-bold"
               onClick={() => {
                 setIsErrorVisible(false);
-              }}
-            >
+              }}>
               Abbrechen
             </Button>
             <Button
@@ -163,8 +181,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
               onClick={() => {
                 setIsErrorVisible(false);
                 setIsNewEntryVisible(false);
-              }}
-            >
+              }}>
               Verwerfen
             </Button>
           </div>

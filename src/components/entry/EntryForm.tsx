@@ -1,21 +1,23 @@
 import cx from "classnames";
-import {
-  ContentState,
-  convertFromHTML,
-  convertToRaw,
-  EditorState,
-} from "draft-js";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useCase, useHeaderContext } from "../../contexts";
+import { getTheme } from "../../themes/getTheme";
 import { Button } from "../Button";
 import { Tooltip } from "../Tooltip";
 import { Action } from "./Action";
 
 const toolbarOptions = {
-  options: ["inline", "list", "textAlign"],
+  options: ["blockType", "inline", "list", "textAlign"],
+  blockType: {
+    inDropdown: true,
+    options: ["Normal", "H3"],
+    className: ["!mb-0 hover:shadow-none rounded text-black"],
+  },
   inline: {
     className: ["!mb-0"],
     options: ["bold", "italic", "underline", "strikethrough"],
@@ -49,16 +51,17 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
 }) => {
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
-    const blocksFromHTML = convertFromHTML(defaultContent || "");
+    const blocksFromHtml = htmlToDraft(defaultContent || "");
+    const { contentBlocks, entityMap } = blocksFromHtml;
     const contentState = ContentState.createFromBlockArray(
-      blocksFromHTML.contentBlocks,
-      blocksFromHTML.entityMap
+      contentBlocks,
+      entityMap
     );
 
     return EditorState.createWithContent(contentState);
   });
 
-  const { showColumnView } = useHeaderContext();
+  const { showColumnView, selectedTheme } = useHeaderContext();
   const { entries } = useCase();
   const editorRef = useRef<Editor>(null);
   const suggestions = entries.map((entry) => ({
@@ -82,11 +85,10 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   return (
     <div
       className={cx("border border-t-0 rounded-b-lg", {
-        "border-lightPurple": isPlaintiff,
-        "border-lightPetrol": !isPlaintiff,
+        [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]: isPlaintiff,
+        [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]: !isPlaintiff,
         "RichEditor-hidePlaceholder": hidePlaceholder,
-      })}
-    >
+      })}>
       <Editor
         ref={editorRef}
         mention={{
@@ -94,14 +96,21 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           trigger: "#",
           suggestions,
         }}
+        localization={{
+          locale: "de",
+          translations: {
+            "components.controls.blocktype.normal": "Text",
+            "components.controls.blocktype.h3": "Überschrift",
+          },
+        }}
         defaultEditorState={editorState}
         stripPastedStyles={true}
         onEditorStateChange={setEditorState}
         wrapperClassName={cx("w-full focus:outline-none")}
-        editorClassName="p-6 min-h-[160px] overflow-visible"
+        editorClassName="p-6 min-h-[300px] overflow-visible"
         placeholder="Text eingeben..."
         toolbarClassName={cx(
-          "p-2 relative rounded-none border border-x-0 border-t-0 border-lightGrey leading-none"
+          "p-2 relative rounded-none border border-x-0 border-t-0 bg-white border-lightGrey leading-none sticky -top-[112px] z-10"
         )}
         toolbar={toolbarOptions}
         toolbarCustomButtons={
@@ -110,13 +119,11 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
                 <span className="absolute right-2 top-1/2 -translate-y-1/2 leading-[0]">
                   <Tooltip
                     position="top"
-                    text={isExpanded ? "Minimieren" : "Maximieren"}
-                  >
+                    text={isExpanded ? "Minimieren" : "Maximieren"}>
                     <Action
                       className="text-base"
                       onClick={() => setIsExpanded()}
-                      isPlaintiff={isPlaintiff}
-                    >
+                      isPlaintiff={isPlaintiff}>
                       {isExpanded ? <CornersIn /> : <CornersOut />}
                     </Action>
                   </Tooltip>
@@ -137,9 +144,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             onAbort(plainText, newHtml);
           }}
           size="sm"
-          bgColor="bg-lightRed"
-          textColor="font-bold text-darkRed"
-        >
+          bgColor="bg-lightRed hover:bg-darkRed"
+          textColor="font-bold text-darkRed hover:text-white">
           Abbrechen
         </Button>
         <Button
@@ -153,9 +159,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             onSave(plainText, newHtml);
           }}
           size="sm"
-          bgColor="bg-lightGreen"
-          textColor="font-bold text-darkGreen"
-        >
+          bgColor="bg-lightGreen hover:bg-darkGreen"
+          textColor="font-bold text-darkGreen hover:text-white">
           Speichern
         </Button>
       </div>

@@ -1,7 +1,17 @@
+export interface ITheme {
+  id: string,
+  title: string;
+  primaryPlaintiff: string;
+  secondaryPlaintiff: string;
+  primaryDefendant: string;
+  secondaryDefendant: string;
+}
+
 export interface IBookmark {
   id: string;
   title: string;
   associatedEntry: string;
+  isInEditMode?: boolean;
 }
 
 export interface IHint {
@@ -22,15 +32,21 @@ export interface INote {
   associatedEntry?: string;
 }
 
+export interface ISidebar {
+  name: SidebarState;
+  jsxElem: JSX.Element;
+  icon: JSX.Element;
+}
+
 export interface IUser {
   name: string;
   role: UserRole;
 }
 
 export enum UserRole {
-  Plaintiff = "Kläger",
-  Defendant = "Beklagter",
-  Judge = "Richter",
+  Plaintiff = "Klagepartei",
+  Defendant = "Beklagtenpartei",
+  Judge = "Richter:in",
 }
 
 export enum Sorting {
@@ -40,7 +56,13 @@ export enum Sorting {
 
 export enum UsageMode {
   Open,
-  Create
+  Create,
+}
+
+export enum SidebarState {
+  Notes,
+  Hints,
+  Bookmarks,
 }
 
 export interface ISection {
@@ -56,9 +78,19 @@ export interface IEntry {
   version: number;
   text: string;
   author: string;
-  role: "Kläger" | "Beklagter";
+  role: "Klagepartei" | "Beklagtenpartei";
   sectionId: string;
   associatedEntry?: string;
+}
+
+export enum IDragItemType {
+  ENTRY = "entry",
+}
+
+export interface IndividualEntrySortingEntry {
+  rowId: string;
+  isLitigious?: boolean;
+  columns: string[][]; // [0] = plaintiff, [1] = defendant
 }
 
 export interface BasisdokumentData {
@@ -80,11 +112,6 @@ export interface IMetaData {
   defendant: string;
 }
 
-export interface ILitigiousCheck {
-  entryId: string;
-  isLitigious: boolean;
-}
-
 export interface IHighlightedEntry {
   entryId: string;
   highlightedText: string;
@@ -99,7 +126,7 @@ export interface IVersion {
 export enum Tool {
   Eraser,
   Cursor,
-  Highlighter
+  Highlighter,
 }
 
 export interface ITool {

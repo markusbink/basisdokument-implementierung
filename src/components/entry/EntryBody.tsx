@@ -2,9 +2,13 @@ import cx from "classnames";
 import Highlight from "highlight-react/dist/highlight";
 import { useCallback, useEffect } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
-import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib/index";
+import {
+  doHighlight,
+  optionsImpl,
+} from "@funktechno/texthighlighter/lib/index";
 import { IHighlightedEntry, Tool } from "../../types";
 import { getColorHexForColor } from "../../util/get-hex-code-for-marker";
+import { getTheme } from "../../themes/getTheme";
 
 interface EntryBodyProps {
   isPlaintiff: boolean;
@@ -12,17 +16,35 @@ interface EntryBodyProps {
   children: React.ReactNode;
   setLowerOpcacityForSearch: React.Dispatch<React.SetStateAction<boolean>>;
   lowerOpcacityForHighlighters: boolean;
-  setLowerOpcacityForHighlighters: React.Dispatch<React.SetStateAction<boolean>>;
+  setLowerOpcacityForHighlighters: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 }
 
-export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setLowerOpcacityForSearch, lowerOpcacityForHighlighters, setLowerOpcacityForHighlighters, children }) => {
-  const { searchbarValue, currentColorSelection, getCurrentTool, highlighterData } = useHeaderContext();
+export const EntryBody: React.FC<EntryBodyProps> = ({
+  isPlaintiff,
+  entryId,
+  setLowerOpcacityForSearch,
+  lowerOpcacityForHighlighters,
+  setLowerOpcacityForHighlighters,
+  children,
+}) => {
+  const {
+    searchbarValue,
+    currentColorSelection,
+    getCurrentTool,
+    highlighterData,
+    selectedTheme,
+  } = useHeaderContext();
   const { setHighlightedEntries, highlightedEntries } = useCase();
 
   useEffect(() => {
-    let highlightedTextElement: Element | null = document.querySelector(`.search-text-${entryId}`);
+    let highlightedTextElement: Element | null = document.querySelector(
+      `.search-text-${entryId}`
+    );
     if (highlightedTextElement !== null) {
-      let numberOfMarksInEntry: number = highlightedTextElement?.querySelectorAll("mark").length;
+      let numberOfMarksInEntry: number =
+        highlightedTextElement?.querySelectorAll("mark").length;
       if (numberOfMarksInEntry > 0) {
         setLowerOpcacityForSearch(true);
       } else {
@@ -32,7 +54,8 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   }, [searchbarValue, entryId, setLowerOpcacityForSearch]);
 
   const getEntryContent = useCallback(() => {
-    let highlightedEntry: IHighlightedEntry | undefined = highlightedEntries.find((entry) => entry.entryId === entryId);
+    let highlightedEntry: IHighlightedEntry | undefined =
+      highlightedEntries.find((entry) => entry.entryId === entryId);
     if (highlightedEntry) {
       return highlightedEntry.highlightedText;
     }
@@ -40,7 +63,9 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   }, [children, entryId, highlightedEntries]);
 
   useEffect(() => {
-    let htmlElementOfEntryText: HTMLDivElement = createElementFromHTML(getEntryContent() as string);
+    let htmlElementOfEntryText: HTMLDivElement = createElementFromHTML(
+      getEntryContent() as string
+    );
     let oneColorIsUsed: boolean = false;
     let hideAllEntries: boolean = true;
 
@@ -50,7 +75,9 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
 
       if (isSelectedColor) {
         hideAllEntries = false;
-        let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
+        let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(
+          `span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`
+        );
         if (allHighlightings.length > 0) {
           oneColorIsUsed = true;
         }
@@ -61,7 +88,12 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     } else {
       setLowerOpcacityForHighlighters(!oneColorIsUsed);
     }
-  }, [highlighterData, setLowerOpcacityForHighlighters, getCurrentTool, getEntryContent]);
+  }, [
+    highlighterData,
+    setLowerOpcacityForHighlighters,
+    getCurrentTool,
+    getEntryContent,
+  ]);
 
   const getCurrentHighlighterColorAsHTMLString = () => {
     if (getCurrentTool.id === Tool.Eraser) {
@@ -77,7 +109,9 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
   }
 
   const saveNewHighlighting = () => {
-    let highlightedText: string | undefined = document.querySelector(`.marker-text-${entryId}`)?.innerHTML;
+    let highlightedText: string | undefined = document.querySelector(
+      `.marker-text-${entryId}`
+    )?.innerHTML;
 
     if (typeof highlightedText === "string") {
       if (markedEntryExists(entryId)) {
@@ -89,16 +123,25 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
         });
         setHighlightedEntries(newHighlightedEntries);
       } else {
-        setHighlightedEntries([...highlightedEntries, { entryId: entryId, highlightedText: highlightedText }]);
+        setHighlightedEntries([
+          ...highlightedEntries,
+          { entryId: entryId, highlightedText: highlightedText },
+        ]);
       }
     }
   };
 
   const createHighlighting = () => {
     const domEle: any = document.querySelector(`.marker-text-${entryId}`);
-    const options: optionsImpl = { color: getCurrentHighlighterColorAsHTMLString() };
+    const options: optionsImpl = {
+      color: getCurrentHighlighterColorAsHTMLString(),
+    };
 
-    if (domEle && (getCurrentTool.id === Tool.Highlighter || getCurrentTool.id === Tool.Eraser)) {
+    if (
+      domEle &&
+      (getCurrentTool.id === Tool.Highlighter ||
+        getCurrentTool.id === Tool.Eraser)
+    ) {
       const highlightMade = doHighlight(domEle, true, options);
       if (highlightMade) {
         saveNewHighlighting();
@@ -106,10 +149,11 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     }
   };
 
+  // Change cursor if highlighter cursor is selected
   const getToolIconPath = () => {
     switch (getCurrentTool.id) {
       case Tool.Highlighter:
-        return `url(cursors/highlighter-${currentColorSelection.color}.svg), auto`;
+        return `url(cursors/highlighter-${currentColorSelection.color}.svg) 0 10, auto`;
       case Tool.Eraser:
         return `url(cursors/eraser.svg), auto`;
       default:
@@ -117,6 +161,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     }
   };
 
+  // Source: https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro
   const createElementFromHTML = (htmlString: string) => {
     let div = document.createElement("div");
     div.innerHTML = htmlString.trim();
@@ -130,7 +175,9 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
     Object.keys(highlighterData).forEach(function eachKey(key) {
       let colorId: string = key;
       let isSelectedColor: boolean = highlighterData[key];
-      let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(`span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`);
+      let allHighlightings: any = htmlElementOfEntryText.querySelectorAll(
+        `span[data-backgroundcolor="${getColorHexForColor(colorId)}"]`
+      );
 
       for (let index = 0; index < allHighlightings.length; index++) {
         const highlighting = allHighlightings[index];
@@ -147,18 +194,33 @@ export const EntryBody: React.FC<EntryBodyProps> = ({ isPlaintiff, entryId, setL
 
   return (
     <div
-      className={cx(`p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`, {
-        "border-lightPurple": isPlaintiff,
-        "border-lightPetrol": !isPlaintiff,
-      })}
-    >
-      {/* eslint-disable-next-line */}
-      {searchbarValue === "" && (getCurrentTool.id === Tool.Highlighter || getCurrentTool.id === Tool.Eraser) ? (
-        <p style={{ cursor: getToolIconPath() }} className={cx(`marker-text-${entryId}`)} onMouseUp={createHighlighting} dangerouslySetInnerHTML={{ __html: getEntryContent() as string }}></p>
+      className={cx(
+        `p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`,
+        {
+          [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]: isPlaintiff,
+          [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]: !isPlaintiff,
+        }
+      )}>
+      {searchbarValue === "" &&
+      (getCurrentTool.id === Tool.Highlighter ||
+        getCurrentTool.id === Tool.Eraser) ? (
+        <p
+          style={{ cursor: getToolIconPath() }}
+          className={cx(`marker-text-${entryId}`)}
+          onMouseUp={createHighlighting}
+          dangerouslySetInnerHTML={{ __html: getEntryContent() as string }}></p>
       ) : null}
-      {searchbarValue === "" && getCurrentTool.id === Tool.Cursor ? <p dangerouslySetInnerHTML={{ __html: applyHighlighterFiltersToEntry(getEntryContent() as string) }}></p> : null}
+      {searchbarValue === "" && getCurrentTool.id === Tool.Cursor ? (
+        <p
+          dangerouslySetInnerHTML={{
+            __html: applyHighlighterFiltersToEntry(getEntryContent() as string),
+          }}></p>
+      ) : null}
       {searchbarValue !== "" ? (
-        <Highlight search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>{children}</Highlight> // eslint-disable-line
+        <Highlight // eslint-disable-next-line
+          search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>
+          {children}
+        </Highlight> // eslint-disable-line
       ) : null}
     </div>
   );

@@ -147,16 +147,27 @@ body {
   @apply my-0;
 }
 
+.rdw-block-wrapper {
+  @apply my-0;
+}
+
+.rdw-dropdown-selectedtext {
+  @apply text-black font-normal;
+}
+
 .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
   @apply hidden;
 }
 
-.rdw-suggestion-dropdown {
-  @apply shadow-lg rounded-lg p-1;
+.rdw-suggestion-dropdown,
+.rdw-dropdown-optionwrapper,
+.rdw-dropdown-optionwrapper:hover {
+  @apply shadow-lg rounded-lg !p-1;
 }
 
-.rdw-suggestion-option {
-  @apply p-2 rounded border-none hover:bg-offWhite;
+.rdw-suggestion-option,
+.rdw-dropdownoption-default {
+  @apply p-2 rounded border-none hover:bg-offWhite w-full;
 }
 
 .rdw-left-aligned-block > div {
@@ -173,6 +184,10 @@ body {
 
 .rdw-justify-aligned-block > div {
   @apply text-justify;
+}
+
+h3 {
+  @apply text-xl font-bold mb-5 leading-5;
 }
 
 /* SwiperJS Pagination Dots */
@@ -210,6 +225,15 @@ ul > ul > ul {
   list-style-type: square;
 }
 
+p {
+  min-height: 20px;
+}
+
 p:not(:last-child) {
   @apply mb-2;
+}
+
+/* Break words for headlines */
+h2 {
+  hyphens: auto;
 }

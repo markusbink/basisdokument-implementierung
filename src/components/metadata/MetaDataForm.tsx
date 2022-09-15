@@ -1,18 +1,19 @@
 import cx from "classnames";
-import {
-  ContentState,
-  convertFromHTML,
-  convertToRaw,
-  EditorState,
-} from "draft-js";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 import { FloppyDisk, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { Button } from "../Button";
 
 const toolbarOptions = {
-  options: ["inline", "list", "textAlign"],
+  options: ["blockType", "inline", "list", "textAlign"],
+  blockType: {
+    inDropdown: true,
+    options: ["Normal", "H3"],
+    className: ["!mb-0 hover:shadow-none rounded text-black"],
+  },
   inline: {
     className: ["!mb-0"],
     options: ["bold", "italic", "underline", "strikethrough"],
@@ -40,14 +41,16 @@ export const MetaDataForm: React.FC<MetaDataFormProps> = ({
 }) => {
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
-    const blocksFromHTML = convertFromHTML(defaultContent || "");
+    const blocksFromHtml = htmlToDraft(defaultContent || "");
+    const { contentBlocks, entityMap } = blocksFromHtml;
     const contentState = ContentState.createFromBlockArray(
-      blocksFromHTML.contentBlocks,
-      blocksFromHTML.entityMap
+      contentBlocks,
+      entityMap
     );
 
     return EditorState.createWithContent(contentState);
   });
+
   const contentState = editorState.getCurrentContent();
 
   useEffect(() => {
@@ -60,9 +63,15 @@ export const MetaDataForm: React.FC<MetaDataFormProps> = ({
     <div
       className={cx("rounded-b-lg bg-white", {
         "RichEditor-hidePlaceholder": hidePlaceholder,
-      })}
-    >
+      })}>
       <Editor
+        localization={{
+          locale: "de",
+          translations: {
+            "components.controls.blocktype.normal": "Text",
+            "components.controls.blocktype.h3": "Überschrift",
+          },
+        }}
         defaultEditorState={editorState}
         onEditorStateChange={setEditorState}
         wrapperClassName={cx("w-full focus:outline-none")}
@@ -85,9 +94,8 @@ export const MetaDataForm: React.FC<MetaDataFormProps> = ({
             onAbort(plainText, newHtml);
           }}
           size="sm"
-          bgColor="bg-lightRed"
-          textColor="font-bold text-darkRed"
-        >
+          bgColor="bg-lightRed hover:bg-darkRed"
+          textColor="font-bold text-darkRed hover:text-white">
           Abbrechen
         </Button>
         <Button
@@ -101,9 +109,8 @@ export const MetaDataForm: React.FC<MetaDataFormProps> = ({
             onSave(plainText, newHtml);
           }}
           size="sm"
-          bgColor="bg-lightGreen"
-          textColor="font-bold text-darkGreen"
-        >
+          bgColor="bg-lightGreen hover:bg-darkGreen"
+          textColor="font-bold text-darkGreen hover:text-white">
           Speichern
         </Button>
       </div>

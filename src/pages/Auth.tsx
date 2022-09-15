@@ -1,6 +1,6 @@
 import cx from "classnames";
-import { Upload } from "phosphor-react";
-import { useState } from "react";
+import { Trash, Upload } from "phosphor-react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
 import { Button } from "../components/Button";
@@ -50,14 +50,18 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [newVersionMode, setNewVersionMode] =
     useState<IStateUserInput["newVersionMode"]>(false);
 
+  // Refs
+  const basisdokumentFileUploadRef = useRef<HTMLInputElement>(null);
+  const editFileUploadRef = useRef<HTMLInputElement>(null);
+
   // Contexts to set the state globally
   const {
     setCaseId: setCaseIdContext,
     setEntries,
     setMetaData,
-    setLitigiousChecks,
     setCurrentVersion,
-    setHighlightedEntries
+    setHighlightedEntries,
+    setIndividualEntrySorting,
   } = useCase();
   const { setVersionHistory, setColorSelection, setCurrentColorSelection } =
     useHeaderContext();
@@ -68,6 +72,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setUser } = useUser();
   const { setIsOnboardingVisible } = useOnboarding();
 
+  // Set React states when user enters/changes text input fields
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setPrename(newValue);
@@ -93,6 +98,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         let result = e.target.result;
         setBasisdokumentFile(result);
       };
+      e.target.value = "";
     } catch (error) {}
   };
 
@@ -105,9 +111,12 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         let result = e.target.result;
         setEditFile(result);
       };
+      e.target.value = "";
     } catch (error) {}
   };
 
+  // The onboarding should only be displayed when if the user opens a basisdokument for the first time.
+  // It is still possible to access the onboarding via the ?-icon in the header.
   const checkOnboardingShownBefore = () => {
     if (Cookies.get("onboarding") === undefined) {
       Cookies.set("onboarding", "true");
@@ -122,8 +131,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     // check if file exists and validate
     if (usage === UsageMode.Open) {
       if (
-        (!basisdokumentFilename.endsWith(".json") &&
-          typeof basisdokumentFile !== "string") ||
+        !basisdokumentFilename.endsWith(".json") ||
+        typeof basisdokumentFile !== "string" ||
         !basisdokumentFile
       ) {
         setErrorText(
@@ -139,7 +148,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         }
       }
       if (editFile) {
-        if (!editFilename.endsWith(".json") && typeof editFile !== "string") {
+        if (!editFilename.endsWith(".json") || typeof editFile !== "string") {
           setErrorText(
             "Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!"
           );
@@ -167,7 +176,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     }
     if (!role) {
       setErrorText(
-        "Bitte spezifizieren Sie, ob Sie das Basisdokument als Kläger, Beklagter oder Richter bearbeiten möchten!"
+        "Bitte spezifizieren Sie, ob Sie das Basisdokument als Klagepartei, Beklagtenpartei oder Richter:in bearbeiten möchten!"
       );
       inputIsValid = false;
     }
@@ -204,6 +213,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             basisdokumentObject.caseId,
             basisdokumentObject.currentVersion
           );
+
           editFileObject = updateSortingsIfVersionIsDifferent(
             basisdokumentObject,
             editFileObject
@@ -235,13 +245,13 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     }
   };
 
+  // The imported data from the files is then merged into a React state (context provider).
   const setContextFromBasisdokument = (basisdokument: any) => {
     setVersionHistory(basisdokument.versions);
     setEntries(basisdokument.entries);
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
     setMetaData(basisdokument.metaData);
-    setLitigiousChecks(basisdokument.litigiousChecks);
     setCurrentVersion(basisdokument.currentVersion);
     setCaseIdContext(basisdokument.caseId);
   };
@@ -253,6 +263,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setCurrentColorSelection(editFile.highlighter[0]);
     setIndividualSorting(editFile.individualSorting);
     setHighlightedEntries(editFile.highlightedEntries);
+    setIndividualEntrySorting(editFile.individualEntrySorting);
   };
 
   return (
@@ -278,8 +289,11 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             <span className="text-darkRed">*</span>
           </p>
           <div className="flex flex-row w-auto mt-4 gap-4">
-            <div
+            <button
               onClick={() => {
+                if (usage !== UsageMode.Open) {
+                  setErrorText("");
+                }
                 setUsage(UsageMode.Open);
               }}
               className={cx(
@@ -287,12 +301,14 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 {
                   "border-2 border-darkGrey": usage === UsageMode.Open,
                 }
-              )}
-            >
+              )}>
               Öffnen
-            </div>
-            <div
+            </button>
+            <button
               onClick={() => {
+                if (usage !== UsageMode.Create) {
+                  setErrorText("");
+                }
                 setUsage(UsageMode.Create);
               }}
               className={cx(
@@ -300,10 +316,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 {
                   "border-2 border-darkGrey": usage === UsageMode.Create,
                 }
-              )}
-            >
+              )}>
               Erstellen
-            </div>
+            </button>
           </div>
         </div>
 
@@ -313,45 +328,42 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             <span className="text-darkRed">*</span>
           </p>
           <div className="flex flex-row w-auto mt-4 gap-4">
-            <div
+            <button
               onClick={() => {
                 setRole(UserRole.Plaintiff);
               }}
               className={cx(
                 "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
                 {
-                  "border-2 border-darkGrey": role === "Kläger",
+                  "border-2 border-darkGrey": role === "Klagepartei",
                 }
-              )}
-            >
-              Kläger
-            </div>
-            <div
+              )}>
+              Klagepartei
+            </button>
+            <button
               onClick={() => {
                 setRole(UserRole.Defendant);
               }}
               className={cx(
                 "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
                 {
-                  "border-2 border-darkGrey": role === "Beklagter",
+                  "border-2 border-darkGrey": role === "Beklagtenpartei",
                 }
-              )}
-            >
-              Beklagter
-            </div>
-            <div
+              )}>
+              Beklagtenpartei
+            </button>
+            <button
               onClick={() => {
                 setRole(UserRole.Judge);
               }}
               className={cx(
                 "flex items-center justify-center w-[150px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
                 {
-                  "border-2 border-darkGrey": role === "Richter",
+                  "border-2 border-darkGrey": role === "Richter:in",
                 }
-              )}
-            >
-              Richter
-            </div>
+              )}>
+              Richter:in
+            </button>
           </div>
         </div>
         <div>
@@ -401,30 +413,65 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 <span className="text-darkRed">*</span>
               </p>
               <div className="flex flex-col items-start w-auto mt-8 mb-8 gap-4">
-                <div className="flex flex-row items-center justify-center gap-4">
+                <div className="flex flex-row items-center justify-center gap-2">
                   <span className="font-semibold">
                     Basisdokument: <span className="text-darkRed">*</span>
                   </span>
-                  <label className="flex items-center justify-center gap-2 cursor-pointer">
+                  <label
+                    role="button"
+                    className="flex items-center justify-center gap-2 cursor-pointer">
                     <input
+                      ref={basisdokumentFileUploadRef}
                       type="file"
                       onChange={handleBasisdokumentFileUploadChange}
                     />
-                    <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                    {basisdokumentFilename}
+                    <button
+                      onClick={() => {
+                        basisdokumentFileUploadRef?.current?.click();
+                      }}
+                      className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
                       <Upload size={24} color={"white"} />
-                    </div>
-                    <p className="text-black">{basisdokumentFilename}</p>
+                    </button>
                   </label>
+                  {basisdokumentFilename && (
+                    <button
+                      onClick={() => {
+                        setBasisdokumentFilename("");
+                        setBasisdokumentFile(undefined);
+                      }}
+                      className="bg-lightRed hover:bg-marker-red rounded-md p-1">
+                      <Trash size={24} color={"darkRed"} />
+                    </button>
+                  )}
                 </div>
-                <div className="flex flex-row items-center justify-center gap-4">
+                <div className="flex flex-row items-center justify-center gap-2">
                   <span className="font-semibold">Bearbeitungsdatei:</span>
                   <label className="flex items-center justify-center gap-2 cursor-pointer">
-                    <input type="file" onChange={handleEditFileUploadChange} />
-                    <div className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                    <input
+                      ref={editFileUploadRef}
+                      type="file"
+                      onChange={handleEditFileUploadChange}
+                    />
+                    {editFilename}
+                    <button
+                      onClick={() => {
+                        editFileUploadRef?.current?.click();
+                      }}
+                      className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
                       <Upload size={24} color={"white"} />
-                    </div>
-                    <p className="text-black">{editFilename}</p>
+                    </button>
                   </label>
+                  {editFilename && (
+                    <button
+                      onClick={() => {
+                        setEditFilename("");
+                        setEditFile(undefined);
+                      }}
+                      className="bg-lightRed hover:bg-marker-red rounded-md p-1">
+                      <Trash size={24} color={"darkRed"} />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

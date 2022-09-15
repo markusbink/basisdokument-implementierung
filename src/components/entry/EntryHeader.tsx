@@ -1,4 +1,6 @@
 import cx from "classnames";
+import { useHeaderContext } from "../../contexts";
+import { getTheme } from "../../themes/getTheme";
 
 interface EntryHeaderProps {
   isPlaintiff: boolean;
@@ -15,14 +17,17 @@ export const EntryHeader: React.FC<EntryHeaderProps> = ({
   children,
   className,
 }) => {
+  const {
+    selectedTheme,
+  } = useHeaderContext();
   return (
     <div
       onClick={toggleBody}
       className={cx(
         "flex items-center justify-between rounded-t-lg px-6 py-3 cursor-pointer  select-none",
         {
-          "bg-lightPurple text-darkPurple": isPlaintiff,
-          "bg-lightPetrol text-darkPetrol": !isPlaintiff,
+          [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${getTheme(selectedTheme)?.primaryPlaintiff}`]: isPlaintiff,
+          [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${getTheme(selectedTheme)?.primaryDefendant}`]: !isPlaintiff,
           "rounded-b-lg": !isBodyOpen,
         },
         className
