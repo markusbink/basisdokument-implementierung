@@ -179,11 +179,11 @@ export const DocumentButton = () => {
           <AlertDialog.Overlay />
           <AlertDialog.Content>
             <div
-              className="fixed top-0 left-0 h-screen w-screen bg-black opacity-50"
+              className="fixed top-0 left-0 h-screen w-screen bg-black opacity-50 z-[90]"
               onClick={() => {
                 setShowPopupUpload(false);
               }}></div>
-            <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-5 bg-white p-6 rounded-md w-[400px]">
+            <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col gap-5 bg-white p-6 rounded-md w-[400px] z-[100]">
               <div className="flex justify-center">
                 <div className="flex items-center justify-center bg-lightRed w-32 h-32 rounded-full">
                   <Warning size={80} weight="light" className="text-darkRed" />
