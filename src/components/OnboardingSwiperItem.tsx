@@ -13,9 +13,10 @@ export const OnboardingSliderItem = ({
     <div>
       <div className="bg-gradient-to-tr from-lightPetrol to-lightPurple lg:p-8 p-4">
         <video
-        autoPlay
-        loop
-          className="overflow-hidden rounded-md shadow-xl w-full max-w-xl h-auto mx-auto"
+          autoPlay
+          loop
+          muted
+          className="overflow-hidden rounded-md shadow-xl w-full max-w-xl h-auto mx-auto pointer-events-none"
           src={`${process.env.PUBLIC_URL}/${videoSrc}`}
         />
       </div>
