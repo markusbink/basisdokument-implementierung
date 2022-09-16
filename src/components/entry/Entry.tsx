@@ -493,9 +493,7 @@ export const Entry: React.FC<EntryProps> = ({
                     : UserRole.Plaintiff
                 }
                 sectionId={entry.sectionId}
-                associatedEntry={
-                  entry.associatedEntry ? entry.associatedEntry : entry.id
-                }
+                associatedEntry={entry.id}
                 setIsNewEntryVisible={setIsNewEntryVisible}
               />
             </div>
