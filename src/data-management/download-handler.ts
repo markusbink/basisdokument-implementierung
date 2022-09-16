@@ -60,7 +60,7 @@ function addEntryToSection(
       let childEntry =
         groupedEntries[obj["sections"][i].id][entry.id][childEntryIndex];
 
-      let childEntryTitleEl = document.createElement("span");
+      let childEntryTitleEl = document.createElement("span"); 
 
       childEntryTitleEl.innerHTML =
         childEntry.entryCode +
@@ -82,7 +82,7 @@ function addEntryToSection(
       childEntryTextEl.innerHTML = childEntry.text.trim();
       childEntryTextEl = resetFontSize(childEntryTextEl);
       childEntryTextEl.style.fontSize = "3px";
-      childEntryTextEl.style.marginLeft = "4px";
+
       basisdokumentDOMRepresentation.appendChild(childEntryTextEl);
       addEntryToSection(
         groupedEntries,
@@ -308,21 +308,21 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   let allParagraphs = basisdokumentDOMRepresentation.querySelectorAll("p");
   for (let index = 0; index < allParagraphs.length; index++) {
     const element = allParagraphs[index];
-    element.style.minHeight = "1px";
-    element.style.marginBottom = "1px";
+    element.style.minHeight = "0px";
+    element.style.marginBottom = "0px";
   }
 
   let allLists = basisdokumentDOMRepresentation.querySelectorAll("ul");
   for (let index = 0; index < allLists.length; index++) {
     const element = allLists[index];
-    element.style.margin = "1px";
+    element.style.margin = "0px";
     element.style.marginLeft = "4px";
   }
   let allNumberedLists = basisdokumentDOMRepresentation.querySelectorAll("ol");
   for (let index = 0; index < allNumberedLists.length; index++) {
     const element = allNumberedLists[index];
     element.style.margin = "1px";
-    element.style.marginLeft = "4px";
+    element.style.marginLeft = "2px";
   }
 
   let allListItems = basisdokumentDOMRepresentation.querySelectorAll("li");
@@ -338,8 +338,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     element.style.marginBottom = "0px";
   }
 
-  let allBoldItems =
-    basisdokumentDOMRepresentation.querySelectorAll("b");
+  let allBoldItems = basisdokumentDOMRepresentation.querySelectorAll("b");
   for (let index = 0; index < allBoldItems.length; index++) {
     const element = allBoldItems[index];
     element.style.marginBottom = "0px";
@@ -352,6 +351,8 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   }
 
   let stringHtml = basisdokumentDOMRepresentation.outerHTML;
+
+  
 
   doc
     .html(stringHtml, {
