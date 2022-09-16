@@ -40,36 +40,40 @@ export const DropdownHeader: React.FC<any> = () => {
           DARSTELLUNG
         </span>
         <div className="flex flex-row gap-2 h-8">
-          <div
-            className={cx(
-              "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
-              {
-                "bg-lightGrey": showColumnView,
-              }
-            )}
-            onClick={() => {
-              setShowColumnView(true);
-            }}>
-            <img
-              className="w-4"
-              src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`}
-              alt="column view icon"></img>
-          </div>
-          <div
-            className={cx(
-              "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
-              {
-                "bg-lightGrey": !showColumnView,
-              }
-            )}
-            onClick={() => {
-              setShowColumnView(false);
-            }}>
-            <img
-              className="w-4"
-              src={`${process.env.PUBLIC_URL}/icons/row-view-icon.svg`}
-              alt="row view icon"></img>
-          </div>
+          <Tooltip text="Spalten">
+            <div
+              className={cx(
+                "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
+                {
+                  "bg-lightGrey": showColumnView,
+                }
+              )}
+              onClick={() => {
+                setShowColumnView(true);
+              }}>
+              <img
+                className="w-4"
+                src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`}
+                alt="column view icon"></img>
+            </div>
+          </Tooltip>
+          <Tooltip text="Zeilen">
+            <div
+              className={cx(
+                "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
+                {
+                  "bg-lightGrey": !showColumnView,
+                }
+              )}
+              onClick={() => {
+                setShowColumnView(false);
+              }}>
+              <img
+                className="w-4"
+                src={`${process.env.PUBLIC_URL}/icons/row-view-icon.svg`}
+                alt="row view icon"></img>
+            </div>
+          </Tooltip>
         </div>
       </div>
       <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
