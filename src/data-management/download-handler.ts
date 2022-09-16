@@ -14,6 +14,7 @@ import {
 import { jsPDF } from "jspdf";
 import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
 import { manropeMedium, manropeBold } from "../fonts/fonts";
+import { format } from "date-fns";
 
 function downloadObjectAsJSON(obj: object, fileName: string) {
   // Create a blob of the data
@@ -22,7 +23,7 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   });
 
   // Save the file
-  saveAs(fileToSave, fileName+".json");
+  saveAs(fileToSave, fileName + ".json");
 }
 
 function resetFontSize(parentElement: any) {
@@ -32,6 +33,66 @@ function resetFontSize(parentElement: any) {
     });
   });
   return parentElement;
+}
+
+function getEntryTimestamp(childEntry: any, obj: any) {
+  let childEntryVersion = childEntry.version;
+  let timestamp = format(
+    new Date(obj["versions"][childEntryVersion - 1].timestamp),
+    "dd.MM.yyyy"
+  );
+  return timestamp;
+}
+
+function addEntryToSection(
+  groupedEntries: any,
+  obj: any,
+  entry: any,
+  basisdokumentDOMRepresentation: any,
+  i: number
+) {
+  if (groupedEntries[obj["sections"][i].id][entry.id]) {
+    for (
+      let childEntryIndex = 0;
+      childEntryIndex < groupedEntries[obj["sections"][i].id][entry.id].length;
+      childEntryIndex++
+    ) {
+      let childEntry =
+        groupedEntries[obj["sections"][i].id][entry.id][childEntryIndex];
+
+      let childEntryTitleEl = document.createElement("span");
+
+      childEntryTitleEl.innerHTML =
+        childEntry.entryCode +
+        " | " +
+        "Antwort auf: " +
+        entry.entryCode +
+        " | Autor: " +
+        childEntry.author +
+        " | Hinzugefügt am: " +
+        getEntryTimestamp(childEntry, obj) +
+        " | " +
+        childEntry.role;
+      childEntryTitleEl.style.fontSize = "3px";
+      childEntryTitleEl.style.fontWeight = "bold";
+      childEntryTitleEl.style.marginTop = "4px";
+      basisdokumentDOMRepresentation.appendChild(childEntryTitleEl);
+
+      let childEntryTextEl = document.createElement("span");
+      childEntryTextEl.innerHTML = childEntry.text.trim();
+      childEntryTextEl = resetFontSize(childEntryTextEl);
+      childEntryTextEl.style.fontSize = "3px";
+      childEntryTextEl.style.marginLeft = "4px";
+      basisdokumentDOMRepresentation.appendChild(childEntryTextEl);
+      addEntryToSection(
+        groupedEntries,
+        obj,
+        childEntry,
+        basisdokumentDOMRepresentation,
+        i
+      );
+    }
+  }
 }
 
 function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
@@ -226,38 +287,13 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
         entryTextEl.style.fontSize = "3px";
         basisdokumentDOMRepresentation.appendChild(entryTextEl);
 
-        // get child entries of an entry
-        if (groupedEntries[obj["sections"][i].id][entry.id]) {
-          for (
-            let childEntryIndex = 0;
-            childEntryIndex <
-            groupedEntries[obj["sections"][i].id][entry.id].length;
-            childEntryIndex++
-          ) {
-            let childEntry =
-              groupedEntries[obj["sections"][i].id][entry.id][childEntryIndex];
-
-            let childEntryTitleEl = document.createElement("span");
-            childEntryTitleEl.innerHTML =
-              childEntry.entryCode +
-              " | " +
-              childEntry.author +
-              " (" +
-              childEntry.role;
-            childEntryTitleEl.style.fontSize = "3px";
-            childEntryTitleEl.style.fontWeight = "bold";
-            childEntryTitleEl.style.marginTop = "4px";
-            childEntryTitleEl.style.marginLeft = "4px";
-            basisdokumentDOMRepresentation.appendChild(childEntryTitleEl);
-
-            let childEntryTextEl = document.createElement("span");
-            childEntryTextEl.innerHTML = childEntry.text.trim();
-            childEntryTextEl = resetFontSize(childEntryTextEl);
-            childEntryTextEl.style.fontSize = "3px";
-            childEntryTextEl.style.marginLeft = "4px";
-            basisdokumentDOMRepresentation.appendChild(childEntryTextEl);
-          }
-        }
+        addEntryToSection(
+          groupedEntries,
+          obj,
+          entry,
+          basisdokumentDOMRepresentation,
+          i
+        );
       }
     } else {
       let noEntryInSectionTextEl = document.createElement("span");
@@ -295,24 +331,31 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     element.style.margin = "0px";
   }
 
-  let allStrongItems = basisdokumentDOMRepresentation.querySelectorAll("strong");
+  let allStrongItems =
+    basisdokumentDOMRepresentation.querySelectorAll("strong");
   for (let index = 0; index < allStrongItems.length; index++) {
     const element = allStrongItems[index];
-    element.style.marginBottom = "1px";
+    element.style.marginBottom = "0px";
+  }
+
+  let allBoldItems =
+    basisdokumentDOMRepresentation.querySelectorAll("b");
+  for (let index = 0; index < allBoldItems.length; index++) {
+    const element = allBoldItems[index];
+    element.style.marginBottom = "0px";
   }
 
   let allItalicItems = basisdokumentDOMRepresentation.querySelectorAll("i");
   for (let index = 0; index < allItalicItems.length; index++) {
     const element = allItalicItems[index];
-    element.style.marginBottom = "1px";
+    element.style.marginBottom = "0px";
   }
 
   let stringHtml = basisdokumentDOMRepresentation.outerHTML;
-  console.log(stringHtml);
 
   doc
     .html(stringHtml, {
-      autoPaging: 'text',
+      autoPaging: "text",
       margin: 15,
     })
     .then(() => {
