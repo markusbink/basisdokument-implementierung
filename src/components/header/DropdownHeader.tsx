@@ -40,7 +40,7 @@ export const DropdownHeader: React.FC<any> = () => {
           DARSTELLUNG
         </span>
         <div className="flex flex-row gap-2 h-8">
-          <Tooltip text="Spalten">
+          <Tooltip text="Spalten" position="bottom">
             <div
               className={cx(
                 "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
@@ -57,7 +57,7 @@ export const DropdownHeader: React.FC<any> = () => {
                 alt="column view icon"></img>
             </div>
           </Tooltip>
-          <Tooltip text="Zeilen">
+          <Tooltip text="Zeilen" position="bottom">
             <div
               className={cx(
                 "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
