@@ -1,8 +1,9 @@
 import cx from "classnames";
-import { useDrag } from "react-dnd";
+import { useCallback, useRef } from "react";
+import { useDrag, useDrop, XYCoord } from "react-dnd";
 import { useBookmarks, useCase, useUser } from "../../contexts";
 import { getEntryById } from "../../contexts/CaseContext";
-import { IDragItemType } from "../../types";
+import { IDragItemType, UserRole } from "../../types";
 import { Entry } from "../entry";
 
 export const DraggableEntry = ({
@@ -15,29 +16,143 @@ export const DraggableEntry = ({
   index: number;
 }) => {
   const { user } = useUser();
-  const { entries, currentVersion } = useCase();
+  const { entries, currentVersion, setIndividualEntrySorting } = useCase();
   const { bookmarks } = useBookmarks();
 
   const entry = getEntryById(entries, entryId);
+  const ref = useRef<HTMLDivElement>(null);
 
-  const [{ isDragging }, drag] = useDrag(
-    () => ({
-      type: IDragItemType.ENTRY,
-      item: { position, index, role: entry?.role },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
-      }),
-    }),
-    [position]
+  const moveEntry = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      setIndividualEntrySorting((prevEntrySorting) => {
+        const newSorting = { ...prevEntrySorting };
+
+        // update(prevCards, {
+        //   $splice: [
+        //     [dragIndex, 1],
+        //     [hoverIndex, 0, prevCards[dragIndex] as Item],
+        //   ],
+        // });
+
+        Object.keys(newSorting).map((sectionId) => {
+          if (sectionId !== position.sectionId) {
+            return newSorting[sectionId];
+          }
+
+          return newSorting[sectionId].map((row) => {
+            // Remove item by hover index
+            const draggedItem = row.columns[position.column].splice(
+              dragIndex,
+              1
+            )[0];
+
+            // Add item to the new index
+            return row.columns[position.column].splice(
+              hoverIndex,
+              0,
+              draggedItem
+            );
+          });
+        });
+
+        return newSorting;
+      });
+    },
+    [position, setIndividualEntrySorting]
   );
+
+  interface DragItem {
+    position: number;
+    index: number;
+    role: UserRole;
+  }
+
+  const [{ isDragging }, drag] = useDrag({
+    type: IDragItemType.ENTRY,
+    item: { position, index, role: entry?.role },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+
+  const [{ handlerId, isOver }, drop] = useDrop<
+    DragItem,
+    void,
+    { handlerId: any; isOver: boolean; canDrop: boolean }
+  >({
+    accept: IDragItemType.ENTRY,
+    canDrop(_: any, monitor) {
+      return monitor.getItem().index !== index;
+    },
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+        isOver: !!monitor.isOver(),
+        canDrop: !!monitor.canDrop(),
+      };
+    },
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+
+      const dragIndex = item.index;
+      const hoverIndex = index;
+
+      // Don't replace items with themselves
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+
+      // Determine rectangle on screen
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+
+      // Get vertical middle
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+
+      // Get pixels to the top
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+
+      // Only perform the move when the mouse has crossed half of the items height
+      // When dragging downwards, only move when the cursor is below 50%
+      // When dragging upwards, only move when the cursor is above 50%
+
+      // Dragging downwards
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+
+      // Dragging upwards
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+
+      // Time to actually perform the action
+      moveEntry(dragIndex, hoverIndex);
+
+      // Note: we're mutating the monitor item here!
+      // Generally it's better to avoid mutations,
+      // but it's good here for the sake of performance
+      // to avoid expensive index searches.
+      item.index = hoverIndex;
+    },
+  });
+
+  drag(drop(ref));
 
   return (
     <div
-      ref={drag}
+      ref={ref}
       className={cx({
         "outline-dotted outline-offset-4 rounded cursor-grabbing": isDragging,
         "cursor-grab": !isDragging,
-      })}>
+        "opacity-50": isOver,
+      })}
+      data-handler-id={handlerId}>
       <>
         {entry && (
           <Entry
@@ -45,11 +160,9 @@ export const DraggableEntry = ({
             entry={entry}
             isOld={entry.version < currentVersion}
             isBookmarked={
-              bookmarks.find(
+              !!bookmarks.find(
                 (bookmark) => bookmark.associatedEntry === entry.id
               )
-                ? true
-                : false
             }
           />
         )}
