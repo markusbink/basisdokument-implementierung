@@ -36,6 +36,10 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
         (row) => row.rowId === from.rowId
       );
 
+      if (rowIndex === -1) {
+        return newSorting;
+      }
+
       const draggedItem = newSorting[from.sectionId][rowIndex].columns[
         from.column
       ].splice(indexOfEntry, 1)[0];

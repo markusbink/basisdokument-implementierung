@@ -112,6 +112,48 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
       }, {} as { [key: string]: IndividualEntrySortingEntry[] });
 
       setIndividualEntrySorting(initialSorting);
+    } else if (
+      Object.keys(individualEntrySorting).length > 0 &&
+      entries.length > 0
+    ) {
+      // Add new entries to the sorting array
+      const newEntries = entries.filter(
+        (entry) =>
+          !individualEntrySorting[entry.sectionId]?.some(
+            (sortingEntry) =>
+              sortingEntry.columns[0].includes(entry.id) ||
+              sortingEntry.columns[1].includes(entry.id)
+          )
+      );
+
+      // Do nothing if no new entries were found
+      if (newEntries.length === 0) {
+        return;
+      }
+
+      // Add new entries to the existing sorting array
+      const newSorting = newEntries.reduce((acc, entry) => {
+        // if the accumulator array already contains a section with the sectionId, add the entryId to the respective column
+        // else create a new entry with the sectionId and add the entryId to the respective column
+        acc[entry.sectionId] ||= [];
+
+        const entrySorting: IndividualEntrySortingEntry = {
+          rowId: uuidv4(),
+          columns: [[], []],
+        };
+
+        const columnIndex = entry.role === UserRole.Plaintiff ? 0 : 1;
+        entrySorting.columns[columnIndex].push(entry.id);
+
+        acc[entry.sectionId].push(entrySorting);
+
+        return acc;
+      }, {} as { [key: string]: IndividualEntrySortingEntry[] });
+
+      setIndividualEntrySorting((prev) => ({
+        ...prev,
+        ...newSorting,
+      }));
     }
   }, [entries, individualEntrySorting]);
 
