@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useCase, useUser } from "../../contexts";
+import { useCase, useHeaderContext, useUser } from "../../contexts";
 import { ISection, UserRole } from "../../types";
 import { SectionControls } from "./SectionControls";
 import { SectionDropdown } from "./SectionDropdown";
@@ -18,6 +18,8 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 }) => {
   const { user } = useUser();
   const { currentVersion } = useCase();
+  const { showEntrySorting } = useHeaderContext();
+
   const isOld = section.version < currentVersion;
 
   return (
@@ -51,7 +53,8 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
           version={section.version}
         />
         {((!isOld && user?.role !== UserRole.Judge) ||
-          user?.role === UserRole.Judge) && (
+          (user?.role === UserRole.Judge && !isOld) ||
+          (user?.role === UserRole.Judge && showEntrySorting)) && (
           <div className="mt-9">
             <SectionDropdown sectionId={section.id} version={section.version} />
           </div>
