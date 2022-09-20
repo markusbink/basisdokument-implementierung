@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { useCallback, useRef } from "react";
-import { useDrag, useDrop, XYCoord } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 import { useBookmarks, useCase, useUser } from "../../contexts";
 import { getEntryById } from "../../contexts/CaseContext";
 import { IDragItemType, UserRole } from "../../types";
