@@ -116,14 +116,29 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
       Object.keys(individualEntrySorting).length > 0 &&
       entries.length > 0
     ) {
-      // Add new entries to the sorting array
+      // Check if there are entries that are not in the sorting yet
+
+      // 1. Get all entryIds that are in the sorting
+      const entryIdsInSorting = Object.values(individualEntrySorting).reduce(
+        (acc, sectionEntries) => {
+          sectionEntries.forEach((entry) => {
+            entry.columns.forEach((column) => {
+              column.forEach((entryId) => {
+                acc.push(entryId);
+              });
+
+              return acc;
+            });
+          });
+
+          return acc;
+        },
+        [] as string[]
+      );
+
+      // 2. Check for each entry if it is in the entryIdsInSorting array
       const newEntries = entries.filter(
-        (entry) =>
-          !individualEntrySorting[entry.sectionId]?.some(
-            (sortingEntry) =>
-              sortingEntry.columns[0].includes(entry.id) ||
-              sortingEntry.columns[1].includes(entry.id)
-          )
+        (entry) => !entryIdsInSorting.includes(entry.id)
       );
 
       // Do nothing if no new entries were found
