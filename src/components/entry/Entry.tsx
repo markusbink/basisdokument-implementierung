@@ -460,8 +460,6 @@ export const Entry: React.FC<EntryProps> = ({
                     setIsEditErrorVisible(true);
                   }}
                   onSave={(plainText: string, rawHtml: string) => {
-                    console.log({ rawHtml });
-
                     updateEntry(plainText, rawHtml);
                     setIsExpanded(false);
                   }}

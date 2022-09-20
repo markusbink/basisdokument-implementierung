@@ -27,13 +27,6 @@ export const DraggableEntry = ({
       setIndividualEntrySorting((prevEntrySorting) => {
         const newSorting = { ...prevEntrySorting };
 
-        // update(prevCards, {
-        //   $splice: [
-        //     [dragIndex, 1],
-        //     [hoverIndex, 0, prevCards[dragIndex] as Item],
-        //   ],
-        // });
-
         Object.keys(newSorting).map((sectionId) => {
           if (sectionId !== position.sectionId) {
             return newSorting[sectionId];
