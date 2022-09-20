@@ -60,7 +60,7 @@ function addEntryToSection(
       let childEntry =
         groupedEntries[obj["sections"][i].id][entry.id][childEntryIndex];
 
-      let childEntryTitleEl = document.createElement("span"); 
+      let childEntryTitleEl = document.createElement("span");
 
       childEntryTitleEl.innerHTML =
         childEntry.entryCode +
@@ -331,28 +331,15 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     element.style.margin = "0px";
   }
 
-  let allStrongItems =
-    basisdokumentDOMRepresentation.querySelectorAll("strong");
-  for (let index = 0; index < allStrongItems.length; index++) {
-    const element = allStrongItems[index];
-    element.style.marginBottom = "0px";
-  }
-
-  let allBoldItems = basisdokumentDOMRepresentation.querySelectorAll("b");
-  for (let index = 0; index < allBoldItems.length; index++) {
-    const element = allBoldItems[index];
-    element.style.marginBottom = "0px";
-  }
-
-  let allItalicItems = basisdokumentDOMRepresentation.querySelectorAll("i");
-  for (let index = 0; index < allItalicItems.length; index++) {
-    const element = allItalicItems[index];
-    element.style.marginBottom = "0px";
-  }
 
   let stringHtml = basisdokumentDOMRepresentation.outerHTML;
 
-  
+  stringHtml = stringHtml.replaceAll("<strong>", "");
+  stringHtml = stringHtml.replaceAll("</strong>", "");
+  stringHtml = stringHtml.replaceAll("<i>", "");
+  stringHtml = stringHtml.replaceAll("</i>", "");
+  stringHtml = stringHtml.replaceAll("<b>", "");
+  stringHtml = stringHtml.replaceAll("</b>", "");
 
   doc
     .html(stringHtml, {
