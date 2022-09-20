@@ -150,9 +150,8 @@ export const DraggableEntry: React.FC<DraggableEntryProps> = ({
     <div
       ref={ref}
       className={cx({
-        "outline-dotted outline-offset-4 rounded cursor-grabbing": isDragging,
         "cursor-grab": !isDragging,
-        "opacity-50": isOver && canDrop,
+        "cursor-grabbing": isDragging,
       })}
       data-handler-id={handlerId}>
       <>
