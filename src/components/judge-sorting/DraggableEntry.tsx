@@ -41,6 +41,10 @@ export const DraggableEntry: React.FC<DraggableEntryProps> = ({
               1
             )[0];
 
+            if (!draggedItem) {
+              return row;
+            }
+
             // Add item to the new index
             return row.columns[position.column].splice(
               hoverIndex,

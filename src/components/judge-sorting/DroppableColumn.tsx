@@ -44,6 +44,10 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
         from.column
       ].splice(indexOfEntry, 1)[0];
 
+      if (!draggedItem) {
+        return prevEntrySorting;
+      }
+
       // Add dragged item to the new rowId
       const newRowIndex = newSorting[to.sectionId].findIndex(
         (row) => row.rowId === to.rowId
@@ -79,7 +83,7 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
     <div
       ref={drop}
       className={cx(
-        "relative column space-y-4 px-4 py-8 border border-gray-300 rounded-lg text-black",
+        "relative column space-y-4 px-4 py-12 border border-gray-300 rounded-lg text-black",
         {
           "bg-blue-600/25": isOver && canDrop,
           "bg-gray-200/50": !isOver,
