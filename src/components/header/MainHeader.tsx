@@ -22,6 +22,7 @@ export const MainHeader = () => {
     showDropdownHeader,
     getCurrentTool,
     setCurrentTool,
+    showEntrySorting,
   } = useHeaderContext();
   const { caseId } = useCase();
   const { setIsOnboardingVisible } = useOnboarding();
@@ -106,7 +107,12 @@ export const MainHeader = () => {
         <Tooltip text="Markierungsfarbe auswählen">
           <ColorSelector />
         </Tooltip>
-        <Tooltip text="Werkzeug auswählen">
+        <Tooltip
+          text={`${
+            showEntrySorting
+              ? "Während Beiträge sortiert werden, können keine Markierungen vorgenommen werden."
+              : "Werkzeug auswählen"
+          }`}>
           <ToolSelector
             getCurrentTool={getCurrentTool}
             setCurrentTool={setCurrentTool}

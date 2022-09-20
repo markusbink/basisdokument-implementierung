@@ -9,6 +9,7 @@ import { useRef, useState } from "react";
 import { useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { Tool } from "../../types";
+import cx from "classnames";
 
 const StaticToolList: any = {
   Cursor,
@@ -43,17 +44,22 @@ export const ToolSelector: React.FC<IProps> = ({
     useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   useOutsideClick(dropdownRef, () => setShowToolSelectorMenu(false));
-  const { setSearchbarValue } = useHeaderContext();
+  const { setSearchbarValue, showEntrySorting } = useHeaderContext();
 
   const CurrentToolComponent = StaticToolList[getCurrentTool.iconNode];
 
   return (
-    <div ref={dropdownRef} className="relative">
+    <div
+      ref={dropdownRef}
+      className={cx("relative", {
+        "cursor-pointer": !showEntrySorting,
+        "cursor-not-allowed": showEntrySorting,
+      })}>
       <div
         onClick={() => {
           setShowToolSelectorMenu(!showToolSelectorMenu);
         }}
-        className="flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8 cursor-pointer">
+        className={cx("flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8", {"pointer-events-none": showEntrySorting})}>
         <div className={`flex flex-row items-center rounded-full gap-2`}>
           <CurrentToolComponent size={16} className="text-darkGrey" />
           {showToolSelectorMenu ? (

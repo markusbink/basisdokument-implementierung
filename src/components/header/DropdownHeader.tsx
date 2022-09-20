@@ -39,42 +39,50 @@ export const DropdownHeader: React.FC<any> = () => {
         <span className="font-extrabold tracking-widest text-xs">
           DARSTELLUNG
         </span>
-        <div className="flex flex-row gap-2 h-8">
-          <Tooltip text="Spalten" position="bottom">
-            <div
-              className={cx(
-                "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
-                {
-                  "bg-lightGrey": showColumnView,
-                }
-              )}
-              onClick={() => {
-                setShowColumnView(true);
-              }}>
-              <img
-                className="w-4"
-                src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`}
-                alt="column view icon"></img>
-            </div>
-          </Tooltip>
-          <Tooltip text="Zeilen" position="bottom">
-            <div
-              className={cx(
-                "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
-                {
-                  "bg-lightGrey": !showColumnView,
-                }
-              )}
-              onClick={() => {
-                setShowColumnView(false);
-              }}>
-              <img
-                className="w-4"
-                src={`${process.env.PUBLIC_URL}/icons/row-view-icon.svg`}
-                alt="row view icon"></img>
-            </div>
-          </Tooltip>
-        </div>
+        <Tooltip
+          text="Während Beiträge sortiert werden, kann nicht zur Zeilenansicht gewechselt werden."
+          position="bottom"
+          className="flex flex-row">
+          <div
+            className={cx("flex flex-row gap-2 h-8", {
+              "pointer-events-none cursor-not-allowed": showEntrySorting,
+            })}>
+            <Tooltip text="Spalten" position="bottom">
+              <div
+                className={cx(
+                  "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
+                  {
+                    "bg-lightGrey": showColumnView,
+                  }
+                )}
+                onClick={() => {
+                  setShowColumnView(true);
+                }}>
+                <img
+                  className="w-4"
+                  src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`}
+                  alt="column view icon"></img>
+              </div>
+            </Tooltip>
+            <Tooltip text="Zeilen" position="bottom">
+              <div
+                className={cx(
+                  "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
+                  {
+                    "bg-lightGrey": !showColumnView,
+                  }
+                )}
+                onClick={() => {
+                  setShowColumnView(false);
+                }}>
+                <img
+                  className="w-4"
+                  src={`${process.env.PUBLIC_URL}/icons/row-view-icon.svg`}
+                  alt="row view icon"></img>
+              </div>
+            </Tooltip>
+          </div>
+        </Tooltip>
       </div>
       <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
@@ -96,6 +104,12 @@ export const DropdownHeader: React.FC<any> = () => {
                 <div
                   className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
                   onClick={() => {
+                    setCurrentTool({
+                      id: Tool.Cursor,
+                      iconNode: "Cursor",
+                      germanTitle: "Maus",
+                    });
+                    setShowColumnView(true);
                     setShowEntrySorting(!showEntrySorting);
                   }}>
                   <input
