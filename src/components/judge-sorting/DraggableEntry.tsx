@@ -6,14 +6,16 @@ import { getEntryById } from "../../contexts/CaseContext";
 import { IDragItemType, UserRole } from "../../types";
 import { Entry } from "../entry";
 
-export const DraggableEntry = ({
-  entryId,
-  position,
-  index,
-}: {
+interface DraggableEntryProps {
   entryId: string;
   position: { sectionId: string; rowId: string; column: number };
   index: number;
+}
+
+export const DraggableEntry: React.FC<DraggableEntryProps> = ({
+  entryId,
+  position,
+  index,
 }) => {
   const { user } = useUser();
   const { entries, currentVersion, setIndividualEntrySorting } = useCase();
@@ -55,7 +57,7 @@ export const DraggableEntry = ({
   );
 
   interface DragItem {
-    position: number;
+    position: { sectionId: string; rowId: string; column: number };
     index: number;
     role: UserRole;
   }
@@ -68,14 +70,17 @@ export const DraggableEntry = ({
     }),
   });
 
-  const [{ handlerId, isOver }, drop] = useDrop<
+  const [{ handlerId, isOver, canDrop }, drop] = useDrop<
     DragItem,
     void,
     { handlerId: any; isOver: boolean; canDrop: boolean }
   >({
     accept: IDragItemType.ENTRY,
     canDrop(_: any, monitor) {
-      return monitor.getItem().index !== index;
+      return (
+        monitor.getItem().index !== index &&
+        monitor.getItem().position.rowId === position.rowId
+      );
     },
     collect(monitor) {
       return {
@@ -143,7 +148,7 @@ export const DraggableEntry = ({
       className={cx({
         "outline-dotted outline-offset-4 rounded cursor-grabbing": isDragging,
         "cursor-grab": !isDragging,
-        "opacity-50": isOver,
+        "opacity-50": isOver && canDrop,
       })}
       data-handler-id={handlerId}>
       <>
