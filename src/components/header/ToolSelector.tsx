@@ -10,6 +10,7 @@ import { useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { Tool } from "../../types";
 import cx from "classnames";
+import { Tooltip } from "../Tooltip";
 
 const StaticToolList: any = {
   Cursor,
@@ -59,15 +60,25 @@ export const ToolSelector: React.FC<IProps> = ({
         onClick={() => {
           setShowToolSelectorMenu(!showToolSelectorMenu);
         }}
-        className={cx("flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8", {"pointer-events-none": showEntrySorting})}>
-        <div className={`flex flex-row items-center rounded-full gap-2`}>
-          <CurrentToolComponent size={16} className="text-darkGrey" />
-          {showToolSelectorMenu ? (
-            <CaretUp size={12} className="text-darkGrey" weight="bold" />
-          ) : (
-            <CaretDown size={12} className="text-darkGrey" weight="bold" />
-          )}
-        </div>
+        className={cx(
+          "flex flex-row align-middle justify-center items-center gap-2 bg-offWhite hover:bg-lightGrey rounded-md w-12 h-8",
+          { "pointer-events-none": showEntrySorting }
+        )}>
+        <Tooltip
+          text={`${
+            showEntrySorting
+              ? "Während Beiträge sortiert werden, können keine Markierungen vorgenommen werden."
+              : "Werkzeug auswählen"
+          }`}>
+          <div className={`flex flex-row items-center rounded-full gap-2`}>
+            <CurrentToolComponent size={16} className="text-darkGrey" />
+            {showToolSelectorMenu ? (
+              <CaretUp size={12} className="text-darkGrey" weight="bold" />
+            ) : (
+              <CaretDown size={12} className="text-darkGrey" weight="bold" />
+            )}
+          </div>
+        </Tooltip>
       </div>
       {showToolSelectorMenu ? (
         <div className="absolute top-full right-0  w-[200px] flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 gap-2 z-50">
