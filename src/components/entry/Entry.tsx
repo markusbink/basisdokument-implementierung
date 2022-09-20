@@ -380,7 +380,7 @@ export const Entry: React.FC<EntryProps> = ({
                     </Action>
                   </Tooltip>
                   {(isJudge || (entry.role === viewedBy && !isOld)) && (
-                    <div className="flex relative space-y-2">
+                    <div ref={menuRef} className="flex relative space-y-2">
                       <Tooltip text="Mehr Optionen">
                         <Action
                           className={cx({
@@ -401,9 +401,7 @@ export const Entry: React.FC<EntryProps> = ({
                         </Action>
                       </Tooltip>
                       {isMenuOpen ? (
-                        <ul
-                          ref={menuRef}
-                          className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+                        <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
                           {isJudge && (
                             <li
                               tabIndex={0}

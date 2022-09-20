@@ -27,7 +27,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
           side={position}
           sideOffset={5}>
           {text}
-
           <RadixTooltip.Arrow
             className="fill-darkGrey"
             offset={10}
