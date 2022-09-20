@@ -39,13 +39,13 @@ export const DropdownHeader: React.FC<any> = () => {
         <span className="font-extrabold tracking-widest text-xs">
           DARSTELLUNG
         </span>
-        <Tooltip
-          text="Während Beiträge sortiert werden, kann nicht zur Zeilenansicht gewechselt werden."
-          position="bottom"
-          className="flex flex-row">
+        <div
+          className={cx("flex flex-row", {
+            "cursor-not-allowed": showEntrySorting,
+          })}>
           <div
             className={cx("flex flex-row gap-2 h-8", {
-              "pointer-events-none cursor-not-allowed": showEntrySorting,
+              "pointer-events-none": showEntrySorting
             })}>
             <Tooltip text="Spalten" position="bottom">
               <div
@@ -82,7 +82,7 @@ export const DropdownHeader: React.FC<any> = () => {
               </div>
             </Tooltip>
           </div>
-        </Tooltip>
+        </div>
       </div>
       <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
