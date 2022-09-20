@@ -85,11 +85,11 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
   }>({});
 
   useEffect(() => {
-    // Sets the initial sorting based on the entries if we do not have any sorting yet.
     if (
       Object.keys(individualEntrySorting).length === 0 &&
       entries.length > 0
     ) {
+      // set the initial sorting based on the entries
       const initialSorting = entries.reduce((acc, entry) => {
         // if the accumulator array already contains a section with the sectionId, add the entryId to the respective column
         // else create a new entry with the sectionId and add the entryId to the respective column
@@ -112,44 +112,6 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
       }, {} as { [key: string]: IndividualEntrySortingEntry[] });
 
       setIndividualEntrySorting(initialSorting);
-    } else {
-      // If we have sorting, we need to update the sorting with the new entries.
-      const updatedSorting = entries.reduce((acc, entry) => {
-        // if the accumulator array already contains a section with the sectionId, add the entryId to the respective column
-        // else create a new entry with the sectionId and add the entryId to the respective column
-        acc[entry.sectionId] ||= [];
-
-        const existingEntrySorting = acc[entry.sectionId].find(
-          (entrySorting) =>
-            entrySorting.columns[0].includes(entry.id) ||
-            entrySorting.columns[1].includes(entry.id)
-        );
-
-        if (existingEntrySorting) {
-          if (entry.role === UserRole.Plaintiff) {
-            existingEntrySorting.columns[0].push(entry.id);
-          } else {
-            existingEntrySorting.columns[1].push(entry.id);
-          }
-        } else {
-          const entrySorting: IndividualEntrySortingEntry = {
-            rowId: uuidv4(),
-            columns: [[], []],
-          };
-
-          if (entry.role === UserRole.Plaintiff) {
-            entrySorting.columns[0].push(entry.id);
-          } else {
-            entrySorting.columns[1].push(entry.id);
-          }
-
-          acc[entry.sectionId].push(entrySorting);
-        }
-
-        return acc;
-      }, {} as { [key: string]: IndividualEntrySortingEntry[] });
-
-      setIndividualEntrySorting(updatedSorting);
     }
   }, [entries, individualEntrySorting]);
 
