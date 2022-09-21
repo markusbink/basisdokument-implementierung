@@ -2,14 +2,12 @@ import cx from "classnames";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
-import { CornersIn, CornersOut, FloppyDisk, X } from "phosphor-react";
+import { FloppyDisk, X } from "phosphor-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useCase, useHeaderContext } from "../../contexts";
 import { getTheme } from "../../themes/getTheme";
 import { Button } from "../Button";
-import { Tooltip } from "../Tooltip";
-import { Action } from "./Action";
 import { ExpandButton } from "./ExpandButton";
 
 const toolbarOptions = {
