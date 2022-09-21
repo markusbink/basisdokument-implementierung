@@ -83,6 +83,7 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
   const [individualEntrySorting, setIndividualEntrySorting] = useState<{
     [key: string]: IndividualEntrySortingEntry[];
   }>({});
+  const { sectionList } = useSection();
 
   useEffect(() => {
     if (
@@ -116,71 +117,58 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
       Object.keys(individualEntrySorting).length > 0 &&
       entries.length > 0
     ) {
-      // Check if there are entries that are not in the sorting yet
-
       // 1. Get all entryIds that are in the sorting
-      const entryIdsInSorting = Object.values(individualEntrySorting).reduce(
-        (acc, sectionEntries) => {
-          sectionEntries.forEach((entry) => {
-            entry.columns.forEach((column) => {
-              column.forEach((entryId) => {
-                acc.push(entryId);
-              });
-
-              return acc;
-            });
-          });
-
-          return acc;
-        },
-        [] as string[]
-      );
+      const entryIdsInSorting = getEntryIdsInSorting(individualEntrySorting);
 
       // 2. Check for each entry if it is in the entryIdsInSorting array
       const newEntries = entries.filter(
         (entry) => !entryIdsInSorting.includes(entry.id)
       );
 
-      // Do nothing if no new entries were found
-      if (newEntries.length === 0) {
+      // 3. Check if there are entryIds in the sorting that are not in the entries array
+      const entryIdsInEntries = entries.map((entry) => entry.id);
+      const entriesToRemove = getEntriesToRemove(
+        individualEntrySorting,
+        entryIdsInEntries
+      );
+
+      if (newEntries.length === 0 && entriesToRemove.length === 0) {
         return;
       }
 
+      let newIndividualEntrySorting: {
+          [key: string]: IndividualEntrySortingEntry[];
+        },
+        newSorting: { [key: string]: IndividualEntrySortingEntry[] };
+
+      // Remove the entries that are not in the entries array
+      if (entriesToRemove.length > 0) {
+        newIndividualEntrySorting = removeEntryIdsFromSorting(
+          individualEntrySorting,
+          entriesToRemove
+        );
+      }
+
       // Add new entries to the existing sorting array
-      const newSorting = newEntries.reduce((acc, entry) => {
-        // if the accumulator array already contains a section with the sectionId, add the entryId to the respective column
-        // else create a new entry with the sectionId and add the entryId to the respective column
-        acc[entry.sectionId] ||= [];
-
-        const entrySorting: IndividualEntrySortingEntry = {
-          rowId: uuidv4(),
-          columns: [[], []],
-        };
-
-        const columnIndex = entry.role === UserRole.Plaintiff ? 0 : 1;
-        entrySorting.columns[columnIndex].push(entry.id);
-
-        acc[entry.sectionId].push(entrySorting);
-
-        return acc;
-      }, {} as { [key: string]: IndividualEntrySortingEntry[] });
+      if (newEntries.length > 0) {
+        newSorting = addEntryIdsToSorting(newEntries);
+      }
 
       setIndividualEntrySorting((prev) => ({
         ...prev,
+        ...newIndividualEntrySorting,
         ...newSorting,
       }));
     }
   }, [entries, individualEntrySorting]);
 
-  const { sectionList } = useSection();
+  useEffect(() => {
+    setGroupedEntries(groupEntriesBySectionAndParent(entries));
+  }, [entries, sectionList]);
 
   const updateEntry = (entry: IEntry) => {
     setEntries(entries.map((e) => (e.id === entry.id ? entry : e)));
   };
-
-  useEffect(() => {
-    setGroupedEntries(groupEntriesBySectionAndParent(entries));
-  }, [entries, sectionList]);
 
   return (
     <CaseContext.Provider
@@ -212,3 +200,109 @@ export const useCase = () => {
   }
   return context;
 };
+
+/**
+ * Retrieves all entryIds that are in the sorting.
+ * @param individualEntrySorting The sorting object.
+ * @returns Array containing all entryIds.
+ */
+function getEntryIdsInSorting(individualEntrySorting: {
+  [key: string]: IndividualEntrySortingEntry[];
+}): string[] {
+  return Object.values(individualEntrySorting).reduce((acc, sectionEntries) => {
+    sectionEntries.forEach((entry) => {
+      entry.columns.forEach((column) => {
+        column.forEach((entryId) => {
+          acc.push(entryId);
+        });
+
+        return acc;
+      });
+    });
+
+    return acc;
+  }, [] as string[]);
+}
+
+/**
+ * Retrieves all entryIds that are in the sorting but not in the entries array.
+ * @param individualEntrySorting The sorting object.
+ * @param entryIdsInEntries Array containing all entryIds that are in the entries array.
+ * @returns Array containing all entryIds that are in the sorting but not in the entries array.
+ */
+function getEntriesToRemove(
+  individualEntrySorting: {
+    [key: string]: IndividualEntrySortingEntry[];
+  },
+  entryIdsInEntries: string[]
+): string[] {
+  return Object.values(individualEntrySorting).reduce((acc, sectionEntries) => {
+    sectionEntries.forEach((entry) => {
+      entry.columns.forEach((column) => {
+        column.forEach((entryId) => {
+          if (!entryIdsInEntries.includes(entryId)) {
+            acc.push(entryId);
+          }
+        });
+
+        return acc;
+      });
+    });
+
+    return acc;
+  }, [] as string[]);
+}
+
+/**
+ * Returns a new sorting object without the entryIds that are in the entriesToRemove array.
+ * @param individualEntrySorting The sorting object.
+ * @param entriesToRemove Array containing all entryIds that should be removed from the sorting.
+ * @returns New sorting object without the entryIds that are in the entriesToRemove array.
+ */
+function removeEntryIdsFromSorting(
+  individualEntrySorting: {
+    [key: string]: IndividualEntrySortingEntry[];
+  },
+  entriesToRemove: string[]
+) {
+  return Object.entries(individualEntrySorting).reduce(
+    (acc, [sectionId, sectionEntries]) => {
+      acc[sectionId] = sectionEntries.map((entry) => {
+        const newEntry = { ...entry };
+        newEntry.columns = newEntry.columns.map((column) => {
+          return column.filter((entryId) => !entriesToRemove.includes(entryId));
+        });
+
+        return newEntry;
+      });
+
+      return acc;
+    },
+    {} as { [key: string]: IndividualEntrySortingEntry[] }
+  );
+}
+
+/**
+ * Creates a new sorting object for the new entries.
+ * @param newEntries Array containing all new entries.
+ * @returns New sorting object for the new entries.
+ */
+function addEntryIdsToSorting(newEntries: IEntry[]) {
+  return newEntries.reduce((acc, entry) => {
+    // if the accumulator array already contains a section with the sectionId, add the entryId to the respective column
+    // else create a new entry with the sectionId and add the entryId to the respective column
+    acc[entry.sectionId] ||= [];
+
+    const entrySorting: IndividualEntrySortingEntry = {
+      rowId: uuidv4(),
+      columns: [[], []],
+    };
+
+    const columnIndex = entry.role === UserRole.Plaintiff ? 0 : 1;
+    entrySorting.columns[columnIndex].push(entry.id);
+
+    acc[entry.sectionId].push(entrySorting);
+
+    return acc;
+  }, {} as { [key: string]: IndividualEntrySortingEntry[] });
+}
