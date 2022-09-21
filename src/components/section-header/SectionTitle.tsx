@@ -40,9 +40,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
     });
   };
 
-  const {
-    selectedTheme,
-  } = useHeaderContext();
+  const { selectedTheme } = useHeaderContext();
 
   useEffect(() => {
     if (!title) {
@@ -56,8 +54,12 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
         className={cx(
           "text-xs font-bold rounded-md px-2 py-1 w-fit uppercase text-darkGrey",
           {
-            [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${getTheme(selectedTheme)?.primaryPlaintiff}`]: role === UserRole.Plaintiff,
-            [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${getTheme(selectedTheme)?.primaryDefendant}`]: role === UserRole.Defendant,
+            [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+              getTheme(selectedTheme)?.primaryPlaintiff
+            }`]: role === UserRole.Plaintiff,
+            [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+              getTheme(selectedTheme)?.primaryDefendant
+            }`]: role === UserRole.Defendant,
           }
         )}>
         {role}
@@ -66,7 +68,9 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
         {isEditing ? (
           <input
             ref={titleInputRef}
-            readOnly={role !== user?.role && user?.role !== UserRole.Judge}
+            readOnly={
+              (role !== user?.role && user?.role !== UserRole.Judge) || isOld
+            }
             placeholder="Bisher kein Titel vergeben"
             type="text"
             onKeyDown={(e) => {
