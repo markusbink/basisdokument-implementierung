@@ -101,7 +101,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           {owner}
         </Button>
         {canEdit && (
-          <div className="flex relative space-y-1 cursor-pointer">
+          <div ref={menuRef} className="flex relative space-y-1 cursor-pointer">
             <Tooltip text="Mehr Optionen">
               <Action
                 className={cx("relative", {
@@ -122,9 +122,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
               </Action>
             </Tooltip>
             {isMenuOpen ? (
-              <ul
-                ref={menuRef}
-                className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[150px] shadow-lg z-50 text-sm">
+              <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[150px] shadow-lg z-50 text-sm">
                 <>
                   <li
                     tabIndex={0}
@@ -177,22 +175,26 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                       bgColor={cx({
                         [`bg-${
                           getTheme(selectedTheme)?.primaryPlaintiff
-                        } hover-bg-25-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
-                          isPlaintiff,
+                        } hover-bg-25-${
+                          getTheme(selectedTheme)?.primaryPlaintiff
+                        }`]: isPlaintiff,
                         [`bg-${
                           getTheme(selectedTheme)?.primaryDefendant
-                        } hover-bg-25-${getTheme(selectedTheme)?.primaryDefendant}`]:
-                          !isPlaintiff,
+                        } hover-bg-25-${
+                          getTheme(selectedTheme)?.primaryDefendant
+                        }`]: !isPlaintiff,
                       })}
                       textColor={cx({
                         [`text-${
                           getTheme(selectedTheme)?.secondaryPlaintiff
-                        } hover-text-${getTheme(selectedTheme)?.primaryPlaintiff}`]:
-                          isPlaintiff,
+                        } hover-text-${
+                          getTheme(selectedTheme)?.primaryPlaintiff
+                        }`]: isPlaintiff,
                         [`text-${
                           getTheme(selectedTheme)?.secondaryDefendant
-                        } hover-text-${getTheme(selectedTheme)?.primaryDefendant}`]:
-                          !isPlaintiff,
+                        } hover-text-${
+                          getTheme(selectedTheme)?.primaryDefendant
+                        }`]: !isPlaintiff,
                       })}
                       onClick={() => setIsEditing(true)}
                       icon={<Plus size={18} />}>
@@ -203,7 +205,6 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
               )}
             </MetaDataBody>
           )}
-
           <ErrorPopup isVisible={isEditErrorVisible}>
             <div className="flex flex-col items-center justify-center space-y-8">
               <p className="text-center text-base">

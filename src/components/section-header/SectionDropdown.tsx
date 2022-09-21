@@ -1,7 +1,7 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Button } from "../Button";
 import { DotsThree, Trash, CheckCircle, XCircle, Circle } from "phosphor-react";
-import { useCase, useSection, useUser } from "../../contexts";
+import { useCase, useHeaderContext, useSection, useUser } from "../../contexts";
 import { UserRole } from "../../types";
 import { Tooltip } from "../Tooltip";
 import { ErrorPopup } from "../ErrorPopup";
@@ -19,6 +19,7 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   const { user } = useUser();
   const { currentVersion, setIndividualEntrySorting, setEntries } = useCase();
   const { setSectionList, setIndividualSorting } = useSection();
+  const { showEntrySorting } = useHeaderContext();
 
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
@@ -97,7 +98,7 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
       <DropdownMenu.Root>
         <DropdownMenu.Trigger className="py-1">
           <span>
-            <Tooltip text="Mehr Optionen">
+            <Tooltip asChild text="Mehr Optionen">
               <DotsThree
                 size={20}
                 weight="bold"
@@ -117,7 +118,7 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
                 </Button>
               </DropdownMenu.Item>
             )}
-            {user?.role === UserRole.Judge && (
+            {user?.role === UserRole.Judge && showEntrySorting && (
               <>
                 <DropdownMenu.Item onClick={() => resetLitigiousChecks()}>
                   <Button icon={<Circle size={18} />} size="sm">

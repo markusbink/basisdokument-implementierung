@@ -22,7 +22,7 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
    * @param to New position the entry is being dropped
    * @param indexOfEntry Index of the entry being dragged
    */
-  const moveItem = (
+  const moveItemToRow = (
     from: { sectionId: string; rowId: string; column: number },
     to: { sectionId: string; rowId: string },
     indexOfEntry: number
@@ -36,9 +36,17 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
         (row) => row.rowId === from.rowId
       );
 
+      if (rowIndex === -1) {
+        return newSorting;
+      }
+
       const draggedItem = newSorting[from.sectionId][rowIndex].columns[
         from.column
       ].splice(indexOfEntry, 1)[0];
+
+      if (!draggedItem) {
+        return prevEntrySorting;
+      }
 
       // Add dragged item to the new rowId
       const newRowIndex = newSorting[to.sectionId].findIndex(
@@ -58,11 +66,12 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
     drop: (_: any, monitor) => {
       const oldPosition = monitor.getItem().position;
       const indexOfItem = monitor.getItem().index;
-      moveItem(oldPosition, position, indexOfItem);
+      moveItemToRow(oldPosition, position, indexOfItem);
     },
     canDrop: (_: any, monitor) => {
       const role = monitor.getItem().role;
-      return role === columnRole;
+      const isSameRow = monitor.getItem().position.rowId === position.rowId;
+      return role === columnRole && !isSameRow;
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -74,7 +83,7 @@ export const DroppableColumn: React.FC<DroppableColumnProps> = ({
     <div
       ref={drop}
       className={cx(
-        "relative column space-y-4 p-4 border border-gray-300 rounded-lg text-black",
+        "relative column space-y-4 px-4 py-12 border border-gray-300 rounded-lg text-black",
         {
           "bg-blue-600/25": isOver && canDrop,
           "bg-gray-200/50": !isOver,
