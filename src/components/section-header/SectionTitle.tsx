@@ -92,7 +92,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
             className={cx(
               "bg-transparent text-xl font-bold w-full outline-none rounded",
               {
-                "focus:outline focus:outline-offset-2 focus:outline-blue-600":
+                "focus:outline focus:outline-offset-2 focus:outline-darkGrey":
                   (role === user?.role || user?.role === UserRole.Judge) &&
                   !isOld,
                 "hover:cursor-not-allowed":
