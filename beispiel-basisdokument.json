@@ -1,0 +1,209 @@
+{
+  "caseId": "BZ-375",
+  "fileType": "basisdokument",
+  "currentVersion": 4,
+  "versions": [
+    {
+      "author": "Andrea  Klagehaupt",
+      "role": "Klagepartei",
+      "timestamp": "2022-09-07T06:28:49.445Z"
+    },
+    {
+      "author": "Stefanie Beklagtenberg",
+      "role": "Beklagtenpartei",
+      "timestamp": "2022-09-07T06:37:45.415Z"
+    },
+    {
+      "author": "Andrea Klagehaupt",
+      "role": "Klagepartei",
+      "timestamp": "2022-09-07T06:42:01.887Z"
+    },
+    {
+      "author": "Rita Richter",
+      "role": "Richter:in",
+      "timestamp": "2022-09-23T07:10:03.550Z"
+    }
+  ],
+  "metaData": {
+    "plaintiff": "<p><strong>Herr Oswald, Peter</strong></p>\n<p>geb. am 23.11.1973 in Bonn</p>\n<p>Heidenelkenstraße 1, 90762 Fürth</p>\n<p>Prozessbev.: <strong>Rechtsanwältin Klagehaupt, Andrea</strong></p>\n",
+    "defendant": "<p><strong>Axa Versicherung AG,</strong> vertreten durch die Vorstände</p>\n<p>Colonia-Allee 10-20, 51067 Köln</p>\n<p>Prozessbev.: <strong>Rechtsanwältin Dr. Beklagtenberg, Stefanie</strong></p>\n"
+  },
+  "entries": [
+    {
+      "id": "0a10d4ff-fa22-475e-8709-847df7ad0bb0",
+      "entryCode": "K-1-1",
+      "author": "Andrea  Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "4b9a0b7e-9674-486a-b7f4-ad0fbe59bc77",
+      "text": "<p>Die Beklagte wird verurteilt, an den Kläger € 5.070,17 nebst 5 %-Punkten über dem Basiszins seit dem 16.11.2019 sowie vorgerichtliche Rechtsanwaltskosten in Höhe von € 571,44 zu zahlen.&nbsp;</p>\n<p></p>\n<p>Die Beklagte trägt die Kosten des Verfahrens.</p>\n",
+      "version": 1
+    },
+    {
+      "id": "327e98c3-152d-4bc5-8189-b4c8761bcd35",
+      "entryCode": "K-1-2",
+      "author": "Andrea  Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "4b9a0b7e-9674-486a-b7f4-ad0fbe59bc77",
+      "text": "<p>Gegenstand der vorliegenden Klage sind Schadensersatzansprüche des Klägers aus einem Verkehrsunfall am 14.06.2019 auf der Magazinstraße in Fürth. Der beteiligte Pkw Ford mit dem amtlichen Kennzeichen FÜ-DE 391 nebst Anhänger mit dem amtlichen Kennzeichen FÜ-DE 392 war bei der Beklagten zum Zeitpunkt des Unfalls haftpflichtversichert.</p>\n",
+      "version": 1
+    },
+    {
+      "id": "5cb62899-cc2f-48b7-b81a-6e041553114f",
+      "entryCode": "K-2-1",
+      "author": "Andrea  Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "966e395a-6d10-4260-94a9-90b3a534f8dd",
+      "text": "<p>Am 14.06.2019 gegen 17:00 Uhr befuhr der Kläger die Magazinstraße in Fürth Richtung Kreisverkehr als der Versicherungsnehmer der Beklagten mit seinem KFZ Ford mit dem amtlichen Kennzeichen FÜ-DE 391 und einem Anhänger mit dem amtlichen Kennzeichen FÜ-DE 392 aus einer Einfahrt herausfuhr und das Vorfahrtsrechts unseres Mandanten missachtete, sodass es durch Verschulden des Versicherungsnehmers der Beklagten zu einem Zusammenstoß der Fahrzeuge kam. Der Unfall war für den Kläger unvermeidbar.</p>\n<p><strong>Beweis</strong>: Einvernahme des Klägers</p>\n",
+      "version": 1
+    },
+    {
+      "id": "e0ac44fb-cc0f-49f5-aa64-7b903f63fb97",
+      "entryCode": "K-3-1",
+      "author": "Andrea  Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "aa78aa9c-9641-4ce1-adc4-dd36d5c588d4",
+      "text": "<p>Das beschädigte Kfz des nicht vorsteuerabzugsberechtigten Klägers wurde schnellstmöglich von einem unverzüglich beauftragten Sachverständigen beim Autohaus Bäringer begutachtet.</p>\n<p></p>\n<p>Zwischenzeitlich hatte der Kläger Anspruch auf ein gleichartiges und gleichwertiges Ersatzfahrzeug.</p>\n<p></p>\n<p>Mit Sachverständigengutachten vom 18.06.2019 wurde festgestellt, dass das beschädigte KFZ des Klägers nicht mehr fahrtüchtig im Sinne der StVO war und durch den Unfall ein Reparaturschaden in Höhe von voraussichtlich € 4.400,69 verursacht wurde.</p>\n<p></p>\n<p>Außerdem wurde gutachterlich eine dadurch eintretende Wertminderung in Höhe von € 100,00 festgestellt.</p>\n<p></p>\n<p><strong>Beweis</strong>:</p>\n<ul>\n<li>Sachverständigengutachten des Sachverständigenbüro Oberst vom 18.06.2019, in Kopie <strong>als Anlage 2</strong></li>\n<li>Rechnung des Sachverständigenbüro Oberst vom 18.06.2019, in Kopie <strong>als Anlage 3</strong></li>\n</ul>\n<p>Der Sachverständige stellte berechtigt eine Rechnung in Höhe von € 729,71 für die Erstellung des Gutachtens.</p>\n",
+      "version": 1
+    },
+    {
+      "id": "fbb1acb1-118e-447e-9f0c-17a252ff1573",
+      "entryCode": "K-4-1",
+      "author": "Andrea  Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "27465c0a-24f5-4066-ba1e-ce73379d3337",
+      "text": "<p>Nach Kenntnis des Gutachtens entschloss sich der Kläger zum Verkauf des Unfallwagens zum gutachterlich festgestellten Restwert in Höhe von € 3.400,00.</p>\n<p></p>\n<p><strong>Beweis</strong>: Gebrauchtfahrzeuggutschrift vom 19.06.2019, in Kopie <strong>als Anlage 4</strong></p>\n",
+      "version": 1
+    },
+    {
+      "id": "303a5306-d7e7-4580-afe6-307c4b3495f3",
+      "entryCode": "K-5-1",
+      "author": "Andrea  Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "cbf8144f-b2fb-4b39-bb52-ad32e0a6eb92",
+      "text": "<p>Der Kläger kaufte sich ein Ersatzfahrzeug für € 12.890,00.</p>\n<p></p>\n<p>Außerdem entstanden dem Kläger Zulassungskosten in Höhe von € 140,00.</p>\n<p></p>\n<p>Das Fahrzeug wurde am 25.06.2019 zugelassen.</p>\n<p></p>\n<p><strong>Beweis</strong>:</p>\n<ul>\n<li>Verbindliche Bestellung vom 19.06.2019, in Kopie <strong>als Anlage 5</strong></li>\n<li>Rechnung vom 26.06.2019 in Kopie <strong>als Anlage 6</strong></li>\n<li>Zulassungsbescheinigung Teil I vom 25.06.2019,<strong> als Anlage K 7</strong></li>\n</ul>\n",
+      "version": 1
+    },
+    {
+      "id": "5aa653d2-7ba3-4d20-a107-eec1e182c1ec",
+      "entryCode": "K-1-3",
+      "author": "Andrea  Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "4b9a0b7e-9674-486a-b7f4-ad0fbe59bc77",
+      "text": "<p>Mit anwaltlichem Schreiben vom 26.06.2019 wurde die Beklagte über den Haftungsfall und Belegvorlage informiert.&nbsp;</p>\n<p></p>\n<p><strong>Beweis</strong>: anwaltliches Schreiben vom 26.06.2019, in Kopie <strong>als Anlage 11</strong></p>\n",
+      "version": 1
+    },
+    {
+      "id": "09537a18-a8b4-4894-bbfc-e150e9b214ad",
+      "entryCode": "K-6-1",
+      "author": "Andrea  Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "d1687bb8-1768-4ac8-974c-a854c1417fff",
+      "text": "<p>Die Beklagte haftet als Haftpflichtversicherung des Unfallverursachers in vollem Umfang entsprechend der zuletzt mit anwaltlicher Aufstellung vom 04.11.2019 übermittelten Schadensersatzaufstellung:&nbsp;</p>\n<p></p>\n<ul>\n<li>Unkostenpauschale € 25,00&nbsp;</li>\n<li>Sachverständigenkosten € 729,71&nbsp;</li>\n<li>Wiederbeschaffungswart abzüglich Restwert € 3.300,00&nbsp;</li>\n<li>Mietwagenkosten € 875,46&nbsp;</li>\n<li>Zulassungskosten € 140,00&nbsp;</li>\n<li>außergerichtliche Anwaltskosten € 571,44</li>\n<li>Schadensersatzanspruch € 5.641,61&nbsp;</li>\n</ul>\n",
+      "version": 1
+    },
+    {
+      "id": "7bdb0659-9539-4ad6-8be0-33a54effa1b7",
+      "entryCode": "B-1-4",
+      "author": "Stefanie Beklagtenberg",
+      "role": "Beklagtenpartei",
+      "sectionId": "4b9a0b7e-9674-486a-b7f4-ad0fbe59bc77",
+      "text": "<p><strong>In Sachen</strong></p>\n<p></p>\n<p><strong>Oswald, Peter ./. Axa Versicherung</strong></p>\n<p></p>\n<p>beantragen wir namens der Beklagtenseite, die wir vollständig vertreten,</p>\n<p></p>\n<p><strong>gemäß § 358 a ZPO schon vor der mündlichen Verhandlung ein gerichtliches Sachverständigengutachten / amtliche Auskünfte einzuholen</strong></p>\n<p></p>\n<p>und</p>\n<p></p>\n<p><strong>im schriftlichen Verfahren gem. § 495 a / § 128 II ZPO ohne mündliche Verhandlung zu entscheiden</strong></p>\n<p></p>\n<p>und</p>\n<p></p>\n<p><strong>die Klage kostenpflichtig abzuweisen.</strong></p>\n",
+      "version": 2
+    },
+    {
+      "id": "1417a4bf-af8d-4370-a4fb-5e29049b656b",
+      "entryCode": "B-2-2",
+      "author": "Stefanie Beklagtenberg",
+      "role": "Beklagtenpartei",
+      "sectionId": "966e395a-6d10-4260-94a9-90b3a534f8dd",
+      "text": "<p>Das bei der Beklagten versicherte Gespann aus dem Zugfahrzeug Ford Transit und dem Pkw Anhänger wurde aus dem Grundstück heraus bis an die Sichtlinie zur Vorfahrtsstraße, die Magazinstraße, herangefahren, dort blieb der Fahrer des versicherten Gespanns stehen und vergewisserte sich, dass sich auf der vorfahrtsberechtigten Straße keine Fahrzeuge näherten.</p>\n<p></p>\n<p>Als dies für beide Fahrtrichtungen sichergestellt war, fuhr er nach links hin los, was für beide Fahrtrichtungen dann weithin sichtbar war. Nun erst, als das Gespann bereits die erste Fahrspur, die Fahrspur für Fahrzeuge von links, überquerte, kam der Kläger auf dieser Fahrspur überhaupt erst in Sicht. Obwohl der Kläger erkennen konnte, dass das Gespann gerade die Straße überquert und sich das Zugfahrzeug, der Ford Transit, bereits vollständig quer auf der Fahrspur befindet, verlangsamte der Kläger seine Fahrt nicht. Im Gegenteil: Er gab nun noch Gas. Offensichtlich hatte der Kläger aus mangelnder Sorgfalt lediglich sein Augenmerk auf den Ford Transit gerichtet und hat den angehängten FahrzeugTrailer überhaupt nicht bemerkt. Nur so ist es vorstellbar, dass er schließlich in die letzten ca. 20 cm des Trailers, die sich noch auf seiner Fahrspur befanden, mit seiner vorderen linken Fahrzeugfront hineinfuhr. Das Zugfahrzeug und der größte Teil des Anhängers befanden sich bereits auf der Gegenfahrspur.</p>\n<p></p>\n<p><strong>Beweis</strong>:</p>\n<ul>\n<li>Foto vom Beklagtenfahrzeug in Kopie<strong> als Anlage B1</strong></li>\n<li>Zeugnis des Fahrers des Gespanns, FÜ-DE 391 und FÜ-DE 392&nbsp;</li>\n<li>Wegen des Schadens am Beklagtenfahrzeug: Zeugnis des Eigentümers des Gespanns, FÜ-DE 391 und FÜ-DE 392&nbsp;</li>\n</ul>\n<p>Der Kläger kann sich daher nicht auf ein Vorfahrtsrecht berufen: Eine Wartepflicht besteht nur, sofern ein Vorfahrtsberechtigter in Sicht ist. Die Schadensbilder zeigen allerdings bereits, dass das klägerische Fahrzeug noch nicht in Sicht gewesen ist, als das Beklagtenfahrzeug losfuhr, und dass der Kläger offensichtlich den Anhänger übersehen hatte und deshalb hineingefahren ist.</p>\n<p></p>\n<p><strong>Beweis</strong>: Sachverständigengutachten des Gerichts</p>\n<p></p>\n<p>Damit war der Unfall für die Beklagtenseite vollständig unvermeidbar. Als der Kläger in Sicht kam, bestand das Hindernis auf der Spur des Klägers bereits und der Fahrer des Gespanns konnte nichts anderes tun als weiter vorwärts zu fahren und seinen Abbiegevorgang abzuschließen.</p>\n<p></p>\n<p>Einer Haftung der Beklagtenseite besteht daher nicht.&nbsp;</p>\n<p></p>\n<p>Zur Schadenshöhe nehmen wir daher nur vorsorglich Stellung.&nbsp;&nbsp;</p>\n<p></p>\n<p><strong>Beweis</strong>: Wie zuvor</p>\n",
+      "version": 2
+    },
+    {
+      "id": "db850f32-7f75-4cdc-a8fc-3656a2ffa36a",
+      "entryCode": "B-5-2",
+      "author": "Stefanie Beklagtenberg",
+      "role": "Beklagtenpartei",
+      "sectionId": "cbf8144f-b2fb-4b39-bb52-ad32e0a6eb92",
+      "text": "<p>Der Kläger hat die Zulassung des von ihm beschafften gebrauchten Ersatzfahrzeuges bei einer Firma in Auftrag gegeben, anstatt die Zulassung selbst zu besorgen.</p>\n<p></p>\n<p>Der Zeitaufwand bei der Abwicklung eines Verkehrsunfalles gehört zum eigenen Pflichtenkreis des Geschädigten und ist daher nicht erstattungsfähig. Allein die Einbuße an Zeit ist praktisch mit jedem Schadensfall verbunden und stellt keinen Vermögensschaden dar (BGH NJW 1977, 1446; 89,766).</p>\n<p></p>\n<p>Der Geschädigte kann den Zeitaufwand durch außergerichtliche Tätigkeit zur Wahrung seiner Entschädigungsansprüche regelmäßig nicht ersetzt verlangen, mag er die Bearbeitung des Schadensfalles nun persönlich vorgenommen haben oder Dritten übertragen haben. Nach BGH ist allgemein anerkannt, dass das Schadensrecht aus Gründen der Interessenbewertung, aber auch der Praktikabilität diesen Regulierungsaufwand von anderen erstattungsfähigen Kosten der Rechtsverfolgung abgegrenzt und solche Mühewaltung den Zuständigkeitsbereich und Verantwortungsbereich des Geschädigten zuweist, der außerhalb des Schutzzweck des der Haftung des Schädigers liegt (BGH in ständiger Rechtsprechung, grundlegend BGH Urteil vom 09.03.1976, Aktenzeichen VI ZR 98/75, BGHZ 66, 112 ff.; BGH Urteil vom 06.11.1979, Aktenzeichen VI ZR 254/77).</p>\n<p></p>\n<p>Zwar ist grundsätzlich der Wert eigener Arbeitsleistungen zu ersetzen, die der Geschädigte zur Schadensbeseitigung erbringt, jedoch nur, soweit sie nach der Verkehrsanschauung einen Marktwert haben (BGH NJW 1996, Seite 921, NJWRR 2001, 887).</p>\n<p></p>\n<p>So entschied auch das OLG Frankfurt, Urteil vom 30.09.2013, Aktenzeichen 4 U 1 45-13: Kein Geld für den Zeitaufwand der Regulierung, selbst dann nicht, wenn eine Fuhrparkverwaltungsfirma das für den Geschädigten erledigt.</p>\n",
+      "version": 2
+    },
+    {
+      "id": "552c90a7-4e23-420a-a038-3bd49664a7fc",
+      "entryCode": "K-1-5",
+      "author": "Andrea Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "4b9a0b7e-9674-486a-b7f4-ad0fbe59bc77",
+      "text": "<p>Geltend gemachten Schadensersatzansprüche sind gerechtfertigt, die Klage begründet.</p>\n",
+      "version": 3,
+      "associatedEntry": "7bdb0659-9539-4ad6-8be0-33a54effa1b7"
+    },
+    {
+      "id": "dfd54d80-542e-4d8d-8d03-debf8626a7ca",
+      "entryCode": "K-2-3",
+      "author": "Andrea Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "966e395a-6d10-4260-94a9-90b3a534f8dd",
+      "text": "<p>Leider vergewisserte sich der Fahrer des bei der Beklagten versicherten Ford Transit und Anhängers keineswegs, dass sich auf der vorfahrtsberechtigten Straße vor ihm sowohl auf der rechten als auch auf der linken Seite keine Fahrzeuge näherten. Ansonsten hätte er den Kläger bzw. dessen Fahrzeug durchaus sehen müssen. Der Kläger war zuvor mit seiner Frau im real einkaufen gewesen und befuhr danach die Virnsberger Straße in Fürth in gerader Richtung, die in die Magazinstraße übergeht ohne dass der Kläger hätte abbiegen müssen. Der Kläger befuhr mit ordnungsgemäßer Geschwindigkeit also die Magazinstraße gen Kreisverkehr in gerader Richtung. Bereits mit Schadensmeldung gegenüber der Beklagten war mit anwaltlichem Schreiben vom 26.06.2019 eine zeitnah nach dem Unfall erstellte Unfallskizze übermittelt worden, die den Unfallhergang genau zeigt:&nbsp;</p>\n<p></p>\n<p><strong>Beweis</strong>: Unfallskizze <strong>als Anlage K15.</strong></p>\n<p></p>\n<p>Als der Ford Transit völlig überraschend aus der Einfahrt auf die Vorfahrtstraße herausfuhr und dann auch noch einen Anhänger hatte, versuchte der Kläger noch einen Zusammenstoß durch eine Vollbremsung zu vermeiden, was jedoch nicht gelingen konnte.&nbsp;</p>\n<p></p>\n<p><strong>Beweis</strong>:</p>\n<ul>\n<li>Einvernahme des Klägers im Termin</li>\n<li>Einvernahme der Ehefrau des Klägers Frau Oswald, zu laden unter der ladungsfähigen Anschrift des Klägers</li>\n</ul>\n<p>Unrichtig und in keiner Weise schlüssig ist die Schutzbehauptung der Beklagten, der Kläger habe nicht nur seine Fahrt nicht verlangsamt, sondern auch noch Gas gegeben.&nbsp;</p>\n<p></p>\n<p>Unrichtig ist, dass sich beim Zusammenstoß nur noch die letzten 20 cm des Trailers auf der Spur des Klägers befanden und der Transit und \"der größte Teil des Anhängers\" sich bereits auf der Gegenfahrspur befanden.&nbsp;</p>\n<p></p>\n<p>Das als <strong>Anlage B1</strong> vorgelegte Foto ist für die dreiste Behauptung des Fahrers des Gespanns keinerlei Nachweis: Der Fahrer fuhr nämlich mit dem Gespann auch nach dem Zusammenstoß noch weiter.&nbsp;</p>\n<p></p>\n<p><strong>Beweis</strong>:&nbsp;</p>\n<ul>\n<li>Einvernahme des Klägers im Termin&nbsp;</li>\n<li>Einvernahme der Ehefrau und zum Zeitpunkt des Unfalls auch Beifahrerin des Klägers Frau Oswald, zu laden unter der ladungsfähigen Anschrift des Klägers.&nbsp;</li>\n</ul>\n<p>Das von der Beklagtenseite nun als <strong>Anlage B1</strong> vorgelegte Foto zeigt den Standort des bei der Beklagten versicherten Gespanns bei Eintreffen der Polizei, die sich auch nicht erklären konnte, warum der Fahrer des Gespanns, dieses in dieser Position stehen gelassen hatte. Er wurde aufgefordert, das Gespann nicht länger verkehrsbehindernd stehen zu lassen. Schließlich zeigte der Standort keineswegs den Standort des Gespanns zum Zeitpunkt des Zusammenstoßes.&nbsp;</p>\n<p></p>\n<p>Es war der Kläger für den das plötzliche Einfahren eines langen Gespanns in die Vorfahrtstraße völlig überraschend kam und der trotz Vollbremsung den Unfall nicht mehr vermeiden konnte.&nbsp;</p>\n<p></p>\n<p><strong>Beweis: wie vor. </strong></p>\n",
+      "version": 3,
+      "associatedEntry": "1417a4bf-af8d-4370-a4fb-5e29049b656b"
+    },
+    {
+      "id": "165c35bb-66a0-467b-8d71-3ae46cc2f7ea",
+      "entryCode": "K-5-3",
+      "author": "Andrea Klagehaupt",
+      "role": "Klagepartei",
+      "sectionId": "cbf8144f-b2fb-4b39-bb52-ad32e0a6eb92",
+      "text": "<p>Trotz Schadensminderungspflicht des Geschädigten, ist dieser keineswegs verpflichtet die Zulassung des Folgefahrzeugs selbst vorzunehmen.&nbsp;</p>\n<p></p>\n<p>Die umfangreichen Zitate der Rechtsprechung zum Ersatz des tatsächlichen Zeitaufwands gehen vorliegend fehl, da der Kläger zu keinem Zeitpunkt Entschädigung für die aufgewandte Zeit geltend gemacht hat, die er unfallbedingt auf sich nehmen musste und immer noch nehmen muss.&nbsp;</p>\n<p></p>\n<p>Es werden lediglich die konkret angefallenen und konkret nachgewiesenen Zulassungskosten geltend gemacht.</p>\n",
+      "version": 3,
+      "associatedEntry": "db850f32-7f75-4cdc-a8fc-3656a2ffa36a"
+    }
+  ],
+  "sections": [
+    {
+      "id": "4b9a0b7e-9674-486a-b7f4-ad0fbe59bc77",
+      "version": 1,
+      "titlePlaintiff": "Klage auf Schadensersatz",
+      "titleDefendant": "Abweisung der Klage"
+    },
+    {
+      "id": "966e395a-6d10-4260-94a9-90b3a534f8dd",
+      "version": 1,
+      "titlePlaintiff": "Hergang des Verkehrsunfalls",
+      "titleDefendant": "Unfallhergang"
+    },
+    {
+      "id": "aa78aa9c-9641-4ce1-adc4-dd36d5c588d4",
+      "version": 1,
+      "titlePlaintiff": "Gutachten Unfallfahrzeug",
+      "titleDefendant": ""
+    },
+    {
+      "id": "27465c0a-24f5-4066-ba1e-ce73379d3337",
+      "version": 1,
+      "titlePlaintiff": "Verkauf Unfallwagen",
+      "titleDefendant": ""
+    },
+    {
+      "id": "cbf8144f-b2fb-4b39-bb52-ad32e0a6eb92",
+      "version": 1,
+      "titlePlaintiff": "Ersatzfahrzeug und Zulassung",
+      "titleDefendant": "Zulassungskosten"
+    },
+    {
+      "id": "d1687bb8-1768-4ac8-974c-a854c1417fff",
+      "version": 1,
+      "titlePlaintiff": "Schadensersatzaufstellung",
+      "titleDefendant": ""
+    }
+  ],
+  "judgeHints": [
+    {
+      "id": "a3a8cc0a-a0a6-4667-8a50-80ce17a39028",
+      "title": "Beweise zum Tathergang",
+      "text": "<p>Bitte überprüfen Sie noch einmal die Beweise des Unfallhergangs!</p>\n",
+      "author": "Rita Richter",
+      "version": 4
+    }
+  ]
+}
