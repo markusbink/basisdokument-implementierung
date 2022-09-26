@@ -49,7 +49,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
   }, [title]);
 
   return (
-    <div className={cx("flex w-full flex-col")}>
+    <div className={cx("flex w-full flex-col pt-2")}>
       <span
         className={cx(
           "text-xs font-bold rounded-md px-2 py-1 w-fit uppercase text-darkGrey",
@@ -64,7 +64,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
         )}>
         {role}
       </span>
-      <div className={cx("flex items-start justify-between gap-2 w-full py-3")}>
+      <div className={cx("flex items-start justify-between gap-2 w-full pt-3")}>
         {isEditing ? (
           <input
             ref={titleInputRef}
