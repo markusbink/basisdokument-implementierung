@@ -188,7 +188,7 @@ body {
 }
 
 h3 {
-  @apply text-xl font-bold mb-5 leading-5 hyphens-auto;
+  @apply text-xl font-bold mb-5 leading-5 hyphens-auto break-words;
 }
 
 /* SwiperJS Pagination Dots */
@@ -203,7 +203,7 @@ h3 {
 /* Bulletpoints */
 ul,
 ol {
-  @apply space-y-2 my-6 ml-8 hyphens-auto;
+  @apply space-y-2 my-6 ml-8 hyphens-auto break-words;
 }
 
 :is(ul, ol) > :is(ul, ol) {
@@ -227,7 +227,7 @@ ul > ul > ul {
 }
 
 p {
-  @apply hyphens-auto;
+  @apply hyphens-auto break-words;
   min-height: 20px;
 }
 
@@ -237,7 +237,5 @@ p:not(:last-child) {
 
 /* Break words for headlines */
 h2 {
-  -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-  hyphens: auto;
+  @apply hyphens-auto break-words;
 }
