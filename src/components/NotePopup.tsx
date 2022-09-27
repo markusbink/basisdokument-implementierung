@@ -190,6 +190,7 @@ export const NotePopup = () => {
                 </label>
                 <Editor
                   defaultEditorState={editorState}
+                  stripPastedStyles={true}
                   onEditorStateChange={setEditorState}
                   wrapperClassName={cx("w-full focus:outline-none")}
                   editorClassName="p-2 text-sm bg-offWhite text-mediumGrey rounded min-h-[100px] max-h-[200px]"
