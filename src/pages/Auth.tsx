@@ -163,10 +163,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         }
       }
     }
-    if (caseId === "" && usage === UsageMode.Create) {
-      setErrorText("Bitte geben Sie ein gültiges Aktenzeichen an!");
-      inputIsValid = false;
-    }
 
     if (prename === "" || surname === "") {
       setErrorText(
@@ -390,10 +386,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         </div>
         {usage === UsageMode.Create ? (
           <div>
-            <p className="font-light">
-              Aktenzeichen diese Basisdokuments:{" "}
-              <span className="text-darkRed">*</span>
-            </p>
+            <p className="font-light">Aktenzeichen diese Basisdokuments: </p>
             <div className="flex flex-row w-auto mt-4 gap-4">
               <input
                 className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none"
