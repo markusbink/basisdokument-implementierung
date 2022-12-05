@@ -59,9 +59,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setCaseId: setCaseIdContext,
     setEntries,
     setMetaData,
-    setLitigiousChecks,
     setCurrentVersion,
     setHighlightedEntries,
+    setIndividualEntrySorting,
   } = useCase();
   const { setVersionHistory, setColorSelection, setCurrentColorSelection } =
     useHeaderContext();
@@ -213,6 +213,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             basisdokumentObject.caseId,
             basisdokumentObject.currentVersion
           );
+
           editFileObject = updateSortingsIfVersionIsDifferent(
             basisdokumentObject,
             editFileObject
@@ -251,7 +252,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
     setMetaData(basisdokument.metaData);
-    setLitigiousChecks(basisdokument.litigiousChecks);
     setCurrentVersion(basisdokument.currentVersion);
     setCaseIdContext(basisdokument.caseId);
   };
@@ -263,6 +263,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setCurrentColorSelection(editFile.highlighter[0]);
     setIndividualSorting(editFile.individualSorting);
     setHighlightedEntries(editFile.highlightedEntries);
+    setIndividualEntrySorting(editFile.individualEntrySorting);
   };
 
   return (

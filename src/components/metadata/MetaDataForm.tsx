@@ -73,6 +73,7 @@ export const MetaDataForm: React.FC<MetaDataFormProps> = ({
           },
         }}
         defaultEditorState={editorState}
+        stripPastedStyles={true}
         onEditorStateChange={setEditorState}
         wrapperClassName={cx("w-full focus:outline-none")}
         editorClassName="p-6 min-h-[160px] overflow-visible"

@@ -2,8 +2,9 @@ import cx from "classnames";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
-import { useCase, useNotes } from "../../contexts";
+import { useCase, useHeaderContext, useNotes } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { getTheme } from "../../themes/getTheme";
 import { INote } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
@@ -29,6 +30,8 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
     setAssociatedEntryIdNote,
     setEditMode,
   } = useNotes();
+
+  const { selectedTheme } = useHeaderContext();
 
   let entryCode;
   if (note.associatedEntry) {
@@ -68,9 +71,16 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
               "flex gap-1 mt-1.5 mr-1.5 px-1.5 py-0.5 self-end w-fit cursor-pointer text-[10px] font-semibold rounded-xl",
               {
                 "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
-                "bg-lightPurple text-darkPurple hover:bg-darkPurple hover:text-lightPurple":
-                  entryCode?.charAt(0) === "K",
-                "bg-lightPetrol text-darkPetrol hover:bg-darkPetrol hover:text-lightPetrol":
+                [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                  getTheme(selectedTheme)?.primaryPlaintiff
+                } hover-bg-${getTheme(selectedTheme)?.primaryPlaintiff} hover-text-${
+                  getTheme(selectedTheme)?.secondaryPlaintiff
+                }`]: entryCode?.charAt(0) === "K",
+                [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                  getTheme(selectedTheme)?.primaryDefendant
+                } hover-bg-${
+                  getTheme(selectedTheme)?.primaryDefendant
+                } hover-text-${getTheme(selectedTheme)?.secondaryDefendant}`]:
                   entryCode?.charAt(0) === "B",
               }
             )}>
@@ -106,7 +116,7 @@ export const Note: React.FC<NoteProps> = ({ note }) => {
                 }}
                 icon={<DotsThree size={20} weight="bold" />}></Button>{" "}
               {isMenuOpen ? (
-                <ul className="absolute right-0 bottom-8 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
+                <ul className="absolute right-0 bottom-2 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
                   <li
                     tabIndex={0}
                     onClick={editNote}

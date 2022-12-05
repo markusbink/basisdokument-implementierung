@@ -3,6 +3,7 @@ import "react-edit-text/dist/index.css";
 import { useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { ColorSelectorListItem } from "./ColorSelectorListItem";
+import { Tooltip } from "../Tooltip";
 
 export const ColorSelector = () => {
   const {
@@ -45,18 +46,20 @@ export const ColorSelector = () => {
 
   return (
     <div ref={dropdownRef} className="relative">
-      <div
-        onClick={() => setShowColorSelectorMenu(!showColorSelectorMenu)}
-        className={`flex flex-row align-middle justify-center items-center gap-2 marker-icon-opacity ${getColorCode(
-          currentColorSelection.color
-        )} rounded-md w-12 h-8 cursor-pointer`}>
+      <Tooltip text="Markierungsfarbe auswählen">
         <div
-          className={`flex items-center justify-center w-5 h-5 shadow-inner shadow-2xl ${getColorCode(
+          onClick={() => setShowColorSelectorMenu(!showColorSelectorMenu)}
+          className={`flex flex-row align-middle justify-center items-center gap-2 marker-icon-opacity ${getColorCode(
             currentColorSelection.color
-          )} rounded-full`}>
-          <div className="border-white w-3 h-3 rounded-full bg-transparent border-[1px]"></div>
+          )} rounded-md w-12 h-8 cursor-pointer`}>
+          <div
+            className={`flex items-center justify-center w-5 h-5 shadow-inner shadow-2xl ${getColorCode(
+              currentColorSelection.color
+            )} rounded-full`}>
+            <div className="border-white w-3 h-3 rounded-full bg-transparent border-[1px]"></div>
+          </div>
         </div>
-      </div>
+      </Tooltip>
       {showColorSelectorMenu ? (
         <div className="absolute text-left select-none top-full right-0 flex flex-col bg-white shadow-md mt-4 rounded-lg p-4 gap-1 z-20">
           {/* Iterate through list with this element */}

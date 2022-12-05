@@ -15,15 +15,22 @@ import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
 import { useCase, useHeaderContext, useNotes, useHints } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEntry, UserRole, Tool, IBookmark, SidebarState } from "../../types";
+import {
+  IEntry,
+  UserRole,
+  Tool,
+  IBookmark,
+  SidebarState,
+  IndividualEntrySortingEntry,
+} from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
 import { EntryList } from "./EntryList";
-import { LitigiousCheck } from "./LitigiousCheck";
 import { useBookmarks } from "../../contexts";
 import { v4 as uuidv4 } from "uuid";
 import { useSidebar } from "../../contexts/SidebarContext";
+import { getTheme } from "../../themes/getTheme";
 
 interface EntryProps {
   entry: IEntry;
@@ -43,8 +50,14 @@ export const Entry: React.FC<EntryProps> = ({
   isHighlighted = false,
 }) => {
   // Threaded entries
-  const { currentVersion, groupedEntries, setEntries, setHighlightedEntries } =
-    useCase();
+  const {
+    currentVersion,
+    groupedEntries,
+    setEntries,
+    setHighlightedEntries,
+    setIndividualEntrySorting,
+  } = useCase();
+
   const {
     versionHistory,
     showColumnView,
@@ -53,8 +66,11 @@ export const Entry: React.FC<EntryProps> = ({
     getCurrentTool,
     highlightElementsWithSpecificVersion,
     selectedVersion,
+    selectedTheme,
+    showEntrySorting,
   } = useHeaderContext();
-  const { setShowNotePopup,setAssociatedEntryIdNote } = useNotes();
+
+  const { setShowNotePopup, setAssociatedEntryIdNote } = useNotes();
   const { setShowJudgeHintPopup, setAssociatedEntryIdHint } = useHints();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
@@ -141,7 +157,7 @@ export const Entry: React.FC<EntryProps> = ({
   const addHint = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
-    setShowJudgeHintPopup(true);    
+    setShowJudgeHintPopup(true);
     setAssociatedEntryIdHint(entry.id);
   };
 
@@ -185,6 +201,33 @@ export const Entry: React.FC<EntryProps> = ({
           return entry;
         })
     );
+
+    setIndividualEntrySorting((prevEntrySorting) => {
+      let newEntrySorting: { [key: string]: IndividualEntrySortingEntry[] } = {
+        ...prevEntrySorting,
+      };
+      const columnIndex = isPlaintiff ? 0 : 1;
+
+      // Remove the entry from the sorting array
+      newEntrySorting = Object.keys(prevEntrySorting).reduce(
+        (acc, sectionId) => {
+          const sectionSorting = newEntrySorting[sectionId].map((row) => {
+            if (row.columns[columnIndex].includes(entryId)) {
+              row.columns[columnIndex].filter((id) => id !== entryId);
+              return row;
+            }
+            return row;
+          });
+
+          acc[sectionId] = sectionSorting;
+
+          return acc;
+        },
+        {} as { [key: string]: IndividualEntrySortingEntry[] }
+      );
+
+      return newEntrySorting;
+    });
   };
 
   const updateEntry = (plainText: string, rawHtml: string) => {
@@ -230,8 +273,9 @@ export const Entry: React.FC<EntryProps> = ({
           })}>
           <div
             className={cx("transition-all", {
-              "w-[calc(50%_-_12px)]": !isExpanded && showColumnView,
-              "w-full": isExpanded || !showColumnView,
+              "w-[calc(50%_-_12px)]":
+                !isExpanded && showColumnView && !showEntrySorting,
+              "w-full": isExpanded || !showColumnView || showEntrySorting,
             })}>
             {/* Entry */}
             <div
@@ -241,7 +285,6 @@ export const Entry: React.FC<EntryProps> = ({
                   highlightElementsWithSpecificVersion,
                 isHighlighted,
               })}>
-              {isJudge && <LitigiousCheck entryId={entry.id} />}
               <EntryHeader
                 isPlaintiff={isPlaintiff}
                 isBodyOpen={isBodyOpen}
@@ -252,8 +295,16 @@ export const Entry: React.FC<EntryProps> = ({
                       className={cx(
                         "rounded-full px-3 py-1 text-xs font-semibold",
                         {
-                          "bg-darkPurple text-lightPurple": isPlaintiff,
-                          "bg-darkPetrol text-lightPetrol": !isPlaintiff,
+                          [`bg-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          } text-${
+                            getTheme(selectedTheme)?.secondaryPlaintiff
+                          }`]: isPlaintiff,
+                          [`bg-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          } text-${
+                            getTheme(selectedTheme)?.secondaryDefendant
+                          }`]: !isPlaintiff,
                         }
                       )}>
                       {entry.entryCode}
@@ -263,15 +314,23 @@ export const Entry: React.FC<EntryProps> = ({
                         inputClassName={cx(
                           "font-bold h-[28px] p-0 my-0 focus:outline-none bg-transparent",
                           {
-                            "border-darkPurple": isPlaintiff,
-                            "border-darkPetrol": !isPlaintiff,
+                            [`border-${
+                              getTheme(selectedTheme)?.primaryPlaintiff
+                            }`]: isPlaintiff,
+                            [`border-${
+                              getTheme(selectedTheme)?.primaryDefendant
+                            }`]: !isPlaintiff,
                           }
                         )}
                         className={cx(
                           "font-bold p-0 my-0 flex items-center mr-2",
                           {
-                            "text-darkPurple": isPlaintiff,
-                            "text-darkPetrol": !isPlaintiff,
+                            [`text-${
+                              getTheme(selectedTheme)?.primaryPlaintiff
+                            }`]: isPlaintiff,
+                            [`text-${
+                              getTheme(selectedTheme)?.primaryDefendant
+                            }`]: !isPlaintiff,
                           }
                         )}
                         value={authorName}
@@ -321,14 +380,20 @@ export const Entry: React.FC<EntryProps> = ({
                     </Action>
                   </Tooltip>
                   {(isJudge || (entry.role === viewedBy && !isOld)) && (
-                    <div className="flex relative space-y-2">
+                    <div ref={menuRef} className="flex relative space-y-2">
                       <Tooltip text="Mehr Optionen">
                         <Action
                           className={cx({
-                            "bg-darkPurple text-lightPurple":
-                              isPlaintiff && isMenuOpen,
-                            "bg-darkPetrol text-lightPetrol":
-                              !isPlaintiff && isMenuOpen,
+                            [`bg-${
+                              getTheme(selectedTheme)?.primaryPlaintiff
+                            } text-${
+                              getTheme(selectedTheme)?.secondaryPlaintiff
+                            }`]: isPlaintiff && isMenuOpen,
+                            [`bg-${
+                              getTheme(selectedTheme)?.primaryDefendant
+                            } text-${
+                              getTheme(selectedTheme)?.secondaryDefendant
+                            }`]: !isPlaintiff && isMenuOpen,
                           })}
                           onClick={toggleMenu}
                           isPlaintiff={isPlaintiff}>
@@ -336,9 +401,7 @@ export const Entry: React.FC<EntryProps> = ({
                         </Action>
                       </Tooltip>
                       {isMenuOpen ? (
-                        <ul
-                          ref={menuRef}
-                          className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+                        <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
                           {isJudge && (
                             <li
                               tabIndex={0}
@@ -395,8 +458,6 @@ export const Entry: React.FC<EntryProps> = ({
                     setIsEditErrorVisible(true);
                   }}
                   onSave={(plainText: string, rawHtml: string) => {
-                    console.log({ rawHtml });
-
                     updateEntry(plainText, rawHtml);
                     setIsExpanded(false);
                   }}
@@ -404,15 +465,12 @@ export const Entry: React.FC<EntryProps> = ({
               )}
             </div>
             {/* Button to add response */}
-            {canAddEntry && !isNewEntryVisible && (
+            {canAddEntry && !isNewEntryVisible && !showEntrySorting && (
               <Button
                 size="sm"
                 alternativePadding="mt-2"
                 bgColor="bg-lightGrey hover:bg-mediumGrey"
-                textColor={cx("font-semibold", {
-                  "text-darkPurple hover:text-lightPurple": isPlaintiff,
-                  "text-darkPetrol hover:text-lightPetrol": !isPlaintiff,
-                })}
+                textColor="text-darkGrey hover:text-offWhite"
                 onClick={showNewEntry}
                 icon={<ArrowBendLeftUp weight="bold" size={18} />}>
                 Auf diesen Beitrag Bezug nehmen
@@ -431,16 +489,14 @@ export const Entry: React.FC<EntryProps> = ({
                     : UserRole.Plaintiff
                 }
                 sectionId={entry.sectionId}
-                associatedEntry={
-                  entry.associatedEntry ? entry.associatedEntry : entry.id
-                }
+                associatedEntry={entry.id}
                 setIsNewEntryVisible={setIsNewEntryVisible}
               />
             </div>
           )}
         </div>
       </div>
-      {thread?.length > 0 && (
+      {thread?.length > 0 && !showEntrySorting && (
         <div
           className={cx({
             flex: !showColumnView,

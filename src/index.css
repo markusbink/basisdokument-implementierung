@@ -10,19 +10,15 @@ input[type="file"] {
 
 input[type="checkbox"] {
   /* Double-sized Checkboxes */
-  -ms-transform: scale(1.5); /* IE */
-  -moz-transform: scale(1.5); /* FF */
-  -webkit-transform: scale(1.5); /* Safari and Chrome */
-  -o-transform: scale(1.5); /* Opera */
+  -ms-transform: scale(1.5); /* IE */ /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */ /* Opera */
   transform: scale(1.5);
   padding: 10px;
 }
 
 .small-checkbox {
-  -ms-transform: scale(1) !important; /* IE */
-  -moz-transform: scale(1) !important; /* FF */
-  -webkit-transform: scale(1) !important; /* Safari and Chrome */
-  -o-transform: scale(1) !important; /* Opera */
+  -ms-transform: scale(1) !important; /* IE */ /* FF */
+  -webkit-transform: scale(1) !important; /* Safari and Chrome */ /* Opera */
   transform: scale(1) !important;
 }
 
@@ -44,6 +40,11 @@ body {
   a {
     @apply font-bold text-blue-600;
   }
+}
+
+::-moz-selection {
+  background-color: #333;
+  color: white;
 }
 
 ::selection {
@@ -187,7 +188,7 @@ body {
 }
 
 h3 {
-  @apply text-xl font-bold mb-5 leading-5;
+  @apply text-xl font-bold mb-5 leading-5 hyphens-auto break-words;
 }
 
 /* SwiperJS Pagination Dots */
@@ -202,7 +203,7 @@ h3 {
 /* Bulletpoints */
 ul,
 ol {
-  @apply space-y-2 my-6 ml-8;
+  @apply space-y-2 my-6 ml-8 hyphens-auto break-words;
 }
 
 :is(ul, ol) > :is(ul, ol) {
@@ -226,6 +227,7 @@ ul > ul > ul {
 }
 
 p {
+  @apply hyphens-auto break-words;
   min-height: 20px;
 }
 
@@ -235,5 +237,5 @@ p:not(:last-child) {
 
 /* Break words for headlines */
 h2 {
-  hyphens: auto;
+  @apply hyphens-auto break-words;
 }

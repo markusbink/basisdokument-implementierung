@@ -1,6 +1,7 @@
 import cx from "classnames";
 import { useEffect, useRef, useState } from "react";
-import { useCase, useSection, useUser } from "../../contexts";
+import { useCase, useHeaderContext, useSection, useUser } from "../../contexts";
+import { getTheme } from "../../themes/getTheme";
 import { UserRole } from "../../types";
 
 interface SectionTitleProps {
@@ -39,6 +40,8 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
     });
   };
 
+  const { selectedTheme } = useHeaderContext();
+
   useEffect(() => {
     if (!title) {
       setIsEditing(true);
@@ -46,22 +49,28 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
   }, [title]);
 
   return (
-    <div className={cx("flex w-full flex-col")}>
+    <div className={cx("flex w-full flex-col pt-2")}>
       <span
         className={cx(
-          "text-xs font-bold rounded-md px-2 py-1 w-fit uppercase",
+          "text-xs font-bold rounded-md px-2 py-1 w-fit uppercase text-darkGrey",
           {
-            "bg-lightPurple text-darkPurple": role === UserRole.Plaintiff,
-            "bg-lightPetrol text-darkPetrol": role === UserRole.Defendant,
+            [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+              getTheme(selectedTheme)?.primaryPlaintiff
+            }`]: role === UserRole.Plaintiff,
+            [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+              getTheme(selectedTheme)?.primaryDefendant
+            }`]: role === UserRole.Defendant,
           }
         )}>
         {role}
       </span>
-      <div className={cx("flex items-start justify-between gap-2 w-full py-3")}>
+      <div className={cx("flex items-start justify-between gap-2 w-full pt-3")}>
         {isEditing ? (
           <input
             ref={titleInputRef}
-            readOnly={role !== user?.role && user?.role !== UserRole.Judge}
+            readOnly={
+              (role !== user?.role && user?.role !== UserRole.Judge) || isOld
+            }
             placeholder="Bisher kein Titel vergeben"
             type="text"
             onKeyDown={(e) => {
@@ -83,7 +92,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
             className={cx(
               "bg-transparent text-xl font-bold w-full outline-none rounded",
               {
-                "focus:outline focus:outline-offset-2 focus:outline-blue-600":
+                "focus:outline focus:outline-offset-2 focus:outline-darkGrey":
                   (role === user?.role || user?.role === UserRole.Judge) &&
                   !isOld,
                 "hover:cursor-not-allowed":

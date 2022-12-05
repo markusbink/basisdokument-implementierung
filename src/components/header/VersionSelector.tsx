@@ -35,7 +35,7 @@ export const VersionSelector = () => {
         <DropdownMenu.Content
           side="bottom"
           align="start"
-          className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 max-h-[500px] overflow-x-scroll no-scrollbar z-20">
+          className="flex flex-col bg-white shadow-md mt-4 rounded-lg p-2 max-h-[500px] overflow-x-scroll no-scrollbar z-50">
           {/* Iterate through list with this element */}
 
           {versionHistory.map((item: any, index: any) => (

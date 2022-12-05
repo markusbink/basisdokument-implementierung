@@ -115,7 +115,7 @@ export const JudgeHintPopup = () => {
     }
   };
 
-  const getEntryCode = () => {    
+  const getEntryCode = () => {
     let entry = entries.find((obj) => {
       return obj.id === associatedEntryIdHint;
     });
@@ -194,6 +194,7 @@ export const JudgeHintPopup = () => {
                 </label>
                 <Editor
                   defaultEditorState={editorState}
+                  stripPastedStyles={true}
                   onEditorStateChange={setEditorState}
                   wrapperClassName={cx("w-full focus:outline-none")}
                   editorClassName="p-2 text-sm bg-offWhite text-mediumGrey rounded min-h-[100px] max-h-[200px]"
@@ -214,7 +215,7 @@ export const JudgeHintPopup = () => {
                         <Quotes size={14} color="white" weight="regular" />
                       </DropdownMenu.Trigger>
                       <DropdownMenu.Portal>
-                        <DropdownMenu.Content className="flex flex-col gap-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2">
+                        <DropdownMenu.Content className="flex flex-col gap-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 max-h-[200px] mt-5 p-2  overflow-auto">
                           {entries.length === 0 && (
                             <div className="p-2 text-sm">
                               Es sind keine Beiträge im Basisdokument vorhanden.

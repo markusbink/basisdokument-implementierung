@@ -103,15 +103,11 @@ export const MainHeader = () => {
             <Question size={16} className="text-darkGrey" />
           </div>
         </Tooltip>
-        <Tooltip text="Markierungsfarbe auswählen">
-          <ColorSelector />
-        </Tooltip>
-        <Tooltip text="Werkzeug auswählen">
-          <ToolSelector
-            getCurrentTool={getCurrentTool}
-            setCurrentTool={setCurrentTool}
-          />
-        </Tooltip>
+        <ColorSelector />
+        <ToolSelector
+          getCurrentTool={getCurrentTool}
+          setCurrentTool={setCurrentTool}
+        />
       </div>
     </div>
   );

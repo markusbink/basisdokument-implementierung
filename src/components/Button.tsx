@@ -16,7 +16,7 @@ interface ButtonProps {
 
 export const Button: React.FC<ButtonProps> = ({
   icon,
-  bgColor = "bg-darkGrey",
+  bgColor = "bg-darkGrey hover:bg-mediumGrey",
   textColor = "text-white",
   size = "md",
   disabled = false,
