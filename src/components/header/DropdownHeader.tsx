@@ -5,7 +5,8 @@ import { useHeaderContext, useUser } from "../../contexts";
 import { Tool, UserRole } from "../../types";
 import { Tooltip } from "../Tooltip";
 import { HighlighterButton } from "./HighlighterButton";
-import { SortingMenu } from "./SortingMenu";
+import { SortingMenuOriginal } from "./SortingMenuOriginal";
+import { SortingMenuPrivate } from "./SortingMenuPrivate";
 import { SortingSelector } from "./SortingSelector";
 import { VersionSelector } from "./VersionSelector";
 
@@ -45,7 +46,7 @@ export const DropdownHeader: React.FC<any> = () => {
           })}>
           <div
             className={cx("flex flex-row gap-2 h-8", {
-              "pointer-events-none": showEntrySorting
+              "pointer-events-none": showEntrySorting,
             })}>
             <Tooltip text="Spalten" position="bottom">
               <div
@@ -94,7 +95,11 @@ export const DropdownHeader: React.FC<any> = () => {
             selectedSorting={selectedSorting}
             setSelectedSorting={setSelectedSorting}
           />
-          {selectedSorting === Sorting.Privat ? <SortingMenu /> : null}
+          {selectedSorting === Sorting.Privat ? (
+            <SortingMenuPrivate />
+          ) : (
+            <SortingMenuOriginal />
+          )}
           {user?.role === UserRole.Judge &&
           selectedSorting === Sorting.Privat ? (
             <div className="flex flex-row items-center gap-2">
