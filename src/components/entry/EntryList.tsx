@@ -33,6 +33,8 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
           <AddEntryButtons sectionId={entry.sectionId} />
         </>
       ))}
+      {/* TODO: was, wenn noch kein Beitrag da ist
+    TODO: Beiträge hinzufügen geht nicht */}
     </div>
   );
 };
