@@ -1,9 +1,11 @@
 import cx from "classnames";
 import { format } from "date-fns";
 import {
+  ArrowBendDownRight,
   ArrowBendLeftUp,
   BookmarkSimple,
   DotsThree,
+  LinkSimpleBreak,
   Notepad,
   Pencil,
   Scales,
@@ -31,6 +33,8 @@ import { useBookmarks } from "../../contexts";
 import { v4 as uuidv4 } from "uuid";
 import { useSidebar } from "../../contexts/SidebarContext";
 import { getTheme } from "../../themes/getTheme";
+import { getEntryCode } from "../../util/get-entry-code";
+import { getEntryById } from "../../contexts/CaseContext";
 
 interface EntryProps {
   entry: IEntry;
@@ -51,6 +55,7 @@ export const Entry: React.FC<EntryProps> = ({
 }) => {
   // Threaded entries
   const {
+    entries,
     currentVersion,
     groupedEntries,
     setEntries,
@@ -117,6 +122,10 @@ export const Entry: React.FC<EntryProps> = ({
 
   const showNewEntry = () => {
     setIsNewEntryVisible(true);
+  };
+
+  const associatedEntry = (e: React.MouseEvent) => {
+    e.stopPropagation();
   };
 
   const bookmarkEntry = (e: React.MouseEvent) => {
@@ -357,6 +366,37 @@ export const Entry: React.FC<EntryProps> = ({
                   </div>
                 </div>
                 <div className="flex gap-2">
+                  {entry.associatedEntry && (
+                    <a
+                      href={`#${getEntryCode(entries, entry.associatedEntry)}`}
+                      className={cx(
+                        "flex flex-row gap-1 self-center text-xs font-semibold rounded-md p-1",
+                        {
+                          [`bg-${
+                            getTheme(selectedTheme)?.secondaryPlaintiff
+                          } text-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          } hover-bg-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          } hover-text-${
+                            getTheme(selectedTheme)?.secondaryPlaintiff
+                          }`]: entry.entryCode?.charAt(0) === "K",
+                          [`bg-${
+                            getTheme(selectedTheme)?.secondaryDefendant
+                          } text-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          } hover-bg-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          } hover-text-${
+                            getTheme(selectedTheme)?.secondaryDefendant
+                          }`]: entry.entryCode?.charAt(0) === "B",
+                        }
+                      )}
+                      onClick={(e) => e.stopPropagation()}>
+                      <LinkSimpleBreak size={14}></LinkSimpleBreak>
+                      {`${getEntryCode(entries, entry.associatedEntry)}`}
+                    </a>
+                  )}
                   <Tooltip
                     text={
                       isBookmarked ? (
