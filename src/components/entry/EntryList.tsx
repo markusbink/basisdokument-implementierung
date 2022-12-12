@@ -6,9 +6,10 @@ import { Entry } from "./";
 
 interface EntryListProps {
   entries: IEntry[];
+  sectionId: string;
 }
 
-export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
+export const EntryList: React.FC<EntryListProps> = ({ entries, sectionId }) => {
   const { user } = useUser();
   const { currentVersion } = useCase();
   const { bookmarks } = useBookmarks();
@@ -17,6 +18,10 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
     <div className="space-y-4 w-full">
       {entries.map((entry, index) => (
         <>
+          <AddEntryButtons
+            sectionId={sectionId}
+            index={entries.findIndex((entr) => entr.id === entry.id)}
+          />
           <Entry
             key={entry.id}
             entry={entry}
@@ -30,11 +35,9 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
                 : false
             }
           />
-          <AddEntryButtons sectionId={entry.sectionId} />
         </>
       ))}
-      {/* TODO: was, wenn noch kein Beitrag da ist
-    TODO: Beiträge hinzufügen geht nicht */}
+      <AddEntryButtons sectionId={sectionId} index={entries.length - 1} />
     </div>
   );
 };

@@ -7,10 +7,12 @@ import { NewEntry } from "./entry";
 
 interface AddEntryButtonsProps {
   sectionId: string;
+  index: number;
 }
 
 export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
   sectionId,
+  index,
 }) => {
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
   const [newEntryRole, setNewEntryRole] = useState<
@@ -28,6 +30,7 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
       {isNewEntryVisible && (
         <NewEntry
           sectionId={sectionId}
+          index={index}
           roleForNewEntry={newEntryRole}
           setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
         />

@@ -21,6 +21,7 @@ interface NewEntryProps {
   roleForNewEntry: "Klagepartei" | "Beklagtenpartei";
   setIsNewEntryVisible: Dispatch<SetStateAction<boolean>>;
   sectionId: string;
+  index: number;
   associatedEntry?: string;
 }
 
@@ -28,6 +29,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   roleForNewEntry,
   setIsNewEntryVisible,
   sectionId,
+  index,
   associatedEntry,
 }) => {
   const { selectedTheme } = useHeaderContext();
@@ -73,7 +75,14 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     const columnIndex = isPlaintiff ? 0 : 1;
     individualEntrySortingEntry.columns[columnIndex].push(entry.id);
 
-    setEntries((prevEntries) => [...prevEntries, entry]);
+    // TODO: index not working
+    // setEntries((prevEntries) => [...prevEntries, entry]);
+    console.log(index);
+    setEntries((prevEntries) => [
+      ...prevEntries.slice(0, index),
+      entry,
+      ...prevEntries.slice(index),
+    ]);
 
     setIndividualEntrySorting((prevEntrySorting) => {
       const newEntrySorting = { ...prevEntrySorting };
