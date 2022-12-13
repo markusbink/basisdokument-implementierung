@@ -1,6 +1,7 @@
 import { useBookmarks, useCase } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
 import { IEntry } from "../../types";
+import { DraggableEntry } from "../judge-sorting";
 import { Entry } from "./";
 
 interface EntryListProps {
@@ -15,17 +16,34 @@ export const EntryList: React.FC<EntryListProps> = ({ entries }) => {
   return (
     <div className="space-y-4 w-full">
       {entries.map((entry, index) => (
-        <Entry
-          key={entry.id}
-          entry={entry}
-          isOld={entry.version < currentVersion}
-          viewedBy={user!.role}
-          isBookmarked={
-            bookmarks.find((bookmark) => bookmark.associatedEntry === entry.id)
-              ? true
-              : false
-          }
-        />
+        <>
+          {entry.version === currentVersion && !entry.associatedEntry ? (
+            <DraggableEntry
+              key={entry.id}
+              entryId={entry.id}
+              position={{
+                sectionId: entry.sectionId,
+                rowId: entry.sectionId,
+                column: 1,
+              }}
+              index={index}
+            />
+          ) : (
+            <Entry
+              key={entry.id}
+              entry={entry}
+              isOld={entry.version < currentVersion}
+              viewedBy={user!.role}
+              isBookmarked={
+                bookmarks.find(
+                  (bookmark) => bookmark.associatedEntry === entry.id
+                )
+                  ? true
+                  : false
+              }
+            />
+          )}
+        </>
       ))}
     </div>
   );

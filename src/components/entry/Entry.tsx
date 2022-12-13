@@ -411,6 +411,17 @@ export const Entry: React.FC<EntryProps> = ({
                               Hinweis hinzufügen
                             </li>
                           )}
+                          {entry.version === currentVersion && (
+                            <li
+                              tabIndex={0}
+                              className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+                              <img
+                                className="w-5 h-5"
+                                src={`${process.env.PUBLIC_URL}/icons/entry-sorting-icon.svg`}
+                                alt="sorting entry icon"></img>
+                              Verschieben
+                            </li>
+                          )}
                           {!isOld && (
                             <>
                               <li
