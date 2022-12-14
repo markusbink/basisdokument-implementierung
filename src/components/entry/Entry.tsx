@@ -489,7 +489,7 @@ export const Entry: React.FC<EntryProps> = ({
                     ? UserRole.Defendant
                     : UserRole.Plaintiff
                 }
-                index={entries.findIndex((entr) => entr.id === entry.id)}
+                idFollowingEntry={entry.id}
                 sectionId={entry.sectionId}
                 associatedEntry={entry.id}
                 setIsNewEntryVisible={setIsNewEntryVisible}

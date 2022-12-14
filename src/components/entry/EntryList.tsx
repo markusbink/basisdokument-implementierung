@@ -18,10 +18,7 @@ export const EntryList: React.FC<EntryListProps> = ({ entries, sectionId }) => {
     <div className="space-y-4 w-full">
       {entries.map((entry, index) => (
         <>
-          <AddEntryButtons
-            sectionId={sectionId}
-            index={entries.findIndex((entr) => entr.id === entry.id)}
-          />
+          <AddEntryButtons sectionId={sectionId} idFollowingEntry={entry.id} />
           <Entry
             key={entry.id}
             entry={entry}
@@ -37,7 +34,7 @@ export const EntryList: React.FC<EntryListProps> = ({ entries, sectionId }) => {
           />
         </>
       ))}
-      <AddEntryButtons sectionId={sectionId} index={entries.length - 1} />
+      <AddEntryButtons sectionId={sectionId} />
     </div>
   );
 };
