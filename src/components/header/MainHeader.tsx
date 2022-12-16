@@ -1,11 +1,13 @@
 import {
   CaretDown,
   CaretUp,
+  Check,
   MagnifyingGlass,
+  PencilSimple,
   Question,
   XCircle,
 } from "phosphor-react";
-import React, { KeyboardEvent } from "react";
+import React, { KeyboardEvent, useState } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useOnboarding } from "../../contexts/OnboardingContext";
 import { DocumentButton } from "../header/DocumentButton";
@@ -23,8 +25,9 @@ export const MainHeader = () => {
     getCurrentTool,
     setCurrentTool,
   } = useHeaderContext();
-  const { caseId } = useCase();
+  const { caseId, setCaseId } = useCase();
   const { setIsOnboardingVisible } = useOnboarding();
+  const [caseIdInEditMode, setCaseIdInEditMode] = useState<boolean>();
 
   const onChangeSearchbar = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchbarValue(e.target.value);
@@ -34,6 +37,11 @@ export const MainHeader = () => {
     if (e.key === "Escape") {
       setSearchbarValue("");
     }
+  };
+
+  const onCaseIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setCaseId(value);
   };
 
   return (
@@ -53,7 +61,48 @@ export const MainHeader = () => {
             <CaretDown size={12} className="text-darkGrey" weight="bold" />
           )}
         </div>
-        <span className="font-extralight text-sm">AZ. {caseId}</span>
+        {/* <span className="font-extralight text-sm"></span> */}
+        <div className="flex flex-row justify-between items-center gap-3 bg-offWhite rounded-full h-7 pl-2 pr-2">
+          <span className="text-xs">AZ. </span>
+          {caseIdInEditMode ? (
+            <>
+              <input
+                autoFocus={true}
+                type="text"
+                name="title"
+                placeholder="Aktenzeichen..."
+                maxLength={15}
+                className="focus:outline focus:outline-offWhite focus:bg-offWhite p-0 m-0 text-xs w-24"
+                value={caseId}
+                onBlur={() => setCaseIdInEditMode(false)}
+                onChange={onCaseIdChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setCaseIdInEditMode(false);
+                  }
+                }}
+              />
+              <Check
+                size={24}
+                className="hover:bg-lightGrey cursor-pointer rounded-full p-1"
+                onClick={() => {
+                  setCaseIdInEditMode(false);
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <span className="text-xs">{caseId}</span>
+              <PencilSimple
+                size={24}
+                className="hover:bg-lightGrey cursor-pointer rounded-full p-1"
+                onClick={() => {
+                  setCaseIdInEditMode(true);
+                }}
+              />
+            </>
+          )}
+        </div>
       </div>
       {/* searchbar */}
       <div className="flex flex-row gap-2 justify-center items-center w-full max-w-[300px]">
