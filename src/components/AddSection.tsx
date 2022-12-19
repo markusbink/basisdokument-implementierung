@@ -4,20 +4,34 @@ import { useCase, useSection } from "../contexts";
 import { IndividualEntrySortingEntry, ISection } from "../types";
 import { Button } from "./Button";
 
-export const AddSection = () => {
-  const { setSectionList, setIndividualSorting } = useSection();
+interface AddSectionProps {
+  sectionIdAfter?: string;
+}
+
+export const AddSection: React.FC<AddSectionProps> = ({ sectionIdAfter }) => {
+  const { sectionList, setSectionList, setIndividualSorting } = useSection();
   const { setIndividualEntrySorting } = useCase();
   const { currentVersion } = useCase();
 
   const handleClick = () => {
     const section: ISection = {
       id: uuidv4(),
+      num: sectionList.length,
       version: currentVersion,
       titlePlaintiff: "",
       titleDefendant: "",
     };
-    setSectionList((prev) => [...prev, section]);
-    setIndividualSorting((prev) => [...prev, section.id]);
+    if (sectionIdAfter) {
+      const i = sectionList.findIndex((entr) => entr.id === sectionIdAfter);
+      setSectionList((prevSectionList) => [
+        ...prevSectionList.slice(0, i),
+        section,
+        ...prevSectionList.slice(i),
+      ]);
+    } else {
+      setSectionList((prev) => [...prev, section]);
+      setIndividualSorting((prev) => [...prev, section.id]);
+    }
 
     const newIndividualEntrySorting: IndividualEntrySortingEntry = {
       columns: [[], []],

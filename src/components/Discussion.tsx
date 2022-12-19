@@ -63,20 +63,23 @@ export const Discussion = () => {
                 const sectionEntries = groupedEntries[section.id];
 
                 return (
-                  <div key={section.id}>
-                    <SectionHeader
-                      sectionId={getOriginalSortingPosition(
-                        sectionList,
-                        section.id
-                      )}
-                      section={section}
-                      position={index}
-                    />
-                    <div className="space-y-4">
-                      <EntryList entries={sectionEntries?.parent || []} />
-                      <AddEntryButtons sectionId={section.id} />
+                  <>
+                    <AddSection sectionIdAfter={section.id} />
+                    <div key={section.id}>
+                      <SectionHeader
+                        sectionId={getOriginalSortingPosition(
+                          sectionList,
+                          section.id
+                        )}
+                        section={section}
+                        position={index}
+                      />
+                      <div className="space-y-4">
+                        <EntryList entries={sectionEntries?.parent || []} />
+                        <AddEntryButtons sectionId={section.id} />
+                      </div>
                     </div>
-                  </div>
+                  </>
                 );
               })}
             </>
