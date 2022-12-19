@@ -21,6 +21,7 @@ interface NewEntryProps {
   roleForNewEntry: "Klagepartei" | "Beklagtenpartei";
   setIsNewEntryVisible: Dispatch<SetStateAction<boolean>>;
   sectionId: string;
+  idFollowingEntry?: string;
   associatedEntry?: string;
 }
 
@@ -28,6 +29,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   roleForNewEntry,
   setIsNewEntryVisible,
   sectionId,
+  idFollowingEntry,
   associatedEntry,
 }) => {
   const { selectedTheme } = useHeaderContext();
@@ -73,7 +75,16 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     const columnIndex = isPlaintiff ? 0 : 1;
     individualEntrySortingEntry.columns[columnIndex].push(entry.id);
 
-    setEntries((prevEntries) => [...prevEntries, entry]);
+    if (idFollowingEntry) {
+      const i = entries.findIndex((entr) => entr.id === idFollowingEntry);
+      setEntries((prevEntries) => [
+        ...prevEntries.slice(0, i),
+        entry,
+        ...prevEntries.slice(i),
+      ]);
+    } else {
+      setEntries((prevEntries) => [...prevEntries, entry]);
+    }
 
     setIndividualEntrySorting((prevEntrySorting) => {
       const newEntrySorting = { ...prevEntrySorting };

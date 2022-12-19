@@ -7,10 +7,12 @@ import { NewEntry } from "./entry";
 
 interface AddEntryButtonsProps {
   sectionId: string;
+  idFollowingEntry?: string;
 }
 
 export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
   sectionId,
+  idFollowingEntry,
 }) => {
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
   const [newEntryRole, setNewEntryRole] = useState<
@@ -28,6 +30,7 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
       {isNewEntryVisible && (
         <NewEntry
           sectionId={sectionId}
+          idFollowingEntry={idFollowingEntry}
           roleForNewEntry={newEntryRole}
           setIsNewEntryVisible={() => setIsNewEntryVisible(false)}
         />
@@ -38,8 +41,8 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
             user?.role === UserRole.Judge) && (
             <Button
               size="sm"
-              bgColor="bg-darkGrey hover:bg-darkGrey/60"
-              textColor="text-white"
+              bgColor="bg-lightGrey hover:bg-lightGrey/50"
+              textColor="text-darkGrey"
               onClick={() => handleClick(UserRole.Plaintiff)}
               icon={<Plus size={18} weight="bold" />}>
               Neuen Beitrag hinzufügen
@@ -51,8 +54,8 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
             user?.role === UserRole.Judge) && (
             <Button
               size="sm"
-              bgColor="bg-darkGrey hover:bg-darkGrey/60"
-              textColor="text-white"
+              bgColor="bg-lightGrey hover:bg-lightGrey/50"
+              textColor="text-darkGrey"
               onClick={() => handleClick(UserRole.Defendant)}
               icon={<Plus size={18} weight="bold" />}>
               Neuen Beitrag hinzufügen

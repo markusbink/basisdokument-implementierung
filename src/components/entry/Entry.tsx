@@ -57,6 +57,7 @@ export const Entry: React.FC<EntryProps> = ({
     currentVersion,
     groupedEntries,
     setEntries,
+    entries,
     setHighlightedEntries,
     setIndividualEntrySorting,
   } = useCase();
@@ -527,6 +528,7 @@ export const Entry: React.FC<EntryProps> = ({
                     ? UserRole.Defendant
                     : UserRole.Plaintiff
                 }
+                idFollowingEntry={entry.id}
                 sectionId={entry.sectionId}
                 associatedEntry={entry.id}
                 setIsNewEntryVisible={setIsNewEntryVisible}
@@ -543,7 +545,7 @@ export const Entry: React.FC<EntryProps> = ({
           {!showColumnView && (
             <button className="ml-5 w-5 border-l-2 border-lightGrey" />
           )}
-          <EntryList entries={thread} />
+          <EntryList entries={thread} sectionId={entry.sectionId} />
         </div>
       )}
       <ErrorPopup isVisible={isEditErrorVisible}>
