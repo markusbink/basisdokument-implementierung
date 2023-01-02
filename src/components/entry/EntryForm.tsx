@@ -83,7 +83,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
 
   return (
     <div
-      className={cx("border border-t-0 rounded-b-lg", {
+      className={cx("border border-t-0 rounded-b-lg bg-white", {
         [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]: isPlaintiff,
         [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]: !isPlaintiff,
         "RichEditor-hidePlaceholder": hidePlaceholder,
