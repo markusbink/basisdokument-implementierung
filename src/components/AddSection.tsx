@@ -10,6 +10,7 @@ interface AddSectionProps {
 
 export const AddSection: React.FC<AddSectionProps> = ({ sectionIdAfter }) => {
   const { sectionList, setSectionList, setIndividualSorting } = useSection();
+  const { entries, setEntries } = useCase();
   const { setIndividualEntrySorting } = useCase();
   const { currentVersion } = useCase();
 
@@ -22,12 +23,32 @@ export const AddSection: React.FC<AddSectionProps> = ({ sectionIdAfter }) => {
       titleDefendant: "",
     };
     if (sectionIdAfter) {
-      const i = sectionList.findIndex((entr) => entr.id === sectionIdAfter);
+      const indexSection = sectionList.findIndex(
+        (sect) => sect.id === sectionIdAfter
+      );
       setSectionList((prevSectionList) => [
-        ...prevSectionList.slice(0, i),
+        ...prevSectionList.slice(0, indexSection),
         section,
-        ...prevSectionList.slice(i),
+        ...prevSectionList.slice(indexSection),
       ]);
+
+      const sectionIdsAfter = sectionList
+        .slice(indexSection)
+        .map((sect) => sect.id);
+
+      setEntries(
+        entries.map((entr) => {
+          if (sectionIdsAfter.includes(entr.sectionId)) {
+            const newNum =
+              parseInt(entr.entryCode.match(/(?<=-)\d*(?=-)/)![0]) + 1;
+            entr.entryCode = entr.entryCode.replace(
+              /(?<=-)\d*(?=-)/,
+              newNum.toString()
+            );
+          }
+          return entr;
+        })
+      );
     } else {
       setSectionList((prev) => [...prev, section]);
       setIndividualSorting((prev) => [...prev, section.id]);
