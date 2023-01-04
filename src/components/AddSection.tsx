@@ -4,20 +4,55 @@ import { useCase, useSection } from "../contexts";
 import { IndividualEntrySortingEntry, ISection } from "../types";
 import { Button } from "./Button";
 
-export const AddSection = () => {
-  const { setSectionList, setIndividualSorting } = useSection();
+interface AddSectionProps {
+  sectionIdAfter?: string;
+}
+
+export const AddSection: React.FC<AddSectionProps> = ({ sectionIdAfter }) => {
+  const { sectionList, setSectionList, setIndividualSorting } = useSection();
+  const { entries, setEntries } = useCase();
   const { setIndividualEntrySorting } = useCase();
   const { currentVersion } = useCase();
 
   const handleClick = () => {
     const section: ISection = {
       id: uuidv4(),
+      num: sectionList.length,
       version: currentVersion,
       titlePlaintiff: "",
       titleDefendant: "",
     };
-    setSectionList((prev) => [...prev, section]);
-    setIndividualSorting((prev) => [...prev, section.id]);
+    if (sectionIdAfter) {
+      const indexSection = sectionList.findIndex(
+        (sect) => sect.id === sectionIdAfter
+      );
+      setSectionList((prevSectionList) => [
+        ...prevSectionList.slice(0, indexSection),
+        section,
+        ...prevSectionList.slice(indexSection),
+      ]);
+
+      const sectionIdsAfter = sectionList
+        .slice(indexSection)
+        .map((sect) => sect.id);
+
+      setEntries(
+        entries.map((entr) => {
+          if (sectionIdsAfter.includes(entr.sectionId)) {
+            const newNum =
+              parseInt(entr.entryCode.match(/(?<=-)\d*(?=-)/)![0]) + 1;
+            entr.entryCode = entr.entryCode.replace(
+              /(?<=-)\d*(?=-)/,
+              newNum.toString()
+            );
+          }
+          return entr;
+        })
+      );
+    } else {
+      setSectionList((prev) => [...prev, section]);
+      setIndividualSorting((prev) => [...prev, section.id]);
+    }
 
     const newIndividualEntrySorting: IndividualEntrySortingEntry = {
       columns: [[], []],

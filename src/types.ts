@@ -67,6 +67,7 @@ export enum SidebarState {
 
 export interface ISection {
   id: string;
+  num: number;
   version: number;
   titlePlaintiff: string;
   titleDefendant: string;
