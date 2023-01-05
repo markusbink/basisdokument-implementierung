@@ -17,7 +17,6 @@ interface HeaderProviderProps {
 export default interface IHeaderContext {
   selectedTheme: string;
   showDropdownHeader: boolean;
-  showColumnView: boolean;
   getCurrentTool: ITool;
   currentColorSelection: IHighlighter;
   searchbarValue: string;
@@ -36,7 +35,6 @@ export default interface IHeaderContext {
   setVersionHistory: React.Dispatch<React.SetStateAction<IVersion[]>>;
   selectedSorting: Sorting;
   setColorSelection: React.Dispatch<React.SetStateAction<IHighlighter[]>>;
-  setShowColumnView: React.Dispatch<React.SetStateAction<boolean>>;
   setSearchbarValue: React.Dispatch<React.SetStateAction<string>>;
   setShowDropdownHeader: React.Dispatch<React.SetStateAction<boolean>>;
   setHighlighterData: React.Dispatch<
@@ -83,8 +81,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   const [selectedTheme, setSelectedTheme] =
     useState<IHeaderContext["selectedTheme"]>(theme);
 
-  const [showColumnView, setShowColumnView] =
-    useState<IHeaderContext["showColumnView"]>(true);
   const [colorSelection, setColorSelection] = useState<
     IHeaderContext["colorSelection"]
   >([]);
@@ -126,7 +122,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
       value={{
         selectedTheme,
         showDropdownHeader,
-        showColumnView,
         getCurrentTool,
         currentColorSelection,
         searchbarValue,
@@ -145,7 +140,6 @@ export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
         setVersionHistory,
         selectedSorting,
         setColorSelection,
-        setShowColumnView,
         setSearchbarValue,
         setShowDropdownHeader,
         setCurrentColorSelection,

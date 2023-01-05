@@ -6,7 +6,9 @@ import { FloppyDisk, X } from "phosphor-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useCase, useHeaderContext } from "../../contexts";
+import { useView } from "../../contexts/ViewContext";
 import { getTheme } from "../../themes/getTheme";
+import { ViewMode } from "../../types";
 import { Button } from "../Button";
 import { ExpandButton } from "./ExpandButton";
 
@@ -60,7 +62,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     return EditorState.createWithContent(contentState);
   });
 
-  const { showColumnView, selectedTheme } = useHeaderContext();
+  const { selectedTheme } = useHeaderContext();
+  const { view } = useView();
   const { entries } = useCase();
   const editorRef = useRef<Editor>(null);
   const suggestions = entries.map((entry) => ({
@@ -113,7 +116,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         )}
         toolbar={toolbarOptions}
         toolbarCustomButtons={
-          showColumnView
+          view === ViewMode.Columns
             ? [
                 <ExpandButton
                   isPlaintiff={isPlaintiff}

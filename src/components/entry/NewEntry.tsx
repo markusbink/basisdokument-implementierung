@@ -73,7 +73,32 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     const columnIndex = isPlaintiff ? 0 : 1;
     individualEntrySortingEntry.columns[columnIndex].push(entry.id);
 
+    // TODO: where to add new entries?
+
+    // if (associatedEntry) {
+    //   const indexOdd = entries
+    //     .filter((en) => en.role !== roleForNewEntry)
+    //     .findIndex((en) => en.id === associatedEntry);
+
+    //   const entryToOrderIn = entries.filter(
+    //     (en) => en.role === roleForNewEntry
+    //   )[indexOdd];
+
+    //   const index =
+    //     roleForNewEntry === UserRole.Plaintiff
+    //       ? entries.indexOf(entryToOrderIn) + 1
+    //       : entries.indexOf(entryToOrderIn);
+    //   setEntries((prevEntries) => [
+    //     ...prevEntries.slice(0, index),
+    //     entry,
+    //     ...prevEntries.slice(index),
+    //   ]);
+    // } else {
+    //   setEntries((prevEntries) => [...prevEntries, entry]);
+    // }
+
     setEntries((prevEntries) => [...prevEntries, entry]);
+    // END OF TODO
 
     setIndividualEntrySorting((prevEntrySorting) => {
       const newEntrySorting = { ...prevEntrySorting };
