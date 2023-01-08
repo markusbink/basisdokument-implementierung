@@ -2,7 +2,8 @@ import cx from "classnames";
 import { SelectionForeground } from "phosphor-react";
 import React from "react";
 import { useHeaderContext, useUser } from "../../contexts";
-import { Tool, UserRole } from "../../types";
+import { useView } from "../../contexts/ViewContext";
+import { Tool, UserRole, ViewMode } from "../../types";
 import { Tooltip } from "../Tooltip";
 import { HighlighterButton } from "./HighlighterButton";
 import { SortingMenu } from "./SortingMenu";
@@ -16,8 +17,6 @@ export enum Sorting {
 
 export const DropdownHeader: React.FC<any> = () => {
   const {
-    showColumnView,
-    setShowColumnView,
     selectedSorting,
     setHideEntriesHighlighter,
     colorSelection,
@@ -30,6 +29,7 @@ export const DropdownHeader: React.FC<any> = () => {
     setShowEntrySorting,
   } = useHeaderContext();
   const { user } = useUser();
+  const { view, setView } = useView();
 
   const { getCurrentTool } = useHeaderContext();
 
@@ -45,18 +45,35 @@ export const DropdownHeader: React.FC<any> = () => {
           })}>
           <div
             className={cx("flex flex-row gap-2 h-8", {
-              "pointer-events-none": showEntrySorting
+              "pointer-events-none": showEntrySorting,
             })}>
+            <Tooltip text="Side-by-Side" position="bottom">
+              <div
+                className={cx(
+                  "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
+                  {
+                    "bg-lightGrey": view === ViewMode.SideBySide,
+                  }
+                )}
+                onClick={() => {
+                  setView(ViewMode.SideBySide);
+                }}>
+                <img
+                  className="w-4"
+                  src={`${process.env.PUBLIC_URL}/icons/side-by-side-icon.svg`}
+                  alt="row view icon"></img>
+              </div>
+            </Tooltip>
             <Tooltip text="Spalten" position="bottom">
               <div
                 className={cx(
                   "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
                   {
-                    "bg-lightGrey": showColumnView,
+                    "bg-lightGrey": view === ViewMode.Columns,
                   }
                 )}
                 onClick={() => {
-                  setShowColumnView(true);
+                  setView(ViewMode.Columns);
                 }}>
                 <img
                   className="w-4"
@@ -69,11 +86,11 @@ export const DropdownHeader: React.FC<any> = () => {
                 className={cx(
                   "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
                   {
-                    "bg-lightGrey": !showColumnView,
+                    "bg-lightGrey": view === ViewMode.Rows,
                   }
                 )}
                 onClick={() => {
-                  setShowColumnView(false);
+                  setView(ViewMode.Rows);
                 }}>
                 <img
                   className="w-4"
@@ -109,7 +126,7 @@ export const DropdownHeader: React.FC<any> = () => {
                       iconNode: "Cursor",
                       germanTitle: "Maus",
                     });
-                    setShowColumnView(true);
+                    setView(ViewMode.Columns);
                     setShowEntrySorting(!showEntrySorting);
                   }}>
                   <input

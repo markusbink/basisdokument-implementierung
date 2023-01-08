@@ -75,7 +75,11 @@ export const Discussion = () => {
                         position={index}
                       />
                       <div className="space-y-4">
-                        <EntryList entries={sectionEntries?.parent || []} />
+                        <EntryList
+                          entriesList={sectionEntries?.parent || []}
+                          sectionId={section.id}
+                        />
+
                         <AddEntryButtons sectionId={section.id} />
                       </div>
                     </div>
