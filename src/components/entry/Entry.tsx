@@ -10,7 +10,7 @@ import {
   Scales,
   Trash,
 } from "phosphor-react";
-import React, { useRef, useState } from "react";
+import React, { SetStateAction, useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
@@ -43,6 +43,10 @@ interface EntryProps {
   isHidden?: boolean;
   isOld?: boolean;
   isHighlighted?: boolean;
+  setAssociatedEntryInProgress?: (
+    entry: IEntry,
+    setIsNewEntryVisible: React.Dispatch<SetStateAction<boolean>>
+  ) => void;
 }
 
 export const Entry: React.FC<EntryProps> = ({
@@ -52,6 +56,7 @@ export const Entry: React.FC<EntryProps> = ({
   isHidden = false,
   isOld = false,
   isHighlighted = false,
+  setAssociatedEntryInProgress,
 }) => {
   // Threaded entries
   const {
@@ -124,7 +129,11 @@ export const Entry: React.FC<EntryProps> = ({
   };
 
   const showNewEntry = () => {
-    setIsNewEntryVisible(true);
+    if (view === ViewMode.SideBySide) {
+      setAssociatedEntryInProgress!(entry, setIsNewEntryVisible);
+    } else {
+      setIsNewEntryVisible(true);
+    }
   };
 
   const bookmarkEntry = (e: React.MouseEvent) => {
