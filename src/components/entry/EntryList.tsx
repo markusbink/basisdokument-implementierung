@@ -1,7 +1,5 @@
-import { error } from "console";
-import React, { MutableRefObject, useEffect } from "react";
+import React from "react";
 import { SetStateAction, useRef, useState } from "react";
-import { toast } from "react-toastify";
 import { useBookmarks, useCase } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
 import { useView } from "../../contexts/ViewContext";
