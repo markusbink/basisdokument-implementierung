@@ -525,15 +525,19 @@ export const Entry: React.FC<EntryProps> = ({
             </div>
             {/* Button to add response */}
             {canAddEntry && !isNewEntryVisible && !showEntrySorting && (
-              <Button
-                size="sm"
-                alternativePadding="mt-2"
-                bgColor="bg-lightGrey hover:bg-mediumGrey"
-                textColor="text-darkGrey hover:text-offWhite"
-                onClick={showNewEntry}
-                icon={<ArrowBendLeftUp weight="bold" size={18} />}>
-                Auf diesen Beitrag Bezug nehmen
-              </Button>
+              <>
+                <a href={`#${entry.sectionId}-scroll`}>
+                  <Button
+                    size="sm"
+                    alternativePadding="mt-2"
+                    bgColor="bg-lightGrey hover:bg-mediumGrey"
+                    textColor="text-darkGrey hover:text-offWhite"
+                    onClick={showNewEntry}
+                    icon={<ArrowBendLeftUp weight="bold" size={18} />}>
+                    Auf diesen Beitrag Bezug nehmen
+                  </Button>
+                </a>
+              </>
             )}
           </div>
           {isNewEntryVisible && (

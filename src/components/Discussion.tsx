@@ -25,6 +25,7 @@ export const Discussion = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
+      {/* TODO: scroll-smooth | simulate double click on single click*/}
       <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4 scroll-smooth">
         <div className="max-w-[1200px] m-auto">
           {highlightElementsWithSpecificVersion ? (
@@ -63,7 +64,7 @@ export const Discussion = () => {
                 const sectionEntries = groupedEntries[section.id];
 
                 return (
-                  <>
+                  <div key={section.id}>
                     <AddSection sectionIdAfter={section.id} />
                     <div key={section.id}>
                       <SectionHeader
@@ -83,7 +84,7 @@ export const Discussion = () => {
                         <AddEntryButtons sectionId={section.id} />
                       </div>
                     </div>
-                  </>
+                  </div>
                 );
               })}
             </>

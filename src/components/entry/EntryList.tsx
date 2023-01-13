@@ -1,5 +1,5 @@
 import React from "react";
-import { SetStateAction, useRef, useState } from "react";
+import { SetStateAction, useState } from "react";
 import { useBookmarks, useCase } from "../../contexts";
 import { useUser } from "../../contexts/UserContext";
 import { useView } from "../../contexts/ViewContext";
@@ -28,34 +28,16 @@ export const EntryList: React.FC<EntryListProps> = ({
     }[]
   >([]);
 
-  const ref = React.createRef<HTMLDivElement>();
-
-  // const refs = associatedsList.reduce((acc, value) => {
-  //   acc[value.entry.id as keyof {}] = React.createRef<HTMLDivElement>();
-  //   return acc;
-  // }, {});
-
-  //const ref = useRef(null);
-
   const showNewEntry = (
     entry: IEntry,
     setIsNewEntryVisible: React.Dispatch<SetStateAction<boolean>>
   ) => {
     if (!associatedsList.find((assoc) => assoc.entry.id === entry.id)) {
       setAssociatedsList((prevAssociateds) => [
-        ...prevAssociateds,
         { entry: entry, visibilitySetter: setIsNewEntryVisible },
+        ...prevAssociateds,
       ]);
     }
-
-    //TODO: Scrolling
-
-    ref.current?.scrollIntoView();
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    // useEffect(() => {
-    //   myRef.current.focus();
-    // });
   };
 
   const onNewEntryClosed = (id: string) => {
@@ -140,7 +122,7 @@ export const EntryList: React.FC<EntryListProps> = ({
           </div>
 
           {/* For new entries created via "Bezug nehmen" */}
-          <div ref={ref} className="align-content-end w-full">
+          <div id={`${sectionId}-scroll`} className="align-content-end w-full">
             {associatedsList.map((elem) => (
               <NewEntry
                 key={elem.entry.id}
