@@ -17,8 +17,9 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   version,
 }) => {
   const { user } = useUser();
-  const { currentVersion, setIndividualEntrySorting, setEntries } = useCase();
-  const { setSectionList, setIndividualSorting } = useSection();
+  const { currentVersion, setIndividualEntrySorting, entries, setEntries } =
+    useCase();
+  const { sectionList, setSectionList, setIndividualSorting } = useSection();
   const { showEntrySorting } = useHeaderContext();
 
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
@@ -32,6 +33,8 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
       entries.filter((entry) => entry.sectionId !== sectionId)
     );
 
+    const indexSection = sectionList.findIndex((sect) => sect.id === sectionId);
+
     // Remove the section
     setSectionList((prevSectionList) =>
       prevSectionList.filter((section) => section.id !== sectionId)
@@ -43,6 +46,25 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
       const { [sectionId]: _, ...rest } = prevIndividualEntrySorting;
       return rest;
     });
+
+    // Update entryCodes
+    const sectionIdsAfter = sectionList
+      .slice(indexSection)
+      .map((sect) => sect.id);
+
+    setEntries(
+      entries.map((entr) => {
+        if (sectionIdsAfter.includes(entr.sectionId)) {
+          const newNum =
+            parseInt(entr.entryCode.match(/(?<=-)\d*(?=-)/)![0]) - 1;
+          entr.entryCode = entr.entryCode.replace(
+            /(?<=-)\d*(?=-)/,
+            newNum.toString()
+          );
+        }
+        return entr;
+      })
+    );
   };
 
   const resetLitigiousChecks = () => {
