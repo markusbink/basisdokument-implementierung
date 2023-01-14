@@ -35,6 +35,7 @@ import { useSidebar } from "../../contexts/SidebarContext";
 import { getTheme } from "../../themes/getTheme";
 import { getEntryCode } from "../../util/get-entry-code";
 import { useView } from "../../contexts/ViewContext";
+import { getBrowser } from "../../util/get-browser";
 
 interface EntryProps {
   entry: IEntry;
@@ -128,7 +129,12 @@ export const Entry: React.FC<EntryProps> = ({
     setIsBodyOpen(!isBodyOpen);
   };
 
+  const createAssociatedEntryButton = useRef<HTMLAnchorElement | null>(null);
+
   const showNewEntry = () => {
+    // TODO: check other browsers
+    if (!getBrowser().includes("Firefox"))
+      setTimeout(() => createAssociatedEntryButton.current?.click(), 1);
     if (view === ViewMode.SideBySide) {
       setAssociatedEntryInProgress!(entry, setIsNewEntryVisible);
     } else {
@@ -525,19 +531,20 @@ export const Entry: React.FC<EntryProps> = ({
             </div>
             {/* Button to add response */}
             {canAddEntry && !isNewEntryVisible && !showEntrySorting && (
-              <>
-                <a href={`#${entry.sectionId}-scroll`}>
-                  <Button
-                    size="sm"
-                    alternativePadding="mt-2"
-                    bgColor="bg-lightGrey hover:bg-mediumGrey"
-                    textColor="text-darkGrey hover:text-offWhite"
-                    onClick={showNewEntry}
-                    icon={<ArrowBendLeftUp weight="bold" size={18} />}>
-                    Auf diesen Beitrag Bezug nehmen
-                  </Button>
-                </a>
-              </>
+              <a
+                className="inline-block"
+                href={`#${entry.sectionId}-scroll`}
+                ref={createAssociatedEntryButton}>
+                <Button
+                  size="sm"
+                  alternativePadding="mt-2"
+                  bgColor="bg-lightGrey hover:bg-mediumGrey"
+                  textColor="text-darkGrey hover:text-offWhite"
+                  onClick={showNewEntry}
+                  icon={<ArrowBendLeftUp weight="bold" size={18} />}>
+                  Auf diesen Beitrag Bezug nehmen
+                </Button>
+              </a>
             )}
           </div>
           {isNewEntryVisible && (
