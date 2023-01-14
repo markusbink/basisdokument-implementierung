@@ -43,6 +43,12 @@ export interface IUser {
   role: UserRole;
 }
 
+export enum ViewMode {
+  SideBySide = "SbS",
+  Rows = "Row",
+  Columns = "Col",
+}
+
 export enum UserRole {
   Plaintiff = "Klagepartei",
   Defendant = "Beklagtenpartei",

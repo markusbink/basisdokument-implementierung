@@ -10,7 +10,7 @@ import {
   Scales,
   Trash,
 } from "phosphor-react";
-import React, { useRef, useState } from "react";
+import React, { SetStateAction, useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
@@ -23,6 +23,7 @@ import {
   IBookmark,
   SidebarState,
   IndividualEntrySortingEntry,
+  ViewMode,
 } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -33,6 +34,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useSidebar } from "../../contexts/SidebarContext";
 import { getTheme } from "../../themes/getTheme";
 import { getEntryCode } from "../../util/get-entry-code";
+import { useView } from "../../contexts/ViewContext";
+import { getBrowser } from "../../util/get-browser";
 
 interface EntryProps {
   entry: IEntry;
@@ -41,6 +44,10 @@ interface EntryProps {
   isHidden?: boolean;
   isOld?: boolean;
   isHighlighted?: boolean;
+  setAssociatedEntryInProgress?: (
+    entry: IEntry,
+    setIsNewEntryVisible: React.Dispatch<SetStateAction<boolean>>
+  ) => void;
 }
 
 export const Entry: React.FC<EntryProps> = ({
@@ -50,6 +57,7 @@ export const Entry: React.FC<EntryProps> = ({
   isHidden = false,
   isOld = false,
   isHighlighted = false,
+  setAssociatedEntryInProgress,
 }) => {
   // Threaded entries
   const {
@@ -63,7 +71,6 @@ export const Entry: React.FC<EntryProps> = ({
 
   const {
     versionHistory,
-    showColumnView,
     searchbarValue,
     hideEntriesHighlighter,
     getCurrentTool,
@@ -75,9 +82,13 @@ export const Entry: React.FC<EntryProps> = ({
 
   const { setShowNotePopup, setAssociatedEntryIdNote } = useNotes();
   const { setShowJudgeHintPopup, setAssociatedEntryIdHint } = useHints();
+  const { view } = useView();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
-  const thread = groupedEntries[entry.sectionId][entry.id];
+
+  var thread: IEntry[] = [];
+  if (view !== ViewMode.SideBySide)
+    thread = groupedEntries[entry.sectionId][entry.id];
 
   // State of current entry
   const [isBodyOpen, setIsBodyOpen] = useState<boolean>(true);
@@ -118,8 +129,17 @@ export const Entry: React.FC<EntryProps> = ({
     setIsBodyOpen(!isBodyOpen);
   };
 
+  const createAssociatedEntryButton = useRef<HTMLAnchorElement | null>(null);
+
   const showNewEntry = () => {
-    setIsNewEntryVisible(true);
+    // TODO: check other browsers
+    if (!getBrowser().includes("Firefox"))
+      setTimeout(() => createAssociatedEntryButton.current?.click(), 1);
+    if (view === ViewMode.SideBySide) {
+      setAssociatedEntryInProgress!(entry, setIsNewEntryVisible);
+    } else {
+      setIsNewEntryVisible(true);
+    }
   };
 
   const bookmarkEntry = (e: React.MouseEvent) => {
@@ -269,6 +289,7 @@ export const Entry: React.FC<EntryProps> = ({
               hideEntriesHighlighter &&
               getCurrentTool.id === Tool.Cursor),
           "pointer-events-none": isHidden,
+          "mt-6": !entry.associatedEntry,
         })}>
         <div
           className={cx("flex flex-col", {
@@ -277,8 +298,13 @@ export const Entry: React.FC<EntryProps> = ({
           <div
             className={cx("transition-all", {
               "w-[calc(50%_-_12px)]":
-                !isExpanded && showColumnView && !showEntrySorting,
-              "w-full": isExpanded || !showColumnView || showEntrySorting,
+                !isExpanded && view === ViewMode.Columns && !showEntrySorting,
+              "w-full":
+                isExpanded || view === ViewMode.Rows || showEntrySorting,
+              "w-[calc(100%_-_12px)]":
+                !isExpanded &&
+                view === ViewMode.SideBySide &&
+                !showEntrySorting,
             })}>
             {/* Entry */}
             {/* visualize association */}
@@ -505,20 +531,25 @@ export const Entry: React.FC<EntryProps> = ({
             </div>
             {/* Button to add response */}
             {canAddEntry && !isNewEntryVisible && !showEntrySorting && (
-              <Button
-                size="sm"
-                alternativePadding="mt-2"
-                bgColor="bg-lightGrey hover:bg-mediumGrey"
-                textColor="text-darkGrey hover:text-offWhite"
-                onClick={showNewEntry}
-                icon={<ArrowBendLeftUp weight="bold" size={18} />}>
-                Auf diesen Beitrag Bezug nehmen
-              </Button>
+              <a
+                className="inline-block"
+                href={`#${entry.sectionId}-scroll`}
+                ref={createAssociatedEntryButton}>
+                <Button
+                  size="sm"
+                  alternativePadding="mt-2"
+                  bgColor="bg-lightGrey hover:bg-mediumGrey"
+                  textColor="text-darkGrey hover:text-offWhite"
+                  onClick={showNewEntry}
+                  icon={<ArrowBendLeftUp weight="bold" size={18} />}>
+                  Auf diesen Beitrag Bezug nehmen
+                </Button>
+              </a>
             )}
           </div>
           {isNewEntryVisible && (
-            <div className={cx("flex flex-col w-full")}>
-              {!showColumnView && (
+            <div className={cx(`flex flex-col w-full`)}>
+              {view !== ViewMode.Columns && (
                 <button className="ml-5 w-5 border-l-2 border-lightGrey"></button>
               )}
               <NewEntry
@@ -538,12 +569,12 @@ export const Entry: React.FC<EntryProps> = ({
       {thread?.length > 0 && !showEntrySorting && (
         <div
           className={cx({
-            flex: !showColumnView,
+            flex: view !== ViewMode.Columns,
           })}>
-          {!showColumnView && (
+          {view !== ViewMode.Columns && (
             <button className="ml-5 w-5 border-l-2 border-lightGrey" />
           )}
-          <EntryList entries={thread} />
+          <EntryList entriesList={thread} sectionId={thread[0].sectionId} />
         </div>
       )}
       <ErrorPopup isVisible={isEditErrorVisible}>

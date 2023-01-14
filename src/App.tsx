@@ -14,6 +14,7 @@ import { Auth } from "./pages/Auth";
 import { Main } from "./pages/Main";
 import { OnboardingProvider } from "./contexts/OnboardingContext";
 import { SidebarProvider } from "./contexts/SidebarContext";
+import { ViewProvider } from "./contexts/ViewContext";
 
 const registerKeyListener = (e: KeyboardEvent) => {
   if (e.key === "r" && e.metaKey) {
@@ -38,19 +39,21 @@ export const App = () => {
           <SectionProvider>
             <HeaderProvider>
               <CaseProvider>
-                <SidebarProvider>
-                  <NoteProvider>
-                    <HintProvider>
-                      <BookmarkProvider>
-                        {isAuthenticated ? (
-                          <Main />
-                        ) : (
-                          <Auth setIsAuthenticated={setIsAuthenticated} />
-                        )}
-                      </BookmarkProvider>
-                    </HintProvider>
-                  </NoteProvider>
-                </SidebarProvider>
+                <ViewProvider>
+                  <SidebarProvider>
+                    <NoteProvider>
+                      <HintProvider>
+                        <BookmarkProvider>
+                          {isAuthenticated ? (
+                            <Main />
+                          ) : (
+                            <Auth setIsAuthenticated={setIsAuthenticated} />
+                          )}
+                        </BookmarkProvider>
+                      </HintProvider>
+                    </NoteProvider>
+                  </SidebarProvider>
+                </ViewProvider>
               </CaseProvider>
             </HeaderProvider>
           </SectionProvider>
