@@ -98,11 +98,6 @@ export const EntryRow: React.FC<EntryRowProps> = ({
   return (
     <>
       <div
-        onContextMenu={(e) => {
-          e.preventDefault();
-          setContextMenuPosition({ x: e.clientX, y: e.clientY });
-          setIsContextMenuOpen(true);
-        }}
         className={cx(
           "relative rounded-lg select-none grid grid-cols-2 gap-6 border-dashed p-6 pt-10 border ",
           {
@@ -111,7 +106,27 @@ export const EntryRow: React.FC<EntryRowProps> = ({
             "!border-2 border-blue-600": isContextMenuOpen && !hasChildren,
           }
         )}>
-        <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2  z-20">
+        {!hasChildren && (
+          <div className="absolute top-0 right-0 w-fit">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setIsContextMenuOpen(true);
+              }}
+              className=" translate-x-1/2 -translate-y-1/2 bg-darkGrey hover:bg-mediumGrey text-white p-1 rounded-full">
+              <Trash width={16} height={16} />
+            </button>
+            {isContextMenuOpen && (
+              <ContextMenu
+                ref={contextMenuRef}
+                deleteEmptyRow={() => deleteEmptyRow(sectionId, rowId)}
+                deleteAllEmptyRows={() => deleteAllEmptyRows()}
+              />
+            )}
+          </div>
+        )}
+
+        <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
           <LitigiousCheck rowId={rowId} isLitigious={isLitigious} />
         </span>
         {children}
@@ -120,43 +135,32 @@ export const EntryRow: React.FC<EntryRowProps> = ({
           className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-darkGrey hover:bg-mediumGrey text-white p-1 rounded-full">
           <Plus width={18} height={18} weight="bold" />
         </button>
-        {isContextMenuOpen && !hasChildren && (
-          <ContextMenu
-            ref={contextMenuRef}
-            position={contextMenuPosition}
-            deleteEmptyRow={() => deleteEmptyRow(sectionId, rowId)}
-            deleteAllEmptyRows={() => deleteAllEmptyRows()}
-          />
-        )}
       </div>
     </>
   );
 };
 
 interface ContextMenuProps {
-  position: { x: number; y: number };
   deleteEmptyRow: () => void;
   deleteAllEmptyRows: () => void;
 }
 
 const ContextMenu = forwardRef<HTMLUListElement, ContextMenuProps>(
-  ({ position, deleteEmptyRow, deleteAllEmptyRows }, ref) => {
+  ({ deleteEmptyRow, deleteAllEmptyRows }, ref) => {
     return (
       <ul
         ref={ref}
-        style={{ top: position.y, left: position.x }}
         className={cx(
-          "fixed list-none bg-darkGrey rounded-lg text-sm z-50 m-0"
+          "absolute list-none bg-darkGrey rounded-lg text-sm z-50 m-0 w-fit -translate-x-[80%] -translate-y-2"
         )}>
         <li
-          className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all"
+          className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all whitespace-nowrap"
           onClick={deleteEmptyRow}>
-          <Trash width={18} height={18} /> Leere Zeile löschen
+          Leere Zeile löschen
         </li>
         <li
-          className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all"
+          className="flex items-center gap-2 !m-0 text-white p-3 cursor-pointer hover:bg-white/10 transition-all whitespace-nowrap"
           onClick={deleteAllEmptyRows}>
-          <Trash width={18} height={18} />
           Alle leeren Zeilen löschen
         </li>
       </ul>
