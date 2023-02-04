@@ -386,7 +386,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         </div>
         {usage === UsageMode.Create ? (
           <div>
-            <p className="font-light">Aktenzeichen diese Basisdokuments: </p>
+            <p className="font-light">Aktenzeichen dieses Basisdokuments: </p>
             <div className="flex flex-row w-auto mt-4 gap-4">
               <input
                 className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none"
