@@ -18,7 +18,7 @@ import { format } from "date-fns";
 
 function downloadObjectAsJSON(obj: object, fileName: string) {
   // Create a blob of the data
-  var fileToSave = new Blob([JSON.stringify(obj)], {
+  const fileToSave = new Blob([JSON.stringify(obj)], {
     type: "application/json",
   });
 
@@ -392,13 +392,19 @@ export function downloadBasisdokument(
   basisdokumentObject["entries"] = entries;
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
+
+  const date: Date = basisdokumentObject["versions"]
+    [basisdokumentObject["versions"].length - 1]
+    ["timestamp"];
+  const dateString = `${date.getDate().toString().padStart(2, '0')}-${date.getMonth().toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}`;
+
   downloadObjectAsJSON(
     basisdokumentObject,
-    "basisdokument_version_" + currentVersion + "_az_" + caseId
+    `BD_${caseId}_Version-${currentVersion}_${dateString}`
   );
   downloadBasisdokumentAsPDF(
     basisdokumentObject,
-    "basisdokument_version_" + currentVersion + "_az_" + caseId
+    `PDF_${caseId}_Version-${currentVersion}_${dateString}`
   );
 }
 
@@ -422,8 +428,12 @@ export function downloadEditFile(
   editFileObject["bookmarks"] = bookmarks;
   editFileObject["individualSorting"] = individualSorting;
   editFileObject["individualEntrySorting"] = individualEntrySorting;
+
+  const date = new Date();
+  const dateString = `${date.getDate().toString().padStart(2, '0')}-${date.getMonth().toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}`;
+
   downloadObjectAsJSON(
     editFileObject,
-    "bearbeitungsdatei_version_" + currentVersion + "_az_" + caseId
+    `EDIT_${caseId}_Version-${currentVersion}_${dateString}`
   );
 }
