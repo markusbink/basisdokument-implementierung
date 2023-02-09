@@ -23,10 +23,6 @@ export const EntryRow: React.FC<EntryRowProps> = ({
 }) => {
   const { individualEntrySorting, setIndividualEntrySorting } = useCase();
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
-  const [contextMenuPosition, setContextMenuPosition] = useState({
-    x: 0,
-    y: 0,
-  });
   const contextMenuRef = useRef<HTMLUListElement>(null);
   useOutsideClick(contextMenuRef, () => setIsContextMenuOpen(false));
 
