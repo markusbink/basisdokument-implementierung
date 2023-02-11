@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { useCase, useHeaderContext, useUser } from "../../contexts";
-import { ISection, UserRole } from "../../types";
+import { ISection, Sorting, UserRole } from "../../types";
 import { SectionControls } from "./SectionControls";
 import { SectionDropdown } from "./SectionDropdown";
 import { SectionTitle } from "./SectionTitle";
@@ -19,6 +19,10 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   const { user } = useUser();
   const { currentVersion } = useCase();
   const { showEntrySorting } = useHeaderContext();
+  const { selectedSorting } = useHeaderContext();
+
+  const sectionControlsHidden =
+    section.version !== currentVersion && selectedSorting === Sorting.Original;
 
   const isOld = section.version < currentVersion;
 
@@ -30,9 +34,18 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
           "w-full": user?.role !== UserRole.Defendant,
         })}>
         <div className="flex gap-4 items-center relative">
-          <SectionControls position={position} version={section.version} />
-          <div className="ml-1 bg-darkGrey w-10 h-10 rounded-lg rotate-45 flex items-center justify-center">
-            <span className="text-white font-bold -rotate-45">{sectionId}</span>
+          {!sectionControlsHidden && (
+            <SectionControls position={position} version={section.version} />
+          )}
+          <div
+            className={cx("", {
+              "pl-[46px]": sectionControlsHidden,
+            })}>
+            <div className="ml-1 bg-darkGrey w-10 h-10 rounded-lg rotate-45 flex items-center justify-center">
+              <span className="text-white font-bold -rotate-45">
+                {sectionId}
+              </span>
+            </div>
           </div>
         </div>
 

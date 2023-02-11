@@ -27,7 +27,7 @@ export const Discussion = () => {
     <DndProvider backend={HTML5Backend}>
       {/* TODO: scroll-smooth | simulate double click on single click*/}
       <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4 scroll-smooth">
-        <div className="max-w-[1200px] m-auto">
+        <div className="max-w-[1280px] m-auto">
           {highlightElementsWithSpecificVersion ? (
             <div className="flex justify-center z-[30] relative">
               <div className="fixed flex justify-center items-center -mt-24">
@@ -75,7 +75,7 @@ export const Discussion = () => {
                         section={section}
                         position={index}
                       />
-                      <div className="space-y-4">
+                      <div className="space-y-4 pl-[40px]">
                         <EntryList
                           entriesList={sectionEntries?.parent || []}
                           sectionId={section.id}

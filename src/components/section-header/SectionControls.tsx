@@ -1,7 +1,7 @@
 import { CaretDown, CaretUp } from "phosphor-react";
-import { useCase, useHeaderContext, useSection } from "../../contexts";
+import { useHeaderContext, useSection } from "../../contexts";
 import cx from "classnames";
-import { ISection, Sorting } from "../../types";
+import { Sorting } from "../../types";
 
 const enum Direction {
   Up = "up",
@@ -26,27 +26,13 @@ interface SectionControlsProps {
   version: number;
 }
 
-const isPreviousSectionMovable = (
-  sectionList: ISection[],
-  clickedPosition: number,
-  currentVersion: number
-) => {
-  return sectionList[clickedPosition - 1]?.version === currentVersion;
-};
-
 export const SectionControls: React.FC<SectionControlsProps> = ({
   position,
-  version,
 }) => {
   const { sectionList, setSectionList, setIndividualSorting } = useSection();
-  const { currentVersion } = useCase();
   const { selectedSorting } = useHeaderContext();
 
-  const isCurrentVersion = version === currentVersion;
-  const canMoveUp =
-    position > 0 &&
-    (isPreviousSectionMovable(sectionList, position, currentVersion) ||
-      selectedSorting === Sorting.Privat);
+  const canMoveUp = position > 0;
   const canMoveDown = position < sectionList.length - 1;
 
   const moveSection = <T,>(direction: Direction, sectionList: T[]) => {
@@ -98,13 +84,8 @@ export const SectionControls: React.FC<SectionControlsProps> = ({
     }
   };
 
-  // Hide Controls for older sections that are in the original sorting
-  if (!isCurrentVersion && selectedSorting === Sorting.Original) {
-    return null;
-  }
-
   return (
-    <div className="flex gap-1 flex-col absolute -left-full">
+    <div className="flex gap-1 flex-col">
       {moveSectionButtons.map((button, index) => (
         <button
           key={`${index}-${button.title}`}
@@ -117,8 +98,7 @@ export const SectionControls: React.FC<SectionControlsProps> = ({
                 (!canMoveUp && button.action === Direction.Up) ||
                 (!canMoveDown && button.action === Direction.Down),
             }
-          )}
-        >
+          )}>
           {button.icon}
         </button>
       ))}
