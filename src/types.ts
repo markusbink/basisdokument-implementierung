@@ -76,7 +76,9 @@ export interface ISection {
   num: number;
   version: number;
   titlePlaintiff: string;
+  titlePlaintiffVersion?: number;
   titleDefendant: string;
+  titleDefendantVersion?: number;
 }
 
 export interface IEntry {
