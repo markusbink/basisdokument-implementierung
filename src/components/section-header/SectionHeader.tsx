@@ -58,7 +58,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         />
       </div>
       {/* Title with User Role */}
-      <div className="flex w-full gap-6 items-start">
+      <div className="flex w-[calc(100%_-_40px)] items-start justify-self-center">
         <SectionTitle
           id={section.id}
           role={UserRole.Defendant}
