@@ -8,7 +8,10 @@ interface ErrorPopupProps {
   children: React.ReactNode;
 }
 
-export const VersionPopup: React.FC<ErrorPopupProps> = ({ isVisible }) => {
+export const VersionPopup: React.FC<ErrorPopupProps> = ({
+  isVisible,
+  children,
+}) => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
   if (!isVisible) {
     return null;
@@ -54,20 +57,7 @@ export const VersionPopup: React.FC<ErrorPopupProps> = ({ isVisible }) => {
             werden, welche Beiträge zu welchem Zeitpunkt hinzugefügt wurden.
           </p>
 
-          <div className="flex flex-col gap-2 w-full">
-            <Button
-              bgColor="bg-offWhite hover:bg-lightGrey"
-              textColor="text-black font-bold"
-              onClick={() => {}}>
-              Die hochgeladene Datei stammt von meiner Partei
-            </Button>
-            <Button
-              bgColor="bg-offWhite hover:bg-lightGrey"
-              textColor="text-black font-bold"
-              onClick={() => {}}>
-              Die hochgeladene Datei stammt von einer anderen Partei
-            </Button>
-          </div>
+          <div className="flex flex-col gap-2 w-full">{children}</div>
         </div>
       </div>
     </>

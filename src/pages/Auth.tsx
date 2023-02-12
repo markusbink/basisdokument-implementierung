@@ -49,7 +49,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     useState<IStateUserInput["editFile"]>("");
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
   const [newVersionMode, setNewVersionMode] =
-    useState<IStateUserInput["newVersionMode"]>(false);
+    useState<IStateUserInput["newVersionMode"]>(undefined);
   const [showVersionPopup, setShowVersionPopup] = useState<boolean>(false);
 
   // Refs
@@ -473,27 +473,60 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               </div>
             </div>
             <div className="flex flex-row items-center gap-4">
-              <input
-                className="w-20 accent-darkGrey"
-                type="checkbox"
-                defaultChecked={newVersionMode}
-                onChange={() => setNewVersionMode(!newVersionMode)}
+              <VersionPopup
+                isVisible={showVersionPopup}
+                children={
+                  <>
+                    <Button
+                      bgColor="bg-offWhite hover:bg-lightGrey"
+                      textColor="text-black font-bold"
+                      onClick={() => {
+                        setShowVersionPopup(!showVersionPopup);
+                        setNewVersionMode(false);
+                      }}>
+                      Die hochgeladene Datei stammt von meiner Partei
+                    </Button>
+                    <Button
+                      bgColor="bg-offWhite hover:bg-lightGrey"
+                      textColor="text-black font-bold"
+                      onClick={() => {
+                        setShowVersionPopup(!showVersionPopup);
+                        setNewVersionMode(true);
+                      }}>
+                      Die hochgeladene Datei stammt von einer anderen Partei
+                    </Button>
+                  </>
+                }
               />
-              <div>
-                <p className="font-extrabold">
-                  Ich möchte eine neue Version auf Basis der hochgeladenen
-                  Version erstellen. <span className="text-darkRed">*</span>
-                </p>
-                <p className="font-light text-mediumGrey">
-                  Setzen Sie hier einen Haken, wenn Sie die Version des
-                  Basisdokuments, die Sie hochladen, zuvor von einer anderen
-                  Partei erhalten und noch nicht editiert haben.
-                </p>
-                <VersionPopup
-                  isVisible={showVersionPopup}
-                  children={undefined}
-                />
-              </div>
+
+              {newVersionMode && (
+                <span className="text-base text-black">
+                  Mit dem Öffnen wird eine neue Version erstellt, da Sie das
+                  hochgeladene Dokument von einer anderen Partei erhalten und
+                  noch nicht editiert haben.{" "}
+                  <u
+                    className="hover:font-bold hover:cursor-pointer"
+                    onClick={() => {
+                      setShowVersionPopup(true);
+                    }}>
+                    Ändern.
+                  </u>
+                </span>
+              )}
+              {newVersionMode === false && (
+                <span className="text-base text-black">
+                  Mit dem Öffnen wird keine neue Version erstellt, da das
+                  hochgeladene Dokument von Ihrer Partei stammt. Sie editieren
+                  weiterhin die aktuelle Version.{" "}
+                  <u
+                    className="hover:font-bold hover:cursor-pointer"
+                    onClick={() => {
+                      setShowVersionPopup(true);
+                    }}>
+                    Ändern.
+                  </u>
+                </span>
+              )}
             </div>
           </div>
         ) : null}
