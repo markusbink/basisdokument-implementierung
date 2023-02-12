@@ -27,6 +27,7 @@ import { IStateUserInput, IUser, UsageMode, UserRole } from "../types";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { useOnboarding } from "../contexts/OnboardingContext";
+import { VersionPopup } from "../components/VersionPopup";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -49,6 +50,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
   const [newVersionMode, setNewVersionMode] =
     useState<IStateUserInput["newVersionMode"]>(false);
+  const [showVersionPopup, setShowVersionPopup] = useState<boolean>(false);
 
   // Refs
   const basisdokumentFileUploadRef = useRef<HTMLInputElement>(null);
@@ -99,6 +101,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         setBasisdokumentFile(result);
       };
       e.target.value = "";
+      console.log("test");
+      setShowVersionPopup(true);
     } catch (error) {}
   };
 
@@ -485,6 +489,10 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                   Basisdokuments, die Sie hochladen, zuvor von einer anderen
                   Partei erhalten und noch nicht editiert haben.
                 </p>
+                <VersionPopup
+                  isVisible={showVersionPopup}
+                  children={undefined}
+                />
               </div>
             </div>
           </div>
