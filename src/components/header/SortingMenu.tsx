@@ -40,8 +40,7 @@ export const SortingMenu = () => {
     <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setShowSortingMenu(!showSortingMenu)}
-        className={`flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer font-bold h-8`}
-      >
+        className={`flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 pl-2 pr-2 pt-2 pb-2 hover:cursor-pointer font-bold h-8`}>
         <SortAscending size={22} className="text-darkGrey" />
       </button>
       {showSortingMenu ? (
@@ -60,20 +59,17 @@ export const SortingMenu = () => {
                 <div
                   className="sorting-menu flex flex-col sorting-menu-container gap-2 mt-4 relative overflow-hidden overflow-y-scroll max-h-[300px]"
                   {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
+                  ref={provided.innerRef}>
                   {individualSorting.map((section, index) => (
                     <Draggable
                       key={getSectionObject(section).id}
                       draggableId={getSectionObject(section).id}
-                      index={index}
-                    >
+                      index={index}>
                       {(provided) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                        >
+                          {...provided.draggableProps}>
                           <div className="flex flex-row items-center select-none group">
                             <DotsSixVertical size={24} />
                             <div className="flex flex-row gap-2 rounded-md p-2 bg-offWhite font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm">
@@ -82,11 +78,40 @@ export const SortingMenu = () => {
                                   sectionList,
                                   getSectionObject(section).id
                                 )}. `}
-                                {user?.role === UserRole.Plaintiff ||
-                                user?.role === UserRole.Judge
-                                  ? getSectionObject(section).titlePlaintiff
-                                  : getSectionObject(section).titleDefendant}
                               </span>
+                              {user?.role === UserRole.Judge && (
+                                <div>
+                                  <span>
+                                    {getSectionObject(section).titlePlaintiff}
+                                  </span>
+                                  <br />
+                                  <span>
+                                    {getSectionObject(section).titleDefendant}
+                                  </span>
+                                </div>
+                              )}
+                              {user?.role === UserRole.Plaintiff && (
+                                <div>
+                                  <span>
+                                    {getSectionObject(section).titlePlaintiff}
+                                  </span>
+                                  <br />
+                                  <span className="font-light">
+                                    {getSectionObject(section).titleDefendant}
+                                  </span>
+                                </div>
+                              )}
+                              {user?.role === UserRole.Defendant && (
+                                <div>
+                                  <span>
+                                    {getSectionObject(section).titleDefendant}
+                                  </span>
+                                  <br />
+                                  <span className="font-light">
+                                    {getSectionObject(section).titlePlaintiff}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -111,8 +136,7 @@ export const SortingMenu = () => {
                 className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey hover:bg-mediumGrey text-white text-[10px] font-bold px-1.5 py-1 rounded-md"
                 onClick={() => {
                   resetPrivateSorting();
-                }}
-              >
+                }}>
                 <ClockClockwise size={16} />
                 <span>Sortierung zurücksetzen</span>
               </div>
