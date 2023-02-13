@@ -54,7 +54,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
           id={section.id}
           role={UserRole.Plaintiff}
           title={section.titlePlaintiff}
-          version={section.version}
+          version={section.titlePlaintiffVersion}
         />
       </div>
       {/* Title with User Role */}
@@ -63,7 +63,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
           id={section.id}
           role={UserRole.Defendant}
           title={section.titleDefendant}
-          version={section.version}
+          version={section.titleDefendantVersion}
         />
         {((!isOld && user?.role !== UserRole.Judge) ||
           (user?.role === UserRole.Judge && !isOld) ||
