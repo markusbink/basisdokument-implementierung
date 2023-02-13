@@ -31,6 +31,11 @@ export const AddSection: React.FC<AddSectionProps> = ({ sectionIdAfter }) => {
         section,
         ...prevSectionList.slice(indexSection),
       ]);
+      setIndividualSorting((prevSectionList) => [
+        ...prevSectionList.slice(0, indexSection),
+        section.id,
+        ...prevSectionList.slice(indexSection),
+      ]);
 
       const sectionIdsAfter = sectionList
         .slice(indexSection)
