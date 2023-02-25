@@ -135,32 +135,32 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     // check if file exists and validate
     if (usage === UsageMode.Open) {
       if (
-        !basisdokumentFilename.endsWith(".json") ||
+        !basisdokumentFilename.endsWith(".txt") ||
         typeof basisdokumentFile !== "string" ||
         !basisdokumentFile
       ) {
         setErrorText(
-          "Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!"
+          "Bitte laden Sie eine valide Basisdokumentdatei (.txt) hoch!"
         );
         inputIsValid = false;
       } else {
         if (jsonToObject(basisdokumentFile).fileType !== "basisdokument") {
           setErrorText(
-            "Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!"
+            "Bitte laden Sie eine valide Basisdokumentdatei (.txt) hoch!"
           );
           inputIsValid = false;
         }
       }
       if (editFile) {
-        if (!editFilename.endsWith(".json") || typeof editFile !== "string") {
+        if (!editFilename.endsWith(".txt") || typeof editFile !== "string") {
           setErrorText(
-            "Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!"
+            "Bitte laden Sie eine valide Bearbeitungsdatei (.txt) hoch!"
           );
           inputIsValid = false;
         } else {
           if (jsonToObject(editFile).fileType !== "editFile") {
             setErrorText(
-              "Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!"
+              "Bitte laden Sie eine valide Bearbeitungsdatei (.txt) hoch!"
             );
             inputIsValid = false;
           }
@@ -274,14 +274,14 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         <p className="text-md text-mediumGrey text-justify">
           Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines
           Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments
-          in Form einer .json-Datei hoch, falls Sie an einer Version
+          in Form einer .txt-Datei hoch, falls Sie an einer Version
           weiterarbeiten wollen. Um persönliche Daten wie Markierungen,
           Sortierungen und Lesezeichen zu laden, ist es notwendig, dass Sie auch
           Ihre persönliche Bearbeitungsdatei hochladen. Das Basisdokument
           verwendet keinen externen Server, um Daten zu speichern. Alle Daten,
           die Sie hochladen, bleiben <b>im Browser Ihres Computers</b>. Das
-          Basisdokument kann schließlich als .json und .pdf exportiert werden
-          und somit an Dritte weitergegeben werden.
+          Basisdokument kann schließlich als .txt und .pdf exportiert werden und
+          somit an Dritte weitergegeben werden.
         </p>
         <div>
           <p className="font-light">

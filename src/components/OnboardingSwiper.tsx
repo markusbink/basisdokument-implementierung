@@ -16,7 +16,7 @@ const sliderItems = [
   {
     src: "videos/BDAnlegen.mp4",
     title: "Basisdokument anlegen",
-    desc: "Zu Beginn können Sie wählen, ob Sie ein neues Basisdokument erstellen oder ein bereits vorhandenes Basisdokument öffnen wollen. Zusätzlich können private Ergänzungen und Notizen geladen & gespeichert werden. Dazu dient die sogenannte “Bearbeitungsdatei”, welche automatisch heruntergeladen wird, sobald Sie das Basisdokument herunterladen. Beide Dateien werden mit der Endung .json gespeichert.",
+    desc: "Zu Beginn können Sie wählen, ob Sie ein neues Basisdokument erstellen oder ein bereits vorhandenes Basisdokument öffnen wollen. Zusätzlich können private Ergänzungen und Notizen geladen & gespeichert werden. Dazu dient die sogenannte “Bearbeitungsdatei”, welche automatisch heruntergeladen wird, sobald Sie das Basisdokument herunterladen. Beide Dateien werden mit der Endung .txt gespeichert.",
   },
   {
     src: "videos/BDMetadataThreading.mp4",
@@ -84,9 +84,12 @@ const SwiperButtonNext = () => {
   return (
     <button
       className="nextEl mx-16 select-all w-10 h-10"
-      onClick={() => swiper.slideNext()}
-    >
-      <ArrowSquareRight size={42} className="text-darkGrey hover:text-mediumGrey" weight="fill" />
+      onClick={() => swiper.slideNext()}>
+      <ArrowSquareRight
+        size={42}
+        className="text-darkGrey hover:text-mediumGrey"
+        weight="fill"
+      />
     </button>
   );
 };
@@ -96,9 +99,12 @@ const SwiperButtonPrev = () => {
   return (
     <button
       className="prevEl mx-16 select-all w-10 h-10"
-      onClick={() => swiper.slidePrev()}
-    >
-      <ArrowSquareLeft size={42} className="text-darkGrey hover:text-mediumGrey" weight="fill" />
+      onClick={() => swiper.slidePrev()}>
+      <ArrowSquareLeft
+        size={42}
+        className="text-darkGrey hover:text-mediumGrey"
+        weight="fill"
+      />
     </button>
   );
 };
@@ -114,9 +120,7 @@ export const OnboardingSwiper = () => {
         loop={false}
         setWrapperSize={true}
         pagination={{ clickable: true, dynamicBullets: true }}
-        className={"rounded-xl space-y-4"}
-      >
-
+        className={"rounded-xl space-y-4"}>
         {sliderItems.map((sliderItem, index) => (
           <div className="swiper-wrapper">
             <SwiperSlide key={index}>
