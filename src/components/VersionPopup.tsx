@@ -1,7 +1,6 @@
 import { Info } from "phosphor-react";
 import cx from "classnames";
 import { useState } from "react";
-import { Button } from "./Button";
 
 interface ErrorPopupProps {
   isVisible: boolean;
