@@ -396,15 +396,16 @@ export function downloadBasisdokument(
   const date: Date = basisdokumentObject["versions"]
     [basisdokumentObject["versions"].length - 1]
     ["timestamp"];
-  const dateString = `${date.getDate().toString().padStart(2, '0')}-${date.getMonth().toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}`;
+    console.log(date);
+  const dateString = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
 
   downloadObjectAsJSON(
     basisdokumentObject,
-    `BD_${caseId}_Version-${currentVersion}_${dateString}`
+    `basisdokument_version_${currentVersion}_az_${caseId}_${dateString}`
   );
   downloadBasisdokumentAsPDF(
     basisdokumentObject,
-    `PDF_${caseId}_Version-${currentVersion}_${dateString}`
+    `basisdokument_version_${currentVersion}_az_${caseId}_${dateString}`
   );
 }
 
@@ -430,10 +431,10 @@ export function downloadEditFile(
   editFileObject["individualEntrySorting"] = individualEntrySorting;
 
   const date = new Date();
-  const dateString = `${date.getDate().toString().padStart(2, '0')}-${date.getMonth().toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}`;
+  const dateString = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
 
   downloadObjectAsJSON(
     editFileObject,
-    `EDIT_${caseId}_Version-${currentVersion}_${dateString}`
+    `bearbeitungsdatei_version_${currentVersion}_az_${caseId}_${dateString}`
   );
 }
