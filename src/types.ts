@@ -76,7 +76,9 @@ export interface ISection {
   num: number;
   version: number;
   titlePlaintiff: string;
+  titlePlaintiffVersion?: number;
   titleDefendant: string;
+  titleDefendantVersion?: number;
 }
 
 export interface IEntry {
@@ -153,5 +155,5 @@ export interface IStateUserInput {
   basisdokumentFilename: string;
   editFilename: string;
   errorText: string;
-  newVersionMode: boolean;
+  newVersionMode: boolean | undefined;
 }

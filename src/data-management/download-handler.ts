@@ -23,7 +23,7 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   });
 
   // Save the file
-  saveAs(fileToSave, fileName + ".json");
+  saveAs(fileToSave, fileName + ".txt");
 }
 
 function resetFontSize(parentElement: any) {

@@ -27,6 +27,7 @@ import { IStateUserInput, IUser, UsageMode, UserRole } from "../types";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { useOnboarding } from "../contexts/OnboardingContext";
+import { VersionPopup } from "../components/VersionPopup";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -48,7 +49,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     useState<IStateUserInput["editFile"]>("");
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
   const [newVersionMode, setNewVersionMode] =
-    useState<IStateUserInput["newVersionMode"]>(false);
+    useState<IStateUserInput["newVersionMode"]>(undefined);
+  const [showVersionPopup, setShowVersionPopup] = useState<boolean>(false);
 
   // Refs
   const basisdokumentFileUploadRef = useRef<HTMLInputElement>(null);
@@ -99,6 +101,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         setBasisdokumentFile(result);
       };
       e.target.value = "";
+      console.log("test");
+      setShowVersionPopup(true);
     } catch (error) {}
   };
 
@@ -131,32 +135,32 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     // check if file exists and validate
     if (usage === UsageMode.Open) {
       if (
-        !basisdokumentFilename.endsWith(".json") ||
+        !basisdokumentFilename.endsWith(".txt") ||
         typeof basisdokumentFile !== "string" ||
         !basisdokumentFile
       ) {
         setErrorText(
-          "Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!"
+          "Bitte laden Sie eine valide Basisdokumentdatei (.txt) hoch!"
         );
         inputIsValid = false;
       } else {
         if (jsonToObject(basisdokumentFile).fileType !== "basisdokument") {
           setErrorText(
-            "Bitte laden Sie eine valide Basisdokumentdatei (.json) hoch!"
+            "Bitte laden Sie eine valide Basisdokumentdatei (.txt) hoch!"
           );
           inputIsValid = false;
         }
       }
       if (editFile) {
-        if (!editFilename.endsWith(".json") || typeof editFile !== "string") {
+        if (!editFilename.endsWith(".txt") || typeof editFile !== "string") {
           setErrorText(
-            "Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!"
+            "Bitte laden Sie eine valide Bearbeitungsdatei (.txt) hoch!"
           );
           inputIsValid = false;
         } else {
           if (jsonToObject(editFile).fileType !== "editFile") {
             setErrorText(
-              "Bitte laden Sie eine valide Bearbeitungsdatei (.json) hoch!"
+              "Bitte laden Sie eine valide Bearbeitungsdatei (.txt) hoch!"
             );
             inputIsValid = false;
           }
@@ -270,14 +274,14 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         <p className="text-md text-mediumGrey text-justify">
           Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines
           Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments
-          in Form einer .json-Datei hoch, falls Sie an einer Version
+          in Form einer .txt-Datei hoch, falls Sie an einer Version
           weiterarbeiten wollen. Um persönliche Daten wie Markierungen,
           Sortierungen und Lesezeichen zu laden, ist es notwendig, dass Sie auch
           Ihre persönliche Bearbeitungsdatei hochladen. Das Basisdokument
           verwendet keinen externen Server, um Daten zu speichern. Alle Daten,
           die Sie hochladen, bleiben <b>im Browser Ihres Computers</b>. Das
-          Basisdokument kann schließlich als .json und .pdf exportiert werden
-          und somit an Dritte weitergegeben werden.
+          Basisdokument kann schließlich als .txt und .pdf exportiert werden und
+          somit an Dritte weitergegeben werden.
         </p>
         <div>
           <p className="font-light">
@@ -469,23 +473,60 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               </div>
             </div>
             <div className="flex flex-row items-center gap-4">
-              <input
-                className="w-20 accent-darkGrey"
-                type="checkbox"
-                defaultChecked={newVersionMode}
-                onChange={() => setNewVersionMode(!newVersionMode)}
+              <VersionPopup
+                isVisible={showVersionPopup}
+                children={
+                  <>
+                    <Button
+                      bgColor="bg-offWhite hover:bg-lightGrey"
+                      textColor="text-black font-bold"
+                      onClick={() => {
+                        setShowVersionPopup(!showVersionPopup);
+                        setNewVersionMode(false);
+                      }}>
+                      Die hochgeladene Datei stammt von meiner Partei
+                    </Button>
+                    <Button
+                      bgColor="bg-offWhite hover:bg-lightGrey"
+                      textColor="text-black font-bold"
+                      onClick={() => {
+                        setShowVersionPopup(!showVersionPopup);
+                        setNewVersionMode(true);
+                      }}>
+                      Die hochgeladene Datei stammt von einer anderen Partei
+                    </Button>
+                  </>
+                }
               />
-              <div>
-                <p className="font-extrabold">
-                  Ich möchte eine neue Version auf Basis der hochgeladenen
-                  Version erstellen. <span className="text-darkRed">*</span>
-                </p>
-                <p className="font-light text-mediumGrey">
-                  Setzen Sie hier einen Haken, wenn Sie die Version des
-                  Basisdokuments, die Sie hochladen, zuvor von einer anderen
-                  Partei erhalten und noch nicht editiert haben.
-                </p>
-              </div>
+
+              {newVersionMode && (
+                <span className="text-base text-black">
+                  Mit dem Öffnen wird eine neue Version erstellt, da Sie das
+                  hochgeladene Dokument von einer anderen Partei erhalten und
+                  noch nicht editiert haben.{" "}
+                  <u
+                    className="hover:font-bold hover:cursor-pointer"
+                    onClick={() => {
+                      setShowVersionPopup(true);
+                    }}>
+                    Ändern.
+                  </u>
+                </span>
+              )}
+              {newVersionMode === false && (
+                <span className="text-base text-black">
+                  Mit dem Öffnen wird keine neue Version erstellt, da das
+                  hochgeladene Dokument von Ihrer Partei stammt. Sie editieren
+                  weiterhin die aktuelle Version.{" "}
+                  <u
+                    className="hover:font-bold hover:cursor-pointer"
+                    onClick={() => {
+                      setShowVersionPopup(true);
+                    }}>
+                    Ändern.
+                  </u>
+                </span>
+              )}
             </div>
           </div>
         ) : null}

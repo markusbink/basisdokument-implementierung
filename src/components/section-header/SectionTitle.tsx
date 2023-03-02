@@ -8,7 +8,7 @@ interface SectionTitleProps {
   id: string;
   title: string;
   role: UserRole;
-  version: number;
+  version?: number;
 }
 
 export const SectionTitle: React.FC<SectionTitleProps> = ({
@@ -21,7 +21,10 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
   const { user } = useUser();
   const { setSectionList } = useSection();
   const { currentVersion } = useCase();
-  const isOld = version < currentVersion;
+  const isOld =
+    version != null &&
+    version < currentVersion &&
+    !(typeof title === "string" && title.trim().length === 0);
   const titleInputRef = useRef<HTMLInputElement>(null);
 
   const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,8 +35,10 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
       if (section) {
         if (role === UserRole.Plaintiff) {
           section.titlePlaintiff = e.target.value;
+          section.titlePlaintiffVersion = currentVersion;
         } else {
           section.titleDefendant = e.target.value;
+          section.titleDefendantVersion = currentVersion;
         }
       }
       return newState;
@@ -69,9 +74,9 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
           <input
             ref={titleInputRef}
             readOnly={
-              (role !== user?.role && user?.role !== UserRole.Judge) || isOld
+              isOld || (role !== user?.role && user?.role !== UserRole.Judge)
             }
-            placeholder="Bisher kein Titel vergeben"
+            placeholder={"Bisher kein Titel vergeben " + version}
             type="text"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
