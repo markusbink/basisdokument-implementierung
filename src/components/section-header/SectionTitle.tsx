@@ -76,7 +76,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
             readOnly={
               isOld || (role !== user?.role && user?.role !== UserRole.Judge)
             }
-            placeholder={"Bisher kein Titel vergeben " + version}
+            placeholder={"Bisher kein Titel vergeben"}
             type="text"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
