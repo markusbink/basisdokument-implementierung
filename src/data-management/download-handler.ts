@@ -23,7 +23,6 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   });
 
   // Save the file
-  fileName = fileName.replace(/ /g,"-");
   saveAs(fileToSave, fileName + ".txt");
 }
 
@@ -368,7 +367,6 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
         120
       );
       doc.text("Unterschrift", 10, 124);
-      fileName = fileName.replace(/ /g,"-");
       doc.save(fileName);
     });
 }
@@ -398,16 +396,16 @@ export function downloadBasisdokument(
   const date: Date = basisdokumentObject["versions"]
     [basisdokumentObject["versions"].length - 1]
     ["timestamp"];
-    console.log(date);
   const dateString = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
+  const caseIdForFilename = caseId.trim().replace(/ /g,"-");
 
   downloadObjectAsJSON(
     basisdokumentObject,
-    `basisdokument_version_${currentVersion}_az_${caseId}_${dateString}`
+    `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
   downloadBasisdokumentAsPDF(
     basisdokumentObject,
-    `basisdokument_version_${currentVersion}_az_${caseId}_${dateString}`
+    `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
 }
 
@@ -434,9 +432,10 @@ export function downloadEditFile(
 
   const date = new Date();
   const dateString = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
+  const caseIdForFilename = caseId.trim().replace(/ /g,"-");
 
   downloadObjectAsJSON(
     editFileObject,
-    `bearbeitungsdatei_version_${currentVersion}_az_${caseId}_${dateString}`
+    `bearbeitungsdatei_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
 }
