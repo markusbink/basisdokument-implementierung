@@ -23,6 +23,7 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   });
 
   // Save the file
+  fileName = fileName.replace(/ /g,"-");
   saveAs(fileToSave, fileName + ".txt");
 }
 
@@ -367,6 +368,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
         120
       );
       doc.text("Unterschrift", 10, 124);
+      fileName = fileName.replace(/ /g,"-");
       doc.save(fileName);
     });
 }
