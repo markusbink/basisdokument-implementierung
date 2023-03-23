@@ -66,6 +66,7 @@ export enum UsageMode {
 }
 
 export enum SidebarState {
+  Sorting,
   Notes,
   Hints,
   Bookmarks,

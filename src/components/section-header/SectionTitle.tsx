@@ -54,7 +54,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
   }, [title]);
 
   return (
-    <div className={cx("flex w-full flex-col pt-2")}>
+    <div id={id} className={cx("flex w-full flex-col pt-2")}>
       <span
         className={cx(
           "text-xs font-bold rounded-md px-2 py-1 w-fit uppercase text-darkGrey",
