@@ -6,8 +6,6 @@ import { useView } from "../../contexts/ViewContext";
 import { Tool, UserRole, ViewMode } from "../../types";
 import { Tooltip } from "../Tooltip";
 import { HighlighterButton } from "./HighlighterButton";
-import { SortingMenu } from "./SortingMenu";
-import { SortingSelector } from "./SortingSelector";
 import { VersionSelector } from "./VersionSelector";
 
 export enum Sorting {
@@ -20,18 +18,16 @@ export const DropdownHeader: React.FC<any> = () => {
     selectedSorting,
     setHideEntriesHighlighter,
     colorSelection,
-    setSelectedSorting,
     hideEntriesHighlighter,
     setHighlightElementsWithSpecificVersion,
     highlightElementsWithSpecificVersion,
     setCurrentTool,
+    getCurrentTool,
     showEntrySorting,
     setShowEntrySorting,
   } = useHeaderContext();
   const { user } = useUser();
   const { view, setView } = useView();
-
-  const { getCurrentTool } = useHeaderContext();
 
   return (
     <div className="flex flex-row gap-4 p-2 pl-8 pr-8 bg-white items-center">
@@ -40,14 +36,19 @@ export const DropdownHeader: React.FC<any> = () => {
           DARSTELLUNG
         </span>
         <div
-          className={cx("flex flex-row", {
-            "cursor-not-allowed": showEntrySorting,
-          })}>
+          className={cx("flex flex-row")}>
           <div
-            className={cx("flex flex-row gap-2 h-8", {
+            className={cx("flex flex-row gap-2 h-8")}>
+            <Tooltip
+              text="Side-by-Side"
+              position="bottom"
+              className={
+                cx({
               "pointer-events-none": showEntrySorting,
-            })}>
-            <Tooltip text="Side-by-Side" position="bottom">
+                  "cursor-not-allowed": showEntrySorting,
+                })
+              }
+            >
               <div
                 className={cx(
                   "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
@@ -64,7 +65,16 @@ export const DropdownHeader: React.FC<any> = () => {
                   alt="row view icon"></img>
               </div>
             </Tooltip>
-            <Tooltip text="Spalten" position="bottom">
+            <Tooltip
+              text="Spalten"
+              position="bottom"
+              className={
+                cx({
+                  "pointer-events-none": showEntrySorting,
+                  "cursor-not-allowed": showEntrySorting,
+                  })
+              }
+            >
               <div
                 className={cx(
                   "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
@@ -81,7 +91,16 @@ export const DropdownHeader: React.FC<any> = () => {
                   alt="column view icon"></img>
               </div>
             </Tooltip>
-            <Tooltip text="Zeilen" position="bottom">
+            <Tooltip 
+              text="Zeilen"
+              position="bottom"
+              className={
+                cx({
+                  "pointer-events-none": showEntrySorting, 
+                  "cursor-not-allowed": showEntrySorting,
+                  })
+              }
+            >
               <div
                 className={cx(
                   "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
@@ -98,22 +117,7 @@ export const DropdownHeader: React.FC<any> = () => {
                   alt="row view icon"></img>
               </div>
             </Tooltip>
-          </div>
-        </div>
-      </div>
-      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
-      <div>
-        <span className="font-extrabold tracking-widest text-xs">
-          SORTIERUNGEN
-        </span>
-        <div className="flex flex-row items-center h-8 gap-2">
-          <SortingSelector
-            selectedSorting={selectedSorting}
-            setSelectedSorting={setSelectedSorting}
-          />
-          {selectedSorting === Sorting.Privat ? <SortingMenu /> : null}
-          {user?.role === UserRole.Judge &&
-          selectedSorting === Sorting.Privat ? (
+            {user?.role === UserRole.Judge && selectedSorting === Sorting.Privat ? (
             <div className="flex flex-row items-center gap-2">
               <Tooltip
                 asChild
@@ -145,6 +149,7 @@ export const DropdownHeader: React.FC<any> = () => {
               </Tooltip>
             </div>
           ) : null}
+          </div>
         </div>
       </div>
       <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
