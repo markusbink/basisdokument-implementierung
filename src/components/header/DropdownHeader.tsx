@@ -5,9 +5,11 @@ import { useHeaderContext, useUser } from "../../contexts";
 import { useView } from "../../contexts/ViewContext";
 import { Tool, UserRole, ViewMode } from "../../types";
 import { Tooltip } from "../Tooltip";
+import { ColorSelector } from "./ColorSelector";
 import { HighlighterButton } from "./HighlighterButton";
 import { SortingMenu } from "./SortingMenu";
 import { SortingSelector } from "./SortingSelector";
+import { ToolSelector } from "./ToolSelector";
 import { VersionSelector } from "./VersionSelector";
 
 export enum Sorting {
@@ -24,6 +26,7 @@ export const DropdownHeader: React.FC<any> = () => {
     hideEntriesHighlighter,
     setHighlightElementsWithSpecificVersion,
     highlightElementsWithSpecificVersion,
+    getCurrentTool,
     setCurrentTool,
     showEntrySorting,
     setShowEntrySorting,
@@ -152,6 +155,12 @@ export const DropdownHeader: React.FC<any> = () => {
         <span className="font-extrabold tracking-widest text-xs">
           MARKIERUNGEN
         </span>
+        <div className="flex flex-row gap-2">
+          <ColorSelector />
+          <ToolSelector
+            getCurrentTool={getCurrentTool}
+            setCurrentTool={setCurrentTool}
+          />
         <div
           className={cx(
             `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
@@ -195,6 +204,7 @@ export const DropdownHeader: React.FC<any> = () => {
                 </div>
               </div>
             </Tooltip>
+            </div>
           </div>
         </div>
       </div>
