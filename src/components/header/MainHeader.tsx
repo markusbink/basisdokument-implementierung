@@ -54,7 +54,7 @@ export const MainHeader = () => {
           onClick={() => {
             setShowDropdownHeader(!showDropdownHeader);
           }}>
-          <span className="text-xs font-bold">Ansicht</span>
+          <span className="text-xs font-bold">Tools</span>
           {showDropdownHeader ? (
             <CaretUp size={12} className="text-darkGrey" weight="bold" />
           ) : (
