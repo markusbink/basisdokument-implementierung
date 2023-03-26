@@ -1,9 +1,10 @@
-name: Github Pages Deploy
+name: Deploy
 
 on:
   push:
     branches:
       - "dev"
+      - "main"
 
 jobs:
   build:
@@ -20,8 +21,39 @@ jobs:
       - name: Install and build
         run: npm install --force && npm run build
 
-      - name: Deploy
+
+  DeployDev:
+    name: Deploy Test Environment
+    if: github.event.ref == 'refs/head/dev'
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+
+    steps:
+      - name: Deploy Dev
         uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: build # The folder the action should deploy.
+
+
+  DeployLive:
+    name: Deploy Live
+    if: github.event.ref == 'refs/head/main'
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    environment:
+      name: live
+
+    steps:
+      - name: SSH
+        run: install -m 600 -D /dev/null ~/.ssh/id_rsa echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+      
+      - name: Deploy Live
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
+      
+      - name: Cleanup
+        run: rm -rf ~/.ssh
