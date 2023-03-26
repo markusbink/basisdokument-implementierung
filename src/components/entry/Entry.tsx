@@ -110,8 +110,8 @@ export const Entry: React.FC<EntryProps> = ({
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
   const isOwnEntry =
-    (viewedBy === UserRole.Plaintiff && entry.role === "Klagepartei") ||
-    (viewedBy === UserRole.Defendant && entry.role === "Beklagtenpartei");
+    (viewedBy === UserRole.Plaintiff && entry.role === UserRole.Plaintiff) ||
+    (viewedBy === UserRole.Defendant && entry.role === UserRole.Defendant);
   const canAddEntry = isJudge || !isOwnEntry;
   const menuRef = useRef(null);
 

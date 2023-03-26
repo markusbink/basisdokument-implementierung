@@ -10,6 +10,7 @@ import {
   INote,
   ISection,
   IVersion,
+  UserRole,
 } from "../types";
 import { jsPDF } from "jspdf";
 import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
@@ -142,7 +143,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   // Metadaten Plaintiff
   let metaPlaintiffTitleEl = document.createElement("span");
-  metaPlaintiffTitleEl.innerHTML = "Metadaten Klagepartei";
+  metaPlaintiffTitleEl.innerHTML = `Metadaten ${UserRole.Plaintiff}`;
   metaPlaintiffTitleEl.style.fontSize = "4px";
   metaPlaintiffTitleEl.style.fontWeight = "bold";
   metaPlaintiffTitleEl.style.marginTop = "4px";
@@ -153,7 +154,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   } else {
     let noMetaDataTextEl = document.createElement("span");
     noMetaDataTextEl.innerHTML =
-      "Es wurden keine Metadaten von der Klagepartei angelegt.";
+    `Es wurden keine Metadaten von der ${UserRole.Plaintiff} angelegt.`;
     noMetaDataTextEl.style.fontSize = "3px";
     basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
@@ -162,7 +163,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   // Metadaten Defendant
   let metaDefendantTitleEl = document.createElement("span");
-  metaDefendantTitleEl.innerHTML = "Metadaten Beklagtenpartei";
+  metaDefendantTitleEl.innerHTML = `Metadaten ${UserRole.Defendant}`;
   metaDefendantTitleEl.style.fontSize = "4px";
   metaDefendantTitleEl.style.fontWeight = "bold";
   metaDefendantTitleEl.style.marginTop = "4px";
@@ -173,7 +174,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   } else {
     let noMetaDataTextEl = document.createElement("span");
     noMetaDataTextEl.innerHTML =
-      "Es wurden keine Metadaten von der Beklagtenpartei angelegt.";
+      `Es wurden keine Metadaten von der ${UserRole.Defendant} angelegt.`;
     noMetaDataTextEl.style.fontSize = "3px";
     basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
@@ -253,7 +254,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     // section title plaintiff
     let letSectionTitlePlaintiffEl = document.createElement("span");
     letSectionTitlePlaintiffEl.innerHTML =
-      "Titel Klagepartei: " + obj["sections"][i].titlePlaintiff;
+      `Titel ${UserRole.Plaintiff}: ${obj["sections"][i].titlePlaintiff}`;
     letSectionTitlePlaintiffEl.style.fontSize = "3px";
     letSectionTitlePlaintiffEl.style.color = "gray";
     basisdokumentDOMRepresentation.appendChild(letSectionTitlePlaintiffEl);
@@ -261,7 +262,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     // section title defendant
     let letSectionTitleDefendantEl = document.createElement("span");
     letSectionTitleDefendantEl.innerHTML =
-      "Titel Beklagtenpartei: " + obj["sections"][i].titleDefendant;
+      `Titel ${UserRole.Defendant}: ${obj["sections"][i].titleDefendant}`;
     letSectionTitleDefendantEl.style.fontSize = "3px";
     letSectionTitleDefendantEl.style.color = "gray";
     basisdokumentDOMRepresentation.appendChild(letSectionTitleDefendantEl);
