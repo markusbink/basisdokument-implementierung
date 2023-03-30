@@ -86,7 +86,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   };
 
   const onChangeGivenCaseId = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+    const newValue: string = e.target.value;
     setCaseId(newValue);
   };
 
