@@ -141,9 +141,9 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   timestampEl.style.fontSize = "3px";
   basisdokumentDOMRepresentation.appendChild(timestampEl);
 
-  // Metadaten Plaintiff
+  // Rubrum Plaintiff
   let metaPlaintiffTitleEl = document.createElement("span");
-  metaPlaintiffTitleEl.innerHTML = `Metadaten ${UserRole.Plaintiff}`;
+  metaPlaintiffTitleEl.innerHTML = `Rubrum ${UserRole.Plaintiff}`;
   metaPlaintiffTitleEl.style.fontSize = "4px";
   metaPlaintiffTitleEl.style.fontWeight = "bold";
   metaPlaintiffTitleEl.style.marginTop = "4px";
@@ -154,16 +154,16 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   } else {
     let noMetaDataTextEl = document.createElement("span");
     noMetaDataTextEl.innerHTML =
-    `Es wurden keine Metadaten von der ${UserRole.Plaintiff} angelegt.`;
+    `Es wurden kein Rubrum von der ${UserRole.Plaintiff} angelegt.`;
     noMetaDataTextEl.style.fontSize = "3px";
     basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
   metaPlaintiffTextEl.style.fontSize = "3px";
   basisdokumentDOMRepresentation.appendChild(metaPlaintiffTextEl);
 
-  // Metadaten Defendant
+  // Rubrum Defendant
   let metaDefendantTitleEl = document.createElement("span");
-  metaDefendantTitleEl.innerHTML = `Metadaten ${UserRole.Defendant}`;
+  metaDefendantTitleEl.innerHTML = `Rubrum ${UserRole.Defendant}`;
   metaDefendantTitleEl.style.fontSize = "4px";
   metaDefendantTitleEl.style.fontWeight = "bold";
   metaDefendantTitleEl.style.marginTop = "4px";
@@ -174,7 +174,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   } else {
     let noMetaDataTextEl = document.createElement("span");
     noMetaDataTextEl.innerHTML =
-      `Es wurden keine Metadaten von der ${UserRole.Defendant} angelegt.`;
+      `Es wurden kein Rubrum von der ${UserRole.Defendant} angelegt.`;
     noMetaDataTextEl.style.fontSize = "3px";
     basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
