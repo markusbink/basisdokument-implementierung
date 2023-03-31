@@ -1,9 +1,10 @@
 import cx from "classnames";
-import { Trash, Upload } from "phosphor-react";
+import { Trash, Upload, Info } from "phosphor-react";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
 import { Button } from "../components/Button";
+import { Tooltip } from "../components/Tooltip";
 import {
   useBookmarks,
   useCase,
@@ -411,64 +412,90 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
               </p>
               <div className="flex flex-col items-start w-auto mt-8 mb-8 gap-4">
                 <div className="flex flex-row items-center justify-center gap-2">
-                  <span className="font-semibold">
-                    Basisdokument: <span className="text-darkRed">*</span>
-                  </span>
-                  <label
-                    role="button"
-                    className="flex items-center justify-center gap-2 cursor-pointer">
-                    <input
-                      ref={basisdokumentFileUploadRef}
-                      type="file"
-                      onChange={handleBasisdokumentFileUploadChange}
-                    />
-                    {basisdokumentFilename}
-                    <button
-                      onClick={() => {
-                        basisdokumentFileUploadRef?.current?.click();
-                      }}
-                      className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
-                      <Upload size={24} color={"white"} />
-                    </button>
-                  </label>
-                  {basisdokumentFilename && (
-                    <button
-                      onClick={() => {
-                        setBasisdokumentFilename("");
-                        setBasisdokumentFile(undefined);
-                      }}
-                      className="bg-lightRed hover:bg-marker-red rounded-md p-1">
-                      <Trash size={24} color={"darkRed"} />
-                    </button>
-                  )}
+                  <div className="flex flex-row gap-0.5">
+                    <span className="font-semibold">
+                      Basisdokument: <span className="text-darkRed">*</span>
+                    </span>
+                    <Tooltip 
+                      text="Bitte Basisdokument txt-Datei hochladen, z.B. basisdokument_version_1_az_... .txt" 
+                      position="top"
+                      delayDuration={0}
+                      disabled={true}
+                    >
+                      <Info size={18} color={"slateGray"} />
+                    </Tooltip>
+                  </div>
+                  <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 flex flex-row gap-2">
+                    <label
+                      role="button"
+                      className="flex items-center justify-center gap-2 cursor-pointer">
+                      <input
+                        ref={basisdokumentFileUploadRef}
+                        type="file"
+                        onChange={handleBasisdokumentFileUploadChange}
+                      />
+                      {basisdokumentFilename}
+                      <button
+                        onClick={() => {
+                          basisdokumentFileUploadRef?.current?.click();
+                        }}
+                        className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                        <Upload size={24} color={"white"} />
+                      </button>
+                    </label>
+                    {basisdokumentFilename && (
+                      <button
+                        onClick={() => {
+                          setBasisdokumentFilename("");
+                          setBasisdokumentFile(undefined);
+                        }}
+                        className="bg-lightRed hover:bg-marker-red rounded-md p-1">
+                        <Trash size={24} color={"darkRed"} />
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <div className="flex flex-row items-center justify-center gap-2">
-                  <span className="font-semibold">Bearbeitungsdatei:</span>
-                  <label className="flex items-center justify-center gap-2 cursor-pointer">
-                    <input
-                      ref={editFileUploadRef}
-                      type="file"
-                      onChange={handleEditFileUploadChange}
-                    />
-                    {editFilename}
-                    <button
-                      onClick={() => {
-                        editFileUploadRef?.current?.click();
-                      }}
-                      className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
-                      <Upload size={24} color={"white"} />
-                    </button>
-                  </label>
-                  {editFilename && (
-                    <button
-                      onClick={() => {
-                        setEditFilename("");
-                        setEditFile(undefined);
-                      }}
-                      className="bg-lightRed hover:bg-marker-red rounded-md p-1">
-                      <Trash size={24} color={"darkRed"} />
-                    </button>
-                  )}
+                <div className="flex flex-row items-center justify-center gap-3">
+                  <div className="flex flex-row gap-0.5">
+                    <span className="font-semibold">
+                      Bearbeitungsdatei:
+                    </span>
+                    <Tooltip 
+                      text="Bitte Bearbeitungsdatei.txt hochladen, z.B. bearbeitungsdatei_version_1_az_... .txt"
+                      position="bottom"
+                      delayDuration={0}
+                      disabled={true}
+                    >
+                      <Info className="pointer-events-none" size={18} color={"slateGray"} />
+                    </Tooltip>
+                  </div>
+                  <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 flex flex-row gap-2">
+                    <label className="flex items-center justify-center gap-2 cursor-pointer">
+                      <input
+                        ref={editFileUploadRef}
+                        type="file"
+                        onChange={handleEditFileUploadChange}
+                      />
+                      {editFilename}
+                      <button
+                        onClick={() => {
+                          editFileUploadRef?.current?.click();
+                        }}
+                        className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                        <Upload size={24} color={"white"} />
+                      </button>
+                    </label>
+                    {editFilename && (
+                      <button
+                        onClick={() => {
+                          setEditFilename("");
+                          setEditFile(undefined);
+                        }}
+                        className="bg-lightRed hover:bg-marker-red rounded-md p-1">
+                        <Trash size={24} color={"darkRed"} />
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
