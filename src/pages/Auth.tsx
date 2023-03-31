@@ -101,7 +101,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         setBasisdokumentFile(result);
       };
       e.target.value = "";
-      console.log("test");
       setShowVersionPopup(true);
     } catch (error) {}
   };
