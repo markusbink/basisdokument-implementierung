@@ -113,9 +113,6 @@ export const MainHeader = () => {
             <span className="text-xs">AZ. {caseId}</span>
           </div>
         )}
-        <div className="flex flex-row justify-between items-center gap-3 bg-offWhite rounded-full h-7 pl-2 pr-2">
-          <span className="text-xs">{user?.role}</span>
-        </div>
       </div>
       {/* searchbar */}
       <div className="flex flex-row gap-2 justify-center items-center w-full max-w-[300px] relative">
@@ -158,6 +155,9 @@ export const MainHeader = () => {
       </div>
       {/* actions on the right side */}
       <div className="flex flex-row gap-4 justify-end items-center">
+        <div className="flex flex-row justify-between items-center gap-3 text-offWhite bg-darkGrey rounded-full h-7 pl-2 pr-2">
+          <span className="text-xs">{user?.role}</span>
+        </div>
         {user?.role !== UserRole.Client && (
           <>
             <Tooltip text="Hilfe">
