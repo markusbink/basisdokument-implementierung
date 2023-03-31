@@ -27,7 +27,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   const isOld = section.version < currentVersion;
 
   return (
-    <div className={cx("grid grid-cols-2 gap-6 items-start pb-4 pt-12 w-full")}>
+    <div className="grid grid-cols-2 gap-6 items-start pb-4 pt-12 w-full">
       {/* Section Number */}
       <div
         className={cx("flex gap-6 items-center", {
