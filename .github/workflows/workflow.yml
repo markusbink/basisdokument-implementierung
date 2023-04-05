@@ -69,6 +69,7 @@ jobs:
           name: build-dir
       - name: Deploy Live
         run: |
+            ls
             scp -r build ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_LIVE }}
 
       
