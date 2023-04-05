@@ -18,12 +18,15 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install and build
+        run: npm install --force && npm run build
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: build-dir
           path: build
           retention-days: 5
-        run: npm install --force && npm run build
+        
 
 
   DeployDev:
@@ -58,15 +61,13 @@ jobs:
         run: |
             install -m 600 -D /dev/null ~/.ssh/id_rsa
             echo "${{ secrets.DEPLOY_KEY }}" >  ~/.ssh/id_rsa
-            cat ~/.ssh/id_rsa
             echo "HIER"
             ssh-keyscan "${{ secrets.SSH_HOST }}" > ~/.ssh/known_hosts
-            cat ~/.ssh/known_hosts
-      - name: Deploy Live
+      - name: Get Build Artifact
         uses: actions/download-artifact@v3
         with:
           name: build-dir
-
+      - name: Deploy Live
         run: |
             scp -r build ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_LIVE }}
 
