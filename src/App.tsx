@@ -1,12 +1,65 @@
-import React from "react";
-import "./App.css";
+import { useEffect, useState } from "react";
+import { CustomToastContainer } from "./components/CustomToastContainer";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  BookmarkProvider,
+  CaseProvider,
+  HeaderProvider,
+  HintProvider,
+  NoteProvider,
+  SectionProvider,
+  UserProvider,
+} from "./contexts";
+import { Auth } from "./pages/Auth";
+import { Main } from "./pages/Main";
+import { OnboardingProvider } from "./contexts/OnboardingContext";
+import { SidebarProvider } from "./contexts/SidebarContext";
+import { ViewProvider } from "./contexts/ViewContext";
 
-function App() {
+const registerKeyListener = (e: KeyboardEvent) => {
+  if (e.key === "r" && e.metaKey) {
+    e.preventDefault();
+  }
+};
+
+export const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    window.addEventListener("keydown", registerKeyListener);
+    return () => {
+      window.removeEventListener("keydown", registerKeyListener);
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+    <div className="App h-screen overflow-hidden">
+      <OnboardingProvider>
+        <UserProvider>
+          <SectionProvider>
+            <HeaderProvider>
+              <CaseProvider>
+                <ViewProvider>
+                  <SidebarProvider>
+                    <NoteProvider>
+                      <HintProvider>
+                        <BookmarkProvider>
+                          {isAuthenticated ? (
+                            <Main />
+                          ) : (
+                            <Auth setIsAuthenticated={setIsAuthenticated} />
+                          )}
+                        </BookmarkProvider>
+                      </HintProvider>
+                    </NoteProvider>
+                  </SidebarProvider>
+                </ViewProvider>
+              </CaseProvider>
+            </HeaderProvider>
+          </SectionProvider>
+        </UserProvider>
+      </OnboardingProvider>
+      <CustomToastContainer />
     </div>
   );
-}
-
-export default App;
+};

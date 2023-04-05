@@ -1,46 +1,26 @@
-# Getting Started with Create React App
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/44339207/189524995-fa130521-2814-493b-8998-f54b630e8a88.png" width="100%">
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<b>Aktuelle Version verfügbar unter:</b> https://markusbink.github.io/basisdokument-implementierung/
 
-## Available Scripts
+# Basisdokument
 
-In the project directory, you can run:
+*Course: MEI-M26 Projektseminar (P-(D-)36633 Praxisseminar) im M.Sc. Medieninformatik, Sommersemester 2022*
 
-### `npm start`
+*Course Instructors: Prof. Dr. Christian Wolff, M.A. Victoria Böhm, M.Sc. Jakob Fehle*
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+*Projectteam: Markus Bink, Martina Emmert, Nils Constantin Hellwig, Michelle Lanzinger, Nicole Schönwerth*
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## About
 
-### `npm test`
+This app enables lawyers and judges to create their previous analogue correspondence in a digital environment. It offers a variety of useful features that aim to ease the process of working on cases while also making the process more time efficient. The app is based on the works of the last semester by [Hahn, Röhr & Sautmann (2021)](https://github.com/kindOfCurly/PS-Basisdokument/wiki/Projekt-Log) and [Freisleben, Schwarz & Zels (2021)](https://elearning.uni-regensburg.de/mod/resource/view.php?id=2172773) The division of the prototypes from previous semesters was discarded due to the newly emerged requirements. All previous and new requirements have been merged into one application that can be used by all parties (Plaintiff, Defendant, Judge). The app allows them to create and edit a "Basisdokument". The current list of features can be seen in the corresponding [Wiki](https://github.com/markusbink/basisdokument-implementierung/wiki/07-Beschreibung-der-Anwendung).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Motivation
 
-### `npm run build`
+The working group "Modernization of Civil Procedure" has "extensively examined how new technical possibilities can be used in civil procedure in order to make court procedures more citizen-friendly, efficient and resource-saving". [[1]](https://www.brak.de/newsroom/newsletter/nachrichten-aus-berlin/2021/ausgabe-2-2021-v-2712021/modernisierung-des-zivilprozesses-diskussionspapier-der-olg-praesidenten/)
+The working group's proposal is a digital document that serves to structure the party speech and eases the communication process between parties.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Running the project locally
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+To get started, download the project, `cd` into the root directory and install all dependencies using `npm install --force` or any other package manager of your choosing. After all dependencies have successfully been installed, you can run `npm start` in your terminal which opens the app in your browser under the following URL [http://localhost:3000](http://localhost:3000).
