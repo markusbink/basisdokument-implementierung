@@ -49,7 +49,7 @@ jobs:
       name: live
 
     steps:
-      - name: SSH
+      - name: SSH 
         run: |
             install -m 600 -D /dev/null ~/.ssh/id_rsa
             echo "${{ secrets.DEPLOY_KEY }}" >  ~/.ssh/id_rsa
