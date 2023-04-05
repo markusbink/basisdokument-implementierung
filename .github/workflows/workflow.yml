@@ -53,9 +53,12 @@ jobs:
         run: |
             install -m 600 -D /dev/null ~/.ssh/id_rsa
             echo "${{ secrets.DEPLOY_KEY }}" >  ~/.ssh/id_rsa
-            ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+            echo "HIER"
+            ssh-keyscan -H "${{ secrets.SSH_HOST }}" > ~/.ssh/known_hosts
+            cat ~/.ssh/known_hosts
       - name: Deploy Live
-        run: scp -r build ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_LIVE }}
+        run: |
+            scp -r build ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_LIVE }}
 
       
       - name: Cleanup
