@@ -53,8 +53,9 @@ jobs:
         run: |
             install -m 600 -D /dev/null ~/.ssh/id_rsa
             echo "${{ secrets.DEPLOY_KEY }}" >  ~/.ssh/id_rsa
+            cat ~/.ssh/id_rsa
             echo "HIER"
-            ssh-keyscan -H "${{ secrets.SSH_HOST }}" > ~/.ssh/known_hosts
+            ssh-keyscan "${{ secrets.SSH_HOST }}" > ~/.ssh/known_hosts
             cat ~/.ssh/known_hosts
       - name: Deploy Live
         run: |
