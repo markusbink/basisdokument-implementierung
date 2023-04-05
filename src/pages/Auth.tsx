@@ -102,7 +102,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         setBasisdokumentFile(result);
       };
       e.target.value = "";
-      console.log("test");
       setShowVersionPopup(true);
     } catch (error) {}
   };
@@ -416,12 +415,11 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                     <span className="font-semibold">
                       Basisdokument: <span className="text-darkRed">*</span>
                     </span>
-                    <Tooltip 
-                      text="Bitte Basisdokument txt-Datei hochladen, z.B. basisdokument_version_1_az_... .txt" 
+                    <Tooltip
+                      text="Bitte Basisdokument txt-Datei hochladen, z.B. basisdokument_version_1_az_... .txt"
                       position="top"
                       delayDuration={0}
-                      disabled={true}
-                    >
+                      disabled={true}>
                       <Info size={18} color={"slateGray"} />
                     </Tooltip>
                   </div>
@@ -457,16 +455,17 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 </div>
                 <div className="flex flex-row items-center justify-center gap-3">
                   <div className="flex flex-row gap-0.5">
-                    <span className="font-semibold">
-                      Bearbeitungsdatei:
-                    </span>
-                    <Tooltip 
+                    <span className="font-semibold">Bearbeitungsdatei:</span>
+                    <Tooltip
                       text="Bitte Bearbeitungsdatei.txt hochladen, z.B. bearbeitungsdatei_version_1_az_... .txt"
                       position="bottom"
                       delayDuration={0}
-                      disabled={true}
-                    >
-                      <Info className="pointer-events-none" size={18} color={"slateGray"} />
+                      disabled={true}>
+                      <Info
+                        className="pointer-events-none"
+                        size={18}
+                        color={"slateGray"}
+                      />
                     </Tooltip>
                   </div>
                   <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 flex flex-row gap-2">
