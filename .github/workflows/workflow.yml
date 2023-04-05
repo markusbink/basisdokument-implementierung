@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - "dev"
+      # - "dev"
       - "main"
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
 
   DeployLive:
     name: Deploy Live
-    if: github.event.ref == 'refs/head/main'
+    # if: github.event.ref == 'refs/head/main'
     needs: [build]
     runs-on: ubuntu-latest
 
