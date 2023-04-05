@@ -1,4 +1,4 @@
-name: Github Pages Deploy
+name: Deploy
 
 on:
   push:
@@ -20,8 +20,41 @@ jobs:
       - name: Install and build
         run: npm install --force && npm run build
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.1.1
+      #- name: Deploy
+      #  uses: JamesIves/github-pages-deploy-action@4.1.1
+      #  with:
+      #    branch: gh-pages # The branch the action should deploy to.
+      #    folder: build # The folder the action should deploy.
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: build # The folder the action should deploy.
+          name: build-dir
+          path: build
+          retention-days: 5
+
+  DeployDev:
+    name: Deploy Dev
+    # if: github.event.ref == 'refs/head/dev'
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH 
+        run: |
+            install -m 600 -D /dev/null ~/.ssh/id_rsa
+            echo "${{ secrets.DEPLOY_KEY }}" >  ~/.ssh/id_rsa
+            echo "HIER"
+            ssh-keyscan "${{ secrets.SSH_HOST }}" > ~/.ssh/known_hosts
+      - name: Get Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-dir
+      - name: Deploy Dev
+        run: |
+            ls
+            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_DEV }}
+
+      
+      - name: Cleanup
+        run: rm -rf ~/.ssh
