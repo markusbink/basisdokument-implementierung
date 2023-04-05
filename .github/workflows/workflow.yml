@@ -3,8 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      # - "dev"
-      - "main"
+      - "static"
 
 jobs:
   build:
@@ -47,14 +46,14 @@ jobs:
           folder: build # The folder the action should deploy.
 
 
-  DeployLive:
-    name: Deploy Live
+  DeployStatic:
+    name: Deploy Static
     # if: github.event.ref == 'refs/head/main'
     needs: [build]
     runs-on: ubuntu-latest
 
     environment:
-      name: live
+      name: static
 
     steps:
       - name: SSH 
@@ -67,10 +66,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-dir
-      - name: Deploy Live
+      - name: Deploy Static
         run: |
             ls
-            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_LIVE }}
+            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_STATIC }}
 
       
       - name: Cleanup
