@@ -56,8 +56,6 @@ jobs:
       
       - name: Deploy Live
         run: scp -r build ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_LIVE }}
-        with:
-          folder: build # The folder the action should deploy.
 
       
       - name: Cleanup
