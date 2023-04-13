@@ -5,7 +5,7 @@ import React, { useRef, useState } from "react";
 import { useCase, useHeaderContext, useHints, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { getTheme } from "../../themes/getTheme";
-import { IHint } from "../../types";
+import { IHint, UserRole } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -73,9 +73,10 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
                 "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
                 [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
                   getTheme(selectedTheme)?.primaryPlaintiff
-                } hover-bg-${getTheme(selectedTheme)?.primaryPlaintiff} hover-text-${
-                  getTheme(selectedTheme)?.secondaryPlaintiff
-                }`]: entryCode?.charAt(0) === "K",
+                } hover-bg-${
+                  getTheme(selectedTheme)?.primaryPlaintiff
+                } hover-text-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
+                  entryCode?.charAt(0) === "K",
                 [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
                   getTheme(selectedTheme)?.primaryDefendant
                 } hover-bg-${
@@ -106,7 +107,8 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
               ) : null}
             </div>
 
-            {hint.version === currentVersion && user?.role === "Richter:in" ? (
+            {hint.version === currentVersion &&
+            user?.role === UserRole.Judge ? (
               <div ref={ref} className="self-end relative">
                 <Button
                   key="createHint"

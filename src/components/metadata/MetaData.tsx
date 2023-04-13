@@ -167,7 +167,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
               ) : (
                 <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
                   <p className="text-sm">
-                    Bisher wurden noch keine Metadaten hinterlegt.
+                    Bisher wurde noch kein Rubrum hinterlegt.
                   </p>
                   {canEdit && (
                     <Button

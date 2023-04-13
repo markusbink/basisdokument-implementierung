@@ -10,6 +10,7 @@ import {
   INote,
   ISection,
   IVersion,
+  UserRole,
 } from "../types";
 import { jsPDF } from "jspdf";
 import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
@@ -140,9 +141,9 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   timestampEl.style.fontSize = "3px";
   basisdokumentDOMRepresentation.appendChild(timestampEl);
 
-  // Metadaten Plaintiff
+  // Rubrum Plaintiff
   let metaPlaintiffTitleEl = document.createElement("span");
-  metaPlaintiffTitleEl.innerHTML = "Metadaten Klagepartei";
+  metaPlaintiffTitleEl.innerHTML = `Rubrum ${UserRole.Plaintiff}`;
   metaPlaintiffTitleEl.style.fontSize = "4px";
   metaPlaintiffTitleEl.style.fontWeight = "bold";
   metaPlaintiffTitleEl.style.marginTop = "4px";
@@ -153,16 +154,16 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   } else {
     let noMetaDataTextEl = document.createElement("span");
     noMetaDataTextEl.innerHTML =
-      "Es wurden keine Metadaten von der Klagepartei angelegt.";
+    `Es wurden kein Rubrum von der ${UserRole.Plaintiff} angelegt.`;
     noMetaDataTextEl.style.fontSize = "3px";
     basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
   metaPlaintiffTextEl.style.fontSize = "3px";
   basisdokumentDOMRepresentation.appendChild(metaPlaintiffTextEl);
 
-  // Metadaten Defendant
+  // Rubrum Defendant
   let metaDefendantTitleEl = document.createElement("span");
-  metaDefendantTitleEl.innerHTML = "Metadaten Beklagtenpartei";
+  metaDefendantTitleEl.innerHTML = `Rubrum ${UserRole.Defendant}`;
   metaDefendantTitleEl.style.fontSize = "4px";
   metaDefendantTitleEl.style.fontWeight = "bold";
   metaDefendantTitleEl.style.marginTop = "4px";
@@ -173,7 +174,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   } else {
     let noMetaDataTextEl = document.createElement("span");
     noMetaDataTextEl.innerHTML =
-      "Es wurden keine Metadaten von der Beklagtenpartei angelegt.";
+      `Es wurden kein Rubrum von der ${UserRole.Defendant} angelegt.`;
     noMetaDataTextEl.style.fontSize = "3px";
     basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
@@ -253,7 +254,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     // section title plaintiff
     let letSectionTitlePlaintiffEl = document.createElement("span");
     letSectionTitlePlaintiffEl.innerHTML =
-      "Titel Klagepartei: " + obj["sections"][i].titlePlaintiff;
+      `Titel ${UserRole.Plaintiff}: ${obj["sections"][i].titlePlaintiff}`;
     letSectionTitlePlaintiffEl.style.fontSize = "3px";
     letSectionTitlePlaintiffEl.style.color = "gray";
     basisdokumentDOMRepresentation.appendChild(letSectionTitlePlaintiffEl);
@@ -261,7 +262,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     // section title defendant
     let letSectionTitleDefendantEl = document.createElement("span");
     letSectionTitleDefendantEl.innerHTML =
-      "Titel Beklagtenpartei: " + obj["sections"][i].titleDefendant;
+      `Titel ${UserRole.Defendant}: ${obj["sections"][i].titleDefendant}`;
     letSectionTitleDefendantEl.style.fontSize = "3px";
     letSectionTitleDefendantEl.style.color = "gray";
     basisdokumentDOMRepresentation.appendChild(letSectionTitleDefendantEl);
@@ -396,16 +397,16 @@ export function downloadBasisdokument(
   const date: Date = basisdokumentObject["versions"]
     [basisdokumentObject["versions"].length - 1]
     ["timestamp"];
-    console.log(date);
   const dateString = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
+  const caseIdForFilename = caseId.trim().replace(/ /g,"-");
 
   downloadObjectAsJSON(
     basisdokumentObject,
-    `basisdokument_version_${currentVersion}_az_${caseId}_${dateString}`
+    `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
   downloadBasisdokumentAsPDF(
     basisdokumentObject,
-    `basisdokument_version_${currentVersion}_az_${caseId}_${dateString}`
+    `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
 }
 
@@ -432,9 +433,10 @@ export function downloadEditFile(
 
   const date = new Date();
   const dateString = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
+  const caseIdForFilename = caseId.trim().replace(/ /g,"-");
 
   downloadObjectAsJSON(
     editFileObject,
-    `bearbeitungsdatei_version_${currentVersion}_az_${caseId}_${dateString}`
+    `bearbeitungsdatei_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
 }
