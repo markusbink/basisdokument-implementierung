@@ -60,7 +60,7 @@ export const DropdownHeader: React.FC<any> = () => {
                   setView(ViewMode.SideBySide);
                 }}>
                 <img
-                  className="w-4"
+                  className={ showEntrySorting ? "w-4 opacity-25": "w-4" }
                   src={`${process.env.PUBLIC_URL}/icons/side-by-side-icon.svg`}
                   alt="row view icon"></img>
               </div>
@@ -86,7 +86,7 @@ export const DropdownHeader: React.FC<any> = () => {
                   setView(ViewMode.Columns);
                 }}>
                 <img
-                  className="w-4"
+                  className={ showEntrySorting ? "w-4 opacity-25": "w-4" }
                   src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`}
                   alt="column view icon"></img>
               </div>
@@ -112,7 +112,7 @@ export const DropdownHeader: React.FC<any> = () => {
                   setView(ViewMode.Rows);
                 }}>
                 <img
-                  className="w-4"
+                  className={ showEntrySorting ? "w-4 opacity-25": "w-4" }
                   src={`${process.env.PUBLIC_URL}/icons/row-view-icon.svg`}
                   alt="row view icon"></img>
               </div>
