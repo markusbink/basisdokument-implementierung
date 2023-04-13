@@ -14,7 +14,13 @@ import React, { SetStateAction, useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useCase, useHeaderContext, useNotes, useHints } from "../../contexts";
+import {
+  useCase,
+  useHeaderContext,
+  useNotes,
+  useHints,
+  useUser,
+} from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import {
   IEntry,
@@ -106,12 +112,13 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const { bookmarks, setBookmarks, deleteBookmarkByReference } = useBookmarks();
   const { setActiveSidebar } = useSidebar();
+  const { user } = useUser();
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
   const isOwnEntry =
-    (viewedBy === UserRole.Plaintiff && entry.role === "Klagepartei") ||
-    (viewedBy === UserRole.Defendant && entry.role === "Beklagtenpartei");
+    (viewedBy === UserRole.Plaintiff && entry.role === UserRole.Plaintiff) ||
+    (viewedBy === UserRole.Defendant && entry.role === UserRole.Defendant);
   const canAddEntry = isJudge || !isOwnEntry;
   const menuRef = useRef(null);
 
@@ -420,84 +427,90 @@ export const Entry: React.FC<EntryProps> = ({
                       </span>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Tooltip
-                      text={
-                        isBookmarked ? (
-                          <span>
-                            Lesezeichen <b>{getBookmarkTitle()}</b> entfernen
-                          </span>
-                        ) : (
-                          "Zu Lesezeichen hinzufügen"
-                        )
-                      }>
-                      <Action onClick={bookmarkEntry} isPlaintiff={isPlaintiff}>
-                        <BookmarkSimple
-                          size={20}
-                          weight={isBookmarked ? "fill" : "regular"}
-                        />
-                      </Action>
-                    </Tooltip>
-                    <Tooltip text="Notiz hinzufügen">
-                      <Action onClick={addNote} isPlaintiff={isPlaintiff}>
-                        <Notepad size={20} />
-                      </Action>
-                    </Tooltip>
-                    {(isJudge || (entry.role === viewedBy && !isOld)) && (
-                      <div ref={menuRef} className="flex relative space-y-2">
-                        <Tooltip text="Mehr Optionen">
-                          <Action
-                            className={cx({
-                              [`bg-${
-                                getTheme(selectedTheme)?.primaryPlaintiff
-                              } text-${
-                                getTheme(selectedTheme)?.secondaryPlaintiff
-                              }`]: isPlaintiff && isMenuOpen,
-                              [`bg-${
-                                getTheme(selectedTheme)?.primaryDefendant
-                              } text-${
-                                getTheme(selectedTheme)?.secondaryDefendant
-                              }`]: !isPlaintiff && isMenuOpen,
-                            })}
-                            onClick={toggleMenu}
-                            isPlaintiff={isPlaintiff}>
-                            <DotsThree size={20} />
-                          </Action>
-                        </Tooltip>
-                        {isMenuOpen ? (
-                          <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
-                            {isJudge && (
-                              <li
-                                tabIndex={0}
-                                onClick={addHint}
-                                className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
-                                <Scales size={20} />
-                                Hinweis hinzufügen
-                              </li>
-                            )}
-                            {!isOld && (
-                              <>
+                  {user?.role !== UserRole.Client && (
+                    <div className="flex gap-2">
+                      <Tooltip
+                        text={
+                          isBookmarked ? (
+                            <span>
+                              Lesezeichen <b>{getBookmarkTitle()}</b> entfernen
+                            </span>
+                          ) : (
+                            "Zu Lesezeichen hinzufügen"
+                          )
+                        }>
+                        <Action
+                          onClick={bookmarkEntry}
+                          isPlaintiff={isPlaintiff}>
+                          <BookmarkSimple
+                            size={20}
+                            weight={isBookmarked ? "fill" : "regular"}
+                          />
+                        </Action>
+                      </Tooltip>
+                      <Tooltip text="Notiz hinzufügen">
+                        <Action onClick={addNote} isPlaintiff={isPlaintiff}>
+                          <Notepad size={20} />
+                        </Action>
+                      </Tooltip>
+                      {(isJudge || (entry.role === viewedBy && !isOld)) && (
+                        <div ref={menuRef} className="flex relative space-y-2">
+                          <Tooltip text="Mehr Optionen">
+                            <Action
+                              className={cx({
+                                [`bg-${
+                                  getTheme(selectedTheme)?.primaryPlaintiff
+                                } text-${
+                                  getTheme(selectedTheme)?.secondaryPlaintiff
+                                }`]: isPlaintiff && isMenuOpen,
+                                [`bg-${
+                                  getTheme(selectedTheme)?.primaryDefendant
+                                } text-${
+                                  getTheme(selectedTheme)?.secondaryDefendant
+                                }`]: !isPlaintiff && isMenuOpen,
+                              })}
+                              onClick={toggleMenu}
+                              isPlaintiff={isPlaintiff}>
+                              <DotsThree size={20} />
+                            </Action>
+                          </Tooltip>
+                          {isMenuOpen ? (
+                            <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[250px] shadow-lg z-50">
+                              {isJudge && (
                                 <li
                                   tabIndex={0}
-                                  onClick={editEntry}
+                                  onClick={addHint}
                                   className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
-                                  <Pencil size={20} />
-                                  Bearbeiten
+                                  <Scales size={20} />
+                                  Hinweis hinzufügen
                                 </li>
-                                <li
-                                  tabIndex={0}
-                                  onClick={() => setIsDeleteErrorVisible(true)}
-                                  className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none">
-                                  <Trash size={20} />
-                                  Löschen
-                                </li>
-                              </>
-                            )}
-                          </ul>
-                        ) : null}
-                      </div>
-                    )}
-                  </div>
+                              )}
+                              {!isOld && (
+                                <>
+                                  <li
+                                    tabIndex={0}
+                                    onClick={editEntry}
+                                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+                                    <Pencil size={20} />
+                                    Bearbeiten
+                                  </li>
+                                  <li
+                                    tabIndex={0}
+                                    onClick={() =>
+                                      setIsDeleteErrorVisible(true)
+                                    }
+                                    className="flex items-center gap-2 p-2 rounded-lg text-vibrantRed hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+                                    <Trash size={20} />
+                                    Löschen
+                                  </li>
+                                </>
+                              )}
+                            </ul>
+                          ) : null}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </EntryHeader>
                 {/* Body */}
                 {isBodyOpen && !isEditing && (
@@ -530,22 +543,25 @@ export const Entry: React.FC<EntryProps> = ({
               </div>
             </div>
             {/* Button to add response */}
-            {canAddEntry && !isNewEntryVisible && !showEntrySorting && (
-              <a
-                className="inline-block"
-                href={`#${entry.sectionId}-scroll`}
-                ref={createAssociatedEntryButton}>
-                <Button
-                  size="sm"
-                  alternativePadding="mt-2"
-                  bgColor="bg-lightGrey hover:bg-mediumGrey"
-                  textColor="text-darkGrey hover:text-offWhite"
-                  onClick={showNewEntry}
-                  icon={<ArrowBendLeftUp weight="bold" size={18} />}>
-                  Auf diesen Beitrag Bezug nehmen
-                </Button>
-              </a>
-            )}
+            {canAddEntry &&
+              !isNewEntryVisible &&
+              !showEntrySorting &&
+              user?.role !== UserRole.Client && (
+                <a
+                  className="inline-block"
+                  href={`#${entry.sectionId}-scroll`}
+                  ref={createAssociatedEntryButton}>
+                  <Button
+                    size="sm"
+                    alternativePadding="mt-2"
+                    bgColor="bg-lightGrey hover:bg-mediumGrey"
+                    textColor="text-darkGrey hover:text-offWhite"
+                    onClick={showNewEntry}
+                    icon={<ArrowBendLeftUp weight="bold" size={18} />}>
+                    Auf diesen Beitrag Bezug nehmen
+                  </Button>
+                </a>
+              )}
           </div>
           {isNewEntryVisible && (
             <div className={cx(`flex flex-col w-full`)}>

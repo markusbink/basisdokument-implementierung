@@ -102,103 +102,111 @@ export const DropdownHeader: React.FC<any> = () => {
         </div>
       </div>
       <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
-      <div>
-        <span className="font-extrabold tracking-widest text-xs">
-          SORTIERUNGEN
-        </span>
-        <div className="flex flex-row items-center h-8 gap-2">
-          <SortingSelector
-            selectedSorting={selectedSorting}
-            setSelectedSorting={setSelectedSorting}
-          />
-          {selectedSorting === Sorting.Privat ? <SortingMenu /> : null}
-          {user?.role === UserRole.Judge &&
-          selectedSorting === Sorting.Privat ? (
+      {user?.role !== UserRole.Client && (
+        <div>
+          <span className="font-extrabold tracking-widest text-xs">
+            SORTIERUNGEN
+          </span>
+          <div className="flex flex-row items-center h-8 gap-2">
+            <SortingSelector
+              selectedSorting={selectedSorting}
+              setSelectedSorting={setSelectedSorting}
+            />
+            {selectedSorting === Sorting.Privat ? <SortingMenu /> : null}
+            {user?.role === UserRole.Judge &&
+            selectedSorting === Sorting.Privat ? (
+              <div className="flex flex-row items-center gap-2">
+                <Tooltip
+                  asChild
+                  text="Erlaubt Ihnen die Verschiebung von Beiträgen innerhalb einzelner Gliederungspunkte. Die Sortierung der Beiträge ist nur für Sie sichtbar.">
+                  <div
+                    className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
+                    onClick={() => {
+                      setCurrentTool({
+                        id: Tool.Cursor,
+                        iconNode: "Cursor",
+                        germanTitle: "Maus",
+                      });
+                      setView(ViewMode.Columns);
+                      setShowEntrySorting(!showEntrySorting);
+                    }}>
+                    <input
+                      className="small-checkbox accent-darkGrey cursor-pointer"
+                      type="checkbox"
+                      checked={showEntrySorting}
+                      onChange={() => setShowEntrySorting(!showEntrySorting)}
+                    />
+                    <div>
+                      <img
+                        className="w-6 h-6"
+                        src={`${process.env.PUBLIC_URL}/icons/entry-sorting-icon.svg`}
+                        alt="sorting entry icon"></img>
+                    </div>
+                  </div>
+                </Tooltip>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      )}
+      {user?.role !== UserRole.Client && (
+        <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
+      )}
+      {user?.role !== UserRole.Client && (
+        <div>
+          <span className="font-extrabold tracking-widest text-xs">
+            MARKIERUNGEN
+          </span>
+          <div
+            className={cx(
+              `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
+              {
+                "opacity-30": getCurrentTool.id !== Tool.Cursor,
+              }
+            )}
+            onClick={() => {
+              if (getCurrentTool.id !== Tool.Cursor) {
+                setCurrentTool({
+                  id: Tool.Cursor,
+                  iconNode: "Cursor",
+                  germanTitle: "Maus",
+                });
+              }
+            }}>
+            <div className="flex flex-row gap-2">
+              {colorSelection.map((item: any, id: number) => (
+                <HighlighterButton key={id} id={id} />
+              ))}
+            </div>
             <div className="flex flex-row items-center gap-2">
               <Tooltip
                 asChild
-                text="Erlaubt Ihnen die Verschiebung von Beiträgen innerhalb einzelner Gliederungspunkte. Die Sortierung der Beiträge ist nur für Sie sichtbar.">
+                text="Beiträge ohne eine der ausgewählten Farben werden ausgeblendet">
                 <div
                   className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
                   onClick={() => {
-                    setCurrentTool({
-                      id: Tool.Cursor,
-                      iconNode: "Cursor",
-                      germanTitle: "Maus",
-                    });
-                    setView(ViewMode.Columns);
-                    setShowEntrySorting(!showEntrySorting);
+                    setHideEntriesHighlighter(!hideEntriesHighlighter);
                   }}>
                   <input
                     className="small-checkbox accent-darkGrey cursor-pointer"
                     type="checkbox"
-                    checked={showEntrySorting}
-                    onChange={() => setShowEntrySorting(!showEntrySorting)}
+                    checked={hideEntriesHighlighter}
+                    onChange={() =>
+                      setHideEntriesHighlighter(!hideEntriesHighlighter)
+                    }
                   />
                   <div>
-                    <img
-                      className="w-6 h-6"
-                      src={`${process.env.PUBLIC_URL}/icons/entry-sorting-icon.svg`}
-                      alt="sorting entry icon"></img>
+                    <SelectionForeground size={16} />
                   </div>
                 </div>
               </Tooltip>
             </div>
-          ) : null}
-        </div>
-      </div>
-      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
-      <div>
-        <span className="font-extrabold tracking-widest text-xs">
-          MARKIERUNGEN
-        </span>
-        <div
-          className={cx(
-            `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
-            {
-              "opacity-30": getCurrentTool.id !== Tool.Cursor,
-            }
-          )}
-          onClick={() => {
-            if (getCurrentTool.id !== Tool.Cursor) {
-              setCurrentTool({
-                id: Tool.Cursor,
-                iconNode: "Cursor",
-                germanTitle: "Maus",
-              });
-            }
-          }}>
-          <div className="flex flex-row gap-2">
-            {colorSelection.map((item: any, id: number) => (
-              <HighlighterButton key={id} id={id} />
-            ))}
-          </div>
-          <div className="flex flex-row items-center gap-2">
-            <Tooltip
-              asChild
-              text="Beiträge ohne eine der ausgewählten Farben werden ausgeblendet">
-              <div
-                className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
-                onClick={() => {
-                  setHideEntriesHighlighter(!hideEntriesHighlighter);
-                }}>
-                <input
-                  className="small-checkbox accent-darkGrey cursor-pointer"
-                  type="checkbox"
-                  checked={hideEntriesHighlighter}
-                  onChange={() =>
-                    setHideEntriesHighlighter(!hideEntriesHighlighter)
-                  }
-                />
-                <div>
-                  <SelectionForeground size={16} />
-                </div>
-              </div>
-            </Tooltip>
           </div>
         </div>
-      </div>
-      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
+      )}
+      {user?.role !== UserRole.Client && (
+        <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
+      )}
       <div>
         <span className="font-extrabold tracking-widest text-xs">
           ÄNDERUNGEN VON
