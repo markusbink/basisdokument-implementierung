@@ -102,7 +102,9 @@ export const DropdownHeader: React.FC<any> = () => {
           </div>
         </div>
       </div>
-      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
+      {user?.role !== UserRole.Client && (
+        <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
+      )}
       {user?.role !== UserRole.Client && (
         <div>
           <span className="font-extrabold tracking-widest text-xs">
@@ -158,27 +160,13 @@ export const DropdownHeader: React.FC<any> = () => {
           <span className="font-extrabold tracking-widest text-xs">
             MARKIERUNGEN
           </span>
-          <div
-            className={cx(
-              `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
-              {
-                "opacity-30": getCurrentTool.id !== Tool.Cursor,
-              }
-            )}
-            onClick={() => {
-              if (getCurrentTool.id !== Tool.Cursor) {
-                setCurrentTool({
-                  id: Tool.Cursor,
-                  iconNode: "Cursor",
-                  germanTitle: "Maus",
-                });
-              }
-            }}>
-            <div className="flex flex-row gap-2">
-              {colorSelection.map((item: any, id: number) => (
-                <HighlighterButton key={id} id={id} />
-              ))}
-            </div>
+          <div className="flex flex-row gap-2">
+            <ToolSelector
+              getCurrentTool={getCurrentTool}
+              setCurrentTool={setCurrentTool}
+            />
+            <ColorSelector />
+            <div className="h-8 w-[1px] bg-lightGrey rounded-full"></div>
             <div className="flex flex-row items-center gap-2">
               <Tooltip
                 asChild
@@ -202,71 +190,32 @@ export const DropdownHeader: React.FC<any> = () => {
                 </div>
               </Tooltip>
             </div>
-          ) : null}
-        </div>
-      </div>
-      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
-      <div>
-        <span className="font-extrabold tracking-widest text-xs">
-          MARKIERUNGEN
-        </span>
-        <div className="flex flex-row gap-2">
-          <ToolSelector
-            getCurrentTool={getCurrentTool}
-            setCurrentTool={setCurrentTool}
-          />
-          <ColorSelector />
-          <div className="h-8 w-[1px] bg-lightGrey rounded-full"></div>
-          <div className="flex flex-row items-center gap-2">
-            <Tooltip
-              asChild
-              text="Beiträge ohne eine der ausgewählten Farben werden ausgeblendet">
-              <div
-                className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
-                onClick={() => {
-                  setHideEntriesHighlighter(!hideEntriesHighlighter);
-                }}>
-                <input
-                  className="small-checkbox accent-darkGrey cursor-pointer"
-                  type="checkbox"
-                  checked={hideEntriesHighlighter}
-                  onChange={() =>
-                    setHideEntriesHighlighter(!hideEntriesHighlighter)
-                  }
-                />
-                <div>
-                  <SelectionForeground size={16} />
-                </div>
+            <div
+              className={cx(
+                `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
+                {
+                  "opacity-30": getCurrentTool.id !== Tool.Cursor,
+                }
+              )}
+              onClick={() => {
+                if (getCurrentTool.id !== Tool.Cursor) {
+                  setCurrentTool({
+                    id: Tool.Cursor,
+                    iconNode: "Cursor",
+                    germanTitle: "Maus",
+                  });
+                }
+              }}>
+              <div className="flex flex-row gap-2">
+                {colorSelection.map((item: any, id: number) => (
+                  <HighlighterButton key={id} id={id} />
+                ))}
               </div>
-            </Tooltip>
-          </div>
-          <div
-            className={cx(
-              `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
-              {
-                "opacity-30": getCurrentTool.id !== Tool.Cursor,
-              }
-            )}
-            onClick={() => {
-              if (getCurrentTool.id !== Tool.Cursor) {
-                setCurrentTool({
-                  id: Tool.Cursor,
-                  iconNode: "Cursor",
-                  germanTitle: "Maus",
-                });
-              }
-            }}>
-            <div className="flex flex-row gap-2">
-              {colorSelection.map((item: any, id: number) => (
-                <HighlighterButton key={id} id={id} />
-              ))}
             </div>
           </div>
         </div>
       )}
-      {user?.role !== UserRole.Client && (
-        <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
-      )}
+      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
       <div>
         <span className="font-extrabold tracking-widest text-xs">
           ÄNDERUNGEN VON
