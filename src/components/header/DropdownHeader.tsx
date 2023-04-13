@@ -5,9 +5,11 @@ import { useHeaderContext, useUser } from "../../contexts";
 import { useView } from "../../contexts/ViewContext";
 import { Tool, UserRole, ViewMode } from "../../types";
 import { Tooltip } from "../Tooltip";
+import { ColorSelector } from "./ColorSelector";
 import { HighlighterButton } from "./HighlighterButton";
 import { SortingMenu } from "./SortingMenu";
 import { SortingSelector } from "./SortingSelector";
+import { ToolSelector } from "./ToolSelector";
 import { VersionSelector } from "./VersionSelector";
 
 export enum Sorting {
@@ -24,14 +26,13 @@ export const DropdownHeader: React.FC<any> = () => {
     hideEntriesHighlighter,
     setHighlightElementsWithSpecificVersion,
     highlightElementsWithSpecificVersion,
+    getCurrentTool,
     setCurrentTool,
     showEntrySorting,
     setShowEntrySorting,
   } = useHeaderContext();
   const { user } = useUser();
   const { view, setView } = useView();
-
-  const { getCurrentTool } = useHeaderContext();
 
   return (
     <div className="flex flex-row gap-4 p-2 pl-8 pr-8 bg-white items-center">
@@ -200,6 +201,65 @@ export const DropdownHeader: React.FC<any> = () => {
                   </div>
                 </div>
               </Tooltip>
+            </div>
+          ) : null}
+        </div>
+      </div>
+      <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
+      <div>
+        <span className="font-extrabold tracking-widest text-xs">
+          MARKIERUNGEN
+        </span>
+        <div className="flex flex-row gap-2">
+          <ToolSelector
+            getCurrentTool={getCurrentTool}
+            setCurrentTool={setCurrentTool}
+          />
+          <ColorSelector />
+          <div className="h-8 w-[1px] bg-lightGrey rounded-full"></div>
+          <div className="flex flex-row items-center gap-2">
+            <Tooltip
+              asChild
+              text="Beiträge ohne eine der ausgewählten Farben werden ausgeblendet">
+              <div
+                className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
+                onClick={() => {
+                  setHideEntriesHighlighter(!hideEntriesHighlighter);
+                }}>
+                <input
+                  className="small-checkbox accent-darkGrey cursor-pointer"
+                  type="checkbox"
+                  checked={hideEntriesHighlighter}
+                  onChange={() =>
+                    setHideEntriesHighlighter(!hideEntriesHighlighter)
+                  }
+                />
+                <div>
+                  <SelectionForeground size={16} />
+                </div>
+              </div>
+            </Tooltip>
+          </div>
+          <div
+            className={cx(
+              `flex flex-col lg:flex-row items-center h-12 lg:h-8 gap-2 lg:gap-4 text-sm font-medium`,
+              {
+                "opacity-30": getCurrentTool.id !== Tool.Cursor,
+              }
+            )}
+            onClick={() => {
+              if (getCurrentTool.id !== Tool.Cursor) {
+                setCurrentTool({
+                  id: Tool.Cursor,
+                  iconNode: "Cursor",
+                  germanTitle: "Maus",
+                });
+              }
+            }}>
+            <div className="flex flex-row gap-2">
+              {colorSelection.map((item: any, id: number) => (
+                <HighlighterButton key={id} id={id} />
+              ))}
             </div>
           </div>
         </div>

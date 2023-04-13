@@ -11,8 +11,6 @@ import React, { KeyboardEvent, useState } from "react";
 import { useCase, useHeaderContext, useUser } from "../../contexts";
 import { useOnboarding } from "../../contexts/OnboardingContext";
 import { DocumentButton } from "../header/DocumentButton";
-import { ColorSelector } from "./ColorSelector";
-import { ToolSelector } from "./ToolSelector";
 import cx from "classnames";
 import { Tooltip } from "../Tooltip";
 import { UserRole } from "../../types";
@@ -24,8 +22,6 @@ export const MainHeader = () => {
     setSearchbarValue,
     setShowDropdownHeader,
     showDropdownHeader,
-    getCurrentTool,
-    setCurrentTool,
   } = useHeaderContext();
   const { caseId, setCaseId } = useCase();
   const { setIsOnboardingVisible } = useOnboarding();
@@ -169,11 +165,6 @@ export const MainHeader = () => {
                 <Question size={16} className="text-darkGrey" />
               </div>
             </Tooltip>
-            <ColorSelector />
-            <ToolSelector
-              getCurrentTool={getCurrentTool}
-              setCurrentTool={setCurrentTool}
-            />
           </>
         )}
       </div>
