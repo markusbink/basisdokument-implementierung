@@ -341,7 +341,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   //autotable all entries
   doc.addPage();
-  var node: any; //base node for outline
+  var node: any; //base node for sections outline
   autoTable(doc, {
     theme: "grid",
     margin: { top: 6, bottom: 6, left: 6, right: 6 },
@@ -353,6 +353,8 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
       });
     },
   });
+  //const declaration needed for eslint no-loop-func warning
+  const currEntriesNode = node;
   for (let i = 0; i < allEntries.length; i++) {
     if (allEntries[i].section) {
       autoTable(doc, {
@@ -363,7 +365,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
         margin: { top: 7, bottom: 7, left: 7, right: 7 },
         didDrawPage: function (hookData) {
           doc.outline.add(
-            node,
+            currEntriesNode,
             hookData.table.head[0].raw as unknown as string + //section
             " | " +
             hookData.table.body[0].raw as string + //section title plaintiff
@@ -384,6 +386,9 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
       } else {
         data = [[allEntries[i].title], [allEntries[i].text]];
       }
+      //const declarations needed for eslint no-loop-func warning
+      const currEntryId = allEntries[i].id;
+      const currAllHints = allHints;
       autoTable(doc, {
         theme: "grid",
         styles: {
@@ -415,22 +420,22 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
         },
         didDrawCell: function (hookData) {
           let counterArr: any = [];
-          for (let j=0; j<allHints.length; j++) {
-            if (allHints[j].id === allEntries[i].id && hookData.row.index === 0) {
-              if (allHints[j].id in counterArr) {
-                counterArr[allHints[j].id] = counterArr[allHints[j].id] + 2;
+          for (let j=0; j<currAllHints.length; j++) {
+            if (currAllHints[j].id === currEntryId && hookData.row.index === 0) {
+              if (currAllHints[j].id in counterArr) {
+                counterArr[currAllHints[j].id] = counterArr[currAllHints[j].id] + 2;
               } else {
-                counterArr[allHints[j].id] = 0;
+                counterArr[currAllHints[j].id] = 0;
               }
               let xPos = hookData.cursor?.x as number;
               let yPos = hookData.cursor?.y as number;
-              let offset = counterArr[allHints[j].id]; //offset for multiple hints to an entry
+              let offset = counterArr[currAllHints[j].id]; //offset for multiple hints to an entry
               doc.createAnnotation({
                 type: 'text',
-                title: allHints[j].title,
-                contents: allHints[j].text,
+                title: currAllHints[j].title,
+                contents: currAllHints[j].text,
                 bounds: {
-                  x: allHints[j].id.includes('B') ? xPos - 10 + offset : xPos + hookData.cell.width + 2 + offset, //change position depending on defendant/plaintiff
+                  x: currAllHints[j].id.includes('B') ? xPos - 10 + offset : xPos + hookData.cell.width + 2 + offset, //change position depending on defendant/plaintiff
                   y: yPos,
                   w: hookData.cell.contentWidth,
                   h: hookData.cell.contentHeight,
