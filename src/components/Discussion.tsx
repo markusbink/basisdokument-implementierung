@@ -1,6 +1,6 @@
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useCase, useHeaderContext, useSection } from "../contexts";
+import { useCase, useHeaderContext, useSection, useUser } from "../contexts";
 import { Sorting, UserRole } from "../types";
 import { getOriginalSortingPosition } from "../util/get-original-sorting-position";
 import { getRequestedSorting } from "../util/get-requested-sorting";
@@ -14,6 +14,7 @@ import { SectionHeader } from "./section-header/SectionHeader";
 export const Discussion = () => {
   const { groupedEntries } = useCase();
   const { sectionList, individualSorting } = useSection();
+  const { user } = useUser();
 
   const {
     selectedSorting,
@@ -64,7 +65,9 @@ export const Discussion = () => {
 
                 return (
                   <div key={section.id}>
-                    <AddSection sectionIdAfter={section.id} />
+                    {user?.role !== UserRole.Client && (
+                      <AddSection sectionIdAfter={section.id} />
+                    )}
                     <div key={section.id}>
                       <SectionHeader
                         sectionId={getOriginalSortingPosition(
@@ -80,7 +83,9 @@ export const Discussion = () => {
                           sectionId={section.id}
                         />
 
-                        <AddEntryButtons sectionId={section.id} />
+                        {user?.role !== UserRole.Client && (
+                          <AddEntryButtons sectionId={section.id} />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -88,7 +93,7 @@ export const Discussion = () => {
               })}
             </>
           )}
-          <AddSection />
+          {user?.role !== UserRole.Client && <AddSection />}
         </div>
       </div>
     </DndProvider>

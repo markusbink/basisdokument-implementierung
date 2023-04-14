@@ -118,7 +118,7 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
   return (
     <>
       <DropdownMenu.Root>
-        <DropdownMenu.Trigger className="py-1">
+        <DropdownMenu.Trigger>
           <span>
             <Tooltip asChild text="Mehr Optionen">
               <DotsThree

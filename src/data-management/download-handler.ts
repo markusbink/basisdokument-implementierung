@@ -10,6 +10,7 @@ import {
   INote,
   ISection,
   IVersion,
+  UserRole,
 } from "../types";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
