@@ -1,4 +1,4 @@
-import { Notepad, Scales, Bookmarks } from "phosphor-react";
+import { Notepad, Scales, Bookmarks, ListNumbers } from "phosphor-react";
 import {
   createContext,
   Dispatch,
@@ -9,9 +9,15 @@ import {
 import { SidebarBookmarks } from "../components/sidebar/SidebarBookmarks";
 import { SidebarHints } from "../components/sidebar/SidebarHints";
 import { SidebarNotes } from "../components/sidebar/SidebarNotes";
+import { SidebarSorting } from "../components/sidebar/SidebarSorting";
 import { ISidebar, SidebarState } from "../types";
 
 const sidebars: ISidebar[] = [
+  {
+    name: SidebarState.Sorting,
+    jsxElem: <SidebarSorting key={SidebarState.Sorting.toString()}></SidebarSorting>,
+    icon: <ListNumbers size={20} />,
+  },
   {
     name: SidebarState.Notes,
     jsxElem: <SidebarNotes key={SidebarState.Notes.toString()}></SidebarNotes>,

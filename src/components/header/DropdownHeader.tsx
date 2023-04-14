@@ -7,9 +7,6 @@ import { Tool, UserRole, ViewMode } from "../../types";
 import { Tooltip } from "../Tooltip";
 import { ColorSelector } from "./ColorSelector";
 import { HighlighterButton } from "./HighlighterButton";
-import { SortingMenu } from "./SortingMenu";
-import { SortingSelector } from "./SortingSelector";
-import { ToolSelector } from "./ToolSelector";
 import { VersionSelector } from "./VersionSelector";
 
 export enum Sorting {
@@ -22,12 +19,12 @@ export const DropdownHeader: React.FC<any> = () => {
     selectedSorting,
     setHideEntriesHighlighter,
     colorSelection,
-    setSelectedSorting,
     hideEntriesHighlighter,
     setHighlightElementsWithSpecificVersion,
     highlightElementsWithSpecificVersion,
     getCurrentTool,
     setCurrentTool,
+    getCurrentTool,
     showEntrySorting,
     setShowEntrySorting,
   } = useHeaderContext();
@@ -41,14 +38,19 @@ export const DropdownHeader: React.FC<any> = () => {
           DARSTELLUNG
         </span>
         <div
-          className={cx("flex flex-row", {
-            "cursor-not-allowed": showEntrySorting,
-          })}>
+          className={cx("flex flex-row")}>
           <div
-            className={cx("flex flex-row gap-2 h-8", {
+            className={cx("flex flex-row gap-2 h-8")}>
+            <Tooltip
+              text="Side-by-Side"
+              position="bottom"
+              className={
+                cx({
               "pointer-events-none": showEntrySorting,
-            })}>
-            <Tooltip text="Side-by-Side" position="bottom">
+                  "cursor-not-allowed": showEntrySorting,
+                })
+              }
+            >
               <div
                 className={cx(
                   "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
@@ -60,12 +62,21 @@ export const DropdownHeader: React.FC<any> = () => {
                   setView(ViewMode.SideBySide);
                 }}>
                 <img
-                  className="w-4"
+                  className={ showEntrySorting ? "w-4 opacity-25": "w-4" }
                   src={`${process.env.PUBLIC_URL}/icons/side-by-side-icon.svg`}
                   alt="row view icon"></img>
               </div>
             </Tooltip>
-            <Tooltip text="Spalten" position="bottom">
+            <Tooltip
+              text="Spalten"
+              position="bottom"
+              className={
+                cx({
+                  "pointer-events-none": showEntrySorting,
+                  "cursor-not-allowed": showEntrySorting,
+                  })
+              }
+            >
               <div
                 className={cx(
                   "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
@@ -77,12 +88,21 @@ export const DropdownHeader: React.FC<any> = () => {
                   setView(ViewMode.Columns);
                 }}>
                 <img
-                  className="w-4"
+                  className={ showEntrySorting ? "w-4 opacity-25": "w-4" }
                   src={`${process.env.PUBLIC_URL}/icons/column-view-icon.svg`}
                   alt="column view icon"></img>
               </div>
             </Tooltip>
-            <Tooltip text="Zeilen" position="bottom">
+            <Tooltip 
+              text="Zeilen"
+              position="bottom"
+              className={
+                cx({
+                  "pointer-events-none": showEntrySorting, 
+                  "cursor-not-allowed": showEntrySorting,
+                  })
+              }
+            >
               <div
                 className={cx(
                   "rounded-md h-8 w-8 flex justify-center items-center cursor-pointer hover:bg-offWhite",
@@ -94,7 +114,7 @@ export const DropdownHeader: React.FC<any> = () => {
                   setView(ViewMode.Rows);
                 }}>
                 <img
-                  className="w-4"
+                  className={ showEntrySorting ? "w-4 opacity-25": "w-4" }
                   src={`${process.env.PUBLIC_URL}/icons/row-view-icon.svg`}
                   alt="row view icon"></img>
               </div>
@@ -102,56 +122,6 @@ export const DropdownHeader: React.FC<any> = () => {
           </div>
         </div>
       </div>
-      {user?.role !== UserRole.Client && (
-        <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
-      )}
-      {user?.role !== UserRole.Client && (
-        <div>
-          <span className="font-extrabold tracking-widest text-xs">
-            SORTIERUNGEN
-          </span>
-          <div className="flex flex-row items-center h-8 gap-2">
-            <SortingSelector
-              selectedSorting={selectedSorting}
-              setSelectedSorting={setSelectedSorting}
-            />
-            {selectedSorting === Sorting.Privat ? <SortingMenu /> : null}
-            {user?.role === UserRole.Judge &&
-            selectedSorting === Sorting.Privat ? (
-              <div className="flex flex-row items-center gap-2">
-                <Tooltip
-                  asChild
-                  text="Erlaubt Ihnen die Verschiebung von Beiträgen innerhalb einzelner Gliederungspunkte. Die Sortierung der Beiträge ist nur für Sie sichtbar.">
-                  <div
-                    className="flex flex-row items-center justify-center gap-2 bg-offWhite hover:bg-lightGrey h-8 px-2 cursor-pointer rounded-md"
-                    onClick={() => {
-                      setCurrentTool({
-                        id: Tool.Cursor,
-                        iconNode: "Cursor",
-                        germanTitle: "Maus",
-                      });
-                      setView(ViewMode.Columns);
-                      setShowEntrySorting(!showEntrySorting);
-                    }}>
-                    <input
-                      className="small-checkbox accent-darkGrey cursor-pointer"
-                      type="checkbox"
-                      checked={showEntrySorting}
-                      onChange={() => setShowEntrySorting(!showEntrySorting)}
-                    />
-                    <div>
-                      <img
-                        className="w-6 h-6"
-                        src={`${process.env.PUBLIC_URL}/icons/entry-sorting-icon.svg`}
-                        alt="sorting entry icon"></img>
-                    </div>
-                  </div>
-                </Tooltip>
-              </div>
-            ) : null}
-          </div>
-        </div>
-      )}
       {user?.role !== UserRole.Client && (
         <div className="h-12 w-0.5 bg-lightGrey rounded-full"></div>
       )}
