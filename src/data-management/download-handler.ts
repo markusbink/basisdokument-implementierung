@@ -110,15 +110,18 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     let filteredEntry = obj["entries"].find((entry: any) => {
       return entry.id === judgeHintObject.associatedEntry;
     });
+    let entryId;
     let entryCodeText;
     if (filteredEntry) {
       let entryCode = filteredEntry.entryCode;
+      entryId = entryCode;
       entryCodeText = " | Verweis auf: " + entryCode;
     } else {
       entryCodeText = "";
     }
 
     let hint = {
+      id: entryId,
       title:
         judgeHintObject.author + entryCodeText + " | " + judgeHintObject.title,
       text: parseHTMLtoString(judgeHintObject.text),
@@ -157,64 +160,34 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
       }
       for (let j = 0; j < sectionEntries.length; j++) {
         const entry = sectionEntries[j];
-
         //all entries
-        let tableEntry;
-        if (entry.entryCode.includes("K")) {
-          tableEntry = {
-            id: "K",
-            title:
-              entry.entryCode +
-              " | " +
-              entry.author +
-              " | " +
-              entry.role +
-              " | Hinzugefügt am: " +
-              getEntryTimestamp(entry, obj),
-            text: parseHTMLtoString(entry.text),
-            version: entry.version,
-            associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-          };
-        } else {
-          tableEntry = {
-            id: "B",
-            title:
-              entry.entryCode +
-              " | " +
-              entry.author +
-              " | " +
-              entry.role +
-              " | Hinzugefügt am: " +
-              getEntryTimestamp(entry, obj),
-            text: parseHTMLtoString(entry.text),
-            version: entry.version,
-            associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-          };
-        }
+        let tableEntry = {
+          id: entry.entryCode,
+          title:
+            entry.entryCode +
+            " | " +
+            entry.author +
+            " | " +
+            entry.role +
+            " | Hinzugefügt am: " +
+            getEntryTimestamp(entry, obj),
+          text: parseHTMLtoString(entry.text),
+          version: entry.version,
+          associatedEntry: getEntryTitle(entry.associatedEntry, obj),
+        };
         allEntries.push(tableEntry);
 
         //new entries
         let newEntry;
         if (entry.version === obj["currentVersion"]) {
-          if (entry.entryCode.includes("K")) {
-            newEntry = {
-              id: "K",
-              title:
-                entry.entryCode + " | " + entry.author + " | " + entry.role,
-              text: parseHTMLtoString(entry.text),
-              version: entry.version,
-              associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-            };
-          } else {
-            newEntry = {
-              id: "B",
-              title:
-                entry.entryCode + " | " + entry.author + " | " + entry.role,
-              text: parseHTMLtoString(entry.text),
-              version: entry.version,
-              associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-            };
-          }
+          newEntry = {
+            id: entry.entryCode,
+            title:
+              entry.entryCode + " | " + entry.author + " | " + entry.role,
+            text: parseHTMLtoString(entry.text),
+            version: entry.version,
+            associatedEntry: getEntryTitle(entry.associatedEntry, obj),
+          };
           newEntries.push(newEntry);
         }
       }
@@ -307,7 +280,6 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
       },
     });
   }
-  allHints = [];
 
   //autotable new entries
   if (newEntries.length !== 0) { //only show new entries page if there are new entries
@@ -344,8 +316,8 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
         theme: "grid",
         body: data,
         margin: {
-          left: newEntries[i].id === "B" ? 30 : 10,
-          right: newEntries[i].id === "B" ? 10 : 30,
+          left: newEntries[i].id.includes("B") ? 30 : 10,
+          right: newEntries[i].id.includes("B") ? 10 : 30,
           top: 7,
           bottom: 7,
         },
@@ -424,8 +396,8 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
         },
         body: data,
         margin: {
-          left: allEntries[i].id === "B" ? 30 : 10,
-          right: allEntries[i].id === "B" || allEntries[i].id === "N" ? 10 : 30,
+          left: allEntries[i].id.includes("B") ? 30 : 10,
+          right: allEntries[i].id.includes("B") || allEntries[i].id === "N" ? 10 : 30,
           top: 7,
           bottom: 10,
         },
@@ -441,9 +413,37 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
             hookData.cell.styles.cellPadding = 0;
           }
         },
+        didDrawCell: function (hookData) {
+          let counterArr: any = [];
+          for (let j=0; j<allHints.length; j++) {
+            if (allHints[j].id === allEntries[i].id && hookData.row.index === 0) {
+              if (allHints[j].id in counterArr) {
+                counterArr[allHints[j].id] = counterArr[allHints[j].id] + 2;
+              } else {
+                counterArr[allHints[j].id] = 0;
+              }
+              let xPos = hookData.cursor?.x as number;
+              let yPos = hookData.cursor?.y as number;
+              let offset = counterArr[allHints[j].id]; //offset for multiple hints to an entry
+              doc.createAnnotation({
+                type: 'text',
+                title: allHints[j].title,
+                contents: allHints[j].text,
+                bounds: {
+                  x: allHints[j].id.includes('B') ? xPos - 10 + offset : xPos + hookData.cell.width + 2 + offset, //change position depending on defendant/plaintiff
+                  y: yPos,
+                  w: hookData.cell.contentWidth,
+                  h: hookData.cell.contentHeight,
+                },
+                open: false,
+              });
+            }
+          }
+        }
       });
     }
   }
+  allHints = [];
   allEntries = [];
 
   //signature page
