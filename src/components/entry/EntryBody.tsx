@@ -19,6 +19,7 @@ interface EntryBodyProps {
   setLowerOpcacityForHighlighters: React.Dispatch<
     React.SetStateAction<boolean>
   >;
+  showInPopup?: boolean;
 }
 
 export const EntryBody: React.FC<EntryBodyProps> = ({
@@ -28,6 +29,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
   lowerOpcacityForHighlighters,
   setLowerOpcacityForHighlighters,
   children,
+  showInPopup,
 }) => {
   const {
     searchbarValue,
@@ -197,8 +199,11 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
       className={cx(
         `p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`,
         {
-          [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]: isPlaintiff,
-          [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]: !isPlaintiff,
+          [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
+            isPlaintiff,
+          [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]:
+            !isPlaintiff,
+          "max-h-[70vh] overflow-y-auto": showInPopup,
         }
       )}>
       {searchbarValue === "" &&

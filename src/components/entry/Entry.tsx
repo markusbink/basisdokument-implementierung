@@ -540,7 +540,8 @@ export const Entry: React.FC<EntryProps> = ({
                       setLowerOpcacityForHighlighters
                     }
                     lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
-                    entryId={entry.id}>
+                    entryId={entry.id}
+                    showInPopup={shownInPopup}>
                     {entry.text}
                   </EntryBody>
                 )}
