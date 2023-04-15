@@ -53,6 +53,7 @@ export enum UserRole {
   Plaintiff = "Klagepartei",
   Defendant = "Beklagtenpartei",
   Judge = "Richter:in",
+  Client = "Mandant:in"
 }
 
 export enum Sorting {
@@ -63,9 +64,11 @@ export enum Sorting {
 export enum UsageMode {
   Open,
   Create,
+  Readonly
 }
 
 export enum SidebarState {
+  Sorting,
   Notes,
   Hints,
   Bookmarks,
@@ -87,7 +90,7 @@ export interface IEntry {
   version: number;
   text: string;
   author: string;
-  role: "Klagepartei" | "Beklagtenpartei";
+  role: UserRole.Plaintiff | UserRole.Defendant;
   sectionId: string;
   associatedEntry?: string;
 }
@@ -145,7 +148,7 @@ export interface ITool {
 }
 
 export interface IStateUserInput {
-  usage: UsageMode.Open | UsageMode.Create | undefined;
+  usage: UsageMode.Open | UsageMode.Create | UsageMode.Readonly | undefined;
   role: UserRole | undefined;
   prename: string;
   surname: string;

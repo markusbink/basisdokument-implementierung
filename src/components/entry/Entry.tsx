@@ -15,7 +15,13 @@ import React, { SetStateAction, useRef, useState } from "react";
 import { EditText } from "react-edit-text";
 import { toast } from "react-toastify";
 import { Action, EntryBody, EntryForm, EntryHeader, NewEntry } from ".";
-import { useCase, useHeaderContext, useNotes, useHints } from "../../contexts";
+import {
+  useCase,
+  useHeaderContext,
+  useNotes,
+  useHints,
+  useUser,
+} from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import {
   IEntry,
@@ -113,12 +119,13 @@ export const Entry: React.FC<EntryProps> = ({
     useState<boolean>(false);
   const { bookmarks, setBookmarks, deleteBookmarkByReference } = useBookmarks();
   const { setActiveSidebar } = useSidebar();
+  const { user } = useUser();
 
   const isJudge = viewedBy === UserRole.Judge;
   const isPlaintiff = entry.role === UserRole.Plaintiff;
   const isOwnEntry =
-    (viewedBy === UserRole.Plaintiff && entry.role === "Klagepartei") ||
-    (viewedBy === UserRole.Defendant && entry.role === "Beklagtenpartei");
+    (viewedBy === UserRole.Plaintiff && entry.role === UserRole.Plaintiff) ||
+    (viewedBy === UserRole.Defendant && entry.role === UserRole.Defendant);
   const canAddEntry = isJudge || !isOwnEntry;
   const menuRef = useRef(null);
 
@@ -451,7 +458,7 @@ export const Entry: React.FC<EntryProps> = ({
                       </span>
                     </div>
                   </div>
-                  {!shownInPopup && (
+                  {!shownInPopup && user?.role !== UserRole.Client && (
                     <div className="flex gap-2">
                       <Tooltip
                         text={
@@ -569,24 +576,25 @@ export const Entry: React.FC<EntryProps> = ({
             </div>
             {/* Button to add response */}
             {canAddEntry &&
-            !isNewEntryVisible &&
-            !showEntrySorting &&
-            !shownInPopup ? (
-              <a
-                className="inline-block"
-                href={`#${entry.sectionId}-scroll`}
-                ref={createAssociatedEntryButton}>
-                <Button
-                  size="sm"
-                  alternativePadding="mt-2"
-                  bgColor="bg-lightGrey hover:bg-mediumGrey"
-                  textColor="text-darkGrey hover:text-offWhite"
-                  onClick={showNewEntry}
-                  icon={<ArrowBendLeftUp weight="bold" size={18} />}>
-                  Auf diesen Beitrag Bezug nehmen
-                </Button>
-              </a>
-            ) : null}
+              !isNewEntryVisible &&
+              !showEntrySorting &&
+              !shownInPopup &&
+              user?.role !== UserRole.Client && (
+                <a
+                  className="inline-block"
+                  href={`#${entry.sectionId}-scroll`}
+                  ref={createAssociatedEntryButton}>
+                  <Button
+                    size="sm"
+                    alternativePadding="mt-2"
+                    bgColor="bg-lightGrey hover:bg-mediumGrey"
+                    textColor="text-darkGrey hover:text-offWhite"
+                    onClick={showNewEntry}
+                    icon={<ArrowBendLeftUp weight="bold" size={18} />}>
+                    Auf diesen Beitrag Bezug nehmen
+                  </Button>
+                </a>
+              )}
           </div>
           {isNewEntryVisible && (
             <div className={cx(`flex flex-col w-full`)}>

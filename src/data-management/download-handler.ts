@@ -12,9 +12,17 @@ import {
   IVersion,
 } from "../types";
 import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
-import { manropeMedium, manropeBold } from "../fonts/fonts";
 import { format } from "date-fns";
+
+//define data arrays
+let allEntries: any[] = [];
+let newEntries: any[] = [];
+let rubrumKlage: any[] = [];
+let rubrumBeklagt: any[] = [];
+let basisdokument: any[] = [];
+let allHints: any[] = [];
 
 function downloadObjectAsJSON(obj: object, fileName: string) {
   // Create a blob of the data
@@ -26,15 +34,6 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   saveAs(fileToSave, fileName + ".txt");
 }
 
-function resetFontSize(parentElement: any) {
-  ["p", "span", "div", "b", "i"].forEach((elementIType) => {
-    parentElement.querySelectorAll(elementIType).forEach((element: any) => {
-      element.style.fontSize = "3px";
-    });
-  });
-  return parentElement;
-}
-
 function getEntryTimestamp(childEntry: any, obj: any) {
   let childEntryVersion = childEntry.version;
   let timestamp = format(
@@ -44,331 +43,488 @@ function getEntryTimestamp(childEntry: any, obj: any) {
   return timestamp;
 }
 
-function addEntryToSection(
-  groupedEntries: any,
-  obj: any,
-  entry: any,
-  basisdokumentDOMRepresentation: any,
-  i: number
-) {
-  if (groupedEntries[obj["sections"][i].id][entry.id]) {
-    for (
-      let childEntryIndex = 0;
-      childEntryIndex < groupedEntries[obj["sections"][i].id][entry.id].length;
-      childEntryIndex++
-    ) {
-      let childEntry =
-        groupedEntries[obj["sections"][i].id][entry.id][childEntryIndex];
-
-      let childEntryTitleEl = document.createElement("span");
-
-      childEntryTitleEl.innerHTML =
-        childEntry.entryCode +
-        " | " +
-        "Antwort auf: " +
-        entry.entryCode +
-        " | Autor: " +
-        childEntry.author +
-        " | Hinzugefügt am: " +
-        getEntryTimestamp(childEntry, obj) +
-        " | " +
-        childEntry.role;
-      childEntryTitleEl.style.fontSize = "3px";
-      childEntryTitleEl.style.fontWeight = "bold";
-      childEntryTitleEl.style.marginTop = "4px";
-      basisdokumentDOMRepresentation.appendChild(childEntryTitleEl);
-
-      let childEntryTextEl = document.createElement("span");
-      childEntryTextEl.innerHTML = childEntry.text.trim();
-      childEntryTextEl = resetFontSize(childEntryTextEl);
-      childEntryTextEl.style.fontSize = "3px";
-
-      basisdokumentDOMRepresentation.appendChild(childEntryTextEl);
-      addEntryToSection(
-        groupedEntries,
-        obj,
-        childEntry,
-        basisdokumentDOMRepresentation,
-        i
-      );
+//get associated entry title
+function getEntryTitle(entryId: any, obj: any) {
+  if (entryId) {
+    let title;
+    for (var i = 0; i < obj["entries"].length; i++) {
+      if (obj["entries"][i].id === entryId) {
+        title =
+          obj["entries"][i].entryCode + " | Autor: " + obj["entries"][i].author;
+      }
     }
+    return "Antwort auf: " + title;
+  } else {
+    return;
   }
+}
+
+//parse HTML to string to remove tags
+function parseHTMLtoString(htmltext: any) {
+  const parser = new DOMParser();
+  const parserElem = parser.parseFromString(htmltext, "text/html");
+  return parserElem.body.innerText.replace(/\n+$/, ""); //remove last empty line
 }
 
 function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   let pdfConverter = jsPDF,
     doc = new pdfConverter();
-
   // converter https://www.giftofspeed.com/base64-encoder/
 
-  doc.addFileToVFS("Manrope-Medium.ttf", manropeMedium);
-  doc.addFileToVFS("Manrope-Bold.ttf", manropeBold);
-  doc.addFont("Manrope-Medium.ttf", "Manrope", "normal");
-  doc.addFont("Manrope-Bold.ttf", "Manrope", "bold");
-  doc.setFontSize(4);
-  doc.setFont("Manrope");
-
-  let basisdokumentDOMRepresentation = document.createElement("div");
-  basisdokumentDOMRepresentation.style.display = "flex";
-  basisdokumentDOMRepresentation.style.flexDirection = "column";
-  basisdokumentDOMRepresentation.style.width = "180px";
-
-  // Main Title "Basisdokument"
-  let mainTitleEl = document.createElement("h1");
-  mainTitleEl.style.fontSize = "5px";
-  mainTitleEl.style.fontWeight = "bold";
-  mainTitleEl.innerHTML = "Basisdokument";
-  basisdokumentDOMRepresentation.appendChild(mainTitleEl);
-
-  // Case Id
-  let caseIdEl = document.createElement("span");
-  caseIdEl.innerHTML = "Aktenzeichen: " + obj["caseId"];
-  caseIdEl.style.fontSize = "3px";
-  basisdokumentDOMRepresentation.appendChild(caseIdEl);
-
-  // Version
-  let versionEl = document.createElement("span");
-  versionEl.innerHTML = "Version: " + obj["currentVersion"];
-  versionEl.style.fontSize = "3px";
-  basisdokumentDOMRepresentation.appendChild(versionEl);
-
-  // Export Timestamp
-  let timestampEl = document.createElement("span");
-  timestampEl.innerHTML =
-    "Export: " +
-    obj["versions"][obj["versions"].length - 1]["timestamp"].toLocaleString();
-  timestampEl.style.fontSize = "3px";
-  basisdokumentDOMRepresentation.appendChild(timestampEl);
+  //DATA for autotables
+  // basic data
+  let basicData = {
+    caseId: "Aktenzeichen: " + obj["caseId"],
+    version: "Version: " + obj["currentVersion"],
+    timestamp:
+      "Export: " +
+      obj["versions"][obj["versions"].length - 1]["timestamp"].toLocaleString(),
+  };
+  basisdokument.push(basicData);
 
   // Rubrum Plaintiff
-  let metaPlaintiffTitleEl = document.createElement("span");
-  metaPlaintiffTitleEl.innerHTML = "Rubrum Klagepartei";
-  metaPlaintiffTitleEl.style.fontSize = "4px";
-  metaPlaintiffTitleEl.style.fontWeight = "bold";
-  metaPlaintiffTitleEl.style.marginTop = "4px";
-  basisdokumentDOMRepresentation.appendChild(metaPlaintiffTitleEl);
-  let metaPlaintiffTextEl = document.createElement("span");
+  let metaPlaintiff;
   if (obj["metaData"]) {
-    metaPlaintiffTextEl.innerHTML = obj["metaData"]["plaintiff"];
+    metaPlaintiff = obj["metaData"]["plaintiff"];
   } else {
-    let noMetaDataTextEl = document.createElement("span");
-    noMetaDataTextEl.innerHTML =
-      "Es wurde kein Rubrum von der Klagepartei angelegt.";
-    noMetaDataTextEl.style.fontSize = "3px";
-    basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
+    metaPlaintiff = "Es wurde kein Rubrum von der Klagepartei angelegt.";
   }
-  metaPlaintiffTextEl.style.fontSize = "3px";
-  basisdokumentDOMRepresentation.appendChild(metaPlaintiffTextEl);
+  rubrumKlage = [parseHTMLtoString(metaPlaintiff)];
 
   // Rubrum Defendant
-  let metaDefendantTitleEl = document.createElement("span");
-  metaDefendantTitleEl.innerHTML = "Rubrum Beklagtenpartei";
-  metaDefendantTitleEl.style.fontSize = "4px";
-  metaDefendantTitleEl.style.fontWeight = "bold";
-  metaDefendantTitleEl.style.marginTop = "4px";
-  basisdokumentDOMRepresentation.appendChild(metaDefendantTitleEl);
-  let metaDefendantTextEl = document.createElement("span");
+  let metaDefendant;
   if (obj["metaData"]) {
-    metaDefendantTextEl.innerHTML = obj["metaData"]["defendant"];
+    metaDefendant = obj["metaData"]["defendant"];
   } else {
-    let noMetaDataTextEl = document.createElement("span");
-    noMetaDataTextEl.innerHTML =
-      "Es wurde kein Rubrum von der Beklagtenpartei angelegt.";
-    noMetaDataTextEl.style.fontSize = "3px";
-    basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
+    metaDefendant = "Es wurde kein Rubrum von der Klagepartei angelegt.";
   }
-  metaDefendantTextEl.style.fontSize = "3px";
-  basisdokumentDOMRepresentation.appendChild(metaDefendantTextEl);
+  rubrumBeklagt = [parseHTMLtoString(metaDefendant)];
 
   // hints from the judge §139 ZPO
-  let hintsTitleEl = document.createElement("span");
-  hintsTitleEl.innerHTML = "Hinweise des Richters nach (nach §139 ZPO)";
-  hintsTitleEl.style.fontSize = "4px";
-  hintsTitleEl.style.fontWeight = "bold";
-  hintsTitleEl.style.marginTop = "3px";
-  basisdokumentDOMRepresentation.appendChild(hintsTitleEl);
-
-  if (obj["judgeHints"].length === 0) {
-    let noHintTextEl = document.createElement("span");
-    noHintTextEl.innerHTML =
-      "Es wurden keine Hinweise von der Richterin / dem Richter verfasst.";
-    noHintTextEl.style.fontSize = "3px";
-    basisdokumentDOMRepresentation.appendChild(noHintTextEl);
+  if (obj["judgeHints"].length === 0) { //no hints
+    allHints.push({ title: "Keine Hinweise", text: "Es wurden bisher keine Hinweise von der Richterin / dem Richter verfasst." });
   }
 
-  for (let index = 0; index < obj["judgeHints"].length; index++) {
-    const judgeHintObject = obj["judgeHints"][index];
-    let judgeHintTitleEl = document.createElement("span");
+  for (let i=0; i< obj["judgeHints"].length; i++) {
+    const judgeHintObject = obj["judgeHints"][i];
     let filteredEntry = obj["entries"].find((entry: any) => {
       return entry.id === judgeHintObject.associatedEntry;
     });
+    let entryId;
     let entryCodeText;
     if (filteredEntry) {
       let entryCode = filteredEntry.entryCode;
-      entryCodeText = " | Verweis auf: " + entryCode;
+      entryId = entryCode;
+      entryCodeText = " | Verweis auf: " + entryCode;
     } else {
       entryCodeText = "";
     }
 
-    judgeHintTitleEl.innerHTML =
-      judgeHintObject.author + entryCodeText + " | " + judgeHintObject.title;
-    judgeHintTitleEl.style.fontSize = "3px";
-    judgeHintTitleEl.style.fontWeight = "bold";
-    judgeHintTitleEl.style.marginTop = "3px";
-    let judgeHintTextEl = document.createElement("span");
-    judgeHintTextEl.innerHTML = judgeHintObject.text;
-    judgeHintTextEl.style.fontSize = "3px";
-    basisdokumentDOMRepresentation.appendChild(judgeHintTitleEl);
-    basisdokumentDOMRepresentation.appendChild(judgeHintTextEl);
+    let hint = {
+      id: entryId,
+      title:
+        judgeHintObject.author + entryCodeText + " | " + judgeHintObject.title,
+      text: parseHTMLtoString(judgeHintObject.text),
+      version: judgeHintObject.version,
+    };
+    allHints.push(hint);
   }
-
-  // discussion Title
-  let discussionTitleEl = document.createElement("span");
-  discussionTitleEl.innerHTML = "Parteivortrag";
-  discussionTitleEl.style.fontSize = "4px";
-  discussionTitleEl.style.fontWeight = "bold";
-  discussionTitleEl.style.marginTop = "3px";
-  basisdokumentDOMRepresentation.appendChild(discussionTitleEl);
 
   // Get grouped entries
   let groupedEntries = groupEntriesBySectionAndParent(obj["entries"]);
 
-  if (obj["sections"].length === 0) {
-    let noEntryTextEl = document.createElement("span");
-    noEntryTextEl.innerHTML =
-      "Es wurden keine Gliederungspunkte / Beiträge von den Parteien angelegt.";
-    noEntryTextEl.style.fontSize = "3px";
-    basisdokumentDOMRepresentation.appendChild(noEntryTextEl);
+  if (obj["sections"].length === 0) { //no entries
+    allEntries.push({ id: "N", title: "Keine Beiträge", text: "Es wurden keine Gliederungspunkte / Beiträge von den Parteien angelegt." });
   }
 
   for (let i = 0; i < obj["sections"].length; i++) {
-    // section index
-    let letSectionTitleEl = document.createElement("span");
-    letSectionTitleEl.innerHTML = `${i + 1}. Gliederungspunkt`;
-    letSectionTitleEl.style.fontSize = "3.5px";
-    letSectionTitleEl.style.fontWeight = "bold";
-    letSectionTitleEl.style.marginTop = "3px";
-    basisdokumentDOMRepresentation.appendChild(letSectionTitleEl);
-
-    // section title plaintiff
-    let letSectionTitlePlaintiffEl = document.createElement("span");
-    letSectionTitlePlaintiffEl.innerHTML =
-      "Titel Klagepartei: " + obj["sections"][i].titlePlaintiff;
-    letSectionTitlePlaintiffEl.style.fontSize = "3px";
-    letSectionTitlePlaintiffEl.style.color = "gray";
-    basisdokumentDOMRepresentation.appendChild(letSectionTitlePlaintiffEl);
-
-    // section title defendant
-    let letSectionTitleDefendantEl = document.createElement("span");
-    letSectionTitleDefendantEl.innerHTML =
-      "Titel Beklagtenpartei: " + obj["sections"][i].titleDefendant;
-    letSectionTitleDefendantEl.style.fontSize = "3px";
-    letSectionTitleDefendantEl.style.color = "gray";
-    basisdokumentDOMRepresentation.appendChild(letSectionTitleDefendantEl);
+    let titleEntry;
+    titleEntry = {
+      // section index
+      section: `${i + 1}. Gliederungspunkt`,
+      // section title plaintiff
+      titlePlaintiff: "Titel Klagepartei: " + obj["sections"][i].titlePlaintiff,
+      // section title defendant
+      titleDefendant:
+        "Titel Beklagtenpartei: " + obj["sections"][i].titleDefendant,
+    };
+    allEntries.push(titleEntry);
 
     // get section entries
     if (groupedEntries[obj["sections"][i].id]) {
-      let sectionEntriesParent = groupedEntries[obj["sections"][i].id].parent;
-      for (let entryId = 0; entryId < sectionEntriesParent.length; entryId++) {
-        const entry = sectionEntriesParent[entryId];
-
-        let entryTitleEl = document.createElement("span");
-        entryTitleEl.innerHTML =
-          entry.entryCode + " | " + entry.author + " | " + entry.role;
-        entryTitleEl.style.fontSize = "3px";
-        entryTitleEl.style.fontWeight = "bold";
-        entryTitleEl.style.marginTop = "4px";
-        basisdokumentDOMRepresentation.appendChild(entryTitleEl);
-
-        let entryTextEl = document.createElement("div");
-        entryTextEl.innerHTML = entry.text.trim();
-        entryTextEl = resetFontSize(entryTextEl);
-
-        entryTextEl.style.fontSize = "3px";
-        basisdokumentDOMRepresentation.appendChild(entryTextEl);
-
-        addEntryToSection(
-          groupedEntries,
-          obj,
-          entry,
-          basisdokumentDOMRepresentation,
-          i
-        );
+      let sectionEntries = [];
+      for (let j = 0; j < obj["entries"].length; j++) {
+        if (obj["entries"][j].sectionId === obj["sections"][i].id) {
+          sectionEntries.push(obj["entries"][j]);
+        }
       }
-    } else {
-      let noEntryInSectionTextEl = document.createElement("span");
-      noEntryInSectionTextEl.innerHTML =
-        "Es wurden keine Beiträge zu diesem Gliederungspunkt verfasst.";
-      noEntryInSectionTextEl.style.fontSize = "3px";
-      basisdokumentDOMRepresentation.appendChild(noEntryInSectionTextEl);
+      for (let j = 0; j < sectionEntries.length; j++) {
+        const entry = sectionEntries[j];
+        //all entries
+        let tableEntry = {
+          id: entry.entryCode,
+          title:
+            entry.entryCode +
+            " | " +
+            entry.author +
+            " | " +
+            entry.role +
+            " | Hinzugefügt am: " +
+            getEntryTimestamp(entry, obj),
+          text: parseHTMLtoString(entry.text),
+          version: entry.version,
+          associatedEntry: getEntryTitle(entry.associatedEntry, obj),
+        };
+        allEntries.push(tableEntry);
+
+        //new entries
+        let newEntry;
+        if (entry.version === obj["currentVersion"]) {
+          newEntry = {
+            id: entry.entryCode,
+            title:
+              entry.entryCode + " | " + entry.author + " | " + entry.role,
+            text: parseHTMLtoString(entry.text),
+            version: entry.version,
+            associatedEntry: getEntryTitle(entry.associatedEntry, obj),
+          };
+          newEntries.push(newEntry);
+        }
+      }
     }
   }
 
-  // Remove default margins
-  let allParagraphs = basisdokumentDOMRepresentation.querySelectorAll("p");
-  for (let index = 0; index < allParagraphs.length; index++) {
-    const element = allParagraphs[index];
-    element.style.minHeight = "0px";
-    element.style.marginBottom = "0px";
-  }
+  // AUTOTABLES
+  //autotable basisdokument metadata
+  autoTable(doc, {
+    theme: "grid",
+    styles: { fontStyle: "bold" },
+    head: [["Basisdokument"]],
+    headStyles: { fontStyle: "bold", fontSize: 14, fillColor: [0, 102, 204] },
+    body: [
+      [basisdokument[0].caseId],
+      [basisdokument[0].version],
+      [basisdokument[0].timestamp],
+    ],
+    didDrawPage: function () {
+      doc.outline.add(null, "Basisdokument-Metadaten", {
+        pageNumber: doc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
+  basisdokument = [];
 
-  let allLists = basisdokumentDOMRepresentation.querySelectorAll("ul");
-  for (let index = 0; index < allLists.length; index++) {
-    const element = allLists[index];
-    element.style.margin = "0px";
-    element.style.marginLeft = "4px";
-  }
-  let allNumberedLists = basisdokumentDOMRepresentation.querySelectorAll("ol");
-  for (let index = 0; index < allNumberedLists.length; index++) {
-    const element = allNumberedLists[index];
-    element.style.margin = "1px";
-    element.style.marginLeft = "2px";
-  }
+  //autotable rubrum plaintiff
+  autoTable(doc, {
+    theme: "grid",
+    styles: { halign: "center" },
+    head: [["Rubrum Klagepartei"]],
+    headStyles: { fillColor: [0, 102, 204] },
+    body: [rubrumKlage],
+    didDrawPage: function () {
+      doc.outline.add(null, "Rubrum Klagepartei", {
+        pageNumber: doc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
+  rubrumKlage = [];
 
-  let allListItems = basisdokumentDOMRepresentation.querySelectorAll("li");
-  for (let index = 0; index < allListItems.length; index++) {
-    const element = allListItems[index];
-    element.style.margin = "0px";
-  }
+  //autotable rubrum defendant
+  autoTable(doc, {
+    theme: "grid",
+    styles: { halign: "center" },
+    head: [["Rubrum Beklagtenpartei"]],
+    headStyles: { fillColor: [0, 102, 204] },
+    body: [rubrumBeklagt],
+    didDrawPage: function () {
+      doc.outline.add(null, "Rubrum Beklagtenpartei", {
+        pageNumber: doc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
+  rubrumBeklagt = [];
 
-
-  let stringHtml = basisdokumentDOMRepresentation.outerHTML;
-
-  stringHtml = stringHtml.replaceAll("<strong>", "");
-  stringHtml = stringHtml.replaceAll("</strong>", "");
-  stringHtml = stringHtml.replaceAll("<i>", "");
-  stringHtml = stringHtml.replaceAll("</i>", "");
-  stringHtml = stringHtml.replaceAll("<b>", "");
-  stringHtml = stringHtml.replaceAll("</b>", "");
-
-  doc
-    .html(stringHtml, {
-      autoPaging: "text",
-      margin: 15,
-    })
-    .then(() => {
-      doc.addPage();
-      doc.setFontSize(8);
-      doc.text(
-        ".................................................................................................................................",
-        10,
-        60
-      );
-      doc.text("Vorname, Nachname", 10, 64);
-      doc.text(
-        ".................................................................................................................................",
-        10,
-        90
-      );
-      doc.text("Ort, Datum", 10, 94);
-      doc.text(
-        "...........................................................................",
-        10,
-        120
-      );
-      doc.text("Unterschrift", 10, 124);
-      doc.save(fileName);
+  //autotable hints
+  doc.addPage();
+  autoTable(doc, {
+    theme: "grid",
+    head: [["Hinweise des Richters nach (nach §139 ZPO)"]],
+    headStyles: { fontStyle: "bold", fontSize: 12, fillColor: [0, 102, 204] },
+    margin: { top: 6, bottom: 6, left: 6, right: 6 },
+    didDrawPage: function () {
+      doc.outline.add(null, "Hinweise des Richters nach (nach §139 ZPO)", {
+        pageNumber: doc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
+  for (let i = 0; i < allHints.length; i++) {
+    let hintData = [[allHints[i].title], [allHints[i].text]];
+    autoTable(doc, {
+      theme: "grid",
+      body: hintData,
+      styles: {
+        lineColor:
+          allHints[i].version === obj["currentVersion"] ? [15, 82, 186] : 100,
+        lineWidth: allHints[i].version === obj["currentVersion"] ? 0.6 : 0.3,
+      },
+      didParseCell: function (hookData) {
+        if (hookData.row.index === 0) {
+          hookData.cell.styles.fontStyle = "bold";
+        }
+      },
+      willDrawCell: function (hookData) {
+        if (hookData.cell.raw === "") {
+          hookData.cell.styles.cellWidth = 0;
+          hookData.cell.styles.cellPadding = 0;
+        }
+      },
     });
+  }
+
+  //autotable new entries
+  if (newEntries.length !== 0) { //only show new entries page if there are new entries
+    doc.addPage();
+    autoTable(doc, {
+      theme: "grid",
+      head: [["Neue Beiträge"]],
+      headStyles: {
+        fontStyle: "bold",
+        fontSize: 12,
+        fillColor: [0, 102, 204],
+        valign: "middle",
+      },
+      margin: { top: 7, bottom: 7, left: 7, right: 7 },
+      didDrawPage: function () {
+        doc.outline.add(null, "Neue Beiträge", {
+          pageNumber: doc.getCurrentPageInfo().pageNumber,
+        });
+      },
+    });
+    for (let i = 0; i < newEntries.length; i++) {
+      let data;
+      if (newEntries[i].associatedEntry) {
+        data = [
+          ["Neuer Beitrag"],
+          [newEntries[i].title],
+          [newEntries[i].associatedEntry],
+          [newEntries[i].text],
+        ];
+      } else {
+        data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text]];
+      }
+      autoTable(doc, {
+        theme: "grid",
+        body: data,
+        margin: {
+          left: newEntries[i].id.includes("B") ? 30 : 10,
+          right: newEntries[i].id.includes("B") ? 10 : 30,
+          top: 7,
+          bottom: 7,
+        },
+        didParseCell: function (hookData) {
+          if (hookData.row.index === 0) {
+            hookData.cell.styles.fontStyle = "italic";
+          } else if (hookData.row.index === 1) {
+            hookData.cell.styles.fontStyle = "bold";
+          }
+        },
+        willDrawCell: function (hookData) {
+          if (hookData.cell.raw === "") {
+            hookData.cell.styles.cellWidth = 0;
+            hookData.cell.styles.cellPadding = 0;
+          }
+        },
+      });
+    }
+    newEntries = [];
+  }
+
+  //autotable all entries
+  doc.addPage();
+  var node: any; //base node for sections outline
+  autoTable(doc, {
+    theme: "grid",
+    margin: { top: 6, bottom: 6, left: 6, right: 6 },
+    head: [["Parteivortrag"]],
+    headStyles: { fontStyle: "bold", fontSize: 12, fillColor: [0, 102, 204] },
+    didDrawPage: function () {
+      node = doc.outline.add(null, "Parteivortrag", {
+        pageNumber: doc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
+  //const declaration needed for eslint no-loop-func warning
+  const currEntriesNode = node;
+  for (let i = 0; i < allEntries.length; i++) {
+    if (allEntries[i].section) {
+      autoTable(doc, {
+        theme: "grid",
+        head: [[allEntries[i].section]],
+        headStyles: { fillColor: [0, 102, 204] },
+        body: [[allEntries[i].titlePlaintiff], [allEntries[i].titleDefendant]],
+        margin: { top: 7, bottom: 7, left: 7, right: 7 },
+        didDrawPage: function (hookData) {
+          doc.outline.add(
+            currEntriesNode,
+            hookData.table.head[0].raw as unknown as string + //section
+            " | " +
+            hookData.table.body[0].raw as string + //section title plaintiff
+            " | " +
+            hookData.table.body[1].raw as string, //section title defendant
+            { pageNumber: doc.getCurrentPageInfo().pageNumber, }
+          );
+        },
+      });
+    } else {
+      let data;
+      if (allEntries[i].associatedEntry !== undefined) {
+        data = [
+          [allEntries[i].title],
+          [allEntries[i].associatedEntry],
+          [allEntries[i].text],
+        ];
+      } else {
+        data = [[allEntries[i].title], [allEntries[i].text]];
+      }
+      //const declarations needed for eslint no-loop-func warning
+      const currEntryId = allEntries[i].id;
+      const currAllHints = allHints;
+      autoTable(doc, {
+        theme: "grid",
+        styles: {
+          lineColor:
+            allEntries[i].version === obj["currentVersion"]
+              ? [15, 82, 186]
+              : 100,
+          lineWidth:
+            allEntries[i].version === obj["currentVersion"] ? 0.6 : 0.3,
+        },
+        body: data,
+        margin: {
+          left: allEntries[i].id.includes("B") ? 30 : 10,
+          right: allEntries[i].id.includes("B") || allEntries[i].id === "N" ? 10 : 30,
+          top: 7,
+          bottom: 10,
+        },
+        didParseCell: function (hookData) {
+          //TODO: try to format text
+          if (hookData.row.index === 0) {
+            hookData.cell.styles.fontStyle = "bold";
+          }
+        },
+        willDrawCell: function (hookData) {
+          if (hookData.cell.raw === "" || hookData.cell.raw === undefined) {
+            hookData.cell.styles.cellWidth = 0;
+            hookData.cell.styles.cellPadding = 0;
+          }
+        },
+        didDrawCell: function (hookData) {
+          let counterArr: any = [];
+          for (let j=0; j<currAllHints.length; j++) {
+            if (currAllHints[j].id === currEntryId && hookData.row.index === 0) {
+              if (currAllHints[j].id in counterArr) {
+                counterArr[currAllHints[j].id] = counterArr[currAllHints[j].id] + 2;
+              } else {
+                counterArr[currAllHints[j].id] = 0;
+              }
+              let xPos = hookData.cursor?.x as number;
+              let yPos = hookData.cursor?.y as number;
+              let offset = counterArr[currAllHints[j].id]; //offset for multiple hints to an entry
+              doc.createAnnotation({
+                type: 'text',
+                title: currAllHints[j].title,
+                contents: currAllHints[j].text,
+                bounds: {
+                  x: currAllHints[j].id.includes('B') ? xPos - 10 + offset : xPos + hookData.cell.width + 2 + offset, //change position depending on defendant/plaintiff
+                  y: yPos,
+                  w: hookData.cell.contentWidth,
+                  h: hookData.cell.contentHeight,
+                },
+                open: false,
+              });
+            }
+          }
+        }
+      });
+    }
+  }
+  allHints = [];
+  allEntries = [];
+
+  //signature page
+  doc.addPage();
+  doc.setFontSize(8);
+  doc.text(
+    ".................................................................................................................................",
+    10,
+    60
+  );
+  doc.text(obj["versions"][obj["versions"].length - 1].author, 10, 64);
+  doc.text(
+    ".................................................................................................................................",
+    10,
+    90
+  );
+  doc.text("Ort, Datum", 10, 94);
+  doc.text(
+    "...........................................................................",
+    10,
+    120
+  );
+  doc.text("Unterschrift", 10, 124);
+
+  //set pageframes + pagenumbers
+  var pageCount = doc.getNumberOfPages();
+  for (let i = 0; i < pageCount; i++) {
+    doc.setPage(i);
+
+    let pageWidth = doc.internal.pageSize.width;
+    let pageHeight = doc.internal.pageSize.height;
+
+    //pageframes
+    doc.setLineWidth(0.1);
+    doc.setDrawColor(229, 228, 226);
+    doc.rect(5, 5, pageWidth - 10, pageHeight - 10);
+    doc.stroke();
+
+    //pagenumbers
+    doc.setFontSize(10);
+    doc.setTextColor(128, 128, 128);
+    let currentPageNum = doc.getCurrentPageInfo().pageNumber;
+    let pageNumPos;
+    //single digit pagenumber
+    if (pageCount.toString().length === 1) {
+      pageNumPos =
+        currentPageNum.toString().length === 1
+          ? pageWidth - 20
+          : currentPageNum.toString().length === 2
+          ? pageWidth - 22
+          : pageWidth - 24;
+    //double digit pagenumber
+    } else if (pageCount.toString().length === 2) {
+      pageNumPos =
+        currentPageNum.toString().length === 1
+          ? pageWidth - 22
+          : currentPageNum.toString().length === 2
+          ? pageWidth - 24
+          : pageWidth - 26;
+    //three and more digit pagenumber
+    } else {
+      pageNumPos =
+        currentPageNum.toString().length === 1
+          ? pageWidth - 24
+          : currentPageNum.toString().length === 2
+          ? pageWidth - 26
+          : pageWidth - 28;
+    }
+    doc.text(
+      "Seite " + currentPageNum + "/" + pageCount,
+      pageNumPos,
+      pageHeight - 7
+    );
+  }
+  
+  doc.save(fileName);
 }
 
 export function downloadBasisdokument(
@@ -393,11 +549,19 @@ export function downloadBasisdokument(
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
 
-  const date: Date = basisdokumentObject["versions"]
-    [basisdokumentObject["versions"].length - 1]
-    ["timestamp"];
-  const dateString = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
-  const caseIdForFilename = caseId.trim().replace(/ /g,"-");
+  const date: Date =
+    basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1][
+      "timestamp"
+    ];
+  const dateString = `${date.getDate().toString().padStart(2, "0")}-${(
+    date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${date.getFullYear().toString().padStart(2, "0")}_${date
+    .getHours()
+    .toString()
+    .padStart(2, "0")}-${date.getMinutes().toString().padStart(2, "0")}`;
+  const caseIdForFilename = caseId.trim().replace(/ /g, "-");
 
   downloadObjectAsJSON(
     basisdokumentObject,
@@ -431,8 +595,15 @@ export function downloadEditFile(
   editFileObject["individualEntrySorting"] = individualEntrySorting;
 
   const date = new Date();
-  const dateString = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getFullYear().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}-${date.getMinutes().toString().padStart(2, '0')}`;
-  const caseIdForFilename = caseId.trim().replace(/ /g,"-");
+  const dateString = `${date.getDate().toString().padStart(2, "0")}-${(
+    date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${date.getFullYear().toString().padStart(2, "0")}_${date
+    .getHours()
+    .toString()
+    .padStart(2, "0")}-${date.getMinutes().toString().padStart(2, "0")}`;
+  const caseIdForFilename = caseId.trim().replace(/ /g, "-");
 
   downloadObjectAsJSON(
     editFileObject,

@@ -25,7 +25,7 @@ import { EntryForm } from "./EntryForm";
 import { EntryHeader } from "./EntryHeader";
 
 interface NewEntryProps {
-  roleForNewEntry: "Klagepartei" | "Beklagtenpartei";
+  roleForNewEntry: UserRole.Plaintiff | UserRole.Defendant;
   setIsNewEntryVisible: Dispatch<SetStateAction<boolean>>;
   sectionId: string;
   associatedEntry?: string;
