@@ -301,7 +301,7 @@ export const Entry: React.FC<EntryProps> = ({
         })}>
         <div
           className={cx("flex flex-col", {
-            "items-end": !isPlaintiff,
+            "items-end": !isPlaintiff && !shownInPopup,
           })}>
           <div
             className={cx("transition-all", {
@@ -309,9 +309,14 @@ export const Entry: React.FC<EntryProps> = ({
                 !isExpanded && view === ViewMode.Columns && !showEntrySorting,
               "w-full":
                 isExpanded || view === ViewMode.Rows || showEntrySorting,
+              "mt-6":
+                (isExpanded || view === ViewMode.Rows || showEntrySorting) &&
+                entry.associatedEntry &&
+                entry.role === UserRole.Plaintiff &&
+                !shownInPopup,
               "w-[calc(100%_-_12px)]":
                 !isExpanded &&
-                view === ViewMode.SideBySide &&
+                (view === ViewMode.SideBySide || shownInPopup) &&
                 !showEntrySorting,
             })}>
             {/* Entry */}
@@ -602,13 +607,13 @@ export const Entry: React.FC<EntryProps> = ({
           )}
         </div>
       </div>
-      {thread?.length > 0 && !showEntrySorting && (
+      {thread?.length > 0 && !showEntrySorting && !shownInPopup && (
         <div
           className={cx({
             flex: view !== ViewMode.Columns,
           })}>
           {view !== ViewMode.Columns && (
-            <button className="ml-5 w-5 border-l-2 border-lightGrey" />
+            <button className="mt-6 ml-5 w-5 border-l-2 border-lightGrey" />
           )}
           <EntryList entriesList={thread} sectionId={thread[0].sectionId} />
         </div>
