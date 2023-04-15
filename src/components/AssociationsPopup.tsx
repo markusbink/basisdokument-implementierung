@@ -3,6 +3,8 @@ import cx from "classnames";
 import { IEntry, UserRole } from "../types";
 import { Entry } from "./entry";
 import { useUser } from "../contexts";
+import { useRef } from "react";
+import { useOutsideClick } from "../hooks/use-outside-click";
 
 type AssociationsPopupProps = {
   setIsAssociationsPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,6 +18,9 @@ export const AssociationsPopup: React.FC<AssociationsPopupProps> = ({
   associatedEntry,
 }) => {
   const { user } = useUser();
+  const popupRef = useRef(null);
+  useOutsideClick(popupRef, () => setIsAssociationsPopupOpen(false));
+
   return (
     <>
       <div
@@ -24,7 +29,9 @@ export const AssociationsPopup: React.FC<AssociationsPopupProps> = ({
         )}>
         <div className="my-6 mx-auto w-[80vw]">
           {/*content*/}
-          <div className="p-6 space-y-4 border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none">
+          <div
+            ref={popupRef}
+            className="p-6 space-y-4 border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
             <div className="flex items-start justify-between rounded-lg ">
               <h3 className="text-xl font-bold text-darkGrey">{`Beitrag ${entry.entryCode} bezieht sich auf Beitrag ${associatedEntry.entryCode}`}</h3>
