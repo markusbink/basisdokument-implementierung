@@ -39,10 +39,12 @@ export const SidebarSorting = () => {
         <div className="font-bold text-darkGrey text-lg">Gliederung:</div>
         <div className="content-center">
           <div>
-            <SortingSelector
-              selectedSorting={selectedSorting}
-              setSelectedSorting={setSelectedSorting}
-            />
+            {user?.role !== UserRole.Client && (
+              <SortingSelector
+                selectedSorting={selectedSorting}
+                setSelectedSorting={setSelectedSorting}
+              />
+            )}
           </div>
         </div>
       </div>

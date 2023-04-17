@@ -3,10 +3,9 @@ import { Header } from "../components/Header";
 import { Sidebar } from "../components/sidebar/Sidebar";
 import { Onboarding } from "../components/Onboarding";
 import { useBeforeunload } from "react-beforeunload";
-import { useHints, useNotes, useUser } from "../contexts";
+import { useHints, useNotes } from "../contexts";
 import { JudgeHintPopup } from "../components/JudgeHintPopup";
 import { NotePopup } from "../components/NotePopup";
-import { UserRole } from "../types";
 
 export const Main: React.FC = () => {
   useBeforeunload(
@@ -15,7 +14,6 @@ export const Main: React.FC = () => {
   );
   const { showJudgeHintPopup } = useHints();
   const { showNotePopup } = useNotes();
-  const { user } = useUser();
 
   return (
     <div className="flex w-full h-full">
@@ -26,7 +24,7 @@ export const Main: React.FC = () => {
         <Header />
         <Discussion />
       </main>
-      {user?.role !== UserRole.Client && <Sidebar />}
+      <Sidebar />
     </div>
   );
 };
