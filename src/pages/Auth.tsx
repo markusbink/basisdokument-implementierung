@@ -24,11 +24,18 @@ import {
   openEditFile,
   updateSortingsIfVersionIsDifferent,
 } from "../data-management/opening-handler";
-import { IStateUserInput, IUser, UsageMode, UserRole } from "../types";
+import {
+  IStateUserInput,
+  IUser,
+  SidebarState,
+  UsageMode,
+  UserRole,
+} from "../types";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { useOnboarding } from "../contexts/OnboardingContext";
 import { VersionPopup } from "../components/VersionPopup";
+import { useSidebar } from "../contexts/SidebarContext";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -74,6 +81,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setBookmarks } = useBookmarks();
   const { setUser } = useUser();
   const { setIsOnboardingVisible } = useOnboarding();
+  const { setActiveSidebar, setIsSidebarOpen } = useSidebar();
 
   // Set React states when user enters/changes text input fields
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -334,6 +342,8 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 setUsage(UsageMode.Readonly);
                 setRole(UserRole.Client);
                 setNewVersionMode(false);
+                setActiveSidebar(SidebarState.Sorting);
+                setIsSidebarOpen(false);
               }}
               className={cx(
                 "flex items-center justify-center w-fit px-5 h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",

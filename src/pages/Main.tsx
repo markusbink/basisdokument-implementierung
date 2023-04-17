@@ -15,7 +15,6 @@ export const Main: React.FC = () => {
   );
   const { showJudgeHintPopup } = useHints();
   const { showNotePopup } = useNotes();
-  const { user } = useUser();
 
   return (
     <div className="flex w-full h-full">
@@ -26,7 +25,7 @@ export const Main: React.FC = () => {
         <Header />
         <Discussion />
       </main>
-      {user?.role !== UserRole.Client && <Sidebar />}
+      <Sidebar />
     </div>
   );
 };
