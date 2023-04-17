@@ -1,14 +1,13 @@
-name: Deploy
+name: Deploy Live
 
 on:
   push:
     branches:
-      - "dev"
+      - "main"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [15.x]
@@ -20,44 +19,18 @@ jobs:
       - name: Install and build
         run: npm install --force && npm run build
 
-      #- name: Deploy
-      #  uses: JamesIves/github-pages-deploy-action@4.1.1
-      #  with:
-      #    branch: gh-pages # The branch the action should deploy to.
-      #    folder: build # The folder the action should deploy.
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: build-dir
           path: build
           retention-days: 5
-
-  DeployDev:
-      name: Deploy Test Environment
-
-      if: github.event.ref == 'refs/head/dev'
-      needs: [build]
-      runs-on: ubuntu-latest
-
-      environment:
-        name: github-pages
-
-      steps:
-        - name: Deploy Dev
-          uses: JamesIves/github-pages-deploy-action@4.1.1
-          with:
-            branch: gh-pages # The branch the action should deploy to.
-            folder: build # The folder the action should deploy.
+        
 
   DeployLive:
     name: Deploy Live
-    # if: github.event.ref == 'refs/head/dev'
     needs: [build]
     runs-on: ubuntu-latest
-
-    environment:
-      name: dev
 
     steps:
       - name: SSH 
@@ -70,11 +43,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-dir
-      - name: Deploy Dev
+      - name: Deploy Live
         run: |
             ls
-            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_DEV }}
-
+            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_LIVE }}
       
       - name: Cleanup
         run: rm -rf ~/.ssh
