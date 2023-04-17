@@ -343,7 +343,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                 setRole(UserRole.Client);
                 setNewVersionMode(false);
                 setActiveSidebar(SidebarState.Sorting);
-                setIsSidebarOpen(false);
               }}
               className={cx(
                 "flex items-center justify-center w-fit px-5 h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
