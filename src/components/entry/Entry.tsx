@@ -9,6 +9,7 @@ import {
   Pencil,
   Scales,
   Trash,
+  ArrowSquareOut,
 } from "phosphor-react";
 import React, { SetStateAction, useRef, useState } from "react";
 import { EditText } from "react-edit-text";
@@ -42,6 +43,8 @@ import { getTheme } from "../../themes/getTheme";
 import { getEntryCode } from "../../util/get-entry-code";
 import { useView } from "../../contexts/ViewContext";
 import { getBrowser } from "../../util/get-browser";
+import { AssociationsPopup } from "../AssociationsPopup";
+import { getEntryById } from "../../contexts/CaseContext";
 
 interface EntryProps {
   entry: IEntry;
@@ -50,6 +53,7 @@ interface EntryProps {
   isHidden?: boolean;
   isOld?: boolean;
   isHighlighted?: boolean;
+  shownInPopup?: boolean;
   setAssociatedEntryInProgress?: (
     entry: IEntry,
     setIsNewEntryVisible: React.Dispatch<SetStateAction<boolean>>
@@ -63,6 +67,7 @@ export const Entry: React.FC<EntryProps> = ({
   isHidden = false,
   isOld = false,
   isHighlighted = false,
+  shownInPopup = false,
   setAssociatedEntryInProgress,
 }) => {
   // Threaded entries
@@ -101,6 +106,8 @@ export const Entry: React.FC<EntryProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isAssociationsPopupOpen, setIsAssociationsPopupOpen] =
+    useState<boolean>(false);
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
@@ -296,11 +303,12 @@ export const Entry: React.FC<EntryProps> = ({
               hideEntriesHighlighter &&
               getCurrentTool.id === Tool.Cursor),
           "pointer-events-none": isHidden,
-          "mt-6": !entry.associatedEntry,
+          "mt-6": !entry.associatedEntry && !shownInPopup,
+          "w-1/2": shownInPopup,
         })}>
         <div
           className={cx("flex flex-col", {
-            "items-end": !isPlaintiff,
+            "items-end": !isPlaintiff && !shownInPopup,
           })}>
           <div
             className={cx("transition-all", {
@@ -308,14 +316,19 @@ export const Entry: React.FC<EntryProps> = ({
                 !isExpanded && view === ViewMode.Columns && !showEntrySorting,
               "w-full":
                 isExpanded || view === ViewMode.Rows || showEntrySorting,
+              "mt-6":
+                (isExpanded || view === ViewMode.Rows || showEntrySorting) &&
+                entry.associatedEntry &&
+                entry.role === UserRole.Plaintiff &&
+                !shownInPopup,
               "w-[calc(100%_-_12px)]":
                 !isExpanded &&
-                view === ViewMode.SideBySide &&
+                (view === ViewMode.SideBySide || shownInPopup) &&
                 !showEntrySorting,
             })}>
             {/* Entry */}
             {/* visualize association */}
-            {entry.associatedEntry && (
+            {entry.associatedEntry && !shownInPopup ? (
               <a
                 href={`#${getEntryCode(entries, entry.associatedEntry)}`}
                 className={cx(
@@ -336,8 +349,22 @@ export const Entry: React.FC<EntryProps> = ({
                   entries,
                   entry.associatedEntry
                 )}`}
+                <div
+                  className={cx("h-[16px] w-[0.5px]", {
+                    [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
+                      entry.entryCode?.charAt(0) === "B",
+                    [`bg-${getTheme(selectedTheme)?.secondaryDefendant}`]:
+                      entry.entryCode?.charAt(0) === "K",
+                  })}></div>
+                <Tooltip text="Bezugnahme gesondert anzeigen">
+                  <ArrowSquareOut
+                    size={14}
+                    onClick={() =>
+                      setIsAssociationsPopupOpen(true)
+                    }></ArrowSquareOut>
+                </Tooltip>
               </a>
-            )}
+            ) : null}
             <div
               className={cx("shadow rounded-lg", {
                 "outline outline-2 outline-offset-4 outline-blue-600":
@@ -350,11 +377,15 @@ export const Entry: React.FC<EntryProps> = ({
                   [`pr-1 rounded-l-xl rounded-br-lg bg-${
                     getTheme(selectedTheme)?.primaryPlaintiff
                   }`]:
-                    entry.entryCode?.charAt(0) === "B" && entry.associatedEntry,
+                    entry.entryCode?.charAt(0) === "B" &&
+                    entry.associatedEntry &&
+                    !shownInPopup,
                   [`pl-1 rounded-r-xl rounded-bl-lg bg-${
                     getTheme(selectedTheme)?.primaryDefendant
                   }`]:
-                    entry.entryCode?.charAt(0) === "K" && entry.associatedEntry,
+                    entry.entryCode?.charAt(0) === "K" &&
+                    entry.associatedEntry &&
+                    !shownInPopup,
                 })}>
                 <EntryHeader
                   isPlaintiff={isPlaintiff}
@@ -427,7 +458,7 @@ export const Entry: React.FC<EntryProps> = ({
                       </span>
                     </div>
                   </div>
-                  {user?.role !== UserRole.Client && (
+                  {!shownInPopup && user?.role !== UserRole.Client && (
                     <div className="flex gap-2">
                       <Tooltip
                         text={
@@ -521,7 +552,8 @@ export const Entry: React.FC<EntryProps> = ({
                       setLowerOpcacityForHighlighters
                     }
                     lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
-                    entryId={entry.id}>
+                    entryId={entry.id}
+                    showInPopup={shownInPopup}>
                     {entry.text}
                   </EntryBody>
                 )}
@@ -546,6 +578,7 @@ export const Entry: React.FC<EntryProps> = ({
             {canAddEntry &&
               !isNewEntryVisible &&
               !showEntrySorting &&
+              !shownInPopup &&
               user?.role !== UserRole.Client && (
                 <a
                   className="inline-block"
@@ -582,13 +615,13 @@ export const Entry: React.FC<EntryProps> = ({
           )}
         </div>
       </div>
-      {thread?.length > 0 && !showEntrySorting && (
+      {thread?.length > 0 && !showEntrySorting && !shownInPopup && (
         <div
           className={cx({
             flex: view !== ViewMode.Columns,
           })}>
           {view !== ViewMode.Columns && (
-            <button className="ml-5 w-5 border-l-2 border-lightGrey" />
+            <button className="mt-6 ml-5 w-5 border-l-2 border-lightGrey" />
           )}
           <EntryList entriesList={thread} sectionId={thread[0].sectionId} />
         </div>
@@ -648,6 +681,14 @@ export const Entry: React.FC<EntryProps> = ({
           </div>
         </div>
       </ErrorPopup>
+      {isAssociationsPopupOpen && (
+        <AssociationsPopup
+          setIsAssociationsPopupOpen={setIsAssociationsPopupOpen}
+          entry={entry}
+          associatedEntry={
+            getEntryById(entries, entry.associatedEntry!)!
+          }></AssociationsPopup>
+      )}
     </>
   );
 };
