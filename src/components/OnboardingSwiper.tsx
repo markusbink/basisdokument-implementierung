@@ -21,7 +21,7 @@ const sliderItems = [
   {
     src: "videos/BDMetadataThreading.mp4",
     title: "Basisdokument: Fall anlegen & Ansicht",
-    desc: "Beim initialen Anlegen eines Falls können Sie Metadaten Ihrer Mandant:innen eintragen. Diese werden in zwei gegenüberliegenden Spalten dargestellt - zur optimalen Übersicht finden Sie die Beiträge der Klagepartei stets in der linken, die der Beklagtenpartei stets in der rechten Spalte. Wenn Sie jedoch eine Zeilenansicht der Beiträge präferieren, können Sie ganz einfach wechseln. Keine Sorge, auch hier können Sie dank der Farbgebung eindeutig erkennen, welche Beiträge von welcher Partei verfasst wurden.",
+    desc: "Beim initialen Anlegen eines Falls können Sie Rubren Ihrer Mandant:innen eintragen. Diese werden in zwei gegenüberliegenden Spalten dargestellt - zur optimalen Übersicht finden Sie die Beiträge der Klagepartei stets in der linken, die der Beklagtenpartei stets in der rechten Spalte. Wenn Sie jedoch eine Zeilenansicht der Beiträge präferieren, können Sie ganz einfach wechseln. Keine Sorge, auch hier können Sie dank der Farbgebung eindeutig erkennen, welche Beiträge von welcher Partei verfasst wurden.",
   },
   {
     src: "videos/BDBeitragGliederungspunkt.mp4",

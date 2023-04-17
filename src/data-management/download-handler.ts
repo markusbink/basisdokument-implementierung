@@ -142,7 +142,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   // Metadaten Plaintiff
   let metaPlaintiffTitleEl = document.createElement("span");
-  metaPlaintiffTitleEl.innerHTML = "Metadaten Klagepartei";
+  metaPlaintiffTitleEl.innerHTML = "Rubrum Klagepartei";
   metaPlaintiffTitleEl.style.fontSize = "4px";
   metaPlaintiffTitleEl.style.fontWeight = "bold";
   metaPlaintiffTitleEl.style.marginTop = "4px";
@@ -153,7 +153,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   } else {
     let noMetaDataTextEl = document.createElement("span");
     noMetaDataTextEl.innerHTML =
-      "Es wurden keine Metadaten von der Klagepartei angelegt.";
+      "Es wurde kein Rubrum von der Klagepartei angelegt.";
     noMetaDataTextEl.style.fontSize = "3px";
     basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
@@ -162,7 +162,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   // Metadaten Defendant
   let metaDefendantTitleEl = document.createElement("span");
-  metaDefendantTitleEl.innerHTML = "Metadaten Beklagtenpartei";
+  metaDefendantTitleEl.innerHTML = "Rubrum Beklagtenpartei";
   metaDefendantTitleEl.style.fontSize = "4px";
   metaDefendantTitleEl.style.fontWeight = "bold";
   metaDefendantTitleEl.style.marginTop = "4px";
@@ -173,7 +173,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   } else {
     let noMetaDataTextEl = document.createElement("span");
     noMetaDataTextEl.innerHTML =
-      "Es wurden keine Metadaten von der Beklagtenpartei angelegt.";
+      "Es wurde kein Rubrum von der Beklagtenpartei angelegt.";
     noMetaDataTextEl.style.fontSize = "3px";
     basisdokumentDOMRepresentation.appendChild(noMetaDataTextEl);
   }
