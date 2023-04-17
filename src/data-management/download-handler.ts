@@ -96,7 +96,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   if (obj["metaData"]) {
     metaDefendant = obj["metaData"]["defendant"];
   } else {
-    metaDefendant = "Es wurde kein Rubrum von der Klagepartei angelegt.";
+    metaDefendant = "Es wurde kein Rubrum von der Beklagtenpartei angelegt.";
   }
   rubrumBeklagt = [parseHTMLtoString(metaDefendant)];
 
