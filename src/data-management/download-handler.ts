@@ -66,6 +66,16 @@ function parseHTMLtoString(htmltext: any) {
   return parserElem.body.innerText.replace(/\n+$/, ""); //remove last empty line
 }
 
+//get role profession, e.g. "Rechtsanwältin/Rechtsanwalt" for plaintiff or defendant
+//readonly cannot download pdf
+function getRoleProfession(role: string) {
+  if (role === "Richter:in") {
+    return "Richterin/Richter";
+  } else {
+    return "Rechtsanwältin/Rechtsanwalt";
+  }
+}
+
 function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   let pdfConverter = jsPDF,
     doc = new pdfConverter();
@@ -452,26 +462,25 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   allEntries = [];
 
   //signature page
-  doc.addPage();
-  doc.setFontSize(8);
-  doc.text(
-    ".................................................................................................................................",
-    10,
-    60
-  );
-  doc.text(obj["versions"][obj["versions"].length - 1].author, 10, 64);
-  doc.text(
-    ".................................................................................................................................",
-    10,
-    90
-  );
-  doc.text("Ort, Datum", 10, 94);
-  doc.text(
-    "...........................................................................",
-    10,
-    120
-  );
-  doc.text("Unterschrift", 10, 124);
+  //doc.addPage();
+  console.log(obj);
+  let signatureData:any = [[
+    parseHTMLtoString(
+      "Datum: " +
+      obj["versions"][obj["versions"].length - 1]["timestamp"].toLocaleString().substring(0, 9) +
+      "\n" +
+      "\n" +
+      "gez. " +
+      "\n" +
+      obj["versions"][obj["versions"].length - 1].author) +
+      "\n" +
+      getRoleProfession(obj["versions"][obj["versions"].length - 1].role)
+  ]];
+  autoTable(doc, {
+    theme: 'grid',
+    styles: { fontSize: 11, cellPadding: 5 },
+    body: signatureData,
+  });
 
   //set pageframes + pagenumbers
   var pageCount = doc.getNumberOfPages();
