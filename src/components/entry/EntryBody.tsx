@@ -195,38 +195,47 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
   };
 
   return (
-    <div
-      className={cx(
-        `p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`,
-        {
-          [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
-            isPlaintiff,
-          [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]:
-            !isPlaintiff,
-          "max-h-[70vh] overflow-y-auto": showInPopup,
-        }
-      )}>
-      {searchbarValue === "" &&
-      (getCurrentTool.id === Tool.Highlighter ||
-        getCurrentTool.id === Tool.Eraser) ? (
-        <p
-          style={{ cursor: getToolIconPath() }}
-          className={cx(`marker-text-${entryId}`)}
-          onMouseUp={createHighlighting}
-          dangerouslySetInnerHTML={{ __html: getEntryContent() as string }}></p>
-      ) : null}
-      {searchbarValue === "" && getCurrentTool.id === Tool.Cursor ? (
-        <p
-          dangerouslySetInnerHTML={{
-            __html: applyHighlighterFiltersToEntry(getEntryContent() as string),
-          }}></p>
-      ) : null}
-      {searchbarValue !== "" ? (
-        <Highlight // eslint-disable-next-line
-          search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>
-          {children}
-        </Highlight> // eslint-disable-line
-      ) : null}
-    </div>
+    <>
+      <div
+        className={cx(
+          `p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`,
+          {
+            [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
+              isPlaintiff,
+            [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]:
+              !isPlaintiff,
+            "max-h-[70vh] overflow-y-auto": showInPopup,
+          }
+        )}>
+        {searchbarValue === "" &&
+        (getCurrentTool.id === Tool.Highlighter ||
+          getCurrentTool.id === Tool.Eraser) ? (
+          <p
+            style={{ cursor: getToolIconPath() }}
+            className={cx(`marker-text-${entryId}`)}
+            onMouseUp={createHighlighting}
+            dangerouslySetInnerHTML={{
+              __html: getEntryContent() as string,
+            }}></p>
+        ) : null}
+        {searchbarValue === "" && getCurrentTool.id === Tool.Cursor ? (
+          <p
+            dangerouslySetInnerHTML={{
+              __html: applyHighlighterFiltersToEntry(
+                getEntryContent() as string
+              ),
+            }}></p>
+        ) : null}
+        {searchbarValue !== "" ? (
+          <Highlight // eslint-disable-next-line
+            search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>
+            {children}
+          </Highlight> // eslint-disable-line
+        ) : null}
+        <div className="border-t-2 border-lightGrey rounded-b-lg mt-4">
+          <span>TODO: Beweis</span>
+        </div>
+      </div>
+    </>
   );
 };
