@@ -1,14 +1,14 @@
-name: Deploy
+name: Deploy Dev
 
 on:
   push:
     branches:
-      # - "dev"
-      - "main"
+      - "dev"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         node-version: [15.x]
@@ -26,35 +26,25 @@ jobs:
           name: build-dir
           path: build
           retention-days: 5
-        
 
 
-  DeployDev:
-    name: Deploy Test Environment
-
-    if: github.event.ref == 'refs/head/dev'
+  DeployPages:
+    name: Deploy Test Environment Github Pages
     needs: [build]
     runs-on: ubuntu-latest
 
-    environment:
-      name: github-pages
-
     steps:
-      - name: Deploy Dev
+      - name: Deploy Dev Pages
         uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: build # The folder the action should deploy.
 
 
-  DeployLive:
-    name: Deploy Live
-    # if: github.event.ref == 'refs/head/main'
+  DeployDev:
+    name: Deploy Test Environment Server
     needs: [build]
     runs-on: ubuntu-latest
-
-    environment:
-      name: live
 
     steps:
       - name: SSH 
@@ -70,8 +60,7 @@ jobs:
       - name: Deploy Live
         run: |
             ls
-            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_LIVE }}
-
+            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_DEV }}
       
       - name: Cleanup
         run: rm -rf ~/.ssh
