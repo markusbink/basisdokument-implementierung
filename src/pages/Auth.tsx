@@ -81,7 +81,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setBookmarks } = useBookmarks();
   const { setUser } = useUser();
   const { setIsOnboardingVisible } = useOnboarding();
-  const { setActiveSidebar, setIsSidebarOpen } = useSidebar();
+  const { setActiveSidebar } = useSidebar();
 
   // Set React states when user enters/changes text input fields
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
