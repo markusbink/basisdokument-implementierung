@@ -16,6 +16,14 @@ export const SidebarSorting = () => {
     return section;
   };
 
+  const titleVisible = (title: string) => {
+    if (title === "") {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const resetPrivateSorting = () => {
     let originalSorting = sectionList.map((section) => section.id);
     setIndividualSorting(originalSorting);
@@ -91,7 +99,7 @@ export const SidebarSorting = () => {
                                   draggable={false}
                                   className="flex flex-row gap-2 rounded-md p-2 bg-offWhite text-darkGrey font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm"
                                   onClick={(e) => e.stopPropagation()}>
-                                  <span>
+                                  <span className="self-center">
                                     {`${getOriginalSortingPosition(
                                       sectionList,
                                       getSectionObject(section).id
@@ -105,7 +113,20 @@ export const SidebarSorting = () => {
                                             .titlePlaintiff
                                         }
                                       </span>
-                                      <br />
+                                      <div
+                                        className={
+                                          titleVisible(
+                                            getSectionObject(section)
+                                              .titlePlaintiff
+                                          ) === false ||
+                                          titleVisible(
+                                            getSectionObject(section)
+                                              .titleDefendant
+                                          ) === false
+                                            ? ""
+                                            : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
+                                        }
+                                      />
                                       <span>
                                         {
                                           getSectionObject(section)
@@ -122,7 +143,20 @@ export const SidebarSorting = () => {
                                             .titlePlaintiff
                                         }
                                       </span>
-                                      <br />
+                                      <div
+                                        className={
+                                          titleVisible(
+                                            getSectionObject(section)
+                                              .titlePlaintiff
+                                          ) === false ||
+                                          titleVisible(
+                                            getSectionObject(section)
+                                              .titleDefendant
+                                          ) === false
+                                            ? ""
+                                            : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
+                                        }
+                                      />
                                       <span className="font-light">
                                         {
                                           getSectionObject(section)
@@ -139,7 +173,20 @@ export const SidebarSorting = () => {
                                             .titleDefendant
                                         }
                                       </span>
-                                      <br />
+                                      <div
+                                        className={
+                                          titleVisible(
+                                            getSectionObject(section)
+                                              .titlePlaintiff
+                                          ) === false ||
+                                          titleVisible(
+                                            getSectionObject(section)
+                                              .titleDefendant
+                                          ) === false
+                                            ? ""
+                                            : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
+                                        }
+                                      />
                                       <span className="font-light">
                                         {
                                           getSectionObject(section)
@@ -190,7 +237,7 @@ export const SidebarSorting = () => {
               draggable={false}
               className="flex flex-row gap-2 rounded-md p-2 my-2 text-darkGrey bg-offWhite font-bold w-full item-container text-sm"
               onClick={(e) => e.stopPropagation()}>
-              <span>
+              <span className="self-center">
                 {getOriginalSortingPosition(
                   sectionList,
                   getSectionObject(sortpoint).id
@@ -198,9 +245,28 @@ export const SidebarSorting = () => {
                 .
               </span>
               <div>
-                <span>{getSectionObject(sortpoint).titlePlaintiff}</span>
-                <br />
-                <span>{getSectionObject(sortpoint).titleDefendant}</span>
+                <span
+                  className={
+                    user?.role === UserRole.Plaintiff ? "" : "font-light"
+                  }>
+                  {getSectionObject(sortpoint).titlePlaintiff}
+                </span>
+                <div
+                  className={
+                    titleVisible(getSectionObject(sortpoint).titlePlaintiff) ===
+                      false ||
+                    titleVisible(getSectionObject(sortpoint).titleDefendant) ===
+                      false
+                      ? ""
+                      : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
+                  }
+                />
+                <span
+                  className={
+                    user?.role === UserRole.Defendant ? "" : "font-light"
+                  }>
+                  {getSectionObject(sortpoint).titleDefendant}
+                </span>
               </div>
             </a>
           ))
