@@ -100,6 +100,7 @@ export const SidebarSorting = () => {
                                 <a
                                   href={`#${section}`}
                                   draggable={false}
+                                  key={getSectionObject(section).id}
                                   className="flex flex-row gap-2 rounded-md p-2 bg-offWhite text-darkGrey font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm"
                                   onClick={(e) => e.stopPropagation()}>
                                   <span className="self-center">
@@ -238,6 +239,7 @@ export const SidebarSorting = () => {
             <a
               href={`#${sortpoint}`}
               draggable={false}
+              key={getSectionObject(sortpoint).id}
               className="flex flex-row gap-2 rounded-md p-2 my-2 text-darkGrey bg-offWhite font-bold w-full item-container text-sm"
               onClick={(e) => e.stopPropagation()}>
               <span className="self-center">
