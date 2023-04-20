@@ -247,7 +247,7 @@ export const SidebarSorting = () => {
               <div>
                 <span
                   className={
-                    user?.role === UserRole.Plaintiff ? "" : "font-light"
+                    user?.role === UserRole.Defendant ? "font-light" : ""
                   }>
                   {getSectionObject(sortpoint).titlePlaintiff}
                 </span>
@@ -263,7 +263,7 @@ export const SidebarSorting = () => {
                 />
                 <span
                   className={
-                    user?.role === UserRole.Defendant ? "" : "font-light"
+                    user?.role === UserRole.Plaintiff ?  "font-light" : ""
                   }>
                   {getSectionObject(sortpoint).titleDefendant}
                 </span>
