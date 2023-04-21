@@ -63,7 +63,12 @@ function getEntryTitle(entryId: any, obj: any) {
 function parseHTMLtoString(htmltext: any) {
   const parser = new DOMParser();
   const parserElem = parser.parseFromString(htmltext, "text/html");
-  return parserElem.body.innerText.replace(/\n+$/, ""); //remove last empty line
+  //add newline for spacing
+  let parsedtext = "\n" + parserElem.body.innerText;
+  return parsedtext
+    .replace(/[^\S\n]/g, " ") //remove all NNBSPs -> formatting error
+    .replace(/\u00A0/g, "\n") //change all NBSPs to newlines for spacing
+    .replace(/^\n\n+|\n\n+$/g, "\n"); //format more than one newline at the beginning or end of string to one
 }
 
 //get role profession, e.g. "Rechtsanwältin/Rechtsanwalt" for plaintiff or defendant
