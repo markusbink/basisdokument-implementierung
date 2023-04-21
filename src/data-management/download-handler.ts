@@ -133,7 +133,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     let hint = {
       id: entryId,
       title:
-        judgeHintObject.author + entryCodeText + " | " + judgeHintObject.title,
+        judgeHintObject.author + entryCodeText + " | " + judgeHintObject.title + " | Hinzugefügt am: " + getEntryTimestamp(judgeHintObject, obj),
       text: parseHTMLtoString(judgeHintObject.text),
       version: judgeHintObject.version,
     };
