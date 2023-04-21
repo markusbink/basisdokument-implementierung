@@ -462,8 +462,6 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   allEntries = [];
 
   //signature page
-  //doc.addPage();
-  console.log(obj);
   let signatureData:any = [[
     parseHTMLtoString(
       "Datum: " +
