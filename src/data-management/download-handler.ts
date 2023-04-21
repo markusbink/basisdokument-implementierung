@@ -63,6 +63,34 @@ function getEntryTitle(entryId: any, obj: any) {
 function parseHTMLtoString(htmltext: any) {
   const parser = new DOMParser();
   const parserElem = parser.parseFromString(htmltext, "text/html");
+  //add enumeration in ordered lists
+  var orderedLists = parserElem.getElementsByTagName("ol");
+  for (let i=0; i<orderedLists.length; i++) {
+    let listitems = orderedLists[i].getElementsByTagName("li");
+    for (let j=0; j<listitems.length; j++) {
+      if (j === 0) {
+        listitems[j].innerText = "\n" + (j + 1) + ". " + listitems[j].innerText;
+      } else if (j === listitems.length-1) {
+        listitems[j].innerText = (j + 1) + ". " + listitems[j].innerText + "\n";
+      } else {
+        listitems[j].innerText = (j + 1) + ". " + listitems[j].innerText;
+      }
+    }
+  }
+  //add bulletpoints in unordered lists
+  var unorderedLists = parserElem.getElementsByTagName("ul");
+  for (let i=0; i<unorderedLists.length; i++) {
+    let bulletpoints = unorderedLists[i].getElementsByTagName("li");
+    for (let j=0; j<bulletpoints.length; j++) {
+      if (j === 0) {
+        bulletpoints[j].innerText = "\n• " + bulletpoints[j].innerText;
+      } else if (j === bulletpoints.length-1) {
+        bulletpoints[j].innerText = "• " + bulletpoints[j].innerText + "\n";
+      } else {
+        bulletpoints[j].innerText = "• " + bulletpoints[j].innerText;
+      }
+    }
+  }
   //add newline for spacing
   let parsedtext = "\n" + parserElem.body.innerText;
   return parsedtext
