@@ -53,7 +53,11 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const entryCodePrefix = isPlaintiff ? "K" : "B";
   const sectionNumber = getOriginalSortingPosition(sectionList, sectionId);
 
-  const createEntry = (plainText: string, rawHtml: string) => {
+  const createEntry = (
+    plainText: string,
+    rawHtml: string,
+    attatchments: string[]
+  ) => {
     if (plainText.length === 0) {
       toast("Bitte geben sie einen Text ein.", { type: "error" });
       return;
@@ -70,6 +74,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       sectionId,
       text: rawHtml,
       version: currentVersion,
+      attatchments: attatchments,
     };
 
     if (associatedEntry) {
@@ -219,9 +224,10 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             onAbort={(plainText, rawHtml) => {
               closeNewEntryForm(plainText, rawHtml);
             }}
-            onSave={(plainText, rawHtml) => {
-              createEntry(plainText, rawHtml);
+            onSave={(plainText, rawHtml, attatchments) => {
+              createEntry(plainText, rawHtml, attatchments);
             }}
+            attatchments={[]}
           />
         </div>
       </div>

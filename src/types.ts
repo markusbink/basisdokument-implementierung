@@ -93,6 +93,7 @@ export interface IEntry {
   role: UserRole.Plaintiff | UserRole.Defendant;
   sectionId: string;
   associatedEntry?: string;
+  attatchments: string[];
 }
 
 export enum IDragItemType {
@@ -159,4 +160,10 @@ export interface IStateUserInput {
   editFilename: string;
   errorText: string;
   newVersionMode: boolean | undefined;
+}
+
+export interface IAttatchment {
+  evidenceId: string; 
+  name: string;
+  role: UserRole;
 }

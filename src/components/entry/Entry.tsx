@@ -31,6 +31,7 @@ import {
   SidebarState,
   IndividualEntrySortingEntry,
   ViewMode,
+  IAttatchment,
 } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -267,7 +268,11 @@ export const Entry: React.FC<EntryProps> = ({
     });
   };
 
-  const updateEntry = (plainText: string, rawHtml: string) => {
+  const updateEntry = (
+    plainText: string,
+    rawHtml: string,
+    attatchments: string[]
+  ) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
       return;
@@ -281,6 +286,7 @@ export const Entry: React.FC<EntryProps> = ({
       );
       newEntries[entryIndex].text = rawHtml;
       newEntries[entryIndex].author = authorName || entry.author;
+      newEntries[entryIndex].attatchments = attatchments;
       return newEntries;
     });
 
@@ -553,7 +559,8 @@ export const Entry: React.FC<EntryProps> = ({
                     }
                     lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
                     entryId={entry.id}
-                    showInPopup={shownInPopup}>
+                    showInPopup={shownInPopup}
+                    attatchments={entry.attatchments}>
                     {entry.text}
                   </EntryBody>
                 )}
@@ -566,10 +573,15 @@ export const Entry: React.FC<EntryProps> = ({
                     onAbort={() => {
                       setIsEditErrorVisible(true);
                     }}
-                    onSave={(plainText: string, rawHtml: string) => {
-                      updateEntry(plainText, rawHtml);
+                    onSave={(
+                      plainText: string,
+                      rawHtml: string,
+                      attatchments: string[]
+                    ) => {
+                      updateEntry(plainText, rawHtml, attatchments);
                       setIsExpanded(false);
                     }}
+                    attatchments={entry.attatchments}
                   />
                 )}
               </div>

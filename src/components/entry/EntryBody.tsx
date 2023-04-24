@@ -20,6 +20,7 @@ interface EntryBodyProps {
     React.SetStateAction<boolean>
   >;
   showInPopup?: boolean;
+  attatchments: string[];
 }
 
 export const EntryBody: React.FC<EntryBodyProps> = ({
@@ -30,6 +31,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
   setLowerOpcacityForHighlighters,
   children,
   showInPopup,
+  attatchments,
 }) => {
   const {
     searchbarValue,
@@ -104,11 +106,11 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
     return getColorHexForColor(currentColorSelection.color);
   };
 
-  function markedEntryExists(entryId: string) {
+  const markedEntryExists = (entryId: string) => {
     return highlightedEntries.some(function (el) {
       return el.entryId === entryId;
     });
-  }
+  };
 
   const saveNewHighlighting = () => {
     let highlightedText: string | undefined = document.querySelector(
@@ -232,9 +234,17 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
             {children}
           </Highlight> // eslint-disable-line
         ) : null}
-        <div className="border-t-2 border-lightGrey rounded-b-lg mt-4">
-          <span>TODO: Beweis</span>
-        </div>
+        {attatchments && attatchments.length > 0 && (
+          <div className="flex border-t border-lightGrey rounded-b-lg mt-5 items-center gap-2 justify-between">
+            <div className="flex flex-row flex-wrap gap-1 pt-2">
+              {attatchments.map((tag) => (
+                <div className="flex flex-row items-center rounded-full gap-1 px-2 py-1 text-xs font-semibold bg-darkGrey text-white">
+                  <span>{tag}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
