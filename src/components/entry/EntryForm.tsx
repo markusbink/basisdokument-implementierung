@@ -53,7 +53,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   defaultContent,
   attatchments,
 }) => {
-  const [evs, setEvs] = useState<string[]>(attatchments);
+  const [att, setAtts] = useState<string[]>(attatchments);
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [evidencePopupVisible, setAttatchmentPopupVisible] =
     useState<boolean>(false);
@@ -137,17 +137,20 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           }
         />
         <div className="flex border-t border-lightGrey rounded-b-lg px-3 py-2 items-center gap-2 justify-between">
-          {evs.length <= 0 ? (
+          {att.length <= 0 ? (
             <div className="flex flex-col gap-2 items-center">
               <span className="italic">Keine Anlagen</span>
             </div>
           ) : (
             <div className="flex flex-col gap-1">
-              <span className="ml-1">Anlagen:</span>
-              <div className="flex flex-row flex-wrap gap-1">
-                {evs.map((tag) => (
-                  <div className="flex flex-row items-center rounded-full gap-1 px-2 py-1 text-xs font-semibold bg-darkGrey text-white">
-                    <span>{tag}</span>
+              <span className="ml-1 font-bold">Anlagen:</span>
+              <div className="flex flex-col flex-wrap gap-1">
+                {att.map((tag, index) => (
+                  <div className="flex flex-row items-center px-2" key={index}>
+                    <div className="flex flex-row gap-3">
+                      <span>{index + 1}.</span>
+                      <span>{tag}</span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -186,7 +189,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
                 convertToRaw(editorState.getCurrentContent())
               );
 
-              onSave(plainText, newHtml, evs);
+              onSave(plainText, newHtml, att);
             }}
             size="sm"
             bgColor="bg-lightGreen hover:bg-darkGreen"
@@ -198,8 +201,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       <AttatchmentPopup
         isVisible={evidencePopupVisible}
         setIsVisible={setAttatchmentPopupVisible}
-        attatchments={evs}
-        setAttatchments={setEvs}></AttatchmentPopup>
+        attatchments={att}
+        setAttatchments={setAtts}></AttatchmentPopup>
     </>
   );
 };

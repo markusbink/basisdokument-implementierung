@@ -1,7 +1,9 @@
-import { Paperclip, X, XCircle } from "phosphor-react";
+import { Plus, X, XCircle } from "phosphor-react";
 import { useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
+import { getAttatchments } from "../../util/get-attatchments";
+import { useCase, useUser } from "../../contexts";
 
 interface AttatchmentPopupProps {
   isVisible: boolean;
@@ -18,16 +20,19 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
 }) => {
   const [tags, setTags] = useState<string[]>(attatchments);
   const [currentTag, setCurrentTag] = useState<string>("");
+  const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
+  const { user } = useUser();
+  const { entries } = useCase();
 
   const handleKeyDown = (e: SyntheticKeyboardEvent) => {
-    if (e.key !== "Enter" || !currentTag || currentTag?.trim().length <= 0) {
-      return;
-    }
+    if (e.key !== "Enter") return;
     login();
   };
 
-  const login = () => {
-    setTags([...tags, currentTag]);
+  const login = (input?: string) => {
+    const value = input ? input : currentTag;
+    if (!value || value?.trim().length <= 0) return;
+    setTags([...tags, value]);
     setCurrentTag("");
   };
 
@@ -65,33 +70,65 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
           </div>
           <span className="text-sm">
             Verweisen Sie auf eine Anlage, die Sie später mit versenden, indem
-            Sie den Dateinamen hier angeben.
+            Sie den Dateinamen hier angeben. (z.B. zeugenaussage.pdf,
+            schaden.jpg, ...)
           </span>
-          <div className="flex flex-row items-center justify-between bg-offWhite rounded-lg">
-            <input
-              value={currentTag}
-              className="w-full px-2 py-2 text-sm bg-offWhite block rounded-l-lg text-mediumGrey focus:outline-none"
-              onKeyDown={handleKeyDown}
-              onChange={(e) => {
-                setCurrentTag(e.target.value);
-              }}
-              type="text"
-              placeholder="Dateiname..."
-            />
-            <Button
-              alternativePadding="p-2 m-1"
-              icon={<Paperclip size={16} color="white" weight="regular" />}
-              onClick={login}></Button>
+          <div className="flex flex-col">
+            <div className="flex flex-row w-full items-start justify-between gap-1">
+              <div className="w-full">
+                <input
+                  value={currentTag}
+                  className="w-full px-2 py-2 text-sm bg-offWhite block rounded-lg text-mediumGrey focus:outline-none"
+                  onKeyDown={handleKeyDown}
+                  onChange={(e) => {
+                    setCurrentTag(e.target.value);
+                  }}
+                  onFocus={(e) => setSuggestionsActive(true)}
+                  type="text"
+                  placeholder="Dateiname..."
+                />
+                {suggestionsActive ? (
+                  <ul className="my-1 ml-0 p-1 text-darkGrey w-full max-h-[100px] overflow-auto bg-offWhite rounded-b-lg">
+                    {getAttatchments(entries, user?.role, currentTag).map(
+                      (attatchment, index) => (
+                        <li
+                          tabIndex={index}
+                          className="p-1 rounded-lg hover:bg-lightGrey focus:bg-lightGrey focus:outline-none cursor-pointer"
+                          onClick={(e: React.BaseSyntheticEvent) => {
+                            setCurrentTag(e.target.innerHTML);
+                            setSuggestionsActive(false);
+                            login(e.target.innerHTML);
+                          }}>
+                          {attatchment}
+                        </li>
+                      )
+                    )}
+                  </ul>
+                ) : null}
+              </div>
+              <div className="items-center flex my-1">
+                <Button
+                  alternativePadding="p-1"
+                  icon={<Plus size={20} color="white" weight="regular" />}
+                  onClick={login}></Button>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-row flex-wrap gap-1">
+
+          {/* TODO: dnd für reihenfolge */}
+          <div className="flex flex-col flex-wrap gap-1 w-full">
             {tags.map((tag, index) => (
               <div
-                className="flex flex-row items-center cursor-pointer rounded-full gap-1 pl-3 pr-1 py-1 text-xs font-semibold bg-darkGrey text-white"
+                className="flex flex-row items-center px-2 py-1 rounded-lg bg-offWhite justify-between"
                 key={index}>
-                <span>{tag}</span>
+                <div className="flex flex-row gap-3">
+                  <span>{index + 1}.</span>
+                  <span>{tag}</span>
+                </div>
                 <XCircle
                   size={20}
                   weight="fill"
+                  className="cursor-pointer"
                   onClick={() => {
                     removeTag(index);
                   }}
@@ -99,6 +136,7 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
               </div>
             ))}
           </div>
+
           <div className="flex items-center justify-end">
             <button
               className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"

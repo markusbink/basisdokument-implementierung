@@ -235,11 +235,15 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
           </Highlight> // eslint-disable-line
         ) : null}
         {attatchments && attatchments.length > 0 && (
-          <div className="flex border-t border-lightGrey rounded-b-lg mt-5 items-center gap-2 justify-between">
-            <div className="flex flex-row flex-wrap gap-1 pt-2">
-              {attatchments.map((tag) => (
-                <div className="flex flex-row items-center rounded-full gap-1 px-2 py-1 text-xs font-semibold bg-darkGrey text-white">
-                  <span>{tag}</span>
+          <div className="flex flex-col gap-1 border-t border-lightGrey pt-2">
+            <span className="font-bold">Anlagen:</span>
+            <div className="flex flex-col flex-wrap gap-1">
+              {attatchments.map((attatchment, index) => (
+                <div className="flex flex-row items-center px-2" key={index}>
+                  <div className="flex flex-row gap-3">
+                    <span>{index + 1}.</span>
+                    <span>{attatchment}</span>
+                  </div>
                 </div>
               ))}
             </div>
