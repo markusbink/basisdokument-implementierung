@@ -241,7 +241,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
               {attatchments.map((attatchment, index) => (
                 <div className="flex flex-row items-center px-2" key={index}>
                   <div className="flex flex-row gap-3">
-                    <span>{index + 1}.</span>
+                    <span>{index + 1 + ")"}</span>
                     <span>{attatchment}</span>
                   </div>
                 </div>

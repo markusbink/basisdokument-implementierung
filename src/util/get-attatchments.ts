@@ -6,22 +6,21 @@ export const getAttatchments = (
   currentTag: string,
   tags: string[],
 ): string[] => {
-    let atts = [];
     if (!entryRole || entryRole === UserRole.Client) return [];
+    
+    let atts = [];
     if (entryRole === UserRole.Judge) {
         atts = entries.map((e) => e.attatchments).flat(1);
-        if (currentTag) {
-            return atts.filter((att) => att.startsWith(currentTag) && !tags.includes(att));
-        }
-        return atts;
+    } else {
+        atts = (entries.map((e) => {
+            if (e.role === entryRole) return e.attatchments;
+            return [];
+        })).flat(1);
     }
-    const attatchments = entries.map((e) => {
-        if (e.role === entryRole) return e.attatchments;
-        return [];
-    });
-    atts = attatchments.flat(1);
+
     if (currentTag) {
-        return atts.filter((att) => att.startsWith(currentTag) && !tags.includes(att));
+        atts = atts.filter((att) => att.startsWith(currentTag));
     }
-    return atts;
+    atts = atts.filter((att) => !tags.includes(att));
+    return Array.from(new Set(atts));
 };

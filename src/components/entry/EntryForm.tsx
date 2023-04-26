@@ -148,7 +148,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
                 {att.map((tag, index) => (
                   <div className="flex flex-row items-center px-2" key={index}>
                     <div className="flex flex-row gap-3">
-                      <span>{index + 1}.</span>
+                      <span>{index + 1 + ")"}</span>
                       <span>{tag}</span>
                     </div>
                   </div>

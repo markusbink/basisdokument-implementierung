@@ -1,9 +1,10 @@
 import { Plus, X, XCircle } from "phosphor-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
 import { getAttatchments } from "../../util/get-attatchments";
 import { useCase, useUser } from "../../contexts";
+import { useOutsideClick } from "../../hooks/use-outside-click";
 
 interface AttatchmentPopupProps {
   isVisible: boolean;
@@ -24,6 +25,9 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
   const { user } = useUser();
   const { entries } = useCase();
 
+  const inputRef = useRef(null);
+  useOutsideClick(inputRef, () => setSuggestionsActive(false));
+
   const handleKeyDown = (e: SyntheticKeyboardEvent) => {
     if (e.key !== "Enter") return;
     login();
@@ -31,7 +35,6 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
 
   const login = (input?: string) => {
     const value = input ? input : currentTag;
-    console.log(value);
     if (!value || value?.trim().length <= 0) return;
     setTags([...tags, value]);
     setCurrentTag("");
@@ -76,7 +79,7 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
           </span>
           <div className="flex flex-col px-4">
             <div className="flex flex-row w-full items-start justify-between gap-1">
-              <div className="w-full">
+              <div className="w-full" ref={inputRef}>
                 <input
                   value={currentTag}
                   className="w-full px-2 py-2 text-sm bg-offWhite block rounded-lg text-mediumGrey focus:outline-none"
@@ -85,13 +88,12 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
                     setCurrentTag(e.target.value);
                   }}
                   onFocus={(e) => setSuggestionsActive(true)}
-                  onBlur={(e) => setSuggestionsActive(false)}
                   type="text"
                   placeholder="Dateiname..."
                 />
                 <div className="relative">
                   {suggestionsActive ? (
-                    <ul className="absolute my-1 ml-0 p-1 text-darkGrey w-full max-h-[100px] overflow-auto bg-offWhite rounded-b-lg shadow-lg">
+                    <ul className="absolute my-1 ml-0 p-1 text-darkGrey w-full max-h-[100px] overflow-auto opacity-90 bg-offWhite rounded-b-lg shadow-lg empty:hidden">
                       {getAttatchments(
                         entries,
                         user?.role,
@@ -123,15 +125,18 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
           </div>
 
           {/* TODO: dnd für reihenfolge */}
-          <div className="pt-8">
-            <span>Anlagen zu diesem Beitrag:</span>
+          <div className="pt-4">
+            <span>
+              {tags && tags.length > 0 ? "Anlagen" : "Bisher keine Anlagen"} zu
+              diesem Beitrag
+            </span>
             <div className="flex flex-col gap-1 w-full max-h-[20vh] overflow-auto mt-2">
               {tags.map((tag, index) => (
                 <div
                   className="flex flex-row items-center px-2 py-1 rounded-lg bg-offWhite justify-between"
                   key={index}>
                   <div className="flex flex-row gap-3">
-                    <span>{index + 1}.</span>
+                    <span>{index + 1 + ")"}</span>
                     <span>{tag}</span>
                   </div>
                   <XCircle
