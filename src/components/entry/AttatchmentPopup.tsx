@@ -123,8 +123,6 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
               </div>
             </div>
           </div>
-
-          {/* TODO: dnd für reihenfolge */}
           <div className="pt-4">
             <span>
               {tags && tags.length > 0 ? "Anlagen" : "Bisher keine Anlagen"} zu
