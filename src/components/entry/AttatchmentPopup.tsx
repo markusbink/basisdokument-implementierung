@@ -31,6 +31,7 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
 
   const login = (input?: string) => {
     const value = input ? input : currentTag;
+    console.log(value);
     if (!value || value?.trim().length <= 0) return;
     setTags([...tags, value]);
     setCurrentTag("");
@@ -55,7 +56,7 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
       <div className="fixed inset-0 flex flex-col justify-center items-center z-50">
         <div
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-            p-8 bg-white rounded-lg content-center shadow-lg space-y-8 w-full max-w-[600px]">
+            p-8 bg-white rounded-lg content-center shadow-lg space-y-4 w-full max-w-[600px]">
           <div className="flex items-start justify-between rounded-lg ">
             <h3>Anlagen hinzufügen</h3>
             <div>
@@ -73,7 +74,7 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
             Sie den Dateinamen hier angeben. (z.B. zeugenaussage.pdf,
             schaden.jpg, ...)
           </span>
-          <div className="flex flex-col">
+          <div className="flex flex-col px-4">
             <div className="flex flex-row w-full items-start justify-between gap-1">
               <div className="w-full">
                 <input
@@ -84,13 +85,19 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
                     setCurrentTag(e.target.value);
                   }}
                   onFocus={(e) => setSuggestionsActive(true)}
+                  onBlur={(e) => setSuggestionsActive(false)}
                   type="text"
                   placeholder="Dateiname..."
                 />
-                {suggestionsActive ? (
-                  <ul className="my-1 ml-0 p-1 text-darkGrey w-full max-h-[100px] overflow-auto bg-offWhite rounded-b-lg">
-                    {getAttatchments(entries, user?.role, currentTag).map(
-                      (attatchment, index) => (
+                <div className="relative">
+                  {suggestionsActive ? (
+                    <ul className="absolute my-1 ml-0 p-1 text-darkGrey w-full max-h-[100px] overflow-auto bg-offWhite rounded-b-lg shadow-lg">
+                      {getAttatchments(
+                        entries,
+                        user?.role,
+                        currentTag,
+                        tags
+                      ).map((attatchment, index) => (
                         <li
                           tabIndex={index}
                           className="p-1 rounded-lg hover:bg-lightGrey focus:bg-lightGrey focus:outline-none cursor-pointer"
@@ -101,40 +108,43 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
                           }}>
                           {attatchment}
                         </li>
-                      )
-                    )}
-                  </ul>
-                ) : null}
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
               </div>
               <div className="items-center flex my-1">
                 <Button
                   alternativePadding="p-1"
                   icon={<Plus size={20} color="white" weight="regular" />}
-                  onClick={login}></Button>
+                  onClick={() => login()}></Button>
               </div>
             </div>
           </div>
 
           {/* TODO: dnd für reihenfolge */}
-          <div className="flex flex-col flex-wrap gap-1 w-full">
-            {tags.map((tag, index) => (
-              <div
-                className="flex flex-row items-center px-2 py-1 rounded-lg bg-offWhite justify-between"
-                key={index}>
-                <div className="flex flex-row gap-3">
-                  <span>{index + 1}.</span>
-                  <span>{tag}</span>
+          <div className="pt-8">
+            <span>Anlagen zu diesem Beitrag:</span>
+            <div className="flex flex-col gap-1 w-full max-h-[20vh] overflow-auto mt-2">
+              {tags.map((tag, index) => (
+                <div
+                  className="flex flex-row items-center px-2 py-1 rounded-lg bg-offWhite justify-between"
+                  key={index}>
+                  <div className="flex flex-row gap-3">
+                    <span>{index + 1}.</span>
+                    <span>{tag}</span>
+                  </div>
+                  <XCircle
+                    size={20}
+                    weight="fill"
+                    className="cursor-pointer"
+                    onClick={() => {
+                      removeTag(index);
+                    }}
+                  />
                 </div>
-                <XCircle
-                  size={20}
-                  weight="fill"
-                  className="cursor-pointer"
-                  onClick={() => {
-                    removeTag(index);
-                  }}
-                />
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center justify-end">
