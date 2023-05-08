@@ -8,10 +8,40 @@ import "swiper/css/pagination";
 
 const sliderItems = [
   {
-    src: "BDWelcome.png",
+    src: "images/BDWelcome.png",
     alt: "Main screen to show the main functions",
     title: "Willkommen zum Basisdokument!",
-    desc: "Das Basisdokument unterstützt die Digitalisierung ziviler Gerichtsverfahren. In dieser kurzen Einführung werden Ihnen die Funktionen des Basisdokuments erläutert.",
+    desc: "Das Basisdokument unterstützt die Digitalisierung ziviler Gerichtsverfahren. In dieser kurzen Einführung werden Ihnen die Funktionen des Basisdokuments erläutert.<br><br>Eine Übersicht zu allen Funktionen finden Sie im <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "videos/BDGliederungs-Sidebar.mp4",
+    title: "NEU: Gliederungs-Sidebar",
+    desc: "Die neue <b>Gliederungs-Sidebar</b> gewährt einen besseren Überblick und eine schnellere Navigation im Basisdokument. Per Klick auf einen Gliederungspunkt gelangen Sie sofort an die entsprechende Stelle im Dokument. Hier finden Sie nun auch die <b>Sortierungsfunktionen 'Original' und 'Privat'</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "images/BDPDF.png",
+    title: "NEU: Neuer PDF-Look",
+    desc: "Das neue PDF bietet zusätzlich zu einem neuen Look noch weitere Verbesserungen: Es wurden <b>Seitenzahlen</b> integriert, über eine <b>PDF-interne Gliederung</b> können Sie nun schneller im PDF navigieren. Zudem finden Sie auf eigenen <b>Übersichtsseiten</b> alle <b>neuen Beiträge</b> (diese werden zusätzlich in der Gesamtübersicht des Parteivortrags hervorgehoben) und <b>alle Hinweise</b>. Bezugnehmende Hinweise werden zusätzlich als <b>Kommentare</b> neben den entsprechenden Beiträgen angezeigt.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "videos/BDBezugnehmendeBeiträgePopup.mp4",
+    title: "NEU: Beiträge-Ansicht",
+    desc: "Mit einem Klick können Sie nun <b>zwei bezugnehmende Beiträge nebeneinander anzeigen lassen</b>: Klicken Sie dazu auf das Symbol rechts in der Bezugleiste - die beiden Beiträge werden nun in einem Popup angezeigt.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "videos/BDMandantenansicht.mp4",
+    title: "NEU: Mandantenansicht",
+    desc: "Um Personen Einsicht in das Basisdokument zu gewähren, können Sie nun die neue <b>Mandantenansicht</b> nutzen. Dazu müssen Sie nur den Hinweis auf <a href='https://app.parteivortrag.de' target='_blank'>app.parteivortrag.de</a> und die Basisdokument-txt versenden. In der Mandantenansicht gibt es <b>keine Bearbeitungsmöglichkeiten</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "videos/BDStandardüberschriften.mp4",
+    title: "NEU: Standardüberschriften für Gliederungspunkte",
+    desc: "Sie können nun schnell und unkompliziert <b>Standardüberschriften</b> im Basisdokument nutzen. Wenn Sie auf das Symbol am Ende der Zeile eines Gliederungspunktes klicken, öffnet sich ein Dropdown, aus dem Sie eine beliebige Überschrift auswählen können. Es ist natürlich immer noch möglich <b>individuelle Überschriften</b> zu vergeben.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "images/BDMarkierungstools.png",
+    title: "NEU: Markierungstools in einem Menüpunkt",
+    desc: "Die Markierungstools wurden unter <b>einem gemeinsamen Menüpunkt</b> zusammengefasst. Sie finden die Tool- und Farbauswahl nun in derselben Zeile wie die Filterfunktion.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
   },
   {
     src: "videos/BDAnlegen.mp4",
