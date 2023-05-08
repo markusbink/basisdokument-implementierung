@@ -60,7 +60,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     useState<IStateUserInput["newVersionMode"]>(undefined);
   const [showVersionPopup, setShowVersionPopup] = useState<boolean>(false);
   const [isReadonly] = useState<boolean>(
-    window.location.hostname.includes("mandant")
+    window.location.hostname.includes("localhost")
   );
 
   // Refs
@@ -305,18 +305,27 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex-col justify-center h-auto overflow-scroll no-scrollbar">
         <AboutDevelopersMenu />
         <h1 className="text-3xl font-bold">Das Basisdokument</h1>
-        <p className="text-md text-mediumGrey text-justify">
-          Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines
-          Basisdokuments. Bitte laden Sie den aktuellen Stand des Basisdokuments
-          in Form einer .txt-Datei hoch, falls Sie an einer Version
-          weiterarbeiten wollen. Um persönliche Daten wie Markierungen,
-          Sortierungen und Lesezeichen zu laden, ist es notwendig, dass Sie auch
-          Ihre persönliche Bearbeitungsdatei hochladen. Das Basisdokument
-          verwendet keinen externen Server, um Daten zu speichern. Alle Daten,
-          die Sie hochladen, bleiben <b>im Browser Ihres Computers</b>. Das
-          Basisdokument kann schließlich als .txt und .pdf exportiert werden und
-          somit an Dritte weitergegeben werden.
-        </p>
+        {isReadonly ? (
+          <p className="text-md text-mediumGrey text-justify">
+            Diese Anwendung erlaubt Ihnen als Mandant:in das Einsehen eines
+            Basisdokuments. Dafür laden Sie bitte die .txt-Datei hoch, die Ihnen
+            Ihr Anwältin oder Ihr Anwalt zugesendet hat.
+          </p>
+        ) : (
+          <p className="text-md text-mediumGrey text-justify">
+            Diese Anwendung erlaubt Ihnen das Editieren und Erstellen eines
+            Basisdokuments. Bitte laden Sie den aktuellen Stand des
+            Basisdokuments in Form einer .txt-Datei hoch, falls Sie an einer
+            Version weiterarbeiten wollen. Um persönliche Daten wie
+            Markierungen, Sortierungen und Lesezeichen zu laden, ist es
+            notwendig, dass Sie auch Ihre persönliche Bearbeitungsdatei
+            hochladen. Das Basisdokument verwendet keinen externen Server, um
+            Daten zu speichern. Alle Daten, die Sie hochladen, bleiben{" "}
+            <b>im Browser Ihres Computers</b>. Das Basisdokument kann
+            schließlich als .txt und .pdf exportiert werden und somit an Dritte
+            weitergegeben werden.
+          </p>
+        )}
         <div>
           <p className="font-light">
             Ich möchte ein Basisdokument:{" "}
