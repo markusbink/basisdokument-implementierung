@@ -46,7 +46,7 @@ jobs:
       - name: Deploy Client
         run: |
             ls
-            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_CLIENT }}
+            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_READONLY }}
       
       - name: Cleanup
         run: rm -rf ~/.ssh
