@@ -60,7 +60,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     useState<IStateUserInput["newVersionMode"]>(undefined);
   const [showVersionPopup, setShowVersionPopup] = useState<boolean>(false);
   const [isReadonly] = useState<boolean>(
-    window.location.hostname.includes("localhost")
+    window.location.hostname.includes("mandant")
   );
 
   // Refs
