@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { Trash, Upload, Info } from "phosphor-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
 import { Button } from "../components/Button";
@@ -59,6 +59,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [newVersionMode, setNewVersionMode] =
     useState<IStateUserInput["newVersionMode"]>(undefined);
   const [showVersionPopup, setShowVersionPopup] = useState<boolean>(false);
+  const [isReadonly] = useState<boolean>(
+    window.location.hostname.includes("mandant")
+  );
 
   // Refs
   const basisdokumentFileUploadRef = useRef<HTMLInputElement>(null);
@@ -281,6 +284,22 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setIndividualEntrySorting(editFile.individualEntrySorting);
   };
 
+  const setReadonly = () => {
+    if (usage !== UsageMode.Readonly) {
+      setErrorText("");
+    }
+    setUsage(UsageMode.Readonly);
+    setRole(UserRole.Client);
+    setNewVersionMode(false);
+    setActiveSidebar(SidebarState.Sorting);
+  };
+
+  useEffect(() => {
+    if (isReadonly) {
+      setReadonly();
+    }
+  });
+
   return (
     <div className="overflow-scroll h-full">
       <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex-col justify-center h-auto overflow-scroll no-scrollbar">
@@ -304,45 +323,43 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             <span className="text-darkRed">*</span>
           </p>
           <div className="flex flex-row w-auto mt-4 gap-4">
+            {!isReadonly && (
+              <>
+                <button
+                  onClick={() => {
+                    if (usage !== UsageMode.Open) {
+                      setErrorText("");
+                    }
+                    setUsage(UsageMode.Open);
+                  }}
+                  className={cx(
+                    "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
+                    {
+                      "border-2 border-darkGrey": usage === UsageMode.Open,
+                    }
+                  )}>
+                  Öffnen
+                </button>
+                <button
+                  onClick={() => {
+                    if (usage !== UsageMode.Create) {
+                      setErrorText("");
+                    }
+                    setUsage(UsageMode.Create);
+                  }}
+                  className={cx(
+                    "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
+                    {
+                      "border-2 border-darkGrey": usage === UsageMode.Create,
+                    }
+                  )}>
+                  Erstellen
+                </button>
+              </>
+            )}
             <button
               onClick={() => {
-                if (usage !== UsageMode.Open) {
-                  setErrorText("");
-                }
-                setUsage(UsageMode.Open);
-              }}
-              className={cx(
-                "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                {
-                  "border-2 border-darkGrey": usage === UsageMode.Open,
-                }
-              )}>
-              Öffnen
-            </button>
-            <button
-              onClick={() => {
-                if (usage !== UsageMode.Create) {
-                  setErrorText("");
-                }
-                setUsage(UsageMode.Create);
-              }}
-              className={cx(
-                "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                {
-                  "border-2 border-darkGrey": usage === UsageMode.Create,
-                }
-              )}>
-              Erstellen
-            </button>
-            <button
-              onClick={() => {
-                if (usage !== UsageMode.Readonly) {
-                  setErrorText("");
-                }
-                setUsage(UsageMode.Readonly);
-                setRole(UserRole.Client);
-                setNewVersionMode(false);
-                setActiveSidebar(SidebarState.Sorting);
+                setReadonly();
               }}
               className={cx(
                 "flex items-center justify-center w-fit px-5 h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
