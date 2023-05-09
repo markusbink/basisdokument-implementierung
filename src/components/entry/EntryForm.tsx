@@ -11,7 +11,7 @@ import { getTheme } from "../../themes/getTheme";
 import { ViewMode } from "../../types";
 import { Button } from "../Button";
 import { ExpandButton } from "./ExpandButton";
-import { AttatchmentPopup } from "./AttatchmentPopup";
+import { AttachmentPopup } from "./AttachmentPopup";
 
 const toolbarOptions = {
   options: ["blockType", "inline", "list", "textAlign"],
@@ -39,9 +39,9 @@ interface EntryBodyProps {
   isExpanded: boolean;
   setIsExpanded: () => void;
   onAbort: (plainText: string, rawHtml: string) => void;
-  onSave: (plainText: string, rawHtml: string, attatchments: string[]) => void;
+  onSave: (plainText: string, rawHtml: string, attachments: string[]) => void;
   defaultContent?: string;
-  attatchments: string[];
+  attachments: string[];
 }
 
 export const EntryForm: React.FC<EntryBodyProps> = ({
@@ -51,11 +51,11 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   onAbort,
   onSave,
   defaultContent,
-  attatchments,
+  attachments,
 }) => {
-  const [att, setAtts] = useState<string[]>(attatchments);
+  const [att, setAtts] = useState<string[]>(attachments);
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
-  const [evidencePopupVisible, setAttatchmentPopupVisible] =
+  const [evidencePopupVisible, setAttachmentPopupVisible] =
     useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
     const blocksFromHtml = htmlToDraft(defaultContent || "");
@@ -159,7 +159,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           <Button
             icon={<PencilSimple size={20} />}
             onClick={() => {
-              setAttatchmentPopupVisible(true);
+              setAttachmentPopupVisible(true);
             }}
             size="sm"
             bgColor="bg-offWhite hover:bg-lightGrey"
@@ -198,11 +198,11 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           </Button>
         </div>
       </div>
-      <AttatchmentPopup
+      <AttachmentPopup
         isVisible={evidencePopupVisible}
-        setIsVisible={setAttatchmentPopupVisible}
-        attatchments={att}
-        setAttatchments={setAtts}></AttatchmentPopup>
+        setIsVisible={setAttachmentPopupVisible}
+        attachments={att}
+        setAttachments={setAtts}></AttachmentPopup>
     </>
   );
 };

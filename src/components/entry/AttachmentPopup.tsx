@@ -2,24 +2,24 @@ import { Plus, X, XCircle } from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
-import { getAttatchments } from "../../util/get-attatchments";
+import { getAttachments } from "../../util/get-attachments";
 import { useCase, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 
-interface AttatchmentPopupProps {
+interface AttachmentPopupProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  attatchments: string[];
-  setAttatchments: React.Dispatch<React.SetStateAction<string[]>>;
+  attachments: string[];
+  setAttachments: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
+export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
   isVisible,
   setIsVisible,
-  attatchments,
-  setAttatchments,
+  attachments,
+  setAttachments,
 }) => {
-  const [tags, setTags] = useState<string[]>(attatchments);
+  const [tags, setTags] = useState<string[]>(attachments);
   const [currentTag, setCurrentTag] = useState<string>("");
   const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
   const { user } = useUser();
@@ -44,8 +44,8 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
     setTags(tags.filter((el, i) => i !== index));
   };
 
-  const addAttatchment = () => {
-    setAttatchments(tags);
+  const addAttachment = () => {
+    setAttachments(tags);
     setIsVisible(false);
   };
 
@@ -94,12 +94,12 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
                 <div className="relative">
                   {suggestionsActive ? (
                     <ul className="absolute my-1 ml-0 p-1 text-darkGrey w-full max-h-[100px] overflow-auto opacity-90 bg-offWhite rounded-b-lg shadow-lg empty:hidden">
-                      {getAttatchments(
+                      {getAttachments(
                         entries,
                         user?.role,
                         currentTag,
                         tags
-                      ).map((attatchment, index) => (
+                      ).map((attachment, index) => (
                         <li
                           tabIndex={index}
                           className="p-1 rounded-lg hover:bg-lightGrey focus:bg-lightGrey focus:outline-none cursor-pointer"
@@ -108,7 +108,7 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
                             setSuggestionsActive(false);
                             login(e.target.innerHTML);
                           }}>
-                          {attatchment}
+                          {attachment}
                         </li>
                       ))}
                     </ul>
@@ -154,7 +154,7 @@ export const AttatchmentPopup: React.FC<AttatchmentPopupProps> = ({
             <button
               className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
               onClick={() => {
-                addAttatchment();
+                addAttachment();
               }}>
               Auf gelistete Anlagen verweisen
             </button>

@@ -1,6 +1,6 @@
 import { IEntry, UserRole } from "../types";
 
-export const getAttatchments = (
+export const getAttachments = (
   entries: IEntry[],
   entryRole: UserRole | undefined,
   currentTag: string,
@@ -10,10 +10,10 @@ export const getAttatchments = (
     
     let atts = [];
     if (entryRole === UserRole.Judge) {
-        atts = entries.map((e) => e.attatchments).flat(1);
+        atts = entries.map((e) => e.attachments).flat(1);
     } else {
         atts = (entries.map((e) => {
-            if (e.role === entryRole) return e.attatchments;
+            if (e.role === entryRole) return e.attachments;
             return [];
         })).flat(1);
     }

@@ -20,7 +20,7 @@ interface EntryBodyProps {
     React.SetStateAction<boolean>
   >;
   showInPopup?: boolean;
-  attatchments: string[];
+  attachments: string[];
 }
 
 export const EntryBody: React.FC<EntryBodyProps> = ({
@@ -31,7 +31,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
   setLowerOpcacityForHighlighters,
   children,
   showInPopup,
-  attatchments,
+  attachments,
 }) => {
   const {
     searchbarValue,
@@ -234,15 +234,15 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
             {children}
           </Highlight> // eslint-disable-line
         ) : null}
-        {attatchments && attatchments.length > 0 && (
+        {attachments && attachments.length > 0 && (
           <div className="flex flex-col gap-1 border-t border-lightGrey pt-2">
             <span className="font-bold">Anlagen:</span>
             <div className="flex flex-col flex-wrap gap-1">
-              {attatchments.map((attatchment, index) => (
+              {attachments.map((attachment, index) => (
                 <div className="flex flex-row items-center px-2" key={index}>
                   <div className="flex flex-row gap-3">
                     <span>{index + 1 + ")"}</span>
-                    <span>{attatchment}</span>
+                    <span>{attachment}</span>
                   </div>
                 </div>
               ))}

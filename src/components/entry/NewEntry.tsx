@@ -56,7 +56,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const createEntry = (
     plainText: string,
     rawHtml: string,
-    attatchments: string[]
+    attachments: string[]
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben sie einen Text ein.", { type: "error" });
@@ -74,7 +74,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       sectionId,
       text: rawHtml,
       version: currentVersion,
-      attatchments: attatchments,
+      attachments: attachments,
     };
 
     if (associatedEntry) {
@@ -224,10 +224,10 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             onAbort={(plainText, rawHtml) => {
               closeNewEntryForm(plainText, rawHtml);
             }}
-            onSave={(plainText, rawHtml, attatchments) => {
-              createEntry(plainText, rawHtml, attatchments);
+            onSave={(plainText, rawHtml, attachments) => {
+              createEntry(plainText, rawHtml, attachments);
             }}
-            attatchments={[]}
+            attachments={[]}
           />
         </div>
       </div>
