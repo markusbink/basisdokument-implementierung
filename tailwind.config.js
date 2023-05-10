@@ -8,6 +8,9 @@ module.exports = {
       md: "960px",
       lg: "1200px",
     },
+    fontFamily: {
+      manrope: ['Manrope', 'sans-serif'],
+    },
     extend: {
       colors: {
         transparent: "transparent",
@@ -42,7 +45,7 @@ module.exports = {
         transitionProperty: {
           width: "width",
         },
-      },
+      }
     },
   },
 };
