@@ -212,7 +212,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
               <li
                 tabIndex={0}
                 className="p-1 rounded-lg hover:bg-lightGrey focus:bg-lightGrey focus:outline-none cursor-pointer">
-                Zur Verjährung
+                Verjährung
               </li>
               <li
                 tabIndex={0}
@@ -232,12 +232,12 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
               <li
                 tabIndex={0}
                 className="p-1 rounded-lg hover:bg-lightGrey focus:bg-lightGrey focus:outline-none cursor-pointer">
-                Zum Anspruchsgrund
+                Anspruchsgrund
               </li>
               <li
                 tabIndex={0}
                 className="p-1 rounded-lg hover:bg-lightGrey focus:bg-lightGrey focus:outline-none cursor-pointer">
-                Zur Anspruchshöhe
+                Anspruchshöhe
               </li>
               <li
                 tabIndex={0}
