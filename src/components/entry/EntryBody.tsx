@@ -6,7 +6,7 @@ import {
   doHighlight,
   optionsImpl,
 } from "@funktechno/texthighlighter/lib/index";
-import { IAttachment, IHighlightedEntry, Tool } from "../../types";
+import { IEvidence, IHighlightedEntry, Tool } from "../../types";
 import { getColorHexForColor } from "../../util/get-hex-code-for-marker";
 import { getTheme } from "../../themes/getTheme";
 
@@ -20,7 +20,7 @@ interface EntryBodyProps {
     React.SetStateAction<boolean>
   >;
   showInPopup?: boolean;
-  attachments: IAttachment[];
+  evidences: IEvidence[];
 }
 
 export const EntryBody: React.FC<EntryBodyProps> = ({
@@ -31,7 +31,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
   setLowerOpcacityForHighlighters,
   children,
   showInPopup,
-  attachments,
+  evidences,
 }) => {
   const {
     searchbarValue,
@@ -234,18 +234,18 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
             {children}
           </Highlight> // eslint-disable-line
         ) : null}
-        {attachments && attachments.length > 0 && (
+        {evidences && evidences.length > 0 && (
           <div className="flex flex-col gap-1 border-t border-lightGrey pt-2">
             <span className="font-bold">Beweisbereich</span>
             <div className="flex flex-col flex-wrap gap-1">
-              {attachments.map((attachment, index) => (
+              {evidences.map((evidence, index) => (
                 <div className="flex flex-row items-center px-2" key={index}>
                   <div className="flex flex-row gap-3">
                     <span>{index + 1 + ")"}</span>
-                    <span>{attachment.name}</span>
-                    {attachment.hasAttatchment && (
+                    <span>{evidence.name}</span>
+                    {evidence.hasAttachment && (
                       <span>
-                        <b>als Anlage {attachment.attatchmentId}</b>
+                        <b>als Anlage {evidence.attachmentId}</b>
                       </span>
                     )}
                   </div>

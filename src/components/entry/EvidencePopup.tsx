@@ -2,34 +2,37 @@ import { Plus, X, XCircle } from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
-import { getAttachments, getAttatchmentId } from "../../util/get-attachments";
+import {
+  getEvidences,
+  getEvidenceAttachmentId,
+} from "../../util/get-evidences";
 import { useCase, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IAttachment, UserRole } from "../../types";
+import { IEvidence, UserRole } from "../../types";
 
-interface AttachmentPopupProps {
+interface EvidencesPopupProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  attachments: IAttachment[];
-  backupAttachments: IAttachment[] | undefined;
-  setAttachments: React.Dispatch<React.SetStateAction<IAttachment[]>>;
+  evidences: IEvidence[];
+  backupEvidences: IEvidence[] | undefined;
+  setEvidences: React.Dispatch<React.SetStateAction<IEvidence[]>>;
 }
 
-export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
+export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   isVisible,
   setIsVisible,
-  attachments,
-  backupAttachments,
-  setAttachments,
+  evidences,
+  backupEvidences,
+  setEvidences,
 }) => {
   const { user } = useUser();
   const { entries } = useCase();
   const [currentEvidences, setCurrentEvidences] =
-    useState<IAttachment[]>(attachments);
+    useState<IEvidence[]>(evidences);
   const [currentInput, setCurrentInput] = useState<string>("");
   const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
-  const [lastAttatchmentId, setLastAttatchmentId] = useState<string>("");
-  const [hasAttatchment, setHasAttatchment] = useState<boolean>(false);
+  const [lastAttachmentId, setLastAttachmentId] = useState<string>("");
+  const [hasAttachment, setHasAttachment] = useState<boolean>(false);
 
   const inputRef = useRef(null);
   useOutsideClick(inputRef, () => setSuggestionsActive(false));
@@ -41,31 +44,31 @@ export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
 
   const login = () => {
     if (!currentInput || currentInput?.trim().length <= 0) return;
-    const att: IAttachment = {
-      id: getAttachments(entries, "", []).length + 1,
+    const ev: IEvidence = {
+      id: getEvidences(entries, "", []).length + 1,
       name: currentInput,
-      hasAttatchment: hasAttatchment,
+      hasAttachment: hasAttachment,
     };
-    if (hasAttatchment) {
-      att.role = user?.role;
+    if (hasAttachment) {
+      ev.role = user?.role;
       let id: string;
-      if (lastAttatchmentId) {
+      if (lastAttachmentId) {
         id =
           (user?.role === UserRole.Plaintiff ? "K" : "B") +
-          (parseInt(lastAttatchmentId.slice(1)) + 1);
+          (parseInt(lastAttachmentId.slice(1)) + 1);
       } else {
-        id = getAttatchmentId(entries, user?.role!);
+        id = getEvidenceAttachmentId(entries, user?.role!);
       }
-      att.attatchmentId = id;
-      setLastAttatchmentId(id);
+      ev.attachmentId = id;
+      setLastAttachmentId(id);
     }
 
-    setCurrentEvidences([...currentEvidences, att]);
+    setCurrentEvidences([...currentEvidences, ev]);
     setCurrentInput("");
-    setHasAttatchment(false);
+    setHasAttachment(false);
   };
 
-  const addExisting = (input: IAttachment) => {
+  const addExisting = (input: IEvidence) => {
     setCurrentEvidences([...currentEvidences, input]);
     setCurrentInput("");
   };
@@ -74,8 +77,8 @@ export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
     setCurrentEvidences(currentEvidences.filter((el, i) => i !== index));
   };
 
-  const addAttachment = () => {
-    setAttachments(currentEvidences);
+  const addEvidence = () => {
+    setEvidences(currentEvidences);
     setIsVisible(false);
   };
 
@@ -96,7 +99,7 @@ export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
               <button
                 onClick={() => {
                   setIsVisible(false);
-                  if (backupAttachments) setAttachments(backupAttachments);
+                  if (backupEvidences) setEvidences(backupEvidences);
                 }}
                 className="text-darkGrey bg-offWhite p-1 rounded-md hover:bg-lightGrey">
                 <X size={24} />
@@ -128,11 +131,11 @@ export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
                 <div className="relative">
                   {suggestionsActive ? (
                     <ul className="absolute my-1 ml-0 p-1 text-darkGrey w-full max-h-[100px] overflow-auto opacity-90 bg-offWhite rounded-b-lg shadow-lg empty:hidden">
-                      {getAttachments(
+                      {getEvidences(
                         entries,
                         currentInput,
                         currentEvidences
-                      ).map((attachment, index) => (
+                      ).map((ev, index) => (
                         <li
                           key={index}
                           tabIndex={index}
@@ -140,12 +143,12 @@ export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
                           onClick={(e: React.BaseSyntheticEvent) => {
                             setCurrentInput(e.target.innerHTML);
                             setSuggestionsActive(false);
-                            addExisting(attachment);
+                            addExisting(ev);
                           }}>
-                          {attachment.name}
-                          {attachment.hasAttatchment && (
+                          {ev.name}
+                          {ev.hasAttachment && (
                             <span>
-                              <b> als Anlage {attachment.attatchmentId}</b>
+                              <b> als Anlage {ev.attachmentId}</b>
                             </span>
                           )}
                         </li>
@@ -161,8 +164,8 @@ export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
                   id="new"
                   name="new"
                   value="new"
-                  checked={hasAttatchment}
-                  onChange={() => setHasAttatchment(!hasAttatchment)}
+                  checked={hasAttachment}
+                  onChange={() => setHasAttachment(!hasAttachment)}
                 />
                 <label
                   htmlFor="new"
@@ -188,16 +191,16 @@ export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
               zu diesem Beitrag
             </span>
             <div className="flex flex-col gap-1 w-full max-h-[20vh] overflow-auto mt-2">
-              {currentEvidences.map((att, index) => (
+              {currentEvidences.map((ev, index) => (
                 <div
                   className="flex flex-row items-center px-2 py-1 rounded-lg bg-offWhite justify-between"
                   key={index}>
                   <div className="flex flex-row gap-3">
                     <span>{index + 1 + ")"}</span>
-                    <span>{att.name}</span>
-                    {att.hasAttatchment && (
+                    <span>{ev.name}</span>
+                    {ev.hasAttachment && (
                       <span>
-                        <b>als Anlage {att.attatchmentId}</b>
+                        <b>als Anlage {ev.attachmentId}</b>
                       </span>
                     )}
                   </div>
@@ -216,7 +219,7 @@ export const AttachmentPopup: React.FC<AttachmentPopupProps> = ({
               <button
                 className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
                 onClick={() => {
-                  addAttachment();
+                  addEvidence();
                 }}>
                 Gelistete Beweise hinzufügen
               </button>

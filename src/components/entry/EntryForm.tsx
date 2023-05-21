@@ -8,10 +8,10 @@ import { Editor } from "react-draft-wysiwyg";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useView } from "../../contexts/ViewContext";
 import { getTheme } from "../../themes/getTheme";
-import { IAttachment, ViewMode } from "../../types";
+import { IEvidence, ViewMode } from "../../types";
 import { Button } from "../Button";
 import { ExpandButton } from "./ExpandButton";
-import { AttachmentPopup } from "./AttachmentPopup";
+import { EvidencesPopup } from "./EvidencePopup";
 
 const toolbarOptions = {
   options: ["blockType", "inline", "list", "textAlign"],
@@ -39,13 +39,9 @@ interface EntryBodyProps {
   isExpanded: boolean;
   setIsExpanded: () => void;
   onAbort: (plainText: string, rawHtml: string) => void;
-  onSave: (
-    plainText: string,
-    rawHtml: string,
-    attachments: IAttachment[]
-  ) => void;
+  onSave: (plainText: string, rawHtml: string, evidences: IEvidence[]) => void;
   defaultContent?: string;
-  attachments: IAttachment[];
+  evidences: IEvidence[];
 }
 
 export const EntryForm: React.FC<EntryBodyProps> = ({
@@ -55,12 +51,12 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   onAbort,
   onSave,
   defaultContent,
-  attachments,
+  evidences,
 }) => {
-  const [att, setAtts] = useState<IAttachment[]>(attachments);
-  const [backupAtts, setBackupAtts] = useState<IAttachment[]>();
+  const [entryEvidences, setEntryEvidences] = useState<IEvidence[]>(evidences);
+  const [backupEvidences, setBackupEvidences] = useState<IEvidence[]>();
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
-  const [evidencePopupVisible, setAttachmentPopupVisible] =
+  const [evidencePopupVisible, setEvidencePopupVisible] =
     useState<boolean>(false);
   const [editorState, setEditorState] = useState(() => {
     const blocksFromHtml = htmlToDraft(defaultContent || "");
@@ -142,7 +138,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           }
         />
         <div className="flex border-t border-lightGrey rounded-b-lg px-3 py-2 items-center gap-2 justify-between">
-          {att.length <= 0 ? (
+          {entryEvidences.length <= 0 ? (
             <div className="flex flex-col gap-2 items-center">
               <span className="italic">Keine Beweise</span>
             </div>
@@ -150,14 +146,14 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             <div className="flex flex-col gap-1">
               <span className="ml-1 font-bold">Beweisbereich</span>
               <div className="flex flex-col flex-wrap gap-1">
-                {att.map((tag, index) => (
+                {entryEvidences.map((evidence, index) => (
                   <div className="flex flex-row items-center px-2" key={index}>
                     <div className="flex flex-row gap-3">
                       <span>{index + 1 + ")"}</span>
-                      <span>{tag.name}</span>
-                      {tag.hasAttatchment && (
+                      <span>{evidence.name}</span>
+                      {evidence.hasAttachment && (
                         <span>
-                          <b>als Anlage {tag.attatchmentId}</b>
+                          <b>als Anlage {evidence.attachmentId}</b>
                         </span>
                       )}
                     </div>
@@ -169,8 +165,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           <Button
             icon={<PencilSimple size={20} />}
             onClick={() => {
-              setAttachmentPopupVisible(true);
-              setBackupAtts([...att]);
+              setEvidencePopupVisible(true);
+              setBackupEvidences([...entryEvidences]);
             }}
             size="sm"
             bgColor="bg-offWhite hover:bg-lightGrey"
@@ -200,7 +196,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
                 convertToRaw(editorState.getCurrentContent())
               );
 
-              onSave(plainText, newHtml, att);
+              onSave(plainText, newHtml, entryEvidences);
             }}
             size="sm"
             bgColor="bg-lightGreen hover:bg-darkGreen"
@@ -209,12 +205,12 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           </Button>
         </div>
       </div>
-      <AttachmentPopup
+      <EvidencesPopup
         isVisible={evidencePopupVisible}
-        setIsVisible={setAttachmentPopupVisible}
-        attachments={att}
-        backupAttachments={backupAtts}
-        setAttachments={setAtts}></AttachmentPopup>
+        setIsVisible={setEvidencePopupVisible}
+        evidences={entryEvidences}
+        backupEvidences={backupEvidences}
+        setEvidences={setEntryEvidences}></EvidencesPopup>
     </>
   );
 };

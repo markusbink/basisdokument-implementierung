@@ -11,7 +11,7 @@ import { useUser } from "../../contexts/UserContext";
 import { useView } from "../../contexts/ViewContext";
 import { getTheme } from "../../themes/getTheme";
 import {
-  IAttachment,
+  IEvidence,
   IEntry,
   IndividualEntrySortingEntry,
   UserRole,
@@ -57,7 +57,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const createEntry = (
     plainText: string,
     rawHtml: string,
-    attachments: IAttachment[]
+    evidences: IEvidence[]
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben sie einen Text ein.", { type: "error" });
@@ -75,7 +75,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       sectionId,
       text: rawHtml,
       version: currentVersion,
-      attachments: attachments,
+      evidences: evidences,
     };
 
     if (associatedEntry) {
@@ -225,10 +225,10 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             onAbort={(plainText, rawHtml) => {
               closeNewEntryForm(plainText, rawHtml);
             }}
-            onSave={(plainText, rawHtml, attachments) => {
-              createEntry(plainText, rawHtml, attachments);
+            onSave={(plainText, rawHtml, evidences) => {
+              createEntry(plainText, rawHtml, evidences);
             }}
-            attachments={[]}
+            evidences={[]}
           />
         </div>
       </div>

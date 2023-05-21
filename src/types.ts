@@ -93,7 +93,7 @@ export interface IEntry {
   role: UserRole.Plaintiff | UserRole.Defendant;
   sectionId: string;
   associatedEntry?: string;
-  attachments: IAttachment[];
+  evidences: IEvidence[];
 }
 
 export enum IDragItemType {
@@ -162,11 +162,11 @@ export interface IStateUserInput {
   newVersionMode: boolean | undefined;
 }
 
-export interface IAttachment {
+export interface IEvidence {
   id: number;
   name: string;
-  hasAttatchment: boolean; 
+  hasAttachment: boolean; 
   tag?: string;
   role?: UserRole;
-  attatchmentId?: string;
+  attachmentId?: string;
 }

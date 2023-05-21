@@ -31,7 +31,7 @@ import {
   SidebarState,
   IndividualEntrySortingEntry,
   ViewMode,
-  IAttachment,
+  IEvidence,
 } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -271,7 +271,7 @@ export const Entry: React.FC<EntryProps> = ({
   const updateEntry = (
     plainText: string,
     rawHtml: string,
-    attachments: IAttachment[]
+    evidences: IEvidence[]
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
@@ -286,7 +286,7 @@ export const Entry: React.FC<EntryProps> = ({
       );
       newEntries[entryIndex].text = rawHtml;
       newEntries[entryIndex].author = authorName || entry.author;
-      newEntries[entryIndex].attachments = attachments;
+      newEntries[entryIndex].evidences = evidences;
       return newEntries;
     });
 
@@ -560,7 +560,7 @@ export const Entry: React.FC<EntryProps> = ({
                     lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
                     entryId={entry.id}
                     showInPopup={shownInPopup}
-                    attachments={entry.attachments}>
+                    evidences={entry.evidences}>
                     {entry.text}
                   </EntryBody>
                 )}
@@ -576,12 +576,12 @@ export const Entry: React.FC<EntryProps> = ({
                     onSave={(
                       plainText: string,
                       rawHtml: string,
-                      attachments: IAttachment[]
+                      evidences: IEvidence[]
                     ) => {
-                      updateEntry(plainText, rawHtml, attachments);
+                      updateEntry(plainText, rawHtml, evidences);
                       setIsExpanded(false);
                     }}
-                    attachments={entry.attachments}
+                    evidences={entry.evidences}
                   />
                 )}
               </div>
