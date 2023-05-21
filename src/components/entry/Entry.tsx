@@ -31,6 +31,7 @@ import {
   SidebarState,
   IndividualEntrySortingEntry,
   ViewMode,
+  IAttachment,
 } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -270,7 +271,7 @@ export const Entry: React.FC<EntryProps> = ({
   const updateEntry = (
     plainText: string,
     rawHtml: string,
-    attachments: string[]
+    attachments: IAttachment[]
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
@@ -575,7 +576,7 @@ export const Entry: React.FC<EntryProps> = ({
                     onSave={(
                       plainText: string,
                       rawHtml: string,
-                      attachments: string[]
+                      attachments: IAttachment[]
                     ) => {
                       updateEntry(plainText, rawHtml, attachments);
                       setIsExpanded(false);

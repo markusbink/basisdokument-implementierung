@@ -8,7 +8,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useView } from "../../contexts/ViewContext";
 import { getTheme } from "../../themes/getTheme";
-import { ViewMode } from "../../types";
+import { IAttachment, ViewMode } from "../../types";
 import { Button } from "../Button";
 import { ExpandButton } from "./ExpandButton";
 import { AttachmentPopup } from "./AttachmentPopup";
@@ -39,9 +39,13 @@ interface EntryBodyProps {
   isExpanded: boolean;
   setIsExpanded: () => void;
   onAbort: (plainText: string, rawHtml: string) => void;
-  onSave: (plainText: string, rawHtml: string, attachments: string[]) => void;
+  onSave: (
+    plainText: string,
+    rawHtml: string,
+    attachments: IAttachment[]
+  ) => void;
   defaultContent?: string;
-  attachments: string[];
+  attachments: IAttachment[];
 }
 
 export const EntryForm: React.FC<EntryBodyProps> = ({
@@ -53,7 +57,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   defaultContent,
   attachments,
 }) => {
-  const [att, setAtts] = useState<string[]>(attachments);
+  const [att, setAtts] = useState<IAttachment[]>(attachments);
+  const [backupAtts, setBackupAtts] = useState<IAttachment[]>();
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [evidencePopupVisible, setAttachmentPopupVisible] =
     useState<boolean>(false);
@@ -139,17 +144,22 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         <div className="flex border-t border-lightGrey rounded-b-lg px-3 py-2 items-center gap-2 justify-between">
           {att.length <= 0 ? (
             <div className="flex flex-col gap-2 items-center">
-              <span className="italic">Keine Anlagen</span>
+              <span className="italic">Keine Beweise</span>
             </div>
           ) : (
             <div className="flex flex-col gap-1">
-              <span className="ml-1 font-bold">Anlagen:</span>
+              <span className="ml-1 font-bold">Beweisbereich</span>
               <div className="flex flex-col flex-wrap gap-1">
                 {att.map((tag, index) => (
                   <div className="flex flex-row items-center px-2" key={index}>
                     <div className="flex flex-row gap-3">
                       <span>{index + 1 + ")"}</span>
-                      <span>{tag}</span>
+                      <span>{tag.name}</span>
+                      {tag.hasAttatchment && (
+                        <span>
+                          <b>als Anlage {tag.attatchmentId}</b>
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -160,6 +170,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             icon={<PencilSimple size={20} />}
             onClick={() => {
               setAttachmentPopupVisible(true);
+              setBackupAtts([...att]);
             }}
             size="sm"
             bgColor="bg-offWhite hover:bg-lightGrey"
@@ -202,6 +213,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         isVisible={evidencePopupVisible}
         setIsVisible={setAttachmentPopupVisible}
         attachments={att}
+        backupAttachments={backupAtts}
         setAttachments={setAtts}></AttachmentPopup>
     </>
   );

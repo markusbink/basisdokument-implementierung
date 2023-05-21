@@ -199,7 +199,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
           text: parseHTMLtoString(entry.text),
           version: entry.version,
           associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-          attachments: entry.attachments.length > 0 ? "Anlagen:\n" + getAttachmentNumeration(entry.attachments) : undefined,
+          attachments: entry.attachments.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.attachments) : undefined,
         };
         allEntries.push(tableEntry);
 
@@ -213,7 +213,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
             text: parseHTMLtoString(entry.text),
             version: entry.version,
             associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-            attachments: entry.attachments.length > 0 ? "Anlagen:\n" + getAttachmentNumeration(entry.attachments) : undefined,
+            attachments: entry.attachments.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.attachments) : undefined,
           };
           newEntries.push(newEntry);
         }

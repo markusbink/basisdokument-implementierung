@@ -11,6 +11,7 @@ import { useUser } from "../../contexts/UserContext";
 import { useView } from "../../contexts/ViewContext";
 import { getTheme } from "../../themes/getTheme";
 import {
+  IAttachment,
   IEntry,
   IndividualEntrySortingEntry,
   UserRole,
@@ -56,7 +57,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const createEntry = (
     plainText: string,
     rawHtml: string,
-    attachments: string[]
+    attachments: IAttachment[]
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben sie einen Text ein.", { type: "error" });

@@ -6,7 +6,7 @@ import {
   doHighlight,
   optionsImpl,
 } from "@funktechno/texthighlighter/lib/index";
-import { IHighlightedEntry, Tool } from "../../types";
+import { IAttachment, IHighlightedEntry, Tool } from "../../types";
 import { getColorHexForColor } from "../../util/get-hex-code-for-marker";
 import { getTheme } from "../../themes/getTheme";
 
@@ -20,7 +20,7 @@ interface EntryBodyProps {
     React.SetStateAction<boolean>
   >;
   showInPopup?: boolean;
-  attachments: string[];
+  attachments: IAttachment[];
 }
 
 export const EntryBody: React.FC<EntryBodyProps> = ({
@@ -236,13 +236,18 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
         ) : null}
         {attachments && attachments.length > 0 && (
           <div className="flex flex-col gap-1 border-t border-lightGrey pt-2">
-            <span className="font-bold">Anlagen:</span>
+            <span className="font-bold">Beweisbereich</span>
             <div className="flex flex-col flex-wrap gap-1">
               {attachments.map((attachment, index) => (
                 <div className="flex flex-row items-center px-2" key={index}>
                   <div className="flex flex-row gap-3">
                     <span>{index + 1 + ")"}</span>
-                    <span>{attachment}</span>
+                    <span>{attachment.name}</span>
+                    {attachment.hasAttatchment && (
+                      <span>
+                        <b>als Anlage {attachment.attatchmentId}</b>
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
