@@ -208,6 +208,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       <EvidencesPopup
         isVisible={evidencePopupVisible}
         setIsVisible={setEvidencePopupVisible}
+        isPlaintiff={isPlaintiff}
         evidences={entryEvidences}
         backupEvidences={backupEvidences}
         setEvidences={setEntryEvidences}></EvidencesPopup>

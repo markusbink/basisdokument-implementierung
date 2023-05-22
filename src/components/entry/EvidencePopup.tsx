@@ -6,13 +6,14 @@ import {
   getEvidences,
   getEvidenceAttachmentId,
 } from "../../util/get-evidences";
-import { useCase, useUser } from "../../contexts";
+import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEvidence, UserRole } from "../../types";
 
 interface EvidencesPopupProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isPlaintiff: boolean;
   evidences: IEvidence[];
   backupEvidences: IEvidence[] | undefined;
   setEvidences: React.Dispatch<React.SetStateAction<IEvidence[]>>;
@@ -21,11 +22,11 @@ interface EvidencesPopupProps {
 export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   isVisible,
   setIsVisible,
+  isPlaintiff,
   evidences,
   backupEvidences,
   setEvidences,
 }) => {
-  const { user } = useUser();
   const { entries } = useCase();
   const [currentEvidences, setCurrentEvidences] =
     useState<IEvidence[]>(evidences);
@@ -50,14 +51,13 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       hasAttachment: hasAttachment,
     };
     if (hasAttachment) {
-      ev.role = user?.role;
+      ev.role = isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant;
       let id: string;
       if (lastAttachmentId) {
         id =
-          (user?.role === UserRole.Plaintiff ? "K" : "B") +
-          (parseInt(lastAttachmentId.slice(1)) + 1);
+          (isPlaintiff ? "K" : "B") + (parseInt(lastAttachmentId.slice(1)) + 1);
       } else {
-        id = getEvidenceAttachmentId(entries, user?.role!);
+        id = getEvidenceAttachmentId(entries, ev.role);
       }
       ev.attachmentId = id;
       setLastAttachmentId(id);
@@ -197,21 +197,23 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   key={index}>
                   <div className="flex flex-row gap-3">
                     <span>{index + 1 + ")"}</span>
-                    <span>{ev.name}</span>
+                    <span className="break-words">{ev.name}</span>
                     {ev.hasAttachment && (
                       <span>
                         <b>als Anlage {ev.attachmentId}</b>
                       </span>
                     )}
                   </div>
-                  <XCircle
-                    size={20}
-                    weight="fill"
-                    className="cursor-pointer"
-                    onClick={() => {
-                      removeTag(index);
-                    }}
-                  />
+                  <div>
+                    <XCircle
+                      size={20}
+                      weight="fill"
+                      className="cursor-pointer"
+                      onClick={() => {
+                        removeTag(index);
+                      }}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
