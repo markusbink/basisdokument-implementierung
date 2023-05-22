@@ -80,7 +80,7 @@ export const NotePopup = () => {
   const addNote = () => {
     const newHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
-    if (title === "" || newHtml === "<p></p>\n") {
+    if (title === "") {
       setShowErrorText(true);
     } else {
       // edit Note
@@ -175,6 +175,7 @@ export const NotePopup = () => {
                   className="leading-relaxed text-base font-bold text-darkGrey">
                   Titel
                 </label>
+                <span className="text-darkRed">*</span>
                 <input
                   value={title}
                   onChange={(e) => {
@@ -252,7 +253,7 @@ export const NotePopup = () => {
             <div className="flex justify-center">
               {showErrorText ? (
                 <p className="p-2 bg-lightRed text-darkRed rounded-md w-auto">
-                  Bitte geben Sie einen Titel und einen Text ein.
+                  Bitte geben Sie einen Titel ein.
                 </p>
               ) : null}
             </div>
