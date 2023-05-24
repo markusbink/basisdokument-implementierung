@@ -35,6 +35,7 @@ const toolbarOptions = {
 };
 
 interface EntryBodyProps {
+  entryId?: string;
   isPlaintiff: boolean;
   isExpanded: boolean;
   setIsExpanded: () => void;
@@ -45,6 +46,7 @@ interface EntryBodyProps {
 }
 
 export const EntryForm: React.FC<EntryBodyProps> = ({
+  entryId,
   isPlaintiff,
   isExpanded,
   setIsExpanded,
@@ -206,6 +208,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         </div>
       </div>
       <EvidencesPopup
+        entryId={entryId}
         isVisible={evidencePopupVisible}
         setIsVisible={setEvidencePopupVisible}
         isPlaintiff={isPlaintiff}

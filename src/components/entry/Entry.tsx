@@ -566,6 +566,7 @@ export const Entry: React.FC<EntryProps> = ({
                 )}
                 {isBodyOpen && isEditing && (
                   <EntryForm
+                    entryId={entry.id}
                     defaultContent={entry.text}
                     isPlaintiff={isPlaintiff}
                     isExpanded={isExpanded}

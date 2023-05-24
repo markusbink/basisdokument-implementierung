@@ -9,8 +9,10 @@ import {
 import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEvidence, UserRole } from "../../types";
+import { ErrorPopup } from "../ErrorPopup";
 
 interface EvidencesPopupProps {
+  entryId?: string;
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isPlaintiff: boolean;
@@ -20,6 +22,7 @@ interface EvidencesPopupProps {
 }
 
 export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
+  entryId,
   isVisible,
   setIsVisible,
   isPlaintiff,
@@ -27,13 +30,15 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   backupEvidences,
   setEvidences,
 }) => {
-  const { entries } = useCase();
+  const { entries, setEntries } = useCase();
   const [currentEvidences, setCurrentEvidences] =
     useState<IEvidence[]>(evidences);
   const [currentInput, setCurrentInput] = useState<string>("");
   const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
   const [lastAttachmentId, setLastAttachmentId] = useState<string>("");
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
+  const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
+  const [evidenceIdToRemove, setEvidenceIdToRemove] = useState<number>();
 
   const inputRef = useRef(null);
   useOutsideClick(inputRef, () => setSuggestionsActive(false));
@@ -73,13 +78,56 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     setCurrentInput("");
   };
 
-  const removeTag = (index: number) => {
-    setCurrentEvidences(currentEvidences.filter((el, i) => i !== index));
+  const removeEvidence = (id: number) => {
+    setEvidenceIdToRemove(id);
+    if (hasReferencesInOtherEntries(id)) {
+      remove();
+    } else {
+      console.log("test");
+      setIsEditErrorVisible(true);
+    }
+  };
+
+  const remove = () => {
+    setCurrentEvidences(
+      currentEvidences.filter((evidence) => evidence.id !== evidenceIdToRemove)
+    );
   };
 
   const addEvidence = () => {
     setEvidences(currentEvidences);
     setIsVisible(false);
+  };
+
+  const removeEvidenceOverall = (id: number) => {
+    const newEntries = entries.map((entry) => {
+      entry.evidences.forEach((evidence) => {
+        if (evidence.hasAttachment && evidence.id === id) {
+          entry.evidences = entry.evidences.splice(
+            entry.evidences.indexOf(evidence)
+          );
+        }
+      });
+      return entry;
+    });
+    setEntries(newEntries);
+  };
+
+  const hasReferencesInOtherEntries = (id: number) => {
+    for (let i = 0; i < entries.length; i++) {
+      if (entryId && entryId !== entries[i].id) {
+        for (let j = 0; j < entries[i].evidences.length; j++) {
+          if (
+            entries[i].evidences[j] &&
+            entries[i].evidences[j].hasAttachment &&
+            entries[i].evidences[j].id === id
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   };
 
   if (!isVisible) {
@@ -210,7 +258,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                       weight="fill"
                       className="cursor-pointer"
                       onClick={() => {
-                        removeTag(index);
+                        removeEvidence(ev.id);
                       }}
                     />
                   </div>
@@ -229,6 +277,35 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
           </div>
         </div>
       </div>
+      <ErrorPopup isVisible={isEditErrorVisible}>
+        <div className="flex flex-col items-center justify-center space-y-8">
+          <p className="text-center text-base">
+            Dieser Beweis wird in noch keinem anderen Beitrag referenziert. Wenn
+            Sie ihn also aus dem Beweisbereich dieses Beitrags löschen und bei
+            einem anderen Beitrag anhängen wollen, müssen Sie den Beweis dort
+            erneut erstellen.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              bgColor="bg-lightGrey hover:bg-mediumGrey/50"
+              textColor="text-mediumGrey font-bold hover:text-lightGrey"
+              onClick={() => {
+                setIsEditErrorVisible(false);
+              }}>
+              Abbrechen
+            </Button>
+            <Button
+              bgColor="bg-lightRed hover:bg-darkRed/25"
+              textColor="text-darkRed font-bold"
+              onClick={() => {
+                remove();
+                setIsEditErrorVisible(false);
+              }}>
+              Löschen
+            </Button>
+          </div>
+        </div>
+      </ErrorPopup>
     </>
   );
 };
