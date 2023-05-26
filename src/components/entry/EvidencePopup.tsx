@@ -10,6 +10,7 @@ import { useCase } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEvidence, UserRole } from "../../types";
 import { ErrorPopup } from "../ErrorPopup";
+import { v4 as uuidv4 } from "uuid";
 
 interface EvidencesPopupProps {
   entryId?: string;
@@ -30,7 +31,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   backupEvidences,
   setEvidences,
 }) => {
-  const { entries, setEntries } = useCase();
+  const { entries, setEntries, currentVersion } = useCase();
   const [currentEvidences, setCurrentEvidences] =
     useState<IEvidence[]>(evidences);
   const [currentInput, setCurrentInput] = useState<string>("");
@@ -38,7 +39,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const [lastAttachmentId, setLastAttachmentId] = useState<string>("");
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
-  const [evidenceIdToRemove, setEvidenceIdToRemove] = useState<number>();
+  const [evidenceToRemove, setEvidenceToRemove] = useState<IEvidence>();
 
   const inputRef = useRef(null);
   useOutsideClick(inputRef, () => setSuggestionsActive(false));
@@ -51,9 +52,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const login = () => {
     if (!currentInput || currentInput?.trim().length <= 0) return;
     const ev: IEvidence = {
-      id: getEvidences(entries, "", []).length + 1,
+      id: uuidv4(),
       name: currentInput,
       hasAttachment: hasAttachment,
+      version: currentVersion,
+      isCurrentEntry: true,
     };
     if (hasAttachment) {
       ev.role = isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant;
@@ -67,7 +70,6 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       ev.attachmentId = id;
       setLastAttachmentId(id);
     }
-
     setCurrentEvidences([...currentEvidences, ev]);
     setCurrentInput("");
     setHasAttachment(false);
@@ -78,28 +80,69 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     setCurrentInput("");
   };
 
-  const removeEvidence = (id: number) => {
-    setEvidenceIdToRemove(id);
-    if (hasReferencesInOtherEntries(id)) {
-      remove();
-    } else {
-      console.log("test");
+  const removeEvidence = (evidence: IEvidence) => {
+    setEvidenceToRemove(evidence);
+    if (!hasReferencesInOtherEntries(evidence.id)) {
       setIsEditErrorVisible(true);
     }
   };
 
-  const remove = () => {
-    setCurrentEvidences(
-      currentEvidences.filter((evidence) => evidence.id !== evidenceIdToRemove)
-    );
+  const removeFromEntry = () => {
+    const currentId = evidenceToRemove
+      ? parseInt(evidenceToRemove.attachmentId!.slice(1))
+      : -1;
+
+    if (evidenceToRemove?.version === currentVersion) {
+      let updatedEvidences = currentEvidences.filter(
+        (evidence) => evidence.id !== evidenceToRemove?.id
+      );
+      updatedEvidences = updatedEvidences.map((evidence) => {
+        if (
+          evidence.version === currentVersion &&
+          evidence.hasAttachment &&
+          evidence.isCurrentEntry
+        ) {
+          if (
+            currentId !== -1 &&
+            parseInt(evidence.attachmentId!.slice(1)) > currentId
+          ) {
+            const newId = parseInt(evidence.attachmentId!.slice(1)) - 1;
+            evidence.attachmentId = isPlaintiff ? "K" + newId : "B" + newId;
+          }
+        }
+        return evidence;
+      });
+      setCurrentEvidences(updatedEvidences);
+      setLastAttachmentId(getLastAttachemntId(updatedEvidences));
+    } else {
+      const filteredEvidences = currentEvidences.filter(
+        (evidence) => evidence.id !== evidenceToRemove?.id
+      );
+      setCurrentEvidences(filteredEvidences);
+      setLastAttachmentId(getLastAttachemntId(filteredEvidences));
+    }
+  };
+
+  const getLastAttachemntId = (newEvidences: IEvidence[]): string => {
+    let lastAttachmentId: string | undefined;
+    for (let i = 0; i < newEvidences.length; i++) {
+      if (newEvidences[i].attachmentId) {
+        lastAttachmentId = newEvidences[i].attachmentId;
+      }
+    }
+    return lastAttachmentId ? lastAttachmentId : "";
   };
 
   const addEvidence = () => {
-    setEvidences(currentEvidences);
+    const updatedEvidences = currentEvidences.map((evidence) => {
+      evidence.isCurrentEntry = false;
+      return evidence;
+    });
+    setEvidences(updatedEvidences);
     setIsVisible(false);
   };
 
-  const removeEvidenceOverall = (id: number) => {
+  const removeEvidenceOverall = (id: string) => {
     const newEntries = entries.map((entry) => {
       entry.evidences.forEach((evidence) => {
         if (evidence.hasAttachment && evidence.id === id) {
@@ -113,7 +156,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     setEntries(newEntries);
   };
 
-  const hasReferencesInOtherEntries = (id: number) => {
+  const hasReferencesInOtherEntries = (id: string) => {
     for (let i = 0; i < entries.length; i++) {
       if (entryId && entryId !== entries[i].id) {
         for (let j = 0; j < entries[i].evidences.length; j++) {
@@ -258,7 +301,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                       weight="fill"
                       className="cursor-pointer"
                       onClick={() => {
-                        removeEvidence(ev.id);
+                        removeEvidence(ev);
                       }}
                     />
                   </div>
@@ -298,7 +341,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
-                remove();
+                removeFromEntry();
                 setIsEditErrorVisible(false);
               }}>
               Löschen

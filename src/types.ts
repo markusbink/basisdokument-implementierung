@@ -163,9 +163,11 @@ export interface IStateUserInput {
 }
 
 export interface IEvidence {
-  id: number;
+  id: string;
   name: string;
   hasAttachment: boolean; 
+  version: number;
+  isCurrentEntry: boolean;
   tag?: string;
   role?: UserRole;
   attachmentId?: string;
