@@ -3,6 +3,8 @@ import { createContext, Dispatch, SetStateAction, useContext, useState } from "r
 interface IExportContext {
     isExportPopupOpen: boolean;
     setIsExportPopupOpen: Dispatch<SetStateAction<boolean>>;
+    coverPDF: any;
+    setCoverPDF: Dispatch<SetStateAction<any>>;
 }
 
 export const ExportContext = createContext<IExportContext | null>(null);
@@ -13,10 +15,11 @@ interface ExportProviderProps {
 
 export const ExportProvider: React.FC<ExportProviderProps> = ({ children }) => {
     const [isExportPopupOpen, setIsExportPopupOpen] = useState<boolean>(false);
+    const [coverPDF, setCoverPDF] = useState<any>();
 
     return (
         <ExportContext.Provider
-            value={{isExportPopupOpen, setIsExportPopupOpen}}
+            value={{isExportPopupOpen, setIsExportPopupOpen, coverPDF, setCoverPDF}}
         >
             {children}
         </ExportContext.Provider>

@@ -64,7 +64,9 @@ export const DocumentButton = () => {
         metaData,
         entries,
         sectionList,
-        hints
+        hints,
+        undefined, //coverPDF
+        undefined //otherAuthor
       );
     }, 100);
     setTimeout(() => {
