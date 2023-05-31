@@ -142,9 +142,10 @@ async function mergePDF(coverPDF: ArrayBuffer, basisdokumentPDF: ArrayBuffer, fi
   downloadPDF(file, fileName);
 }
 
-async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, obj: any, fileName: string) {
-  
+async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, downloadNew: boolean, obj: any, fileName: string) {
+
   let doc = new jsPDF();
+  let newDoc = new jsPDF(); //additional pdf with only new entries
 
   //DATA for autotables
   // basic data
@@ -287,6 +288,23 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, obj
       });
     },
   });
+  //additional pdf with only new entries
+  autoTable(newDoc, {
+    theme: "grid",
+    styles: { fontStyle: "bold" },
+    head: [["Basisdokument - Neue Beiträge"]],
+    headStyles: { fontStyle: "bold", fontSize: 14, fillColor: [0, 102, 204] },
+    body: [
+      [basisdokument[0].caseId],
+      [basisdokument[0].version],
+      [basisdokument[0].timestamp],
+    ],
+    didDrawPage: function () {
+      newDoc.outline.add(null, "Basisdokument-Metadaten", {
+        pageNumber: newDoc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
   basisdokument = [];
 
   //autotable rubrum plaintiff
@@ -302,6 +320,19 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, obj
       });
     },
   });
+  //additional pdf with only new entries
+  autoTable(newDoc, {
+    theme: "grid",
+    styles: { halign: "center" },
+    head: [["Rubrum Klagepartei"]],
+    headStyles: { fillColor: [0, 102, 204] },
+    body: [rubrumKlage],
+    didDrawPage: function () {
+      newDoc.outline.add(null, "Rubrum Klagepartei", {
+        pageNumber: newDoc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
   rubrumKlage = [];
 
   //autotable rubrum defendant
@@ -314,6 +345,19 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, obj
     didDrawPage: function () {
       doc.outline.add(null, "Rubrum Beklagtenpartei", {
         pageNumber: doc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
+  //additional pdf with only new entries
+  autoTable(newDoc, {
+    theme: "grid",
+    styles: { halign: "center" },
+    head: [["Rubrum Beklagtenpartei"]],
+    headStyles: { fillColor: [0, 102, 204] },
+    body: [rubrumBeklagt],
+    didDrawPage: function () {
+      newDoc.outline.add(null, "Rubrum Beklagtenpartei", {
+        pageNumber: newDoc.getCurrentPageInfo().pageNumber,
       });
     },
   });
@@ -388,6 +432,60 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, obj
         data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text]];
       }
       autoTable(doc, {
+        theme: "grid",
+        body: data,
+        margin: {
+          left: newEntries[i].id.includes("B") ? 30 : 10,
+          right: newEntries[i].id.includes("B") ? 10 : 30,
+          top: 7,
+          bottom: 7,
+        },
+        didParseCell: function (hookData) {
+          if (hookData.row.index === 0) {
+            hookData.cell.styles.fontStyle = "italic";
+          } else if (hookData.row.index === 1) {
+            hookData.cell.styles.fontStyle = "bold";
+          }
+        },
+        willDrawCell: function (hookData) {
+          if (hookData.cell.raw === "") {
+            hookData.cell.styles.cellWidth = 0;
+            hookData.cell.styles.cellPadding = 0;
+          }
+        },
+      });
+    }
+    //additional pdf with only new entries
+    newDoc.addPage();
+    autoTable(newDoc, {
+      theme: "grid",
+      head: [["Neue Beiträge"]],
+      headStyles: {
+        fontStyle: "bold",
+        fontSize: 12,
+        fillColor: [0, 102, 204],
+        valign: "middle",
+      },
+      margin: { top: 7, bottom: 7, left: 7, right: 7 },
+      didDrawPage: function () {
+        newDoc.outline.add(null, "Neue Beiträge", {
+          pageNumber: newDoc.getCurrentPageInfo().pageNumber,
+        });
+      },
+    });
+    for (let i = 0; i < newEntries.length; i++) {
+      let data;
+      if (newEntries[i].associatedEntry) {
+        data = [
+          ["Neuer Beitrag"],
+          [newEntries[i].title],
+          [newEntries[i].associatedEntry],
+          [newEntries[i].text],
+        ];
+      } else {
+        data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text]];
+      }
+      autoTable(newDoc, {
         theme: "grid",
         body: data,
         margin: {
@@ -600,8 +698,15 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, obj
   if (coverPDF !== undefined) {
     const pdfBuffer = doc.output("arraybuffer");
     mergePDF(coverPDF, pdfBuffer, fileName);
+    if (downloadNew) {
+      const newPdfBuffer = newDoc.output("arraybuffer");
+      mergePDF(coverPDF, newPdfBuffer, "neue_beiträge_" + fileName);
+    }
   } else {
     doc.save(fileName);
+    if (downloadNew) {
+      newDoc.save("neue_beiträge_" + fileName);
+    }
   }
 }
 
@@ -615,6 +720,7 @@ export function downloadBasisdokument(
   hints: IHint[],
   coverPDF: ArrayBuffer | undefined,
   otherAuthor: string | undefined,
+  downloadNewAdditionally: boolean,
 ) {
   let basisdokumentObject: any = {};
   basisdokumentObject["caseId"] = caseId;
@@ -650,6 +756,7 @@ export function downloadBasisdokument(
   );
   downloadBasisdokumentAsPDF(
     coverPDF,
+    downloadNewAdditionally,
     basisdokumentObject,
     `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );

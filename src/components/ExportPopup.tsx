@@ -63,6 +63,7 @@ export const ExportPopup: React.FC<IProps> = ({
   let otherAuthor: string | undefined = prename + " " + surname;
   const [showAuthorChange, setShowAuthorChange] = useState<boolean>(false);
   const [showOptionalCover, setShowOptionalCover] = useState<boolean>(false);
+  var [downloadNewAdditionally, setDownloadNewAdditionally] = useState<boolean>(false);
   var validUserInput: boolean = true;
 
   //Refs
@@ -123,7 +124,8 @@ export const ExportPopup: React.FC<IProps> = ({
         sectionList,
         hints,
         coverPDF,
-        otherAuthor
+        otherAuthor,
+        downloadNewAdditionally
       );
     }, 100);
     setTimeout(() => {
@@ -240,7 +242,7 @@ export const ExportPopup: React.FC<IProps> = ({
                   checked={showAuthorChange}
                   onChange={() => setShowAuthorChange(!showAuthorChange)}
                 />
-                <div>Signatur im Basisdokument-PDF ändern</div>
+                <div className="font-semibold">Signatur im Basisdokument-PDF ändern</div>
               </div>
               {showAuthorChange && (
                 <div className="flex flex-row w-auto mt-4 gap-4">
@@ -260,6 +262,17 @@ export const ExportPopup: React.FC<IProps> = ({
                   />
                 </div>
               )}
+              <div className="flex flex-row items-center justify-left gap-2">
+                <input
+                  className="small-checkbox accent-darkGrey cursor-pointer"
+                  type="checkbox"
+                  checked={downloadNewAdditionally}
+                  onChange={() => setDownloadNewAdditionally(!downloadNewAdditionally)}
+                />
+                <div className="flex flex-row gap-0.5">
+                  <span className="font-semibold">Zusätzlich alle neuen Beiträge als eigene PDF herunterladen</span>
+                </div>
+              </div>
               <div>
                 {errorText !== "" ? (
                   <div className="flex bg-lightRed p-4 rounded-md">
