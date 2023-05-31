@@ -20,7 +20,7 @@ import {
   downloadBasisdokument,
   downloadEditFile,
 } from "../data-management/download-handler";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "./Button";
 
 interface IProps {
@@ -65,29 +65,28 @@ export const ExportPopup: React.FC<IProps> = ({
   const [showOptionalCover, setShowOptionalCover] = useState<boolean>(false);
   var validUserInput: boolean = true;
 
-  useEffect(() => {}, [coverFilename]); //updating coverFilename after every render for user input validation
-
   //Refs
   const coverFileUploadRef = useRef<HTMLInputElement>(null);
 
   // Source: https://stackoverflow.com/questions/71991961/how-to-read-content-of-uploaded-json-file-on-react-next-js
-  const handleCoverFileUploadChange = async (e: any) => {
+  const handleCoverFileUploadChange = (e: any) => {
     const fileReader = new FileReader();
     try {
       fileReader.readAsArrayBuffer(e.target.files[0]);
-      await setCoverFilename(e.target.files[0].name);
+      let filename = e.target.files[0].name;
+      setCoverFilename(filename);
+      validateUserInput(filename);
       fileReader.onload = (e: any) => {
         let result = e.target.result;
         setCoverPDF(result);
       };
       e.target.value = "";
     } catch (error) {}
-    validateUserInput();
   };
 
-  const validateUserInput = () => {
+  const validateUserInput = (filename: string) => {
     // check if file exists and validate
-    if (coverFilename.endsWith(".pdf")) {
+    if (filename.endsWith(".pdf")) {
       setErrorText("");
       validUserInput = true;
     } else {
@@ -99,7 +98,7 @@ export const ExportPopup: React.FC<IProps> = ({
   };
 
   const onClickDownloadButton = () => {
-    validateUserInput();
+    validateUserInput(coverFilename);
     if (validUserInput) {
       triggerDownload();
     }
