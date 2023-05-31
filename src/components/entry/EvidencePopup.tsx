@@ -1,4 +1,4 @@
-import { Plus, X, XCircle } from "phosphor-react";
+import { DotsSixVertical, Plus, X, XCircle } from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
@@ -11,6 +11,7 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEvidence, UserRole } from "../../types";
 import { ErrorPopup } from "../ErrorPopup";
 import { v4 as uuidv4 } from "uuid";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 interface EvidencesPopupProps {
   entryId?: string;
@@ -173,6 +174,18 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     return false;
   };
 
+  const handleDrop = (droppedItem: any) => {
+    // Ignore drop outside droppable container
+    if (!droppedItem.destination) return;
+    const updatedList = [...currentEvidences];
+    // Remove dragged item
+    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
+    // Add dropped item
+    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
+    // Update State
+    setCurrentEvidences(updatedList);
+  };
+
   if (!isVisible) {
     return null;
   }
@@ -282,31 +295,62 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               zu diesem Beitrag
             </span>
             <div className="flex flex-col gap-1 w-full max-h-[20vh] overflow-auto mt-2">
-              {currentEvidences.map((ev, index) => (
-                <div
-                  className="flex flex-row items-center px-2 py-1 rounded-lg bg-offWhite justify-between"
-                  key={index}>
-                  <div className="flex flex-row gap-3">
-                    <span>{index + 1 + ")"}</span>
-                    <span className="break-words">{ev.name}</span>
-                    {ev.hasAttachment && (
-                      <span>
-                        <b>als Anlage {ev.attachmentId}</b>
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <XCircle
-                      size={20}
-                      weight="fill"
-                      className="cursor-pointer"
-                      onClick={() => {
-                        removeEvidence(ev);
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
+              <DragDropContext onDragEnd={handleDrop}>
+                <Droppable droppableId="sorting-evidences">
+                  {(provided) => (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      {currentEvidences.map((ev, index) => (
+                        <Draggable
+                          key={index}
+                          draggableId={index + ""}
+                          index={index}>
+                          {(provided) => (
+                            <div
+                              className="flex flex-row items-center py-1 rounded-lg w-full"
+                              key={index}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}>
+                              <div className="flex flex-row items-center select-none group w-full">
+                                <div {...provided.dragHandleProps}>
+                                  <DotsSixVertical size={24} />
+                                </div>
+                                <a
+                                  href={`#${ev}`}
+                                  draggable={false}
+                                  className="flex flex-row gap-2 rounded-md p-2 bg-offWhite text-darkGrey w-full justify-between item-container transition-all group-hover:bg-lightGrey"
+                                  onClick={(e) => e.stopPropagation()}>
+                                  <div className="flex flex-row gap-3">
+                                    <span>{index + 1 + "."}</span>
+                                    <span className="break-words text-sm font-medium">
+                                      {ev.name}
+                                    </span>
+                                    {ev.hasAttachment && (
+                                      <span>
+                                        <b>als Anlage {ev.attachmentId}</b>
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <XCircle
+                                      size={20}
+                                      weight="fill"
+                                      className="cursor-pointer"
+                                      onClick={() => {
+                                        removeEvidence(ev);
+                                      }}
+                                    />
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </div>
             <div className="flex items-center justify-end pt-6">
               <button
@@ -321,12 +365,15 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         </div>
       </div>
       <ErrorPopup isVisible={isEditErrorVisible}>
-        <div className="flex flex-col items-center justify-center space-y-8">
+        <div className="flex flex-col items-center justify-center space-y-6">
           <p className="text-center text-base">
-            Dieser Beweis wird in noch keinem anderen Beitrag referenziert. Wenn
-            Sie ihn also aus dem Beweisbereich dieses Beitrags löschen und bei
-            einem anderen Beitrag anhängen wollen, müssen Sie den Beweis dort
-            erneut erstellen.
+            Dieser Beweis wird in keinem anderen Beitrag referenziert. Wenn Sie
+            ihn also aus dem Beweisbereich dieses Beitrags löschen, wird er
+            zunächst für das ganze Basisdokument gelöscht.
+          </p>
+          <p className="text-center text-base">
+            Um den Beweis bei einem anderen Beitrag anzuhängen, müssen Sie den
+            ihn dort erneut erstellen.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Button
