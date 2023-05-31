@@ -89,6 +89,8 @@ export const ExportPopup: React.FC<IProps> = ({
     if (filename.endsWith(".pdf")) {
       setErrorText("");
       validUserInput = true;
+    } else if (filename === "") {
+      validUserInput = true;
     } else {
       setErrorText(
         "Bitte laden Sie eine valide Deckblatt PDF-Datei (.pdf) hoch!"
