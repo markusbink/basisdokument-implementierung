@@ -78,7 +78,40 @@ function getAttachmentNumeration(attachments: Array<object>) {
 function parseHTMLtoString(htmltext: any) {
   const parser = new DOMParser();
   const parserElem = parser.parseFromString(htmltext, "text/html");
-  return parserElem.body.innerText.replace(/\n+$/, ""); //remove last empty line
+  //add enumeration in ordered lists
+  var orderedLists = parserElem.getElementsByTagName("ol");
+  for (let i=0; i<orderedLists.length; i++) {
+    let listitems = orderedLists[i].getElementsByTagName("li");
+    for (let j=0; j<listitems.length; j++) {
+      if (j === 0) {
+        listitems[j].innerText = "\n" + (j + 1) + ". " + listitems[j].innerText;
+      } else if (j === listitems.length-1) {
+        listitems[j].innerText = (j + 1) + ". " + listitems[j].innerText + "\n";
+      } else {
+        listitems[j].innerText = (j + 1) + ". " + listitems[j].innerText;
+      }
+    }
+  }
+  //add bulletpoints in unordered lists
+  var unorderedLists = parserElem.getElementsByTagName("ul");
+  for (let i=0; i<unorderedLists.length; i++) {
+    let bulletpoints = unorderedLists[i].getElementsByTagName("li");
+    for (let j=0; j<bulletpoints.length; j++) {
+      if (j === 0) {
+        bulletpoints[j].innerText = "\n• " + bulletpoints[j].innerText;
+      } else if (j === bulletpoints.length-1) {
+        bulletpoints[j].innerText = "• " + bulletpoints[j].innerText + "\n";
+      } else {
+        bulletpoints[j].innerText = "• " + bulletpoints[j].innerText;
+      }
+    }
+  }
+  //add newline for spacing
+  let parsedtext = "\n" + parserElem.body.innerText;
+  return parsedtext
+    .replace(/[^\S\n]/g, " ") //remove all NNBSPs -> formatting error
+    .replace(/\u00A0/g, "\n") //change all NBSPs to newlines for spacing
+    .replace(/^\n\n+|\n\n+$/g, "\n"); //format more than one newline at the beginning or end of string to one
 }
 
 //get role profession, e.g. "Rechtsanwältin/Rechtsanwalt" for plaintiff or defendant
@@ -148,7 +181,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     let hint = {
       id: entryId,
       title:
-        judgeHintObject.author + entryCodeText + " | " + judgeHintObject.title,
+        judgeHintObject.author + entryCodeText + " | " + judgeHintObject.title + " | Hinzugefügt am: " + getEntryTimestamp(judgeHintObject, obj),
       text: parseHTMLtoString(judgeHintObject.text),
       version: judgeHintObject.version,
     };
@@ -501,7 +534,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
   allHints = [];
   allEntries = [];
 
-  //signature
+  //signature page
   let signatureData:any = [[
     parseHTMLtoString(
       "Datum: " +

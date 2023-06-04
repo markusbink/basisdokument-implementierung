@@ -3,7 +3,7 @@ name: Deploy Static
 on:
   push:
     branches:
-      - "march-main"
+      - "static"
 
 jobs:
   build:

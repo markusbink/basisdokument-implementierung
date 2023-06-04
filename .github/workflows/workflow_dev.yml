@@ -27,7 +27,6 @@ jobs:
           path: build
           retention-days: 5
 
-
   DeployDev:
     name: Deploy Test Environment Server
     needs: [build]
@@ -48,6 +47,7 @@ jobs:
         run: |
             ls
             scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_DEV }}
+
       
       - name: Cleanup
         run: rm -rf ~/.ssh

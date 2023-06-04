@@ -1,4 +1,5 @@
 import cx from "classnames";
+import { format } from "date-fns";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
@@ -101,9 +102,9 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
               <div className="font-bold">{hint.author}</div>
 
               {hint.version !== currentVersion ? (
-                <div className="opacity-40">{`${new Date(
+                <div className="opacity-40">{`${format(new Date(
                   Date.parse(versionHistory[hint.version - 1].timestamp)
-                ).toLocaleString("de-DE")}`}</div>
+                ), "dd.MM.yyyy")}`}</div>
               ) : null}
             </div>
 
