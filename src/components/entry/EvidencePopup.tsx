@@ -1,4 +1,4 @@
-import { DotsSixVertical, Plus, X, XCircle } from "phosphor-react";
+import { CaretDown, CaretUp, Plus, X, XCircle } from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
@@ -11,7 +11,6 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEvidence, UserRole } from "../../types";
 import { ErrorPopup } from "../ErrorPopup";
 import { v4 as uuidv4 } from "uuid";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Tooltip } from "../Tooltip";
 import cx from "classnames";
 
@@ -24,6 +23,24 @@ interface EvidencesPopupProps {
   backupEvidences: IEvidence[] | undefined;
   setEvidences: React.Dispatch<React.SetStateAction<IEvidence[]>>;
 }
+
+const enum Direction {
+  Up = "up",
+  Down = "down",
+}
+
+const moveEvidenceButtons = [
+  {
+    icon: <CaretUp size={8} weight="bold" />,
+    title: "Nach oben verschieben",
+    action: Direction.Up,
+  },
+  {
+    icon: <CaretDown size={8} weight="bold" />,
+    title: "Nach unten verschieben",
+    action: Direction.Down,
+  },
+];
 
 export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   entryId,
@@ -53,10 +70,10 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
 
   const handleKeyDown = (e: SyntheticKeyboardEvent) => {
     if (e.key !== "Enter") return;
-    login();
+    handleEvidenceAddedToCurrent();
   };
 
-  const login = () => {
+  const handleEvidenceAddedToCurrent = () => {
     if (!currentInput || currentInput?.trim().length <= 0) return;
     const ev: IEvidence = {
       id: uuidv4(),
@@ -96,7 +113,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     }
   };
 
-  const handleChange = (
+  const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     evidenceToEdit: IEvidence
   ) => {
@@ -185,16 +202,21 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     return false;
   };
 
-  const handleDrop = (droppedItem: any) => {
-    // Ignore drop outside droppable container
-    if (!droppedItem.destination) return;
-    const updatedList = [...currentEvidences];
-    // Remove dragged item
-    const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-    // Add dropped item
-    updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-    // Update State
-    setCurrentEvidences(updatedList);
+  const handleMoveEvidence = (direction: Direction, index: number) => {
+    if (
+      (!(index > 0) && direction === Direction.Up) ||
+      (!(index < currentEvidences.length - 1) && direction === Direction.Down)
+    ) {
+      return;
+    }
+
+    const moveBy = direction === Direction.Up ? -1 : 1;
+    const newCurrentEvidences = [...currentEvidences];
+    [newCurrentEvidences[index + moveBy], newCurrentEvidences[index]] = [
+      newCurrentEvidences[index],
+      newCurrentEvidences[index + moveBy],
+    ];
+    setCurrentEvidences(newCurrentEvidences);
   };
 
   if (!isVisible) {
@@ -238,7 +260,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   onChange={(e) => {
                     setCurrentInput(e.target.value);
                   }}
-                  onFocus={(e) => setSuggestionsActive(true)}
+                  onFocus={() => setSuggestionsActive(true)}
                   type="text"
                   placeholder="Beschreibung..."
                 />
@@ -294,7 +316,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   bgColor="bg-offWhite hover:bg-lightGrey"
                   alternativePadding="p-1.5"
                   icon={<Plus size={20} color="grey" weight="regular" />}
-                  onClick={() => login()}></Button>
+                  onClick={() => handleEvidenceAddedToCurrent()}></Button>
               </div>
             </div>
           </div>
@@ -305,136 +327,126 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                 : "Bisher keine Beweise"}{" "}
               zu diesem Beitrag
             </span>
-            <DragDropContext onDragEnd={handleDrop}>
-              <Droppable droppableId="evidence-popup-container">
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className="evidence-popup evidence-popup-container flex flex-col gap-1 max-h-[20vh] overflow-auto mt-2">
-                    {currentEvidences.map((ev, index) => (
-                      <Draggable
-                        key={index + ""}
-                        draggableId={index + ""}
-                        index={index}>
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                            {...provided.draggableProps}>
-                            <div className="flex flex-row items-center select-none group py-1">
-                              <DotsSixVertical size={24} />
-                              <a
-                                href={`#${ev}`}
-                                draggable={false}
-                                className="flex flex-row gap-2 rounded-md p-2 item-container bg-offWhite text-darkGrey w-full justify-between item-container items-center transition-all group-hover:bg-lightGrey"
-                                onClick={(e) => e.stopPropagation()}>
-                                {ev.version === currentVersion ? (
-                                  <Tooltip
-                                    className="w-full"
-                                    text="Doppelklick, um zu Editieren">
-                                    <div
-                                      className="flex flex-row gap-2 items-center"
-                                      onDoubleClick={() => {
-                                        setEvidenceEditMode({
-                                          evidence: ev,
-                                          value: true,
-                                        });
-                                      }}>
-                                      <span>{index + 1 + "."}</span>
-                                      {evidenceEditMode?.value &&
-                                      evidenceEditMode?.evidence === ev ? (
-                                        <>
-                                          <input
-                                            autoFocus={true}
-                                            type="text"
-                                            name="name"
-                                            placeholder="Beschreibung..."
-                                            className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
-                                            value={ev.name}
-                                            onBlur={() => {
-                                              setEvidenceEditMode({
-                                                evidence: ev,
-                                                value: false,
-                                              });
-                                            }}
-                                            onChange={(e) =>
-                                              handleChange(e, ev)
-                                            }
-                                            onKeyDown={(e) => {
-                                              if (e.key === "Enter") {
-                                                setEvidenceEditMode({
-                                                  evidence: ev,
-                                                  value: false,
-                                                });
-                                              }
-                                            }}
-                                          />
-                                          {ev.hasAttachment && (
-                                            <span>
-                                              <b>
-                                                {" "}
-                                                als Anlage {ev.attachmentId}
-                                              </b>
-                                            </span>
-                                          )}
-                                        </>
-                                      ) : (
-                                        <>
-                                          {ev.hasAttachment ? (
-                                            <span className="break-words font-medium">
-                                              {ev.name}
-                                              <b>
-                                                {" "}
-                                                als Anlage {ev.attachmentId}
-                                              </b>
-                                            </span>
-                                          ) : (
-                                            <span className="break-words font-medium">
-                                              {ev.name}
-                                            </span>
-                                          )}
-                                        </>
-                                      )}
-                                    </div>
-                                  </Tooltip>
-                                ) : (
-                                  <div className="flex flex-row gap-2 items-center">
-                                    <span>{index + 1 + "."}</span>
-
-                                    {ev.hasAttachment ? (
-                                      <span className="break-words font-medium">
-                                        {ev.name}
-                                        <b> als Anlage {ev.attachmentId}</b>
-                                      </span>
-                                    ) : (
-                                      <span className="break-words font-medium">
-                                        {ev.name}
-                                      </span>
-                                    )}
-                                  </div>
-                                )}
-                                <div>
-                                  <XCircle
-                                    size={20}
-                                    weight="fill"
-                                    className="cursor-pointer"
-                                    onClick={() => {
-                                      removeEvidence(ev);
-                                    }}
-                                  />
-                                </div>
-                              </a>
-                            </div>
-                          </div>
-                        )}
-                      </Draggable>
+            <div className="flex flex-col gap-1 w-full max-h-[20vh] overflow-auto mt-2">
+              {currentEvidences.map((ev, index) => (
+                <div className="flex flex-row">
+                  <div className="flex pr-1 flex-col">
+                    {moveEvidenceButtons.map((button, btnIndex) => (
+                      <button
+                        key={`${btnIndex}-${button.title}`}
+                        onClick={() => {
+                          handleMoveEvidence(button.action, index);
+                        }}
+                        className={cx(
+                          "flex items-center py-1 px-1 hover:bg-mediumGrey text-darkGrey hover:text-white rounded transition-all",
+                          {
+                            // Disabled buttons when cannot move up or down
+                            "cursor-default hover:bg-transparent hover:text-darkGrey opacity-50":
+                              (!(index > 0) &&
+                                button.action === Direction.Up) ||
+                              (!(index < currentEvidences.length - 1) &&
+                                button.action === Direction.Down),
+                          }
+                        )}>
+                        {button.icon}
+                      </button>
                     ))}
-                    {provided.placeholder}
                   </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+                  <div
+                    className="flex flex-row items-center px-2 rounded-lg py-1 bg-offWhite justify-between w-full"
+                    key={index}>
+                    {ev.version === currentVersion ? (
+                      <Tooltip
+                        className="w-full"
+                        text="Doppelklick, um zu Editieren">
+                        <div
+                          className="flex flex-row gap-2 items-center"
+                          onDoubleClick={() => {
+                            setEvidenceEditMode({
+                              evidence: ev,
+                              value: true,
+                            });
+                          }}>
+                          <span>{index + 1 + "."}</span>
+                          {evidenceEditMode?.value &&
+                          evidenceEditMode?.evidence === ev ? (
+                            <>
+                              <input
+                                autoFocus={true}
+                                type="text"
+                                name="name"
+                                placeholder="Beschreibung..."
+                                className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
+                                value={ev.name}
+                                onBlur={() => {
+                                  setEvidenceEditMode({
+                                    evidence: ev,
+                                    value: false,
+                                  });
+                                }}
+                                onChange={(e) => handleNameChange(e, ev)}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    setEvidenceEditMode({
+                                      evidence: ev,
+                                      value: false,
+                                    });
+                                  }
+                                }}
+                              />
+                              {ev.hasAttachment && (
+                                <span>
+                                  <b> als Anlage {ev.attachmentId}</b>
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {ev.hasAttachment ? (
+                                <span className="break-words font-medium">
+                                  {ev.name}
+                                  <b> als Anlage {ev.attachmentId}</b>
+                                </span>
+                              ) : (
+                                <span className="break-words font-medium">
+                                  {ev.name}
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </Tooltip>
+                    ) : (
+                      <div className="flex flex-row gap-2 items-center">
+                        <span>{index + 1 + "."}</span>
+
+                        {ev.hasAttachment ? (
+                          <span className="break-words font-medium">
+                            {ev.name}
+                            <b> als Anlage {ev.attachmentId}</b>
+                          </span>
+                        ) : (
+                          <span className="break-words font-medium">
+                            {ev.name}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    <div>
+                      <XCircle
+                        size={20}
+                        weight="fill"
+                        className="cursor-pointer"
+                        onClick={() => {
+                          removeEvidence(ev);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <div className="flex items-center justify-end pt-6">
               <button
                 className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"

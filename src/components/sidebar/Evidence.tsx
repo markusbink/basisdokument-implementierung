@@ -1,20 +1,9 @@
-import {
-  BookmarkSimple,
-  DotsThree,
-  Eye,
-  Paperclip,
-  PencilSimple,
-  Trash,
-} from "phosphor-react";
+import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
-import { useBookmarks, useCase, useHeaderContext } from "../../contexts";
-import { IBookmark, IEvidence } from "../../types";
-import {
-  getEntryCode,
-  getEntryCodesForEvidence,
-} from "../../util/get-entry-code";
+import { useCase, useHeaderContext } from "../../contexts";
+import { IEvidence } from "../../types";
+import { getEntryCodesForEvidence } from "../../util/get-entry-code";
 import { Button } from "../Button";
-import { Tooltip } from "../Tooltip";
 import cx from "classnames";
 import { ErrorPopup } from "../ErrorPopup";
 import { getTheme } from "../../themes/getTheme";
@@ -39,7 +28,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
     entryCodes = getEntryCodesForEvidence(entries, evidence);
   } catch {}
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const newEntries = entries.map((entry) => {
       entry.evidences = entry.evidences.map((ev) => {
@@ -79,7 +68,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
           className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
           value={evidence.name}
           onBlur={() => setIsInEditMode(false)}
-          onChange={handleChange}
+          onChange={handleNameChange}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               setIsInEditMode(false);
@@ -132,7 +121,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
         {evidence.version === currentVersion && (
           <div ref={ref} className="self-end relative">
             <Button
-              key="createHint"
+              key="evidenceMenu"
               bgColor={
                 isMenuOpen ? "bg-lightGrey" : "bg-offWhite hover:bg-lightGrey"
               }

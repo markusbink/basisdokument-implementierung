@@ -1,11 +1,7 @@
-import { CaretDown, CaretRight, Plus } from "phosphor-react";
+import { CaretDown, CaretRight } from "phosphor-react";
 import { useState } from "react";
-import { useCase, useUser } from "../../contexts";
-import { useHints } from "../../contexts/HintContext";
+import { useCase } from "../../contexts";
 import { UserRole } from "../../types";
-import { Button } from "../Button";
-import { Hint } from "./Hint";
-import { getEntryCodesForEvidence } from "../../util/get-entry-code";
 import { getEvidences, getEvidencesForRole } from "../../util/get-evidences";
 import { Evidence } from "./Evidence";
 
@@ -15,7 +11,6 @@ export const SidebarEvidences = () => {
   const [defendantEvidencesOpen, setDefendantEvidencesOpen] =
     useState<boolean>(true);
   const { entries } = useCase();
-  const { user } = useUser();
 
   return (
     <div className="flex flex-col gap-3 flex-1 h-[calc(100vh_-_3.5rem)] overflow-auto">
