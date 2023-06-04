@@ -24,9 +24,7 @@ interface BookmarkProviderProps {
 export const BookmarkProvider: React.FC<BookmarkProviderProps> = ({
   children,
 }) => {
-  const [bookmarks, setBookmarks] = useState<IBookmark[]>([
-    { id: "123", title: "ein ganz langer titel", associatedEntry: "123" },
-  ]);
+  const [bookmarks, setBookmarks] = useState<IBookmark[]>([]);
 
   const updateBookmark = (bookmark: IBookmark) => {
     setBookmarks(bookmarks.map((e) => (e.id === bookmark.id ? bookmark : e)));

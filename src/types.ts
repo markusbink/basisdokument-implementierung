@@ -72,6 +72,7 @@ export enum SidebarState {
   Notes,
   Hints,
   Bookmarks,
+  Evidences
 }
 
 export interface ISection {
@@ -168,7 +169,8 @@ export interface IEvidence {
   hasAttachment: boolean; 
   version: number;
   isCurrentEntry: boolean;
+  role: UserRole;
   tag?: string;
-  role?: UserRole;
   attachmentId?: string;
+  isInEditMode: boolean;
 }

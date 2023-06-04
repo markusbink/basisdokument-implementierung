@@ -12,6 +12,8 @@ import { IEvidence, UserRole } from "../../types";
 import { ErrorPopup } from "../ErrorPopup";
 import { v4 as uuidv4 } from "uuid";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { Tooltip } from "../Tooltip";
+import cx from "classnames";
 
 interface EvidencesPopupProps {
   entryId?: string;
@@ -41,6 +43,10 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
   const [evidenceToRemove, setEvidenceToRemove] = useState<IEvidence>();
+  const [evidenceEditMode, setEvidenceEditMode] = useState<{
+    evidence: IEvidence;
+    value: boolean;
+  }>();
 
   const inputRef = useRef(null);
   useOutsideClick(inputRef, () => setSuggestionsActive(false));
@@ -58,6 +64,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       hasAttachment: hasAttachment,
       version: currentVersion,
       isCurrentEntry: true,
+      role: isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant,
+      isInEditMode: false,
     };
     if (hasAttachment) {
       ev.role = isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant;
@@ -86,6 +94,23 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     if (!hasReferencesInOtherEntries(evidence.id)) {
       setIsEditErrorVisible(true);
     }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    evidenceToEdit: IEvidence
+  ) => {
+    const { value } = e.target;
+    const newEntries = entries.map((entry) => {
+      entry.evidences = entry.evidences.map((ev) => {
+        if (ev.id === evidenceToEdit.id) {
+          ev.name = value;
+        }
+        return ev;
+      });
+      return entry;
+    });
+    setEntries(newEntries);
   };
 
   const removeFromEntry = () => {
@@ -141,20 +166,6 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     });
     setEvidences(updatedEvidences);
     setIsVisible(false);
-  };
-
-  const removeEvidenceOverall = (id: string) => {
-    const newEntries = entries.map((entry) => {
-      entry.evidences.forEach((evidence) => {
-        if (evidence.hasAttachment && evidence.id === id) {
-          entry.evidences = entry.evidences.splice(
-            entry.evidences.indexOf(evidence)
-          );
-        }
-      });
-      return entry;
-    });
-    setEntries(newEntries);
   };
 
   const hasReferencesInOtherEntries = (id: string) => {
@@ -294,64 +305,136 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                 : "Bisher keine Beweise"}{" "}
               zu diesem Beitrag
             </span>
-            <div className="flex flex-col gap-1 w-full max-h-[20vh] overflow-auto mt-2">
-              <DragDropContext onDragEnd={handleDrop}>
-                <Droppable droppableId="sorting-evidences">
-                  {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                      {currentEvidences.map((ev, index) => (
-                        <Draggable
-                          key={index}
-                          draggableId={index + ""}
-                          index={index}>
-                          {(provided) => (
-                            <div
-                              className="flex flex-row items-center py-1 rounded-lg w-full"
-                              key={index}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}>
-                              <div className="flex flex-row items-center select-none group w-full">
-                                <div {...provided.dragHandleProps}>
-                                  <DotsSixVertical size={24} />
-                                </div>
-                                <a
-                                  href={`#${ev}`}
-                                  draggable={false}
-                                  className="flex flex-row gap-2 rounded-md p-2 bg-offWhite text-darkGrey w-full justify-between item-container transition-all group-hover:bg-lightGrey"
-                                  onClick={(e) => e.stopPropagation()}>
-                                  <div className="flex flex-row gap-3">
+            <DragDropContext onDragEnd={handleDrop}>
+              <Droppable droppableId="evidence-popup-container">
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="evidence-popup evidence-popup-container flex flex-col gap-1 max-h-[20vh] overflow-auto mt-2">
+                    {currentEvidences.map((ev, index) => (
+                      <Draggable
+                        key={index + ""}
+                        draggableId={index + ""}
+                        index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.dragHandleProps}
+                            {...provided.draggableProps}>
+                            <div className="flex flex-row items-center select-none group py-1">
+                              <DotsSixVertical size={24} />
+                              <a
+                                href={`#${ev}`}
+                                draggable={false}
+                                className="flex flex-row gap-2 rounded-md p-2 item-container bg-offWhite text-darkGrey w-full justify-between item-container items-center transition-all group-hover:bg-lightGrey"
+                                onClick={(e) => e.stopPropagation()}>
+                                {ev.version === currentVersion ? (
+                                  <Tooltip
+                                    className="w-full"
+                                    text="Doppelklick, um zu Editieren">
+                                    <div
+                                      className="flex flex-row gap-2 items-center"
+                                      onDoubleClick={() => {
+                                        setEvidenceEditMode({
+                                          evidence: ev,
+                                          value: true,
+                                        });
+                                      }}>
+                                      <span>{index + 1 + "."}</span>
+                                      {evidenceEditMode?.value &&
+                                      evidenceEditMode?.evidence === ev ? (
+                                        <>
+                                          <input
+                                            autoFocus={true}
+                                            type="text"
+                                            name="name"
+                                            placeholder="Beschreibung..."
+                                            className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
+                                            value={ev.name}
+                                            onBlur={() => {
+                                              setEvidenceEditMode({
+                                                evidence: ev,
+                                                value: false,
+                                              });
+                                            }}
+                                            onChange={(e) =>
+                                              handleChange(e, ev)
+                                            }
+                                            onKeyDown={(e) => {
+                                              if (e.key === "Enter") {
+                                                setEvidenceEditMode({
+                                                  evidence: ev,
+                                                  value: false,
+                                                });
+                                              }
+                                            }}
+                                          />
+                                          {ev.hasAttachment && (
+                                            <span>
+                                              <b>
+                                                {" "}
+                                                als Anlage {ev.attachmentId}
+                                              </b>
+                                            </span>
+                                          )}
+                                        </>
+                                      ) : (
+                                        <>
+                                          {ev.hasAttachment ? (
+                                            <span className="break-words font-medium">
+                                              {ev.name}
+                                              <b>
+                                                {" "}
+                                                als Anlage {ev.attachmentId}
+                                              </b>
+                                            </span>
+                                          ) : (
+                                            <span className="break-words font-medium">
+                                              {ev.name}
+                                            </span>
+                                          )}
+                                        </>
+                                      )}
+                                    </div>
+                                  </Tooltip>
+                                ) : (
+                                  <div className="flex flex-row gap-2 items-center">
                                     <span>{index + 1 + "."}</span>
-                                    <span className="break-words text-sm font-medium">
-                                      {ev.name}
-                                    </span>
-                                    {ev.hasAttachment && (
-                                      <span>
-                                        <b>als Anlage {ev.attachmentId}</b>
+
+                                    {ev.hasAttachment ? (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
+                                        <b> als Anlage {ev.attachmentId}</b>
+                                      </span>
+                                    ) : (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
                                       </span>
                                     )}
                                   </div>
-                                  <div>
-                                    <XCircle
-                                      size={20}
-                                      weight="fill"
-                                      className="cursor-pointer"
-                                      onClick={() => {
-                                        removeEvidence(ev);
-                                      }}
-                                    />
-                                  </div>
-                                </a>
-                              </div>
+                                )}
+                                <div>
+                                  <XCircle
+                                    size={20}
+                                    weight="fill"
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                      removeEvidence(ev);
+                                    }}
+                                  />
+                                </div>
+                              </a>
                             </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
             <div className="flex items-center justify-end pt-6">
               <button
                 className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"

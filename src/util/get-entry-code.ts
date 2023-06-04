@@ -1,4 +1,4 @@
-import { IEntry } from "../types";
+import { IEntry, IEvidence } from "../types";
 
 export const getEntryCode = (
   entries: IEntry[],
@@ -10,3 +10,11 @@ export const getEntryCode = (
   }
   return entry.entryCode;
 };
+
+export const getEntryCodesForEvidence = (
+  entries: IEntry[],
+  evidence: IEvidence
+): string[] => {
+  let entriesWithEvidenceReference = entries.filter((entry) => entry.evidences.indexOf(evidence) !== -1);
+  return entriesWithEvidenceReference.map((entry) => getEntryCode(entries, entry.id));
+}

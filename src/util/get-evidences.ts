@@ -5,13 +5,22 @@ export const getEvidences = (
   currentInput: string,
   addedEvidences: IEvidence[],
 ): IEvidence[] => {
-    let atts = entries.map((e) => e.evidences).flat(1);
+    let evs = entries.map((entry) => entry.evidences).flat(1);
     if (currentInput) {
-        atts = atts.filter((att) => att.name.startsWith(currentInput));
+        evs = evs.filter((att) => att.name.startsWith(currentInput));
     }
-    atts = atts.filter((att) => !addedEvidences.includes(att));
-    return Array.from(new Set(atts));
+    evs = evs.filter((att) => !addedEvidences.includes(att));
+    return Array.from(new Set(evs));
 };
+
+export const getEvidencesForRole = (
+    entries: IEntry[],
+    role: UserRole
+): IEvidence[] => {
+    let evs = entries.map((entry) => entry.evidences).flat(1);
+    evs = evs.filter((ev) => ev.role === role);
+    return Array.from(new Set(evs));
+}
 
 export const getEvidenceAttachmentId = (
     entries: IEntry[],

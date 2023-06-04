@@ -36,7 +36,7 @@ export const SidebarSorting = () => {
   return (
     <div className="flex flex-col gap-3 flex-1 overflow-auto">
       <div className="flex flex-row justify-between pt-4 px-4">
-        <div className="font-bold text-darkGrey text-lg">Gliederung:</div>
+        <div className="font-bold text-darkGrey text-lg">Gliederung</div>
         <div className="content-center">
           <div>
             {user?.role !== UserRole.Client && (

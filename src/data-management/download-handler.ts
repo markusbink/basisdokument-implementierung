@@ -199,7 +199,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
           text: parseHTMLtoString(entry.text),
           version: entry.version,
           associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-          attachments: entry.attachments.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.attachments) : undefined,
+          evidences: entry.evidences.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.evidences) : undefined,
         };
         allEntries.push(tableEntry);
 
@@ -213,7 +213,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
             text: parseHTMLtoString(entry.text),
             version: entry.version,
             associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-            attachments: entry.attachments.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.attachments) : undefined,
+            evidences: entry.evidences.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.evidences) : undefined,
           };
           newEntries.push(newEntry);
         }
@@ -330,13 +330,13 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     for (let i = 0; i < newEntries.length; i++) {
       let data;
       if (newEntries[i].associatedEntry) {
-        if (newEntries[i].attachments) {
+        if (newEntries[i].evidences) {
           data = [
             ["Neuer Beitrag"],
             [newEntries[i].title],
             [newEntries[i].associatedEntry],
             [newEntries[i].text],
-            [newEntries[i].attachments],
+            [newEntries[i].evidences],
           ];
         } else {
           data = [
@@ -346,8 +346,8 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
             [newEntries[i].text],
           ];
         }        
-      } else if (newEntries[i].attachments) {
-        data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text], [newEntries[i].attachments]];
+      } else if (newEntries[i].evidences) {
+        data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text], [newEntries[i].evidences]];
       } else {
         data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text]];
       }
@@ -417,12 +417,12 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     } else {
       let data;
       if (allEntries[i].associatedEntry !== undefined) {
-        if (allEntries[i].attachments !== undefined) {
+        if (allEntries[i].evidences !== undefined) {
           data = [
             [allEntries[i].title],
             [allEntries[i].associatedEntry],
             [allEntries[i].text],
-            [allEntries[i].attachments],
+            [allEntries[i].evidences],
           ];
         } else {
           data = [
@@ -431,8 +431,8 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
             [allEntries[i].text],
           ];
         }
-      } else if (allEntries[i].attachments !== undefined) {
-        data = [[allEntries[i].title], [allEntries[i].text], [allEntries[i].attachments]];
+      } else if (allEntries[i].evidences !== undefined) {
+        data = [[allEntries[i].title], [allEntries[i].text], [allEntries[i].evidences]];
       } else {
         data = [[allEntries[i].title], [allEntries[i].text]];
       }
