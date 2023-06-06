@@ -72,6 +72,7 @@ export enum SidebarState {
   Notes,
   Hints,
   Bookmarks,
+  Evidences
 }
 
 export interface ISection {
@@ -93,6 +94,7 @@ export interface IEntry {
   role: UserRole.Plaintiff | UserRole.Defendant;
   sectionId: string;
   associatedEntry?: string;
+  evidences: IEvidence[];
 }
 
 export enum IDragItemType {
@@ -159,4 +161,16 @@ export interface IStateUserInput {
   editFilename: string;
   errorText: string;
   newVersionMode: boolean | undefined;
+}
+
+export interface IEvidence {
+  id: string;
+  name: string;
+  hasAttachment: boolean; 
+  version: number;
+  isCurrentEntry: boolean;
+  role: UserRole;
+  tag?: string;
+  attachmentId?: string;
+  isInEditMode: boolean;
 }

@@ -59,6 +59,21 @@ function getEntryTitle(entryId: any, obj: any) {
   }
 }
 
+//add attachments in one string because of autotable commas
+function getAttachmentNumeration(attachments: Array<object>) {
+  var numAttachments: string = "";
+  for (let i=0; i<attachments.length; i++) {
+    let attachment = i+1 + ") " + attachments[i];
+    //do not add line break/empty line to last item
+    if (i === attachments.length-1) {
+      numAttachments = numAttachments + attachment;
+    } else {
+      numAttachments = numAttachments + attachment + "\n";
+    }
+  }
+  return numAttachments;
+}
+
 //parse HTML to string to remove tags
 function parseHTMLtoString(htmltext: any) {
   const parser = new DOMParser();
@@ -217,6 +232,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
           text: parseHTMLtoString(entry.text),
           version: entry.version,
           associatedEntry: getEntryTitle(entry.associatedEntry, obj),
+          evidences: entry.evidences.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.evidences) : undefined,
         };
         allEntries.push(tableEntry);
 
@@ -230,6 +246,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
             text: parseHTMLtoString(entry.text),
             version: entry.version,
             associatedEntry: getEntryTitle(entry.associatedEntry, obj),
+            evidences: entry.evidences.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.evidences) : undefined,
           };
           newEntries.push(newEntry);
         }
@@ -346,12 +363,24 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     for (let i = 0; i < newEntries.length; i++) {
       let data;
       if (newEntries[i].associatedEntry) {
-        data = [
-          ["Neuer Beitrag"],
-          [newEntries[i].title],
-          [newEntries[i].associatedEntry],
-          [newEntries[i].text],
-        ];
+        if (newEntries[i].evidences) {
+          data = [
+            ["Neuer Beitrag"],
+            [newEntries[i].title],
+            [newEntries[i].associatedEntry],
+            [newEntries[i].text],
+            [newEntries[i].evidences],
+          ];
+        } else {
+          data = [
+            ["Neuer Beitrag"],
+            [newEntries[i].title],
+            [newEntries[i].associatedEntry],
+            [newEntries[i].text],
+          ];
+        }        
+      } else if (newEntries[i].evidences) {
+        data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text], [newEntries[i].evidences]];
       } else {
         data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text]];
       }
@@ -421,11 +450,22 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     } else {
       let data;
       if (allEntries[i].associatedEntry !== undefined) {
-        data = [
-          [allEntries[i].title],
-          [allEntries[i].associatedEntry],
-          [allEntries[i].text],
-        ];
+        if (allEntries[i].evidences !== undefined) {
+          data = [
+            [allEntries[i].title],
+            [allEntries[i].associatedEntry],
+            [allEntries[i].text],
+            [allEntries[i].evidences],
+          ];
+        } else {
+          data = [
+            [allEntries[i].title],
+            [allEntries[i].associatedEntry],
+            [allEntries[i].text],
+          ];
+        }
+      } else if (allEntries[i].evidences !== undefined) {
+        data = [[allEntries[i].title], [allEntries[i].text], [allEntries[i].evidences]];
       } else {
         data = [[allEntries[i].title], [allEntries[i].text]];
       }

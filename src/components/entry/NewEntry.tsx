@@ -11,6 +11,7 @@ import { useUser } from "../../contexts/UserContext";
 import { useView } from "../../contexts/ViewContext";
 import { getTheme } from "../../themes/getTheme";
 import {
+  IEvidence,
   IEntry,
   IndividualEntrySortingEntry,
   UserRole,
@@ -53,7 +54,11 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const entryCodePrefix = isPlaintiff ? "K" : "B";
   const sectionNumber = getOriginalSortingPosition(sectionList, sectionId);
 
-  const createEntry = (plainText: string, rawHtml: string) => {
+  const createEntry = (
+    plainText: string,
+    rawHtml: string,
+    evidences: IEvidence[]
+  ) => {
     if (plainText.length === 0) {
       toast("Bitte geben sie einen Text ein.", { type: "error" });
       return;
@@ -70,6 +75,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       sectionId,
       text: rawHtml,
       version: currentVersion,
+      evidences: evidences,
     };
 
     if (associatedEntry) {
@@ -219,9 +225,10 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             onAbort={(plainText, rawHtml) => {
               closeNewEntryForm(plainText, rawHtml);
             }}
-            onSave={(plainText, rawHtml) => {
-              createEntry(plainText, rawHtml);
+            onSave={(plainText, rawHtml, evidences) => {
+              createEntry(plainText, rawHtml, evidences);
             }}
+            evidences={[]}
           />
         </div>
       </div>
