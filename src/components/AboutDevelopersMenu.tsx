@@ -37,9 +37,17 @@ const developerData = [
 
 export const AboutDevelopersMenu = () => {
   const [showDevelopersMenu, setShowDevelopersMenu] = useState<boolean>(false);
+  const { setShowPatchnotesPopup } = usePatchnotes();
+  
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-end w-full">
+    <div>
+      <div className="flex flex-row gap-2 justify-end">
+          <div
+            className="bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey items-center"
+            onClick={() => {setShowPatchnotesPopup(true)}}
+          >
+            <Notebook size={20} />
+          </div>
         <div
           className="flex flex-row items-center justify-center gap-1 bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey"
           onClick={() => {

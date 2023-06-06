@@ -14,3 +14,9 @@ export {
   HeaderContext,
   useHeaderContext,
 } from "./HeaderContext";
+
+export {
+  PatchnotesProvider,
+  PatchnotesContext,
+  usePatchnotes,
+} from "./PatchnotesContext";
