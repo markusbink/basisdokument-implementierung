@@ -236,7 +236,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
         ) : null}
         {evidences && evidences.length > 0 && (
           <div className="flex flex-col gap-1 border-t border-lightGrey pt-2">
-            <span className="font-bold">Beweisbereich</span>
+            <span className="font-bold">Beweisangebot</span>
             <div className="flex flex-col flex-wrap gap-1">
               {evidences.map((evidence, index) => (
                 <div className="flex flex-row items-center px-2" key={index}>

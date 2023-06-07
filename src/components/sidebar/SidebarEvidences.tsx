@@ -19,7 +19,7 @@ export const SidebarEvidences = () => {
       </div>
       {getEvidences(entries, "", []).length <= 0 ? (
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm p-4">
-          Im Beweisbereich bei einem Beitrag können Sie Beweise mit oder ohne
+          Im Beweisangebot bei einem Beitrag können Sie Beweise mit oder ohne
           Anlage hinzufügen. Alle Beweise des Basisdokuments erscheinen dann in
           dieser Ansicht.
         </div>

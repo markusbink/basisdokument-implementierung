@@ -244,7 +244,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
             </div>
           </div>
           <span className="text-sm">
-            Fügen Sie Beweise zum Beweisbereich dieses Beitrags hinzu, indem Sie
+            Fügen Sie Beweise zum Beweisangebot dieses Beitrags hinzu, indem Sie
             eine kurze Beschreibung angeben. Sie können dabei auch auf Anlagen
             verweisen, welche Sie später mit versenden. Beweise, die hier
             hinzugefügt wurden, können dann auch in anderen Beiträgen
@@ -463,7 +463,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         <div className="flex flex-col items-center justify-center space-y-6">
           <p className="text-center text-base">
             Dieser Beweis wird in keinem anderen Beitrag referenziert. Wenn Sie
-            ihn also aus dem Beweisbereich dieses Beitrags löschen, wird er
+            ihn also aus dem Beweisangebot dieses Beitrags löschen, wird er
             zunächst für das ganze Basisdokument gelöscht.
           </p>
           <p className="text-center text-base">
