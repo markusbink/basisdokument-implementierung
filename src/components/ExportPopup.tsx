@@ -182,9 +182,7 @@ export const ExportPopup: React.FC<IProps> = ({
               <div className="text-darkGrey opacity-80">
                 Sie können vor dem Herunterladen des Basisdokuments optional ein
                 Deckblatt einfügen, das dem Basisdokument
-                vorangestellt wird. <br/>
-                Es ist zudem möglich die Signatur des
-                Basisdokuments zu ändern.
+                vorangestellt wird:
               </div>
               <div className="flex flex-row items-center justify-left gap-2">
                 <input
@@ -235,6 +233,7 @@ export const ExportPopup: React.FC<IProps> = ({
                   </div>
                 )}
               </div>
+              <div className="text-darkGrey opacity-80">Es ist zudem möglich, die Signatur des Basisdokuments zu ändern:</div>
               <div className="flex flex-row gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -262,6 +261,7 @@ export const ExportPopup: React.FC<IProps> = ({
                   />
                 </div>
               )}
+              <div className="text-darkGrey opacity-80">Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge herunterladen:</div>
               <div className="flex flex-row items-center justify-left gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -282,7 +282,7 @@ export const ExportPopup: React.FC<IProps> = ({
                   </div>
                 ) : null}
               </div>
-              <div className="flex flex-row justify-center">
+              <div className="flex flex-row justify-end">
                 <Button
                   size="md"
                   bgColor="bg-darkGrey hover:bg-darkGrey/60"

@@ -4,7 +4,7 @@ import { useExport } from "../../contexts";
 
 export const DownloadBasisdokumentButton = () => {
 
-  const { isExportPopupOpen, setIsExportPopupOpen } = useExport();
+  const { setIsExportPopupOpen } = useExport();
 
   const onClickDownloadButton = () => {
     setIsExportPopupOpen((currentState) => !currentState);

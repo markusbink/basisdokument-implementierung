@@ -293,7 +293,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
     theme: "grid",
     styles: { fontStyle: "bold" },
     head: [["Basisdokument - Neue Beiträge"]],
-    headStyles: { fontStyle: "bold", fontSize: 14, fillColor: [0, 102, 204] },
+    headStyles: { fontStyle: "bold", fontSize: 14, fillColor: [0, 122, 122] },
     body: [
       [basisdokument[0].caseId],
       [basisdokument[0].version],
@@ -325,7 +325,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
     theme: "grid",
     styles: { halign: "center" },
     head: [["Rubrum Klagepartei"]],
-    headStyles: { fillColor: [0, 102, 204] },
+    headStyles: { fillColor: [0, 122, 122] },
     body: [rubrumKlage],
     didDrawPage: function () {
       newDoc.outline.add(null, "Rubrum Klagepartei", {
@@ -353,7 +353,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
     theme: "grid",
     styles: { halign: "center" },
     head: [["Rubrum Beklagtenpartei"]],
-    headStyles: { fillColor: [0, 102, 204] },
+    headStyles: { fillColor: [0, 122, 122] },
     body: [rubrumBeklagt],
     didDrawPage: function () {
       newDoc.outline.add(null, "Rubrum Beklagtenpartei", {
@@ -463,7 +463,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
       headStyles: {
         fontStyle: "bold",
         fontSize: 12,
-        fillColor: [0, 102, 204],
+        fillColor: [0, 122, 122],
         valign: "middle",
       },
       margin: { top: 7, bottom: 7, left: 7, right: 7 },
@@ -698,15 +698,11 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
   if (coverPDF !== undefined) {
     const pdfBuffer = doc.output("arraybuffer");
     mergePDF(coverPDF, pdfBuffer, fileName);
-    if (downloadNew) {
-      const newPdfBuffer = newDoc.output("arraybuffer");
-      mergePDF(coverPDF, newPdfBuffer, "neue_beiträge_" + fileName);
-    }
   } else {
     doc.save(fileName);
-    if (downloadNew) {
-      newDoc.save("neue_beiträge_" + fileName);
-    }
+  }
+  if (downloadNew) {
+    newDoc.save("neue_beitraege_" + fileName);
   }
 }
 
