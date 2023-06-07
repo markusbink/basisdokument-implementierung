@@ -6,13 +6,15 @@ import {
   getEvidences,
   getEvidenceAttachmentId,
 } from "../../util/get-evidences";
-import { useCase } from "../../contexts";
+import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEvidence, UserRole } from "../../types";
 import { ErrorPopup } from "../ErrorPopup";
 import { v4 as uuidv4 } from "uuid";
 import { Tooltip } from "../Tooltip";
 import cx from "classnames";
+import { EntryHeader } from "./EntryHeader";
+import { getTheme } from "../../themes/getTheme";
 
 interface EvidencesPopupProps {
   entryId?: string;
@@ -52,6 +54,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   setEvidences,
 }) => {
   const { entries, setEntries, currentVersion } = useCase();
+  const { selectedTheme } = useHeaderContext();
   const [currentEvidences, setCurrentEvidences] =
     useState<IEvidence[]>(evidences);
   const [currentInput, setCurrentInput] = useState<string>("");
@@ -223,13 +226,15 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     return null;
   }
 
+  //TODO: overflow scrolling im vorschau beitrag!!
+
   return (
     <>
       <div className="opacity-25 fixed inset-0 z-40 bg-black !m-0" />
       <div className="fixed inset-0 flex flex-col justify-center items-center z-50">
         <div
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-            p-8 bg-white rounded-lg content-center shadow-lg space-y-4 w-full max-w-[600px]">
+            p-8 bg-white rounded-lg content-center shadow-lg space-y-8 w-full max-w-[600px]">
           <div className="flex items-start justify-between rounded-lg ">
             <h3>Beweise hinzufügen</h3>
             <div>
@@ -250,7 +255,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
             hinzugefügt wurden, können dann auch in anderen Beiträgen
             referenziert werden.
           </span>
-          <div className="flex flex-col pr-6">
+          <div className="flex flex-col mr-2">
             <div className="flex flex-row w-full items-center justify-between gap-1">
               <div className="w-full" ref={inputRef}>
                 <input
@@ -320,7 +325,163 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               </div>
             </div>
           </div>
-          <div className="pt-4">
+          <div
+            className={cx("border-[1px] rounded-xl shadow mr-2", {
+              [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
+                isPlaintiff,
+              [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]:
+                !isPlaintiff,
+            })}>
+            <EntryHeader isPlaintiff={isPlaintiff} isBodyOpen={true}>
+              <div>
+                <i>Vorschau</i>
+              </div>
+            </EntryHeader>
+            <div className="flex border-t border-lightGrey rounded-b-lg py-2 items-center gap-2 justify-between mt-4 mb-2 mx-6">
+              {currentEvidences.length <= 0 ? (
+                <div
+                  className="flex flex-col gap-2 items-center cursor-pointer"
+                  onClick={(e) => {
+                    //TODO
+                  }}>
+                  <span className="italic">Keine Beweise</span>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-1 w-full">
+                  <span className="ml-1 font-bold">Beweisangebot</span>
+                  <div className="flex flex-col flex-wrap gap-1">
+                    {currentEvidences.map((ev, index) => (
+                      <div className="flex flex-row">
+                        <div className="flex pr-1 flex-col">
+                          {moveEvidenceButtons.map((button, btnIndex) => (
+                            <button
+                              key={`${btnIndex}-${button.title}`}
+                              onClick={() => {
+                                handleMoveEvidence(button.action, index);
+                              }}
+                              className={cx(
+                                "flex items-center py-1 px-1 hover:bg-mediumGrey text-darkGrey hover:text-white rounded transition-all",
+                                {
+                                  // Disabled buttons when cannot move up or down
+                                  "cursor-default hover:bg-transparent hover:text-darkGrey opacity-50":
+                                    (!(index > 0) &&
+                                      button.action === Direction.Up) ||
+                                    (!(index < currentEvidences.length - 1) &&
+                                      button.action === Direction.Down),
+                                }
+                              )}>
+                              {button.icon}
+                            </button>
+                          ))}
+                        </div>
+                        <div
+                          className="flex flex-row items-center px-2 rounded-lg py-1 bg-offWhite justify-between w-full"
+                          key={index}>
+                          {ev.version === currentVersion ? (
+                            <Tooltip
+                              className="w-full"
+                              text="Doppelklick, um zu Editieren">
+                              <div
+                                className="flex flex-row gap-2 items-center"
+                                onDoubleClick={() => {
+                                  setEvidenceEditMode({
+                                    evidence: ev,
+                                    value: true,
+                                  });
+                                }}>
+                                <span>{index + 1 + "."}</span>
+                                {evidenceEditMode?.value &&
+                                evidenceEditMode?.evidence === ev ? (
+                                  <>
+                                    <input
+                                      autoFocus={true}
+                                      type="text"
+                                      name="name"
+                                      placeholder="Beschreibung..."
+                                      className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
+                                      value={ev.name}
+                                      onBlur={() => {
+                                        setEvidenceEditMode({
+                                          evidence: ev,
+                                          value: false,
+                                        });
+                                      }}
+                                      onChange={(e) => handleNameChange(e, ev)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                          setEvidenceEditMode({
+                                            evidence: ev,
+                                            value: false,
+                                          });
+                                        }
+                                      }}
+                                    />
+                                    {ev.hasAttachment && (
+                                      <span>
+                                        <b> als Anlage {ev.attachmentId}</b>
+                                      </span>
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    {ev.hasAttachment ? (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
+                                        <b> als Anlage {ev.attachmentId}</b>
+                                      </span>
+                                    ) : (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
+                                      </span>
+                                    )}
+                                  </>
+                                )}
+                              </div>
+                            </Tooltip>
+                          ) : (
+                            <div className="flex flex-row gap-2 items-center">
+                              <span>{index + 1 + "."}</span>
+
+                              {ev.hasAttachment ? (
+                                <span className="break-words font-medium">
+                                  {ev.name}
+                                  <b> als Anlage {ev.attachmentId}</b>
+                                </span>
+                              ) : (
+                                <span className="break-words font-medium">
+                                  {ev.name}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          <div>
+                            <XCircle
+                              size={20}
+                              weight="fill"
+                              className="cursor-pointer"
+                              onClick={() => {
+                                removeEvidence(ev);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center justify-end">
+            <button
+              className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
+              onClick={() => {
+                addEvidence();
+              }}>
+              Beweisangebot speichern
+            </button>
+          </div>
+          {/*<div className="pt-4">
             <span>
               {currentEvidences && currentEvidences.length > 0
                 ? "Beweise"
@@ -456,7 +617,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                 Gelistete Beweise hinzufügen
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <ErrorPopup isVisible={isEditErrorVisible}>
