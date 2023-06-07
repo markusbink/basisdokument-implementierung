@@ -7,6 +7,7 @@ import {
   HeaderProvider,
   HintProvider,
   NoteProvider,
+  PatchnotesProvider,
   SectionProvider,
   UserProvider,
 } from "./contexts";
@@ -44,11 +45,13 @@ export const App = () => {
                     <NoteProvider>
                       <HintProvider>
                         <BookmarkProvider>
-                          {isAuthenticated ? (
-                            <Main />
-                          ) : (
-                            <Auth setIsAuthenticated={setIsAuthenticated} />
-                          )}
+                          <PatchnotesProvider>
+                            {isAuthenticated ? (
+                              <Main />
+                            ) : (
+                              <Auth setIsAuthenticated={setIsAuthenticated} />
+                            )}
+                          </PatchnotesProvider>
                         </BookmarkProvider>
                       </HintProvider>
                     </NoteProvider>
