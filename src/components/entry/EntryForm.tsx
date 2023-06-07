@@ -141,7 +141,13 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         />
         <div className="flex border-t border-lightGrey rounded-b-lg px-3 py-2 items-center gap-2 justify-between">
           {entryEvidences.length <= 0 ? (
-            <div className="flex flex-col gap-2 items-center">
+            <div
+              className="flex flex-col gap-2 items-center cursor-pointer"
+              onClick={(e) => {
+                setEvidencePopupVisible(true);
+                setBackupEvidences([...entryEvidences]);
+                e.stopPropagation();
+              }}>
               <span className="italic">Keine Beweise</span>
             </div>
           ) : (
