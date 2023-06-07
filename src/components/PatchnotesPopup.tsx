@@ -170,7 +170,7 @@ export const PatchnotesPopup = () => {
                 <div className="flex flex-col">
                   <div
                     className={`w-36 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
-                      currentPatchnote === "2.0.1" ? "" : "border-r opacity-50"
+                      currentPatchnote === "2.0.1" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
                       switchPatchnoteContent("2.0.1");
@@ -184,7 +184,7 @@ export const PatchnotesPopup = () => {
                   </div>
                   <div
                     className={`w-36 flex-grow h-full grid place-items-center p-2 hover:bg-gray-200 cursor-pointer ${
-                      currentPatchnote === "2.0.0" ? "" : "border-r opacity-50"
+                      currentPatchnote === "2.0.0" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
                       switchPatchnoteContent("2.0.0");
@@ -198,7 +198,7 @@ export const PatchnotesPopup = () => {
                   </div>
                   <div
                     className={`w-36 flex-grow h-full grid place-items-center p-2 border-t hover:bg-gray-200 cursor-pointer ${
-                      currentPatchnote === "1.0.2" ? "" : "border-r opacity-50"
+                      currentPatchnote === "1.0.2" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
                       switchPatchnoteContent("1.0.2");
@@ -212,7 +212,7 @@ export const PatchnotesPopup = () => {
                   </div>
                   <div
                     className={`w-36 flex-grow h-full grid place-items-center p-2 border-t hover:bg-gray-200 cursor-pointer ${
-                      currentPatchnote === "1.0.1" ? "" : "border-r opacity-50"
+                      currentPatchnote === "1.0.1" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
                       switchPatchnoteContent("1.0.1");
@@ -226,7 +226,7 @@ export const PatchnotesPopup = () => {
                   </div>
                   <div
                     className={`w-36 flex-grow h-full grid place-items-center p-2 border-t hover:bg-gray-200 cursor-pointer ${
-                      currentPatchnote === "1.0.0" ? "" : "border-r opacity-50"
+                      currentPatchnote === "1.0.0" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
                       switchPatchnoteContent("1.0.0");
