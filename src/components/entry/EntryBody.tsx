@@ -6,7 +6,7 @@ import {
   doHighlight,
   optionsImpl,
 } from "@funktechno/texthighlighter/lib/index";
-import { IHighlightedEntry, Tool } from "../../types";
+import { IEvidence, IHighlightedEntry, Tool } from "../../types";
 import { getColorHexForColor } from "../../util/get-hex-code-for-marker";
 import { getTheme } from "../../themes/getTheme";
 
@@ -20,6 +20,7 @@ interface EntryBodyProps {
     React.SetStateAction<boolean>
   >;
   showInPopup?: boolean;
+  evidences: IEvidence[];
 }
 
 export const EntryBody: React.FC<EntryBodyProps> = ({
@@ -30,6 +31,7 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
   setLowerOpcacityForHighlighters,
   children,
   showInPopup,
+  evidences,
 }) => {
   const {
     searchbarValue,
@@ -104,11 +106,11 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
     return getColorHexForColor(currentColorSelection.color);
   };
 
-  function markedEntryExists(entryId: string) {
+  const markedEntryExists = (entryId: string) => {
     return highlightedEntries.some(function (el) {
       return el.entryId === entryId;
     });
-  }
+  };
 
   const saveNewHighlighting = () => {
     let highlightedText: string | undefined = document.querySelector(
@@ -195,38 +197,68 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
   };
 
   return (
-    <div
-      className={cx(
-        `p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`,
-        {
-          [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
-            isPlaintiff,
-          [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]:
-            !isPlaintiff,
-          "max-h-[70vh] overflow-y-auto": showInPopup,
-        }
-      )}>
-      {searchbarValue === "" &&
-      (getCurrentTool.id === Tool.Highlighter ||
-        getCurrentTool.id === Tool.Eraser) ? (
-        <p
-          style={{ cursor: getToolIconPath() }}
-          className={cx(`marker-text-${entryId}`)}
-          onMouseUp={createHighlighting}
-          dangerouslySetInnerHTML={{ __html: getEntryContent() as string }}></p>
-      ) : null}
-      {searchbarValue === "" && getCurrentTool.id === Tool.Cursor ? (
-        <p
-          dangerouslySetInnerHTML={{
-            __html: applyHighlighterFiltersToEntry(getEntryContent() as string),
-          }}></p>
-      ) : null}
-      {searchbarValue !== "" ? (
-        <Highlight // eslint-disable-next-line
-          search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>
-          {children}
-        </Highlight> // eslint-disable-line
-      ) : null}
-    </div>
+    <>
+      <div
+        className={cx(
+          `p-6 bg-white rounded-b-lg border border-t-0 search-text-${entryId}`,
+          {
+            [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
+              isPlaintiff,
+            [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]:
+              !isPlaintiff,
+            "max-h-[70vh] overflow-y-auto": showInPopup,
+          }
+        )}>
+        {searchbarValue === "" &&
+        (getCurrentTool.id === Tool.Highlighter ||
+          getCurrentTool.id === Tool.Eraser) ? (
+          <p
+            style={{ cursor: getToolIconPath() }}
+            className={cx(`marker-text-${entryId}`)}
+            onMouseUp={createHighlighting}
+            dangerouslySetInnerHTML={{
+              __html: getEntryContent() as string,
+            }}></p>
+        ) : null}
+        {searchbarValue === "" && getCurrentTool.id === Tool.Cursor ? (
+          <p
+            dangerouslySetInnerHTML={{
+              __html: applyHighlighterFiltersToEntry(
+                getEntryContent() as string
+              ),
+            }}></p>
+        ) : null}
+        {searchbarValue !== "" ? (
+          <Highlight // eslint-disable-next-line
+            search={`(?<=(\>[^<>]*))${searchbarValue}(?=([^<>]*\<.*\>))`}>
+            {children}
+          </Highlight> // eslint-disable-line
+        ) : null}
+        {evidences && evidences.length > 0 && (
+          <div className="flex flex-col gap-1 border-t border-lightGrey pt-2">
+            <span className="font-bold">Beweisbereich</span>
+            <div className="flex flex-col flex-wrap gap-1">
+              {evidences.map((evidence, index) => (
+                <div className="flex flex-row items-center px-2" key={index}>
+                  <div className="flex flex-row gap-2">
+                    <span>{index + 1 + "."}</span>
+                    {evidence.hasAttachment ? (
+                      <span className="break-words font-medium">
+                        {evidence.name}
+                        <b> als Anlage {evidence.attachmentId}</b>
+                      </span>
+                    ) : (
+                      <span className="break-words font-medium">
+                        {evidence.name}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };

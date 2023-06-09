@@ -16,3 +16,9 @@ export {
 } from "./HeaderContext";
 
 export { ExportProvider, ExportContext, useExport } from "./ExportContext";
+
+export {
+  PatchnotesProvider,
+  PatchnotesContext,
+  usePatchnotes,
+} from "./PatchnotesContext";

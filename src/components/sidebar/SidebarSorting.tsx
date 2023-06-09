@@ -45,7 +45,7 @@ export const SidebarSorting = () => {
     //h-[calc(100vh-56px)] -> overflow scroll needs a fixed height of parent: 56px (height of sidebar header)
     <div className="flex flex-col gap-3 h-[calc(100vh-56px)]">
       <div className="flex flex-row justify-between pt-4 px-4">
-        <div className="font-bold text-darkGrey text-lg">Gliederung:</div>
+        <div className="font-bold text-darkGrey text-lg">Gliederung</div>
         <div className="content-center">
           <div>
             {user?.role !== UserRole.Client && (

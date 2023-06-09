@@ -31,6 +31,7 @@ import {
   SidebarState,
   IndividualEntrySortingEntry,
   ViewMode,
+  IEvidence,
 } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -267,7 +268,11 @@ export const Entry: React.FC<EntryProps> = ({
     });
   };
 
-  const updateEntry = (plainText: string, rawHtml: string) => {
+  const updateEntry = (
+    plainText: string,
+    rawHtml: string,
+    evidences: IEvidence[]
+  ) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
       return;
@@ -281,6 +286,7 @@ export const Entry: React.FC<EntryProps> = ({
       );
       newEntries[entryIndex].text = rawHtml;
       newEntries[entryIndex].author = authorName || entry.author;
+      newEntries[entryIndex].evidences = evidences;
       return newEntries;
     });
 
@@ -303,7 +309,7 @@ export const Entry: React.FC<EntryProps> = ({
               hideEntriesHighlighter &&
               getCurrentTool.id === Tool.Cursor),
           "pointer-events-none": isHidden,
-          "mt-6": !entry.associatedEntry && !shownInPopup,
+          "mt-6": !shownInPopup && view !== ViewMode.SideBySide,
           "w-1/2": shownInPopup,
         })}>
         <div
@@ -553,12 +559,14 @@ export const Entry: React.FC<EntryProps> = ({
                     }
                     lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
                     entryId={entry.id}
-                    showInPopup={shownInPopup}>
+                    showInPopup={shownInPopup}
+                    evidences={entry.evidences}>
                     {entry.text}
                   </EntryBody>
                 )}
                 {isBodyOpen && isEditing && (
                   <EntryForm
+                    entryId={entry.id}
                     defaultContent={entry.text}
                     isPlaintiff={isPlaintiff}
                     isExpanded={isExpanded}
@@ -566,10 +574,15 @@ export const Entry: React.FC<EntryProps> = ({
                     onAbort={() => {
                       setIsEditErrorVisible(true);
                     }}
-                    onSave={(plainText: string, rawHtml: string) => {
-                      updateEntry(plainText, rawHtml);
+                    onSave={(
+                      plainText: string,
+                      rawHtml: string,
+                      evidences: IEvidence[]
+                    ) => {
+                      updateEntry(plainText, rawHtml, evidences);
                       setIsExpanded(false);
                     }}
+                    evidences={entry.evidences}
                   />
                 )}
               </div>
