@@ -178,12 +178,7 @@ export const ExportPopup: React.FC<IProps> = ({
               </div>
             </div>
             {/*body*/}
-            <div className="space-y-4">
-              <div className="text-darkGrey opacity-80">
-                Sie können vor dem Herunterladen des Basisdokuments optional ein
-                Deckblatt einfügen, das dem Basisdokument
-                vorangestellt wird:
-              </div>
+            <div>
               <div className="flex flex-row items-center justify-left gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -233,7 +228,9 @@ export const ExportPopup: React.FC<IProps> = ({
                   </div>
                 )}
               </div>
-              <div className="text-darkGrey opacity-80">Es ist zudem möglich, die Signatur des Basisdokuments zu ändern:</div>
+              <div className="text-darkGrey opacity-80 ml-5 mb-7">
+                Sie können vor dem Herunterladen des Basisdokuments optional ein Deckblatt einfügen, das dem Basisdokument vorangestellt wird.
+              </div>
               <div className="flex flex-row gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -243,8 +240,9 @@ export const ExportPopup: React.FC<IProps> = ({
                 />
                 <div className="font-semibold">Signatur im Basisdokument-PDF ändern</div>
               </div>
+              <div className={`text-darkGrey opacity-80 ml-5 ${showAuthorChange ? '' : 'mb-7'}`}>Sie können die Signatur des Basisdokuments ändern.</div>
               {showAuthorChange && (
-                <div className="flex flex-row w-auto mt-4 gap-4">
+                <div className="flex flex-row w-auto mt-4 gap-4 ml-4 mb-7">
                   <input
                     className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none"
                     type="text"
@@ -261,7 +259,6 @@ export const ExportPopup: React.FC<IProps> = ({
                   />
                 </div>
               )}
-              <div className="text-darkGrey opacity-80">Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge herunterladen:</div>
               <div className="flex flex-row items-center justify-left gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -273,6 +270,7 @@ export const ExportPopup: React.FC<IProps> = ({
                   <span className="font-semibold">Zusätzlich alle neuen Beiträge als eigene PDF herunterladen</span>
                 </div>
               </div>
+              <div className="text-darkGrey opacity-80 ml-5 mb-7">Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge herunterladen.</div>
               <div>
                 {errorText !== "" ? (
                   <div className="flex bg-lightRed p-4 rounded-md">
