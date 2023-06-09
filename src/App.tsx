@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   BookmarkProvider,
   CaseProvider,
+  ExportProvider,
   HeaderProvider,
   HintProvider,
   NoteProvider,
@@ -45,13 +46,15 @@ export const App = () => {
                     <NoteProvider>
                       <HintProvider>
                         <BookmarkProvider>
-                          <PatchnotesProvider>
-                            {isAuthenticated ? (
-                              <Main />
-                            ) : (
-                              <Auth setIsAuthenticated={setIsAuthenticated} />
-                            )}
-                          </PatchnotesProvider>
+                          <ExportProvider>
+                            <PatchnotesProvider>
+                              {isAuthenticated ? (
+                                <Main />
+                              ) : (
+                                <Auth setIsAuthenticated={setIsAuthenticated} />
+                              )}
+                            </PatchnotesProvider>
+                          </ExportProvider>
                         </BookmarkProvider>
                       </HintProvider>
                     </NoteProvider>

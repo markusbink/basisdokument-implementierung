@@ -158,6 +158,7 @@ export interface IStateUserInput {
   basisdokumentFile: string;
   editFile: string;
   basisdokumentFilename: string;
+  coverFilename: string;
   editFilename: string;
   errorText: string;
   newVersionMode: boolean | undefined;

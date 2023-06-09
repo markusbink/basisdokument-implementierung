@@ -64,7 +64,10 @@ export const DocumentButton = () => {
         metaData,
         entries,
         sectionList,
-        hints
+        hints,
+        undefined, //coverPDF
+        undefined, //otherAuthor
+        false //download new entries additionally
       );
     }, 100);
     setTimeout(() => {
@@ -151,20 +154,7 @@ export const DocumentButton = () => {
               </div>
             </div>
             {user?.role !== UserRole.Client && (
-              <DownloadBasisdokumentButton
-                caseId={caseId}
-                currentVersion={currentVersion}
-                versionHistory={versionHistory}
-                metaData={metaData}
-                entries={entries}
-                sectionList={sectionList}
-                hints={hints}
-                highlightedEntries={highlightedEntries}
-                colorSelection={colorSelection}
-                notes={notes}
-                bookmarks={bookmarks}
-                individualSorting={individualSorting}
-              />
+              <DownloadBasisdokumentButton/>
             )}
             <DropdownMenu.Item
               onClick={() => {
