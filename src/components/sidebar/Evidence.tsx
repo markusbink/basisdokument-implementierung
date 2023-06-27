@@ -162,7 +162,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
         <div className="flex flex-col items-center justify-center space-y-8">
           <p className="text-center text-base">
             Sind Sie sicher, dass Sie den Beweis <b>{evidence.name}</b> löschen
-            möchten? Der Beweis wird auch aus allen Beiträgen gelöscht. Diese
+            möchten? Der Beweis wird aus allen Beiträgen gelöscht. Diese
             Aktion kann nicht rückgängig gemacht werden.
           </p>
           <div className="grid grid-cols-2 gap-4">

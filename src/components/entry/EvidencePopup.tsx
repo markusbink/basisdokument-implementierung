@@ -247,10 +247,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
             </div>
           </div>
           <span className="text-sm">
-            Fügen Sie Beweise zum Beweisangebot dieses Beitrags hinzu, indem Sie
-            eine kurze Beschreibung angeben. Sie können dabei auch auf Anlagen
-            verweisen, welche Sie später mit versenden. Beweise, die hier
-            hinzugefügt wurden, können dann auch in anderen Beiträgen
+            Fügen Sie Beweise zu diesem Beitrag hinzu. Sie können dabei auch auf
+            Anlagen verweisen, welche Sie später mit versenden. Beweise, die
+            hier hinzugefügt wurden, können auch in anderen Beiträgen
             referenziert werden.
           </span>
           <div className="flex flex-col mr-2">
@@ -346,7 +345,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                 </div>
               ) : (
                 <div className="flex flex-col gap-1 w-full max-h-56 overflow-auto">
-                  <span className="ml-1 font-bold">Beweisangebot</span>
+                  <span className="ml-1 font-bold">{currentEvidences.length === 1 ? "Beweis:" : "Beweise:"}</span>
                   <div className="flex flex-col flex-wrap gap-1">
                     {currentEvidences.map((ev, index) => (
                       <div className="flex flex-row">
@@ -622,11 +621,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         <div className="flex flex-col items-center justify-center space-y-6">
           <p className="text-center text-base">
             Dieser Beweis wird in keinem anderen Beitrag referenziert. Wenn Sie
-            ihn also aus dem Beweisangebot dieses Beitrags löschen, wird er
-            zunächst für das ganze Basisdokument gelöscht.
+            ihn aus diesem Beitrag löschen, wird er für das gesamte
+            Basisdokument entfernt.
           </p>
           <p className="text-center text-base">
-            Um den Beweis bei einem anderen Beitrag anzuhängen, müssen Sie den
+            Um den Beweis zu einem anderen Beitrag zu referenzieren, müssen Sie
             ihn dort erneut erstellen.
           </p>
           <div className="grid grid-cols-2 gap-4">
