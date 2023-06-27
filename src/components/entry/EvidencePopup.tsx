@@ -226,8 +226,6 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     return null;
   }
 
-  //TODO: overflow scrolling im vorschau beitrag!!
-
   return (
     <>
       <div className="opacity-25 fixed inset-0 z-40 bg-black !m-0" />
@@ -347,7 +345,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   <span className="italic">Keine Beweise</span>
                 </div>
               ) : (
-                <div className="flex flex-col gap-1 w-full">
+                <div className="flex flex-col gap-1 w-full max-h-56 overflow-auto">
                   <span className="ml-1 font-bold">Beweisangebot</span>
                   <div className="flex flex-col flex-wrap gap-1">
                     {currentEvidences.map((ev, index) => (
