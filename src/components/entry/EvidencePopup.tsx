@@ -349,11 +349,20 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]:
                 !isPlaintiff,
             })}>
-            <EntryHeader isPlaintiff={isPlaintiff} isBodyOpen={true}>
+            <div
+              className={`flex items-center justify-between rounded-t-lg px-6 py-3 cursor-pointer select-none ${
+                isPlaintiff
+                  ? `bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                      getTheme(selectedTheme)?.primaryPlaintiff
+                    }`
+                  : `bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                      getTheme(selectedTheme)?.primaryDefendant
+                    }`
+              }`}>
               <div>
                 <i>Vorschau</i>
               </div>
-            </EntryHeader>
+            </div>
             <div className="flex border-t border-lightGrey rounded-b-lg py-2 items-center gap-2 justify-between mt-4 mb-2 mx-6">
               {currentEvidences.length <= 0 ? (
                 <div className="flex flex-col gap-2 items-center">
