@@ -422,7 +422,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                       type="text"
                                       name="name"
                                       placeholder="Beschreibung..."
-                                      className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px]"
+                                      className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] border-slate-500"
                                       value={ev.name}
                                       onChange={(e) => handleNameChange(e, ev)}
                                       onKeyDown={(e) => {
@@ -444,7 +444,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                             type="text"
                                             name="name"
                                             placeholder="Anlagennummer"
-                                            className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] w-14"
+                                            className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] border-slate-500 w-14"
                                             value={ev.attachmentId}
                                             onChange={(e) =>
                                               handleAttachmentIdChange(e, ev)
