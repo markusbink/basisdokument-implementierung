@@ -503,6 +503,16 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               )}
             </div>
           </div>
+          <div className="flex items-center justify-end">
+            <button
+              className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
+              onClick={() => {
+                addEvidence();
+              }}>
+              {(currentEvidences.length === 1 ? "Beweis" : "Beweise") +
+                " speichern"}
+            </button>
+          </div>
         </div>
       </div>
       <ErrorPopup isVisible={isEditErrorVisible}>
