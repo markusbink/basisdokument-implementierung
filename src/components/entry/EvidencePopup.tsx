@@ -2,10 +2,7 @@ import { CaretDown, CaretUp, Plus, X, XCircle } from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
-import {
-  getEvidences,
-  getEvidenceAttachmentId,
-} from "../../util/get-evidences";
+import { getEvidences } from "../../util/get-evidences";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEvidence, UserRole } from "../../types";
@@ -13,8 +10,8 @@ import { ErrorPopup } from "../ErrorPopup";
 import { v4 as uuidv4 } from "uuid";
 import { Tooltip } from "../Tooltip";
 import cx from "classnames";
-import { EntryHeader } from "./EntryHeader";
 import { getTheme } from "../../themes/getTheme";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 interface EvidencesPopupProps {
   entryId?: string;
@@ -55,11 +52,20 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
 }) => {
   const { entries, setEntries, currentVersion } = useCase();
   const { selectedTheme } = useHeaderContext();
+  const {
+    evidencesDefendant,
+    evidencesPlaintiff,
+    addNewEvidenceDefendant,
+    addNewEvidencePlaintiff,
+    updateEvidencesDefendant,
+    updateEvidencesPlaintiff,
+    removeEvidenceDefendant,
+    removeEvidencePlaintiff,
+  } = useEvidence();
   const [currentEvidences, setCurrentEvidences] =
     useState<IEvidence[]>(evidences);
   const [currentInput, setCurrentInput] = useState<string>("");
   const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
-  const [lastAttachmentId, setLastAttachmentId] = useState<string>("");
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
   const [evidenceToRemove, setEvidenceToRemove] = useState<IEvidence>();
@@ -87,35 +93,48 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       role: isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant,
       isInEditMode: false,
     };
+    // if has attachment add to plaintiff/defendant arrays for attachment id handling
     if (hasAttachment) {
-      ev.role = isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant;
-      let id: string;
-      if (lastAttachmentId) {
-        id =
-          (isPlaintiff ? "K" : "B") + (parseInt(lastAttachmentId.slice(1)) + 1);
+      if (ev.role === UserRole.Plaintiff) {
+        addNewEvidencePlaintiff(ev);
       } else {
-        id = getEvidenceAttachmentId(entries, ev.role);
+        addNewEvidenceDefendant(ev);
       }
-      ev.attachmentId = id;
-      setLastAttachmentId(id);
+      // get initial attachment id via index of new evidence in plaintiff/defendant arrays
+      let evAtt;
+      if (ev.role === UserRole.Plaintiff) {
+        evAtt = evidencesPlaintiff.find((e) => e!.id === ev.id);
+      } else {
+        evAtt = evidencesDefendant.find((e) => e!.id === ev.id);
+      }
+      setCurrentEvidences([...currentEvidences, evAtt!]);
+    } else {
+      // if no attachment, no adding to plaintiff/defendant arrays is needed
+      setCurrentEvidences([...currentEvidences, ev]);
     }
-    setCurrentEvidences([...currentEvidences, ev]);
     setCurrentInput("");
     setHasAttachment(false);
   };
 
+  // if existing evidence is added to entry, no handling of plaintiff/defendant arrays is needed
   const addExisting = (input: IEvidence) => {
     setCurrentEvidences([...currentEvidences, input]);
     setCurrentInput("");
   };
 
+  // check if evidence would be removed only from entry or whole document
   const removeEvidence = (evidence: IEvidence) => {
+    // set evidence for possible removal
     setEvidenceToRemove(evidence);
+    // open edit error if evidence would be removed from whole document
     if (!hasReferencesInOtherEntries(evidence.id)) {
       setIsEditErrorVisible(true);
+    } else {
+      removeFromEntry(evidence);
     }
   };
 
+  // handle input for adjusted name of evidence
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     evidenceToEdit: IEvidence
@@ -125,6 +144,13 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       entry.evidences = entry.evidences.map((ev) => {
         if (ev.id === evidenceToEdit.id) {
           ev.name = value;
+        }
+        if (ev.hasAttachment) {
+          if (ev.role === UserRole.Plaintiff) {
+            updateEvidencesPlaintiff(ev);
+          } else {
+            updateEvidencesDefendant(ev);
+          }
         }
         return ev;
       });
@@ -158,25 +184,23 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         }
         return evidence;
       });
-      setCurrentEvidences(updatedEvidences);
-      setLastAttachmentId(getLastAttachemntId(updatedEvidences));
-    } else {
-      const filteredEvidences = currentEvidences.filter(
-        (evidence) => evidence.id !== evidenceToRemove?.id
-      );
-      setCurrentEvidences(filteredEvidences);
-      setLastAttachmentId(getLastAttachemntId(filteredEvidences));
-    }
+      return entry;
+    });
+    setEntries(newEntries);
   };
 
-  const getLastAttachemntId = (newEvidences: IEvidence[]): string => {
-    let lastAttachmentId: string | undefined;
-    for (let i = 0; i < newEvidences.length; i++) {
-      if (newEvidences[i].attachmentId) {
-        lastAttachmentId = newEvidences[i].attachmentId;
+  const removeFromEntry = (evidenceToDelete: IEvidence) => {
+    const filteredEvidences = currentEvidences.filter(
+      (evidence) => evidence.id !== evidenceToDelete?.id
+    );
+    setCurrentEvidences(filteredEvidences);
+    if (!hasReferencesInOtherEntries(evidenceToDelete.id)) {
+      if (evidenceToDelete.role === UserRole.Plaintiff) {
+        removeEvidencePlaintiff(evidenceToDelete);
+      } else {
+        removeEvidenceDefendant(evidenceToDelete);
       }
     }
-    return lastAttachmentId ? lastAttachmentId : "";
   };
 
   const addEvidence = () => {
@@ -191,7 +215,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const hasReferencesInOtherEntries = (id: string) => {
     for (let i = 0; i < entries.length; i++) {
       if (entryId && entryId !== entries[i].id) {
-        for (let j = 0; j < entries[i].evidences.length; j++) {
+        for (let j = 0; j < entries[i].evidences?.length; j++) {
           if (
             entries[i].evidences[j] &&
             entries[i].evidences[j].hasAttachment &&
@@ -346,7 +370,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                 </div>
               ) : (
                 <div className="flex flex-col gap-1 w-full max-h-56 overflow-auto">
-                  <span className="ml-1 font-bold">{currentEvidences.length === 1 ? "Beweis:" : "Beweise:"}</span>
+                  <span className="ml-1 font-bold">
+                    {currentEvidences.length === 1 ? "Beweis:" : "Beweise:"}
+                  </span>
                   <div className="flex flex-col flex-wrap gap-1">
                     {currentEvidences.map((ev, index) => (
                       <div className="flex flex-row">
@@ -480,7 +506,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
-                removeFromEntry();
+                removeFromEntry(evidenceToRemove!);
                 setIsEditErrorVisible(false);
               }}>
               Löschen
