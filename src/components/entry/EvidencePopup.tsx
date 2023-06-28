@@ -141,7 +141,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   ) => {
     const { value } = e.target;
     const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences.map((ev) => {
+      entry.evidences = entry.evidences?.map((ev) => {
         if (ev.id === evidenceToEdit.id) {
           ev.name = value;
         }
