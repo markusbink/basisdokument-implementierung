@@ -159,30 +159,25 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     setEntries(newEntries);
   };
 
-  const removeFromEntry = () => {
-    const currentId = evidenceToRemove
-      ? parseInt(evidenceToRemove.attachmentId!.slice(1))
-      : -1;
-
-    if (evidenceToRemove?.version === currentVersion) {
-      let updatedEvidences = currentEvidences.filter(
-        (evidence) => evidence.id !== evidenceToRemove?.id
-      );
-      updatedEvidences = updatedEvidences.map((evidence) => {
-        if (
-          evidence.version === currentVersion &&
-          evidence.hasAttachment &&
-          evidence.isCurrentEntry
-        ) {
-          if (
-            currentId !== -1 &&
-            parseInt(evidence.attachmentId!.slice(1)) > currentId
-          ) {
-            const newId = parseInt(evidence.attachmentId!.slice(1)) - 1;
-            evidence.attachmentId = isPlaintiff ? "K" + newId : "B" + newId;
+  // handle input for individual attachment id
+  const handleAttachmentIdChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    evidenceToEdit: IEvidence
+  ) => {
+    const { value } = e.target;
+    const newEntries = entries.map((entry) => {
+      entry.evidences = entry.evidences?.map((ev) => {
+        if (ev.id === evidenceToEdit.id) {
+          ev.attachmentId = value;
+        }
+        if (ev.hasAttachment) {
+          if (ev.role === UserRole.Plaintiff) {
+            updateEvidencesPlaintiff(ev);
+          } else {
+            updateEvidencesDefendant(ev);
           }
         }
-        return evidence;
+        return ev;
       });
       return entry;
     });
@@ -361,11 +356,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
             </EntryHeader>
             <div className="flex border-t border-lightGrey rounded-b-lg py-2 items-center gap-2 justify-between mt-4 mb-2 mx-6">
               {currentEvidences.length <= 0 ? (
-                <div
-                  className="flex flex-col gap-2 items-center cursor-pointer"
-                  onClick={(e) => {
-                    //TODO
-                  }}>
+                <div className="flex flex-col gap-2 items-center">
                   <span className="italic">Keine Beweise</span>
                 </div>
               ) : (
@@ -404,7 +395,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                           {ev.version === currentVersion ? (
                             <Tooltip
                               className="w-full"
-                              text="Doppelklick, um zu Editieren">
+                              text="Doppelklick, um zu Editieren - Enter, um zu Bestätigen">
                               <div
                                 className="flex flex-row gap-2 items-center"
                                 onDoubleClick={() => {
@@ -422,14 +413,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                       type="text"
                                       name="name"
                                       placeholder="Beschreibung..."
-                                      className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
+                                      className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px]"
                                       value={ev.name}
-                                      onBlur={() => {
-                                        setEvidenceEditMode({
-                                          evidence: ev,
-                                          value: false,
-                                        });
-                                      }}
                                       onChange={(e) => handleNameChange(e, ev)}
                                       onKeyDown={(e) => {
                                         if (e.key === "Enter") {
@@ -441,45 +426,83 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                       }}
                                     />
                                     {ev.hasAttachment && (
+                                      <span className="flex flex-row">
+                                        <b>
+                                          {" "}
+                                          als Anlage
+                                          <input
+                                            autoFocus={false}
+                                            type="text"
+                                            name="name"
+                                            placeholder="Anlagennummer"
+                                            className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] w-14"
+                                            value={ev.attachmentId}
+                                            onChange={(e) =>
+                                              handleAttachmentIdChange(e, ev)
+                                            }
+                                            onKeyDown={(e) => {
+                                              if (e.key === "Enter") {
+                                                setEvidenceEditMode({
+                                                  evidence: ev,
+                                                  value: false,
+                                                });
+                                              }
+                                            }}
+                                          />
+                                        </b>
+                                      </span>
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    {ev.hasAttachment ? (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
+                                        <b> als Anlage {ev.attachmentId}</b>
+                                      </span>
+                                    ) : (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
+                                      </span>
+                                    )}
+                                  </>
+                                )}
+                              </div>
+                            </Tooltip>
+                          ) : (
+                            <div className="flex flex-row gap-2 items-center">
                               <span className="w-4">{index + 1 + "."}</span>
 
-                        {ev.hasAttachment ? (
-                          <span className="break-words font-medium">
-                            {ev.name}
-                            <b> als Anlage {ev.attachmentId}</b>
-                          </span>
-                        ) : (
-                          <span className="break-words font-medium">
-                            {ev.name}
-                          </span>
-                        )}
+                              {ev.hasAttachment ? (
+                                <span className="break-words font-medium">
+                                  {ev.name}
+                                  <b> als Anlage {ev.attachmentId}</b>
+                                </span>
+                              ) : (
+                                <span className="break-words font-medium">
+                                  {ev.name}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          <div>
+                            <XCircle
+                              size={20}
+                              weight="fill"
+                              className="cursor-pointer"
+                              onClick={() => {
+                                removeEvidence(ev);
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
-                    )}
-                    <div>
-                      <XCircle
-                        size={20}
-                        weight="fill"
-                        className="cursor-pointer"
-                        onClick={() => {
-                          removeEvidence(ev);
-                        }}
-                      />
-                    </div>
+                    ))}
                   </div>
                 </div>
-              ))}
+              )}
             </div>
-
-            <div className="flex items-center justify-end pt-6">
-              <button
-                className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
-                onClick={() => {
-                  addEvidence();
-                }}>
-                Gelistete Beweise hinzufügen
-              </button>
-            </div>
-          </div> */}
+          </div>
         </div>
       </div>
       <ErrorPopup isVisible={isEditErrorVisible}>
