@@ -375,7 +375,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   </span>
                   <div className="flex flex-col flex-wrap gap-1">
                     {currentEvidences.map((ev, index) => (
-                      <div className="flex flex-row">
+                      <div key={index} className="flex flex-row">
                         <div className="flex pr-1 flex-col">
                           {moveEvidenceButtons.map((button, btnIndex) => (
                             <button
