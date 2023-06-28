@@ -315,9 +315,10 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               </div>
               <div className="items-center flex my-1">
                 <Button
-                  bgColor="bg-offWhite hover:bg-lightGrey"
+                  bgColor="bg-lightGreen hover:bg-darkGreen"
+                  textColor="text-darkGreen hover:text-white"
                   alternativePadding="p-1.5"
-                  icon={<Plus size={20} color="grey" weight="regular" />}
+                  icon={<Plus size={20} weight="bold" />}
                   onClick={() => handleEvidenceAddedToCurrent()}></Button>
               </div>
             </div>
