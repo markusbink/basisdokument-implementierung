@@ -19,7 +19,8 @@ export const SidebarEvidences = () => {
       </div>
       {getEvidences(entries, "", []).length <= 0 ? (
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm p-4">
-          In einem Beitrag können Sie Beweise mit oder ohne Anlage hinzufügen. Alle Beweise des Basisdokuments erscheinen dann in dieser Ansicht.
+          In einem Beitrag können Sie Beweise mit oder ohne Anlage hinzufügen.
+          Alle Beweise des Basisdokuments erscheinen dann in dieser Ansicht.
         </div>
       ) : (
         <div className="flex flex-col p-4 text-mediumGrey font-extrabold text-sm h-fit">
@@ -34,10 +35,16 @@ export const SidebarEvidences = () => {
             ERSTELLT VON KLAGEPARTEI
           </div>
           <div>
-            {plaintiffEvidencesOpen &&
+            {getEvidencesForRole(entries, UserRole.Plaintiff).length <= 0 &&
+            plaintiffEvidencesOpen ? (
+              <div className="text-darkGrey opacity-40 text-center text-sm p-4">
+                Die Klagepartei hat noch keine Beweise hinzugefügt.
+              </div>
+            ) : (
               getEvidencesForRole(entries, UserRole.Plaintiff).map(
                 (evidence) => <Evidence key={evidence.id} evidence={evidence} />
-              )}
+              )
+            )}
           </div>
           <div
             className="cursor-pointer flex items-center mt-7"
@@ -50,10 +57,16 @@ export const SidebarEvidences = () => {
             ERSTELLT VON BEKLAGTENPARTEI
           </div>
           <div>
-            {defendantEvidencesOpen &&
+            {getEvidencesForRole(entries, UserRole.Defendant).length <= 0 &&
+            defendantEvidencesOpen ? (
+              <div className="text-darkGrey opacity-40 text-center text-sm p-4">
+                Die Beklagtenpartei hat noch keine Beweise hinzugefügt.
+              </div>
+            ) : (
               getEvidencesForRole(entries, UserRole.Defendant).map(
                 (evidence) => <Evidence key={evidence.id} evidence={evidence} />
-              )}
+              )
+            )}
           </div>
         </div>
       )}
