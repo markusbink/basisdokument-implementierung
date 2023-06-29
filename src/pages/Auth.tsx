@@ -305,7 +305,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   return (
     <div className="overflow-scroll h-full">
-    {showPatchnotesPopup ? <PatchnotesPopup /> : null}
+      {showPatchnotesPopup ? <PatchnotesPopup /> : null}
       <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex-col justify-center h-auto overflow-scroll no-scrollbar">
         <AboutDevelopersMenu />
         <h1 className="text-3xl font-bold">Das Basisdokument</h1>
@@ -469,7 +469,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             </div>
           </div>
         ) : null}
-        {usage === UsageMode.Open || usage === UsageMode.Readonly ? (
+        {role && (usage === UsageMode.Open || usage === UsageMode.Readonly) ? (
           <div className="flex flex-col gap-4">
             <div>
               <p className="font-light">
@@ -570,6 +570,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             {usage === UsageMode.Open && (
               <div className="flex flex-row items-center gap-4">
                 <VersionPopup
+                  role={role!}
                   isVisible={showVersionPopup}
                   children={
                     <>
@@ -580,7 +581,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                           setShowVersionPopup(!showVersionPopup);
                           setNewVersionMode(false);
                         }}>
-                        Die hochgeladene Datei stammt von meiner Partei
+                        {role === UserRole.Judge
+                          ? "Die hochgeladene Datei stammt von meinem Gericht (Weiterbearbeiten)"
+                          : "Die hochgeladene Datei stammt von meiner Partei (Weiterbearbeiten)"}
                       </Button>
                       <Button
                         bgColor="bg-offWhite hover:bg-lightGrey"
@@ -589,7 +592,11 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                           setShowVersionPopup(!showVersionPopup);
                           setNewVersionMode(true);
                         }}>
-                        Die hochgeladene Datei stammt von einer anderen Partei
+                        {role === UserRole.Judge
+                          ? "Die hochgeladene Datei stammt von der Klage- oder Beklagtenpartei (Neue Version)"
+                          : role === UserRole.Plaintiff
+                          ? "Die hochgeladene Datei stammt von der Beklagtenpartei oder dem Gericht (Neue Version)"
+                          : "Die hochgeladene Datei stammt von der Klagepartei oder dem Gericht (Neue Version)"}
                       </Button>
                     </>
                   }
