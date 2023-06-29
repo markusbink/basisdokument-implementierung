@@ -22,3 +22,5 @@ export {
   PatchnotesContext,
   usePatchnotes,
 } from "./PatchnotesContext";
+
+export { ImprintProvider, ImprintContext, useImprint } from "./ImprintContext";
