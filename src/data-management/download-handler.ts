@@ -2,6 +2,7 @@ import { saveAs } from "file-saver";
 import {
   IBookmark,
   IEntry,
+  IEvidence,
   IHighlightedEntry,
   IHighlighter,
   IHint,
@@ -69,18 +70,20 @@ function getEntryTitle(entryId: any, obj: any) {
 }
 
 //add attachments in one string because of autotable commas
-function getAttachmentNumeration(attachments: Array<object>) {
+function getAttachmentNumeration(attachments: Array<IEvidence>) {
   var numAttachments: string = "";
-  for (let i=0; i<attachments.length; i++) {
-    let attachment = i+1 + ") " + attachments[i];
-    //do not add line break/empty line to last item
-    if (i === attachments.length-1) {
-      numAttachments = numAttachments + attachment;
-    } else {
-      numAttachments = numAttachments + attachment + "\n";
+  if (attachments) {
+    for (let i=0; i<attachments.length; i++) {
+      let attachment = i + 1 + ") " + attachments[i].name;
+      //do not add line break/empty line to last item
+      if (i === attachments.length-1) {
+        numAttachments = numAttachments + attachment;
+      } else {
+        numAttachments = numAttachments + attachment + "\n";
+      }
     }
+    return numAttachments;
   }
-  return numAttachments;
 }
 
 //parse HTML to string to remove tags
@@ -265,7 +268,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
           text: parseHTMLtoString(entry.text),
           version: entry.version,
           associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-          evidences: entry.evidences.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.evidences) : undefined,
+          evidences: !entry.evidences?.length ? undefined : entry.evidences?.length > 1 ? "Beweise:\n" + getAttachmentNumeration(entry.evidences) : "Beweis:\n" + getAttachmentNumeration(entry.evidences),
         };
         allEntries.push(tableEntry);
 

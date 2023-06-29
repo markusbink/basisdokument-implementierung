@@ -1,5 +1,5 @@
 export interface ITheme {
-  id: string,
+  id: string;
   title: string;
   primaryPlaintiff: string;
   secondaryPlaintiff: string;
@@ -53,7 +53,7 @@ export enum UserRole {
   Plaintiff = "Klagepartei",
   Defendant = "Beklagtenpartei",
   Judge = "Richter:in",
-  Client = "Mandant:in"
+  Client = "Mandant:in",
 }
 
 export enum Sorting {
@@ -64,7 +64,7 @@ export enum Sorting {
 export enum UsageMode {
   Open,
   Create,
-  Readonly
+  Readonly,
 }
 
 export enum SidebarState {
@@ -72,7 +72,7 @@ export enum SidebarState {
   Notes,
   Hints,
   Bookmarks,
-  Evidences
+  Evidences,
 }
 
 export interface ISection {
@@ -167,7 +167,7 @@ export interface IStateUserInput {
 export interface IEvidence {
   id: string;
   name: string;
-  hasAttachment: boolean; 
+  hasAttachment: boolean;
   version: number;
   isCurrentEntry: boolean;
   role: UserRole;

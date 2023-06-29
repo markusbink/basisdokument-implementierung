@@ -236,12 +236,12 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
         ) : null}
         {evidences && evidences.length > 0 && (
           <div className="flex flex-col gap-1 border-t border-lightGrey pt-2">
-            <span className="font-bold">Beweisbereich</span>
+            <span className="font-bold">{evidences.length === 1 ? "Beweis:" : "Beweise:"}</span>
             <div className="flex flex-col flex-wrap gap-1">
               {evidences.map((evidence, index) => (
                 <div className="flex flex-row items-center px-2" key={index}>
                   <div className="flex flex-row gap-2">
-                    <span>{index + 1 + "."}</span>
+                    <span className="w-4">{index + 1 + "."}</span>
                     {evidence.hasAttachment ? (
                       <span className="break-words font-medium">
                         {evidence.name}

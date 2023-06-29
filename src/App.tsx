@@ -17,6 +17,7 @@ import { Main } from "./pages/Main";
 import { OnboardingProvider } from "./contexts/OnboardingContext";
 import { SidebarProvider } from "./contexts/SidebarContext";
 import { ViewProvider } from "./contexts/ViewContext";
+import { EvidenceProvider } from "./contexts/EvidenceContext";
 
 const registerKeyListener = (e: KeyboardEvent) => {
   if (e.key === "r" && e.metaKey) {
@@ -39,29 +40,33 @@ export const App = () => {
       <OnboardingProvider>
         <UserProvider>
           <SectionProvider>
-            <HeaderProvider>
-              <CaseProvider>
-                <ViewProvider>
-                  <SidebarProvider>
-                    <NoteProvider>
-                      <HintProvider>
-                        <BookmarkProvider>
-                          <ExportProvider>
-                            <PatchnotesProvider>
-                              {isAuthenticated ? (
-                                <Main />
-                              ) : (
-                                <Auth setIsAuthenticated={setIsAuthenticated} />
-                              )}
-                            </PatchnotesProvider>
-                          </ExportProvider>
-                        </BookmarkProvider>
-                      </HintProvider>
-                    </NoteProvider>
-                  </SidebarProvider>
-                </ViewProvider>
-              </CaseProvider>
-            </HeaderProvider>
+            <EvidenceProvider>
+              <HeaderProvider>
+                <CaseProvider>
+                  <ViewProvider>
+                    <SidebarProvider>
+                      <NoteProvider>
+                        <HintProvider>
+                          <BookmarkProvider>
+                            <ExportProvider>
+                              <PatchnotesProvider>
+                                {isAuthenticated ? (
+                                  <Main />
+                                ) : (
+                                  <Auth
+                                    setIsAuthenticated={setIsAuthenticated}
+                                  />
+                                )}
+                              </PatchnotesProvider>
+                            </ExportProvider>
+                          </BookmarkProvider>
+                        </HintProvider>
+                      </NoteProvider>
+                    </SidebarProvider>
+                  </ViewProvider>
+                </CaseProvider>
+              </HeaderProvider>
+            </EvidenceProvider>
           </SectionProvider>
         </UserProvider>
       </OnboardingProvider>

@@ -1,13 +1,14 @@
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
-import { IEvidence } from "../../types";
+import { IEvidence, UserRole } from "../../types";
 import { getEntryCodesForEvidence } from "../../util/get-entry-code";
 import { Button } from "../Button";
 import cx from "classnames";
 import { ErrorPopup } from "../ErrorPopup";
 import { getTheme } from "../../themes/getTheme";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 export interface EvidenceProps {
   evidence: IEvidence;
@@ -16,6 +17,12 @@ export interface EvidenceProps {
 export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const { entries, setEntries, currentVersion } = useCase();
   const { selectedTheme } = useHeaderContext();
+  const {
+    updateEvidencesDefendant,
+    updateEvidencesPlaintiff,
+    removeEvidenceDefendant,
+    removeEvidencePlaintiff,
+  } = useEvidence();
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -24,16 +31,21 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   useOutsideClick(ref, () => setIsMenuOpen(false));
 
   let entryCodes: string[] = [];
-  try {
-    entryCodes = getEntryCodesForEvidence(entries, evidence);
-  } catch {}
+  entryCodes = getEntryCodesForEvidence(entries, evidence);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences.map((ev) => {
+      entry.evidences = entry.evidences?.map((ev) => {
         if (ev.id === evidence.id) {
           ev.name = value;
+        }
+        if (ev.hasAttachment) {
+          if (ev.role === UserRole.Plaintiff) {
+            updateEvidencesPlaintiff(ev);
+          } else {
+            updateEvidencesDefendant(ev);
+          }
         }
         return ev;
       });
@@ -44,9 +56,16 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
 
   const removeEvidenceOverall = (id: string) => {
     const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences.filter(
+      entry.evidences = entry.evidences?.filter(
         (evidence) => evidence.id !== id
       );
+      if (evidence.hasAttachment) {
+        if (evidence.role === UserRole.Plaintiff) {
+          removeEvidencePlaintiff(evidence);
+        } else {
+          removeEvidenceDefendant(evidence);
+        }
+      }
       return entry;
     });
     setEntries(newEntries);
@@ -162,8 +181,8 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
         <div className="flex flex-col items-center justify-center space-y-8">
           <p className="text-center text-base">
             Sind Sie sicher, dass Sie den Beweis <b>{evidence.name}</b> löschen
-            möchten? Der Beweis wird auch aus allen Beiträgen gelöscht. Diese
-            Aktion kann nicht rückgängig gemacht werden.
+            möchten? Der Beweis wird aus allen Beiträgen gelöscht. Diese Aktion
+            kann nicht rückgängig gemacht werden.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Button
