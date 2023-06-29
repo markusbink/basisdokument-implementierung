@@ -13,6 +13,7 @@ import {
   useNotes,
   useUser,
   useSection,
+  usePatchnotes,
 } from "../contexts";
 import {
   createBasisdokument,
@@ -36,6 +37,7 @@ import Cookies from "js-cookie";
 import { useOnboarding } from "../contexts/OnboardingContext";
 import { VersionPopup } from "../components/VersionPopup";
 import { useSidebar } from "../contexts/SidebarContext";
+import { PatchnotesPopup } from "../components/PatchnotesPopup";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -85,6 +87,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setUser } = useUser();
   const { setIsOnboardingVisible } = useOnboarding();
   const { setActiveSidebar } = useSidebar();
+  const { showPatchnotesPopup } = usePatchnotes();
 
   // Set React states when user enters/changes text input fields
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -302,6 +305,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   return (
     <div className="overflow-scroll h-full">
+    {showPatchnotesPopup ? <PatchnotesPopup /> : null}
       <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex-col justify-center h-auto overflow-scroll no-scrollbar">
         <AboutDevelopersMenu />
         <h1 className="text-3xl font-bold">Das Basisdokument</h1>

@@ -16,6 +16,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
 import { format } from "date-fns";
+import { PDFDocument } from "pdf-lib";
 
 //define data arrays
 let allEntries: any[] = [];
@@ -33,6 +34,14 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
 
   // Save the file
   saveAs(fileToSave, fileName + ".txt");
+}
+
+function downloadPDF(PDF: any, fileName: string) {
+  const fileToSave = new Blob([PDF], {
+    type: "application/pdf",
+  });
+
+  saveAs(fileToSave, fileName + ".pdf")
 }
 
 function getEntryTimestamp(childEntry: any, obj: any) {
@@ -127,10 +136,34 @@ function getRoleProfession(role: string) {
   }
 }
 
-function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
-  let pdfConverter = jsPDF,
-    doc = new pdfConverter();
-  // converter https://www.giftofspeed.com/base64-encoder/
+async function mergePDF(coverPDF: ArrayBuffer, basisdokumentPDF: ArrayBuffer, fileName: string) {
+  let pdfDoc = await PDFDocument.create();
+
+  const cover = await PDFDocument.load(coverPDF);
+  const other = await PDFDocument.load(basisdokumentPDF);
+  
+  var page;
+  var coverPages = await pdfDoc.embedPages(cover.getPages());
+  var otherPages = await pdfDoc.embedPages(other.getPages());
+
+  for (var coverPage of coverPages) {
+    page = pdfDoc.addPage();
+    page.drawPage(coverPage);
+  }
+  for (var basisdokumentPage of otherPages) {
+    page = pdfDoc.addPage();
+    page.drawPage(basisdokumentPage);
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  const file = new Blob([pdfBytes], {type: "application/pdf"});
+  downloadPDF(file, fileName);
+}
+
+async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, downloadNew: boolean, obj: any, fileName: string) {
+
+  let doc = new jsPDF();
+  let newDoc = new jsPDF(); //additional pdf with only new entries
 
   //DATA for autotables
   // basic data
@@ -145,7 +178,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   // Rubrum Plaintiff
   let metaPlaintiff;
-  if (obj["metaData"]) {
+  if (obj["metaData"] && obj["metaData"]["plaintiff"] !== undefined) {
     metaPlaintiff = obj["metaData"]["plaintiff"];
   } else {
     metaPlaintiff = "Es wurde kein Rubrum von der Klagepartei angelegt.";
@@ -154,7 +187,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
 
   // Rubrum Defendant
   let metaDefendant;
-  if (obj["metaData"]) {
+  if (obj["metaData"] && obj["metaData"]["defendant"] !== undefined) {
     metaDefendant = obj["metaData"]["defendant"];
   } else {
     metaDefendant = "Es wurde kein Rubrum von der Beklagtenpartei angelegt.";
@@ -275,6 +308,23 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
       });
     },
   });
+  //additional pdf with only new entries
+  autoTable(newDoc, {
+    theme: "grid",
+    styles: { fontStyle: "bold" },
+    head: [["Basisdokument - Neue Beiträge"]],
+    headStyles: { fontStyle: "bold", fontSize: 14, fillColor: [0, 122, 122] },
+    body: [
+      [basisdokument[0].caseId],
+      [basisdokument[0].version],
+      [basisdokument[0].timestamp],
+    ],
+    didDrawPage: function () {
+      newDoc.outline.add(null, "Basisdokument-Metadaten", {
+        pageNumber: newDoc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
   basisdokument = [];
 
   //autotable rubrum plaintiff
@@ -290,6 +340,19 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
       });
     },
   });
+  //additional pdf with only new entries
+  autoTable(newDoc, {
+    theme: "grid",
+    styles: { halign: "center" },
+    head: [["Rubrum Klagepartei"]],
+    headStyles: { fillColor: [0, 122, 122] },
+    body: [rubrumKlage],
+    didDrawPage: function () {
+      newDoc.outline.add(null, "Rubrum Klagepartei", {
+        pageNumber: newDoc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
   rubrumKlage = [];
 
   //autotable rubrum defendant
@@ -302,6 +365,19 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     didDrawPage: function () {
       doc.outline.add(null, "Rubrum Beklagtenpartei", {
         pageNumber: doc.getCurrentPageInfo().pageNumber,
+      });
+    },
+  });
+  //additional pdf with only new entries
+  autoTable(newDoc, {
+    theme: "grid",
+    styles: { halign: "center" },
+    head: [["Rubrum Beklagtenpartei"]],
+    headStyles: { fillColor: [0, 122, 122] },
+    body: [rubrumBeklagt],
+    didDrawPage: function () {
+      newDoc.outline.add(null, "Rubrum Beklagtenpartei", {
+        pageNumber: newDoc.getCurrentPageInfo().pageNumber,
       });
     },
   });
@@ -388,6 +464,60 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
         data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text]];
       }
       autoTable(doc, {
+        theme: "grid",
+        body: data,
+        margin: {
+          left: newEntries[i].id.includes("B") ? 30 : 10,
+          right: newEntries[i].id.includes("B") ? 10 : 30,
+          top: 7,
+          bottom: 7,
+        },
+        didParseCell: function (hookData) {
+          if (hookData.row.index === 0) {
+            hookData.cell.styles.fontStyle = "italic";
+          } else if (hookData.row.index === 1) {
+            hookData.cell.styles.fontStyle = "bold";
+          }
+        },
+        willDrawCell: function (hookData) {
+          if (hookData.cell.raw === "") {
+            hookData.cell.styles.cellWidth = 0;
+            hookData.cell.styles.cellPadding = 0;
+          }
+        },
+      });
+    }
+    //additional pdf with only new entries
+    newDoc.addPage();
+    autoTable(newDoc, {
+      theme: "grid",
+      head: [["Neue Beiträge"]],
+      headStyles: {
+        fontStyle: "bold",
+        fontSize: 12,
+        fillColor: [0, 122, 122],
+        valign: "middle",
+      },
+      margin: { top: 7, bottom: 7, left: 7, right: 7 },
+      didDrawPage: function () {
+        newDoc.outline.add(null, "Neue Beiträge", {
+          pageNumber: newDoc.getCurrentPageInfo().pageNumber,
+        });
+      },
+    });
+    for (let i = 0; i < newEntries.length; i++) {
+      let data;
+      if (newEntries[i].associatedEntry) {
+        data = [
+          ["Neuer Beitrag"],
+          [newEntries[i].title],
+          [newEntries[i].associatedEntry],
+          [newEntries[i].text],
+        ];
+      } else {
+        data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text]];
+      }
+      autoTable(newDoc, {
         theme: "grid",
         body: data,
         margin: {
@@ -546,7 +676,7 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
       "\n" +
       "gez. " +
       "\n" +
-      obj["versions"][obj["versions"].length - 1].author) +
+      ((obj["otherAuthor"] === undefined) ? obj["versions"][obj["versions"].length - 1].author : obj["otherAuthor"])) +
       "\n" +
       getRoleProfession(obj["versions"][obj["versions"].length - 1].role)
   ]];
@@ -607,7 +737,16 @@ function downloadBasisdokumentAsPDF(obj: any, fileName: string) {
     );
   }
   
-  doc.save(fileName);
+  //save or merge basisdokument pdf
+  if (coverPDF !== undefined) {
+    const pdfBuffer = doc.output("arraybuffer");
+    mergePDF(coverPDF, pdfBuffer, fileName);
+  } else {
+    doc.save(fileName);
+  }
+  if (downloadNew) {
+    newDoc.save("neue_beitraege_" + fileName);
+  }
 }
 
 export function downloadBasisdokument(
@@ -617,7 +756,10 @@ export function downloadBasisdokument(
   metaData: IMetaData | null,
   entries: IEntry[],
   sectionList: ISection[],
-  hints: IHint[]
+  hints: IHint[],
+  coverPDF: ArrayBuffer | undefined,
+  otherAuthor: string | undefined,
+  downloadNewAdditionally: boolean,
 ) {
   let basisdokumentObject: any = {};
   basisdokumentObject["caseId"] = caseId;
@@ -631,6 +773,7 @@ export function downloadBasisdokument(
   basisdokumentObject["entries"] = entries;
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
+  basisdokumentObject["otherAuthor"] = otherAuthor;
 
   const date: Date =
     basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1][
@@ -651,6 +794,8 @@ export function downloadBasisdokument(
     `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
   downloadBasisdokumentAsPDF(
+    coverPDF,
+    downloadNewAdditionally,
     basisdokumentObject,
     `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
