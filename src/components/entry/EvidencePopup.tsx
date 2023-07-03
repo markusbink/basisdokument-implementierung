@@ -140,29 +140,38 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     evidenceToEdit: IEvidence
   ) => {
     const { value } = e.target;
-    const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences?.map((ev) => {
+    if (entries.length > 0) {
+      const newEntries = entries.map((entry) => {
+        entry.evidences = entry.evidences?.map((ev) => {
+          if (ev.id === evidenceToEdit.id) {
+            ev.name = value;
+          } else {
+            currentEvidences.forEach((ev) => {
+              if (ev.id === evidenceToEdit.id) {
+                ev.name = value;
+              }
+            });
+          }
+          if (ev.hasAttachment) {
+            if (ev.role === UserRole.Plaintiff) {
+              updateEvidencesPlaintiff(ev);
+            } else {
+              updateEvidencesDefendant(ev);
+            }
+          }
+          return ev;
+        });
+        return entry;
+      });
+      setEntries(newEntries);
+    } else {
+      currentEvidences.forEach((ev) => {
         if (ev.id === evidenceToEdit.id) {
           ev.name = value;
-        } else {
-          currentEvidences.forEach((ev) => {
-            if (ev.id === evidenceToEdit.id) {
-              ev.name = value;
-            }
-          });
         }
-        if (ev.hasAttachment) {
-          if (ev.role === UserRole.Plaintiff) {
-            updateEvidencesPlaintiff(ev);
-          } else {
-            updateEvidencesDefendant(ev);
-          }
-        }
-        return ev;
       });
-      return entry;
-    });
-    setEntries(newEntries);
+      setCurrentEvidences([...currentEvidences]);
+    }
   };
 
   // handle input for individual attachment id
@@ -171,29 +180,38 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     evidenceToEdit: IEvidence
   ) => {
     const { value } = e.target;
-    const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences?.map((ev) => {
+    if (entries.length > 0) {
+      const newEntries = entries.map((entry) => {
+        entry.evidences = entry.evidences?.map((ev) => {
+          if (ev.id === evidenceToEdit.id) {
+            ev.attachmentId = value;
+          } else {
+            currentEvidences.forEach((ev) => {
+              if (ev.id === evidenceToEdit.id) {
+                ev.attachmentId = value;
+              }
+            });
+          }
+          if (ev.hasAttachment) {
+            if (ev.role === UserRole.Plaintiff) {
+              updateEvidencesPlaintiff(ev);
+            } else {
+              updateEvidencesDefendant(ev);
+            }
+          }
+          return ev;
+        });
+        return entry;
+      });
+      setEntries(newEntries);
+    } else {
+      currentEvidences.forEach((ev) => {
         if (ev.id === evidenceToEdit.id) {
           ev.attachmentId = value;
-        } else {
-          currentEvidences.forEach((ev) => {
-            if (ev.id === evidenceToEdit.id) {
-              ev.attachmentId = value;
-            }
-          });
         }
-        if (ev.hasAttachment) {
-          if (ev.role === UserRole.Plaintiff) {
-            updateEvidencesPlaintiff(ev);
-          } else {
-            updateEvidencesDefendant(ev);
-          }
-        }
-        return ev;
       });
-      return entry;
-    });
-    setEntries(newEntries);
+      setCurrentEvidences([...currentEvidences]);
+    }
   };
 
   const removeFromEntry = (evidenceToDelete: IEvidence) => {
