@@ -144,6 +144,12 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       entry.evidences = entry.evidences?.map((ev) => {
         if (ev.id === evidenceToEdit.id) {
           ev.name = value;
+        } else {
+          currentEvidences.forEach((ev) => {
+            if (ev.id === evidenceToEdit.id) {
+              ev.name = value;
+            }
+          });
         }
         if (ev.hasAttachment) {
           if (ev.role === UserRole.Plaintiff) {
@@ -169,6 +175,12 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       entry.evidences = entry.evidences?.map((ev) => {
         if (ev.id === evidenceToEdit.id) {
           ev.attachmentId = value;
+        } else {
+          currentEvidences.forEach((ev) => {
+            if (ev.id === evidenceToEdit.id) {
+              ev.attachmentId = value;
+            }
+          });
         }
         if (ev.hasAttachment) {
           if (ev.role === UserRole.Plaintiff) {
@@ -198,6 +210,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     }
   };
 
+  // click on "save":
   const addEvidence = () => {
     const updatedEvidences = currentEvidences.map((evidence) => {
       evidence.isCurrentEntry = false;
@@ -258,7 +271,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               <button
                 onClick={() => {
                   setIsVisible(false);
-                  if (backupEvidences) setEvidences(backupEvidences);
+                  //if (backupEvidences) setEvidences(backupEvidences);
                 }}
                 className="text-darkGrey bg-offWhite p-1 rounded-md hover:bg-lightGrey">
                 <X size={24} />
