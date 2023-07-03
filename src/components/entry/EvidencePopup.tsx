@@ -1,5 +1,5 @@
 import { CaretDown, CaretUp, Plus, X, XCircle } from "phosphor-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
 import { getEvidences } from "../../util/get-evidences";
@@ -74,12 +74,6 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     value: boolean;
   }>();
 
-  /*useEffect(() => {
-    console.log("useEffect!");
-    console.log(currentEvidences);
-    setEvidences(currentEvidences);
-  }, [setCurrentEvidences]);*/
-
   const inputRef = useRef(null);
   useOutsideClick(inputRef, () => setSuggestionsActive(false));
 
@@ -151,7 +145,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         if (ev.id === evidenceToEdit.id) {
           ev.name = value;
         } else {
-          currentEvidences.map((ev) => {
+          currentEvidences.forEach((ev) => {
             if (ev.id === evidenceToEdit.id) {
               ev.name = value;
             }
@@ -182,9 +176,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         if (ev.id === evidenceToEdit.id) {
           ev.attachmentId = value;
         } else {
-          currentEvidences.map((ev) => {
+          currentEvidences.forEach((ev) => {
             if (ev.id === evidenceToEdit.id) {
-              ev.name = value;
+              ev.attachmentId = value;
             }
           });
         }
