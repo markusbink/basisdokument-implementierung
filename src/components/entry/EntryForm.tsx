@@ -141,17 +141,23 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         />
         <div className="flex border-t border-lightGrey rounded-b-lg px-3 py-2 items-center gap-2 justify-between">
           {entryEvidences.length <= 0 ? (
-            <div className="flex flex-col gap-2 items-center">
+            <div
+              className="flex flex-col gap-2 items-center cursor-pointer"
+              onClick={(e) => {
+                setEvidencePopupVisible(true);
+                setBackupEvidences([...entryEvidences]);
+                e.stopPropagation();
+              }}>
               <span className="italic">Keine Beweise</span>
             </div>
           ) : (
             <div className="flex flex-col gap-1">
-              <span className="ml-1 font-bold">Beweisbereich</span>
+              <span className="ml-1 font-bold">{evidences.length === 1 ? "Beweis:" : "Beweise:"}</span>
               <div className="flex flex-col flex-wrap gap-1">
                 {entryEvidences.map((evidence, index) => (
                   <div className="flex flex-row items-center px-2" key={index}>
                     <div className="flex flex-row gap-2">
-                      <span>{index + 1 + "."}</span>
+                      <span className="w-4">{index + 1 + "."}</span>
                       {evidence.hasAttachment ? (
                         <span className="break-words font-medium">
                           {evidence.name}

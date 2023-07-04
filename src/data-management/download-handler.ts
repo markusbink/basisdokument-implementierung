@@ -2,6 +2,7 @@ import { saveAs } from "file-saver";
 import {
   IBookmark,
   IEntry,
+  IEvidence,
   IHighlightedEntry,
   IHighlighter,
   IHint,
@@ -40,7 +41,7 @@ function downloadPDF(PDF: any, fileName: string) {
     type: "application/pdf",
   });
 
-  saveAs(fileToSave, fileName + ".pdf")
+  saveAs(fileToSave, fileName + ".pdf");
 }
 
 function getEntryTimestamp(childEntry: any, obj: any) {
@@ -68,19 +69,24 @@ function getEntryTitle(entryId: any, obj: any) {
   }
 }
 
-//add attachments in one string because of autotable commas
-function getAttachmentNumeration(attachments: Array<object>) {
-  var numAttachments: string = "";
-  for (let i=0; i<attachments.length; i++) {
-    let attachment = i+1 + ") " + attachments[i];
-    //do not add line break/empty line to last item
-    if (i === attachments.length-1) {
-      numAttachments = numAttachments + attachment;
-    } else {
-      numAttachments = numAttachments + attachment + "\n";
+//add evidences in one string because of autotable commas
+function getEvidenceNumeration(evidences: Array<IEvidence>) {
+  var numEvidences: string = "";
+  if (evidences) {
+    for (let i = 0; i < evidences.length; i++) {
+      let evidence = i + 1 + ") " + evidences[i].name;
+      if (evidences[i].hasAttachment) {
+        evidence = evidence + " als Anlage " + evidences[i].attachmentId;
+      }
+      //do not add line break/empty line to last item
+      if (i === evidences.length - 1) {
+        numEvidences = numEvidences + evidence;
+      } else {
+        numEvidences = numEvidences + evidence + "\n";
+      }
     }
+    return numEvidences;
   }
-  return numAttachments;
 }
 
 //parse HTML to string to remove tags
@@ -89,26 +95,26 @@ function parseHTMLtoString(htmltext: any) {
   const parserElem = parser.parseFromString(htmltext, "text/html");
   //add enumeration in ordered lists
   var orderedLists = parserElem.getElementsByTagName("ol");
-  for (let i=0; i<orderedLists.length; i++) {
+  for (let i = 0; i < orderedLists.length; i++) {
     let listitems = orderedLists[i].getElementsByTagName("li");
-    for (let j=0; j<listitems.length; j++) {
+    for (let j = 0; j < listitems.length; j++) {
       if (j === 0) {
         listitems[j].innerText = "\n" + (j + 1) + ". " + listitems[j].innerText;
-      } else if (j === listitems.length-1) {
-        listitems[j].innerText = (j + 1) + ". " + listitems[j].innerText + "\n";
+      } else if (j === listitems.length - 1) {
+        listitems[j].innerText = j + 1 + ". " + listitems[j].innerText + "\n";
       } else {
-        listitems[j].innerText = (j + 1) + ". " + listitems[j].innerText;
+        listitems[j].innerText = j + 1 + ". " + listitems[j].innerText;
       }
     }
   }
   //add bulletpoints in unordered lists
   var unorderedLists = parserElem.getElementsByTagName("ul");
-  for (let i=0; i<unorderedLists.length; i++) {
+  for (let i = 0; i < unorderedLists.length; i++) {
     let bulletpoints = unorderedLists[i].getElementsByTagName("li");
-    for (let j=0; j<bulletpoints.length; j++) {
+    for (let j = 0; j < bulletpoints.length; j++) {
       if (j === 0) {
         bulletpoints[j].innerText = "\n• " + bulletpoints[j].innerText;
-      } else if (j === bulletpoints.length-1) {
+      } else if (j === bulletpoints.length - 1) {
         bulletpoints[j].innerText = "• " + bulletpoints[j].innerText + "\n";
       } else {
         bulletpoints[j].innerText = "• " + bulletpoints[j].innerText;
@@ -133,12 +139,16 @@ function getRoleProfession(role: string) {
   }
 }
 
-async function mergePDF(coverPDF: ArrayBuffer, basisdokumentPDF: ArrayBuffer, fileName: string) {
+async function mergePDF(
+  coverPDF: ArrayBuffer,
+  basisdokumentPDF: ArrayBuffer,
+  fileName: string
+) {
   let pdfDoc = await PDFDocument.create();
 
   const cover = await PDFDocument.load(coverPDF);
   const other = await PDFDocument.load(basisdokumentPDF);
-  
+
   var page;
   var coverPages = await pdfDoc.embedPages(cover.getPages());
   var otherPages = await pdfDoc.embedPages(other.getPages());
@@ -153,12 +163,16 @@ async function mergePDF(coverPDF: ArrayBuffer, basisdokumentPDF: ArrayBuffer, fi
   }
 
   const pdfBytes = await pdfDoc.save();
-  const file = new Blob([pdfBytes], {type: "application/pdf"});
+  const file = new Blob([pdfBytes], { type: "application/pdf" });
   downloadPDF(file, fileName);
 }
 
-async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, downloadNew: boolean, obj: any, fileName: string) {
-
+async function downloadBasisdokumentAsPDF(
+  coverPDF: ArrayBuffer | undefined,
+  downloadNew: boolean,
+  obj: any,
+  fileName: string
+) {
   let doc = new jsPDF();
   let newDoc = new jsPDF(); //additional pdf with only new entries
 
@@ -192,11 +206,15 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
   rubrumBeklagt = [parseHTMLtoString(metaDefendant)];
 
   // hints from the judge §139 ZPO
-  if (obj["judgeHints"].length === 0) { //no hints
-    allHints.push({ title: "Keine Hinweise", text: "Es wurden bisher keine Hinweise von der Richterin / dem Richter verfasst." });
+  if (obj["judgeHints"].length === 0) {
+    //no hints
+    allHints.push({
+      title: "Keine Hinweise",
+      text: "Es wurden bisher keine Hinweise von der Richterin / dem Richter verfasst.",
+    });
   }
 
-  for (let i=0; i< obj["judgeHints"].length; i++) {
+  for (let i = 0; i < obj["judgeHints"].length; i++) {
     const judgeHintObject = obj["judgeHints"][i];
     let filteredEntry = obj["entries"].find((entry: any) => {
       return entry.id === judgeHintObject.associatedEntry;
@@ -214,7 +232,12 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
     let hint = {
       id: entryId,
       title:
-        judgeHintObject.author + entryCodeText + " | " + judgeHintObject.title + " | Hinzugefügt am: " + getEntryTimestamp(judgeHintObject, obj),
+        judgeHintObject.author +
+        entryCodeText +
+        " | " +
+        judgeHintObject.title +
+        " | Hinzugefügt am: " +
+        getEntryTimestamp(judgeHintObject, obj),
       text: parseHTMLtoString(judgeHintObject.text),
       version: judgeHintObject.version,
     };
@@ -224,8 +247,13 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
   // Get grouped entries
   let groupedEntries = groupEntriesBySectionAndParent(obj["entries"]);
 
-  if (obj["sections"].length === 0) { //no entries
-    allEntries.push({ id: "N", title: "Keine Beiträge", text: "Es wurden keine Gliederungspunkte / Beiträge von den Parteien angelegt." });
+  if (obj["sections"].length === 0) {
+    //no entries
+    allEntries.push({
+      id: "N",
+      title: "Keine Beiträge",
+      text: "Es wurden keine Gliederungspunkte / Beiträge von den Parteien angelegt.",
+    });
   }
 
   for (let i = 0; i < obj["sections"].length; i++) {
@@ -265,7 +293,11 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
           text: parseHTMLtoString(entry.text),
           version: entry.version,
           associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-          evidences: entry.evidences.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.evidences) : undefined,
+          evidences: !entry.evidences?.length
+            ? undefined
+            : entry.evidences?.length > 1
+            ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
+            : "Beweis:\n" + getEvidenceNumeration(entry.evidences),
         };
         allEntries.push(tableEntry);
 
@@ -274,12 +306,15 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
         if (entry.version === obj["currentVersion"]) {
           newEntry = {
             id: entry.entryCode,
-            title:
-              entry.entryCode + " | " + entry.author + " | " + entry.role,
+            title: entry.entryCode + " | " + entry.author + " | " + entry.role,
             text: parseHTMLtoString(entry.text),
             version: entry.version,
             associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-            evidences: entry.evidences.length > 0 ? "Beweise:\n" + getAttachmentNumeration(entry.evidences) : undefined,
+            evidences: !entry.evidences?.length
+              ? undefined
+              : entry.evidences?.length > 1
+              ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
+              : "Beweis:\n" + getEvidenceNumeration(entry.evidences),
           };
           newEntries.push(newEntry);
         }
@@ -418,7 +453,8 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
   }
 
   //autotable new entries
-  if (newEntries.length !== 0) { //only show new entries page if there are new entries
+  if (newEntries.length !== 0) {
+    //only show new entries page if there are new entries
     doc.addPage();
     autoTable(doc, {
       theme: "grid",
@@ -454,9 +490,14 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
             [newEntries[i].associatedEntry],
             [newEntries[i].text],
           ];
-        }        
+        }
       } else if (newEntries[i].evidences) {
-        data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text], [newEntries[i].evidences]];
+        data = [
+          ["Neuer Beitrag"],
+          [newEntries[i].title],
+          [newEntries[i].text],
+          [newEntries[i].evidences],
+        ];
       } else {
         data = [["Neuer Beitrag"], [newEntries[i].title], [newEntries[i].text]];
       }
@@ -568,12 +609,12 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
         didDrawPage: function (hookData) {
           doc.outline.add(
             currEntriesNode,
-            hookData.table.head[0].raw as unknown as string + //section
-            " | " +
-            hookData.table.body[0].raw as string + //section title plaintiff
-            " | " +
-            hookData.table.body[1].raw as string, //section title defendant
-            { pageNumber: doc.getCurrentPageInfo().pageNumber, }
+            ((((hookData.table.head[0].raw as unknown as string) + //section
+              " | " +
+              hookData.table.body[0].raw) as string) + //section title plaintiff
+              " | " +
+              hookData.table.body[1].raw) as string, //section title defendant
+            { pageNumber: doc.getCurrentPageInfo().pageNumber }
           );
         },
       });
@@ -595,7 +636,11 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
           ];
         }
       } else if (allEntries[i].evidences !== undefined) {
-        data = [[allEntries[i].title], [allEntries[i].text], [allEntries[i].evidences]];
+        data = [
+          [allEntries[i].title],
+          [allEntries[i].text],
+          [allEntries[i].evidences],
+        ];
       } else {
         data = [[allEntries[i].title], [allEntries[i].text]];
       }
@@ -615,7 +660,10 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
         body: data,
         margin: {
           left: allEntries[i].id.includes("B") ? 30 : 10,
-          right: allEntries[i].id.includes("B") || allEntries[i].id === "N" ? 10 : 30,
+          right:
+            allEntries[i].id.includes("B") || allEntries[i].id === "N"
+              ? 10
+              : 30,
           top: 7,
           bottom: 10,
         },
@@ -633,10 +681,14 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
         },
         didDrawCell: function (hookData) {
           let counterArr: any = [];
-          for (let j=0; j<currAllHints.length; j++) {
-            if (currAllHints[j].id === currEntryId && hookData.row.index === 0) {
+          for (let j = 0; j < currAllHints.length; j++) {
+            if (
+              currAllHints[j].id === currEntryId &&
+              hookData.row.index === 0
+            ) {
               if (currAllHints[j].id in counterArr) {
-                counterArr[currAllHints[j].id] = counterArr[currAllHints[j].id] + 2;
+                counterArr[currAllHints[j].id] =
+                  counterArr[currAllHints[j].id] + 2;
               } else {
                 counterArr[currAllHints[j].id] = 0;
               }
@@ -644,11 +696,13 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
               let yPos = hookData.cursor?.y as number;
               let offset = counterArr[currAllHints[j].id]; //offset for multiple hints to an entry
               doc.createAnnotation({
-                type: 'text',
+                type: "text",
                 title: currAllHints[j].title,
                 contents: currAllHints[j].text,
                 bounds: {
-                  x: currAllHints[j].id.includes('B') ? xPos - 10 + offset : xPos + hookData.cell.width + 2 + offset, //change position depending on defendant/plaintiff
+                  x: currAllHints[j].id.includes("B")
+                    ? xPos - 10 + offset
+                    : xPos + hookData.cell.width + 2 + offset, //change position depending on defendant/plaintiff
                   y: yPos,
                   w: hookData.cell.contentWidth,
                   h: hookData.cell.contentHeight,
@@ -657,7 +711,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
               });
             }
           }
-        }
+        },
       });
     }
   }
@@ -665,20 +719,27 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
   allEntries = [];
 
   //signature page
-  let signatureData:any = [[
-    parseHTMLtoString(
-      "Datum: " +
-      obj["versions"][obj["versions"].length - 1]["timestamp"].toLocaleString().substring(0, 9) +
-      "\n" +
-      "\n" +
-      "gez. " +
-      "\n" +
-      ((obj["otherAuthor"] === undefined) ? obj["versions"][obj["versions"].length - 1].author : obj["otherAuthor"])) +
-      "\n" +
-      getRoleProfession(obj["versions"][obj["versions"].length - 1].role)
-  ]];
+  let signatureData: any = [
+    [
+      parseHTMLtoString(
+        "Datum: " +
+          obj["versions"][obj["versions"].length - 1]["timestamp"]
+            .toLocaleString()
+            .substring(0, 9) +
+          "\n" +
+          "\n" +
+          "gez. " +
+          "\n" +
+          (obj["otherAuthor"] === undefined
+            ? obj["versions"][obj["versions"].length - 1].author
+            : obj["otherAuthor"])
+      ) +
+        "\n" +
+        getRoleProfession(obj["versions"][obj["versions"].length - 1].role),
+    ],
+  ];
   autoTable(doc, {
-    theme: 'grid',
+    theme: "grid",
     styles: { fontSize: 11, cellPadding: 5 },
     body: signatureData,
   });
@@ -710,7 +771,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
           : currentPageNum.toString().length === 2
           ? pageWidth - 22
           : pageWidth - 24;
-    //double digit pagenumber
+      //double digit pagenumber
     } else if (pageCount.toString().length === 2) {
       pageNumPos =
         currentPageNum.toString().length === 1
@@ -718,7 +779,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
           : currentPageNum.toString().length === 2
           ? pageWidth - 24
           : pageWidth - 26;
-    //three and more digit pagenumber
+      //three and more digit pagenumber
     } else {
       pageNumPos =
         currentPageNum.toString().length === 1
@@ -733,7 +794,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
       pageHeight - 7
     );
   }
-  
+
   //save or merge basisdokument pdf
   if (coverPDF !== undefined) {
     const pdfBuffer = doc.output("arraybuffer");
@@ -756,7 +817,7 @@ export function downloadBasisdokument(
   hints: IHint[],
   coverPDF: ArrayBuffer | undefined,
   otherAuthor: string | undefined,
-  downloadNewAdditionally: boolean,
+  downloadNewAdditionally: boolean
 ) {
   let basisdokumentObject: any = {};
   basisdokumentObject["caseId"] = caseId;

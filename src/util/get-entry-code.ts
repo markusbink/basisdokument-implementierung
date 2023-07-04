@@ -15,6 +15,13 @@ export const getEntryCodesForEvidence = (
   entries: IEntry[],
   evidence: IEvidence
 ): string[] => {
-  let entriesWithEvidenceReference = entries.filter((entry) => entry.evidences.indexOf(evidence) !== -1);
-  return entriesWithEvidenceReference.map((entry) => getEntryCode(entries, entry.id));
-}
+  const entriesWithEvidenceReference = entries
+    // prefilter entries with no evidences
+    .filter((entry) => entry.evidences !== undefined)
+    // filter entries with evidence
+    .filter((entry) => entry.evidences.indexOf(evidence) !== -1);
+  // return entry codes
+  return entriesWithEvidenceReference.map((entry) =>
+    getEntryCode(entries, entry.id)
+  );
+};

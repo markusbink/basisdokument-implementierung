@@ -1,13 +1,14 @@
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
-import { IEvidence } from "../../types";
+import { IEvidence, UserRole } from "../../types";
 import { getEntryCodesForEvidence } from "../../util/get-entry-code";
 import { Button } from "../Button";
 import cx from "classnames";
 import { ErrorPopup } from "../ErrorPopup";
 import { getTheme } from "../../themes/getTheme";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 export interface EvidenceProps {
   evidence: IEvidence;
@@ -16,24 +17,58 @@ export interface EvidenceProps {
 export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const { entries, setEntries, currentVersion } = useCase();
   const { selectedTheme } = useHeaderContext();
+  const {
+    updateEvidencesDefendant,
+    updateEvidencesPlaintiff,
+    removeEvidenceDefendant,
+    removeEvidencePlaintiff,
+  } = useEvidence();
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [isInEditMode, setIsInEditMode] = useState<boolean>(false);
+  const [isInNameEditMode, setIsInNameEditMode] = useState<boolean>(false);
+  const [isInAttachmentEditMode, setIsInAttachmentEditMode] =
+    useState<boolean>(false);
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
 
   let entryCodes: string[] = [];
-  try {
-    entryCodes = getEntryCodesForEvidence(entries, evidence);
-  } catch {}
+  entryCodes = getEntryCodesForEvidence(entries, evidence);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences.map((ev) => {
+      entry.evidences = entry.evidences?.map((ev) => {
         if (ev.id === evidence.id) {
           ev.name = value;
+        }
+        if (ev.hasAttachment) {
+          if (ev.role === UserRole.Plaintiff) {
+            updateEvidencesPlaintiff(ev);
+          } else {
+            updateEvidencesDefendant(ev);
+          }
+        }
+        return ev;
+      });
+      return entry;
+    });
+    setEntries(newEntries);
+  };
+
+  const handleAttachmentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    const newEntries = entries.map((entry) => {
+      entry.evidences = entry.evidences?.map((ev) => {
+        if (ev.id === evidence.id) {
+          ev.attachmentId = value;
+        }
+        if (ev.hasAttachment) {
+          if (ev.role === UserRole.Plaintiff) {
+            updateEvidencesPlaintiff(ev);
+          } else {
+            updateEvidencesDefendant(ev);
+          }
         }
         return ev;
       });
@@ -44,9 +79,16 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
 
   const removeEvidenceOverall = (id: string) => {
     const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences.filter(
+      entry.evidences = entry.evidences?.filter(
         (evidence) => evidence.id !== id
       );
+      if (evidence.hasAttachment) {
+        if (evidence.role === UserRole.Plaintiff) {
+          removeEvidencePlaintiff(evidence);
+        } else {
+          removeEvidenceDefendant(evidence);
+        }
+      }
       return entry;
     });
     setEntries(newEntries);
@@ -54,12 +96,35 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
 
   return (
     <div className="flex flex-col gap-2 bg-offWhite rounded-lg mt-4 p-2 font-medium">
-      {evidence.hasAttachment && (
-        <span className="text-xs font-bold flex gap-1 mt-1 ml-1 self-start w-fit">
-          Anlage {evidence.attachmentId}
-        </span>
-      )}
-      {isInEditMode ? (
+      <div className="flex flex-row mt-1 w-fit">
+        {evidence.hasAttachment && (
+          <div className="gap-1">
+            <span className="text-xs font-bold ml-1 self-center">Anlage</span>
+            {isInAttachmentEditMode ? (
+              <input
+                autoFocus={true}
+                type="text"
+                name="name"
+                placeholder="Anlage..."
+                className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
+                value={evidence.attachmentId}
+                onBlur={() => setIsInAttachmentEditMode(false)}
+                onChange={handleAttachmentIdChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setIsInAttachmentEditMode(false);
+                  }
+                }}
+              />
+            ) : (
+              <span className="text-xs font-bold ml-1 self-center">
+                {evidence.attachmentId}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+      {isInNameEditMode ? (
         <input
           autoFocus={true}
           type="text"
@@ -67,11 +132,11 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
           placeholder="Beschreibung..."
           className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
           value={evidence.name}
-          onBlur={() => setIsInEditMode(false)}
+          onBlur={() => setIsInNameEditMode(false)}
           onChange={handleNameChange}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              setIsInEditMode(false);
+              setIsInNameEditMode(false);
             }
           }}
         />
@@ -135,11 +200,23 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
               icon={<DotsThree size={20} weight="bold" />}></Button>{" "}
             {isMenuOpen ? (
               <ul className="absolute right-0 bottom-2 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
+                {evidence.hasAttachment ? (
+                  <li
+                    tabIndex={0}
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setIsInAttachmentEditMode(true);
+                    }}
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
+                    <PencilSimple size={16} />
+                    Anlage ändern
+                  </li>
+                ) : null}
                 <li
                   tabIndex={0}
                   onClick={() => {
                     setIsMenuOpen(false);
-                    setIsInEditMode(true);
+                    setIsInNameEditMode(true);
                   }}
                   className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                   <PencilSimple size={16} />
@@ -162,8 +239,8 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
         <div className="flex flex-col items-center justify-center space-y-8">
           <p className="text-center text-base">
             Sind Sie sicher, dass Sie den Beweis <b>{evidence.name}</b> löschen
-            möchten? Der Beweis wird auch aus allen Beiträgen gelöscht. Diese
-            Aktion kann nicht rückgängig gemacht werden.
+            möchten? Der Beweis wird aus allen Beiträgen gelöscht. Diese Aktion
+            kann nicht rückgängig gemacht werden.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Button

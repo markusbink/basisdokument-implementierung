@@ -1,8 +1,8 @@
-import { CaretDown, CaretUp, Envelope, Notebook } from "phosphor-react";
+import { CaretDown, CaretUp, Envelope, Info, Notebook } from "phosphor-react";
 import { useState } from "react";
 import { AiFillGithub } from "react-icons/ai";
-import { usePatchnotes } from "../contexts";
 import { Tooltip } from "./Tooltip";
+import { useImprint, usePatchnotes } from "../contexts";
 
 const studentData2021 = [
   {
@@ -69,10 +69,20 @@ export const AboutDevelopersMenu = () => {
   const [showDevelopers2022, setShowDevelopers2022] = useState<boolean>(false);
   const [showDevelopers2023, setShowDevelopers2023] = useState<boolean>(false);
   const { setShowPatchnotesPopup } = usePatchnotes();
+  const { setShowImprintPopup } = useImprint();
 
   return (
     <div>
       <div className="flex flex-row gap-2 justify-end">
+        <Tooltip text="Impressum">
+          <div
+            className="bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey items-center"
+            onClick={() => {
+              setShowImprintPopup(true);
+            }}>
+            <Info size={20} />
+          </div>
+        </Tooltip>
         <Tooltip text="Was gibt es Neues?">
           <div
             className="bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey items-center"
