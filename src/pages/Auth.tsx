@@ -377,6 +377,18 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                   )}>
                   Erstellen
                 </button>
+                <button
+                  onClick={() => {
+                    setReadonly();
+                  }}
+                  className={cx(
+                    "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
+                    {
+                      "border-2 border-darkGrey": usage === UsageMode.Readonly,
+                    }
+                  )}>
+                  Einsehen
+                </button>
               </>
             )}
           </div>
