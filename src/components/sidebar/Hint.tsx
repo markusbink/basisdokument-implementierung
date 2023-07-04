@@ -1,11 +1,12 @@
 import cx from "classnames";
+import { format } from "date-fns";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
 import React, { useRef, useState } from "react";
 import { useCase, useHeaderContext, useHints, useUser } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { getTheme } from "../../themes/getTheme";
-import { IHint } from "../../types";
+import { IHint, UserRole } from "../../types";
 import { getEntryCode } from "../../util/get-entry-code";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -73,9 +74,10 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
                 "bg-darkGrey text-offWhite hover:bg-mediumGrey": !entryCode,
                 [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
                   getTheme(selectedTheme)?.primaryPlaintiff
-                } hover-bg-${getTheme(selectedTheme)?.primaryPlaintiff} hover-text-${
-                  getTheme(selectedTheme)?.secondaryPlaintiff
-                }`]: entryCode?.charAt(0) === "K",
+                } hover-bg-${
+                  getTheme(selectedTheme)?.primaryPlaintiff
+                } hover-text-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
+                  entryCode?.charAt(0) === "K",
                 [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
                   getTheme(selectedTheme)?.primaryDefendant
                 } hover-bg-${
@@ -100,13 +102,14 @@ export const Hint: React.FC<HintProps> = ({ hint }) => {
               <div className="font-bold">{hint.author}</div>
 
               {hint.version !== currentVersion ? (
-                <div className="opacity-40">{`${new Date(
+                <div className="opacity-40">{`${format(new Date(
                   Date.parse(versionHistory[hint.version - 1].timestamp)
-                ).toLocaleString("de-DE")}`}</div>
+                ), "dd.MM.yyyy")}`}</div>
               ) : null}
             </div>
 
-            {hint.version === currentVersion && user?.role === "Richter:in" ? (
+            {hint.version === currentVersion &&
+            user?.role === UserRole.Judge ? (
               <div ref={ref} className="self-end relative">
                 <Button
                   key="createHint"

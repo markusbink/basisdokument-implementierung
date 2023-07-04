@@ -49,7 +49,7 @@ export const EntryList: React.FC<EntryListProps> = ({
   return (
     <>
       {view !== ViewMode.SideBySide ? (
-        <div className="space-y-4 w-full">
+        <div className="w-full">
           {entriesList.map((entry, index) => (
             <Entry
               key={entry.id}

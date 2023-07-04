@@ -1,0 +1,52 @@
+name: Deploy Live
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install and build
+        run: npm install --force && npm run build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-dir
+          path: build
+          retention-days: 5
+        
+
+  DeployLive:
+    name: Deploy Live
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH 
+        run: |
+            install -m 600 -D /dev/null ~/.ssh/id_rsa
+            echo "${{ secrets.DEPLOY_KEY }}" >  ~/.ssh/id_rsa
+            echo "HIER"
+            ssh-keyscan "${{ secrets.SSH_HOST }}" > ~/.ssh/known_hosts
+      - name: Get Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-dir
+      - name: Deploy Live
+        run: |
+            ls
+            scp -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.WORK_DIR_LIVE }}
+      
+      - name: Cleanup
+        run: rm -rf ~/.ssh

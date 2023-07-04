@@ -26,6 +26,7 @@ import { Tooltip } from "../Tooltip";
 import { themeData } from "../../themes/theme-data";
 import Cookies from "js-cookie";
 import cx from "classnames";
+import { UserRole } from "../../types";
 
 export const DocumentButton = () => {
   const { user } = useUser();
@@ -63,7 +64,10 @@ export const DocumentButton = () => {
         metaData,
         entries,
         sectionList,
-        hints
+        hints,
+        undefined, //coverPDF
+        undefined, //otherAuthor
+        false //download new entries additionally
       );
     }, 100);
     setTimeout(() => {
@@ -109,9 +113,11 @@ export const DocumentButton = () => {
             <div className="flex flex-col align-middle justify-center items-center gap-2 bg-offWhite rounded-md p-3 pl-2 pr-2 h-full">
               <UserCircle size={24} className="text-darkGrey" weight="fill" />
               <div className="text-center">
-                <p className="font-extrabold text-base text-darkGrey">
-                  {user!.name}
-                </p>
+                {user?.role !== UserRole.Client && (
+                  <p className="font-extrabold text-base text-darkGrey">
+                    {user!.name}
+                  </p>
+                )}
                 <p className="text-sm text-darkGrey">{user!.role}</p>
               </div>
             </div>
@@ -123,7 +129,7 @@ export const DocumentButton = () => {
                     <Tooltip text={theme.title} key={index}>
                       <div
                         className={cx(
-                          `flex flex-row rounded-full hover:border hover:border-darkGrey hover:border-[2px] w-14 h-14 items-center justify-center cursor-pointer`,
+                          `flex flex-row rounded-full hover:border-darkGrey hover:border-[2px] w-14 h-14 items-center justify-center cursor-pointer`,
                           {
                             "border-[3px] border-darkGrey":
                               theme.id === selectedTheme,
@@ -147,28 +153,22 @@ export const DocumentButton = () => {
                 })}
               </div>
             </div>
-            <DownloadBasisdokumentButton
-              caseId={caseId}
-              currentVersion={currentVersion}
-              versionHistory={versionHistory}
-              metaData={metaData}
-              entries={entries}
-              sectionList={sectionList}
-              hints={hints}
-              highlightedEntries={highlightedEntries}
-              colorSelection={colorSelection}
-              notes={notes}
-              bookmarks={bookmarks}
-              individualSorting={individualSorting}
-            />
+            {user?.role !== UserRole.Client && (
+              <DownloadBasisdokumentButton/>
+            )}
             <DropdownMenu.Item
               onClick={() => {
-                setShowPopupUpload(true);
+                if (user?.role === UserRole.Client) {
+                  reloadPageAndDoNotSave();
+                } else {
+                  setShowPopupUpload(true);
+                }
               }}
               className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer">
               <FileArrowUp size={18} className="text-darkGrey" weight="fill" />
               <div className="text-darkGrey text-sm">
-                Neues Basisdokument erstellen/hochladen
+                Neues Basisdokument{" "}
+                {user?.role !== UserRole.Client ? "erstellen/" : ""}hochladen
               </div>
             </DropdownMenu.Item>
           </DropdownMenu.Content>
