@@ -67,7 +67,8 @@ export const DocumentButton = () => {
         hints,
         undefined, //coverPDF
         undefined, //otherAuthor
-        false //download new entries additionally
+        false, //download new entries additionally
+        undefined //regard
       );
     }, 100);
     setTimeout(() => {
@@ -153,9 +154,7 @@ export const DocumentButton = () => {
                 })}
               </div>
             </div>
-            {user?.role !== UserRole.Client && (
-              <DownloadBasisdokumentButton/>
-            )}
+            {user?.role !== UserRole.Client && <DownloadBasisdokumentButton />}
             <DropdownMenu.Item
               onClick={() => {
                 if (user?.role === UserRole.Client) {

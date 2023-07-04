@@ -62,8 +62,11 @@ export const ExportPopup: React.FC<IProps> = ({
   const [surname, setSurname] = useState<IStateUserInput["surname"]>("");
   let otherAuthor: string | undefined = prename + " " + surname;
   const [showAuthorChange, setShowAuthorChange] = useState<boolean>(false);
+  let [regard, setRegard] = useState<string | undefined>("");
+  const [showAddRegard, setShowAddRegard] = useState<boolean>(false);
   const [showOptionalCover, setShowOptionalCover] = useState<boolean>(false);
-  var [downloadNewAdditionally, setDownloadNewAdditionally] = useState<boolean>(false);
+  var [downloadNewAdditionally, setDownloadNewAdditionally] =
+    useState<boolean>(false);
   var validUserInput: boolean = true;
 
   //Refs
@@ -105,7 +108,7 @@ export const ExportPopup: React.FC<IProps> = ({
     if (validUserInput) {
       triggerDownload();
     }
-  }
+  };
 
   const triggerDownload = () => {
     if (showOptionalCover === false) {
@@ -113,6 +116,9 @@ export const ExportPopup: React.FC<IProps> = ({
     }
     if (showAuthorChange === false) {
       otherAuthor = undefined;
+    }
+    if (showAddRegard === false) {
+      regard = undefined;
     }
     setTimeout(() => {
       downloadBasisdokument(
@@ -125,7 +131,8 @@ export const ExportPopup: React.FC<IProps> = ({
         hints,
         coverPDF,
         otherAuthor,
-        downloadNewAdditionally
+        downloadNewAdditionally,
+        regard
       );
     }, 100);
     setTimeout(() => {
@@ -151,6 +158,11 @@ export const ExportPopup: React.FC<IProps> = ({
   const onChangeGivenSurname = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSurname(newValue);
+  };
+
+  const onChangeRegard = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setRegard(newValue);
   };
 
   return (
@@ -229,8 +241,38 @@ export const ExportPopup: React.FC<IProps> = ({
                 )}
               </div>
               <div className="text-darkGrey opacity-80 ml-5 mb-7">
-                Sie können vor dem Herunterladen des Basisdokuments optional ein Deckblatt einfügen, das dem Basisdokument vorangestellt wird.
+                Sie können vor dem Herunterladen des Basisdokuments optional ein
+                Deckblatt einfügen, das dem Basisdokument vorangestellt wird.
               </div>
+              <div className="flex flex-row gap-2">
+                <input
+                  className="small-checkbox accent-darkGrey cursor-pointer"
+                  type="checkbox"
+                  checked={showAddRegard}
+                  onChange={() => setShowAddRegard(!showAddRegard)}
+                />
+                <div className="font-semibold">
+                  Betreff zur Basisdokument-PDF hinzufügen
+                </div>
+              </div>
+              <div
+                className={`text-darkGrey opacity-80 ml-5 ${
+                  showAddRegard ? "" : "mb-7"
+                }`}>
+                Sie können einen Betreff zu dieser Version des Basisdokuments
+                hinzufügen.
+              </div>
+              {showAddRegard && (
+                <div className="mt-4 ml-4 mb-7">
+                  <input
+                    className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none w-full"
+                    type="text"
+                    placeholder="Betreff..."
+                    value={regard}
+                    onChange={onChangeRegard}
+                  />
+                </div>
+              )}
               <div className="flex flex-row gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -238,9 +280,16 @@ export const ExportPopup: React.FC<IProps> = ({
                   checked={showAuthorChange}
                   onChange={() => setShowAuthorChange(!showAuthorChange)}
                 />
-                <div className="font-semibold">Signatur im Basisdokument-PDF ändern</div>
+                <div className="font-semibold">
+                  Signatur im Basisdokument-PDF ändern
+                </div>
               </div>
-              <div className={`text-darkGrey opacity-80 ml-5 ${showAuthorChange ? '' : 'mb-7'}`}>Sie können die Signatur des Basisdokuments ändern.</div>
+              <div
+                className={`text-darkGrey opacity-80 ml-5 ${
+                  showAuthorChange ? "" : "mb-7"
+                }`}>
+                Sie können die Signatur des Basisdokuments ändern.
+              </div>
               {showAuthorChange && (
                 <div className="flex flex-row w-auto mt-4 gap-4 ml-4 mb-7">
                   <input
@@ -264,13 +313,20 @@ export const ExportPopup: React.FC<IProps> = ({
                   className="small-checkbox accent-darkGrey cursor-pointer"
                   type="checkbox"
                   checked={downloadNewAdditionally}
-                  onChange={() => setDownloadNewAdditionally(!downloadNewAdditionally)}
+                  onChange={() =>
+                    setDownloadNewAdditionally(!downloadNewAdditionally)
+                  }
                 />
                 <div className="flex flex-row gap-0.5">
-                  <span className="font-semibold">Zusätzlich alle neuen Beiträge als eigene PDF herunterladen</span>
+                  <span className="font-semibold">
+                    Zusätzlich alle neuen Beiträge als eigene PDF herunterladen
+                  </span>
                 </div>
               </div>
-              <div className="text-darkGrey opacity-80 ml-5 mb-7">Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge herunterladen.</div>
+              <div className="text-darkGrey opacity-80 ml-5 mb-7">
+                Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge
+                herunterladen.
+              </div>
               <div>
                 {errorText !== "" ? (
                   <div className="flex bg-lightRed p-4 rounded-md">
