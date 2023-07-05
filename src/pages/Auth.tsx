@@ -182,6 +182,17 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           }
         }
       }
+      if (basisdokumentFile && editFile) {
+        if (
+          jsonToObject(basisdokumentFile).fileId !==
+          jsonToObject(editFile).fileId
+        ) {
+          setErrorText(
+            "Die hochgeladene Bearbeitungsdatei passt nicht zum hochgeladenen Basisdokument."
+          );
+          inputIsValid = false;
+        }
+      }
     }
 
     if ((prename === "" || surname === "") && usage !== UsageMode.Readonly) {
