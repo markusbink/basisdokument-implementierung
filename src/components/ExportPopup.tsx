@@ -24,6 +24,7 @@ import { useRef, useState } from "react";
 import { Button } from "./Button";
 
 interface IProps {
+  fileId: string;
   caseId: string;
   currentVersion: number;
   versionHistory: IVersion[];
@@ -39,6 +40,7 @@ interface IProps {
 }
 
 export const ExportPopup: React.FC<IProps> = ({
+  fileId,
   caseId,
   currentVersion,
   versionHistory,
@@ -63,7 +65,8 @@ export const ExportPopup: React.FC<IProps> = ({
   let otherAuthor: string | undefined = prename + " " + surname;
   const [showAuthorChange, setShowAuthorChange] = useState<boolean>(false);
   const [showOptionalCover, setShowOptionalCover] = useState<boolean>(false);
-  var [downloadNewAdditionally, setDownloadNewAdditionally] = useState<boolean>(false);
+  var [downloadNewAdditionally, setDownloadNewAdditionally] =
+    useState<boolean>(false);
   var validUserInput: boolean = true;
 
   //Refs
@@ -105,7 +108,7 @@ export const ExportPopup: React.FC<IProps> = ({
     if (validUserInput) {
       triggerDownload();
     }
-  }
+  };
 
   const triggerDownload = () => {
     if (showOptionalCover === false) {
@@ -116,6 +119,7 @@ export const ExportPopup: React.FC<IProps> = ({
     }
     setTimeout(() => {
       downloadBasisdokument(
+        fileId,
         caseId,
         currentVersion,
         versionHistory,
@@ -130,6 +134,7 @@ export const ExportPopup: React.FC<IProps> = ({
     }, 100);
     setTimeout(() => {
       downloadEditFile(
+        fileId,
         caseId,
         currentVersion,
         highlightedEntries,
@@ -229,7 +234,8 @@ export const ExportPopup: React.FC<IProps> = ({
                 )}
               </div>
               <div className="text-darkGrey opacity-80 ml-5 mb-7">
-                Sie können vor dem Herunterladen des Basisdokuments optional ein Deckblatt einfügen, das dem Basisdokument vorangestellt wird.
+                Sie können vor dem Herunterladen des Basisdokuments optional ein
+                Deckblatt einfügen, das dem Basisdokument vorangestellt wird.
               </div>
               <div className="flex flex-row gap-2">
                 <input
@@ -238,9 +244,16 @@ export const ExportPopup: React.FC<IProps> = ({
                   checked={showAuthorChange}
                   onChange={() => setShowAuthorChange(!showAuthorChange)}
                 />
-                <div className="font-semibold">Signatur im Basisdokument-PDF ändern</div>
+                <div className="font-semibold">
+                  Signatur im Basisdokument-PDF ändern
+                </div>
               </div>
-              <div className={`text-darkGrey opacity-80 ml-5 ${showAuthorChange ? '' : 'mb-7'}`}>Sie können die Signatur des Basisdokuments ändern.</div>
+              <div
+                className={`text-darkGrey opacity-80 ml-5 ${
+                  showAuthorChange ? "" : "mb-7"
+                }`}>
+                Sie können die Signatur des Basisdokuments ändern.
+              </div>
               {showAuthorChange && (
                 <div className="flex flex-row w-auto mt-4 gap-4 ml-4 mb-7">
                   <input
@@ -264,13 +277,20 @@ export const ExportPopup: React.FC<IProps> = ({
                   className="small-checkbox accent-darkGrey cursor-pointer"
                   type="checkbox"
                   checked={downloadNewAdditionally}
-                  onChange={() => setDownloadNewAdditionally(!downloadNewAdditionally)}
+                  onChange={() =>
+                    setDownloadNewAdditionally(!downloadNewAdditionally)
+                  }
                 />
                 <div className="flex flex-row gap-0.5">
-                  <span className="font-semibold">Zusätzlich alle neuen Beiträge als eigene PDF herunterladen</span>
+                  <span className="font-semibold">
+                    Zusätzlich alle neuen Beiträge als eigene PDF herunterladen
+                  </span>
                 </div>
               </div>
-              <div className="text-darkGrey opacity-80 ml-5 mb-7">Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge herunterladen.</div>
+              <div className="text-darkGrey opacity-80 ml-5 mb-7">
+                Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge
+                herunterladen.
+              </div>
               <div>
                 {errorText !== "" ? (
                   <div className="flex bg-lightRed p-4 rounded-md">

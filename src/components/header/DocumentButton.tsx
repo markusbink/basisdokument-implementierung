@@ -36,6 +36,7 @@ export const DocumentButton = () => {
   );
 
   const {
+    fileId,
     caseId,
     currentVersion,
     metaData,
@@ -58,6 +59,7 @@ export const DocumentButton = () => {
   const reloadPageAndSave = () => {
     setTimeout(() => {
       downloadBasisdokument(
+        fileId,
         caseId,
         currentVersion,
         versionHistory,
@@ -72,6 +74,7 @@ export const DocumentButton = () => {
     }, 100);
     setTimeout(() => {
       downloadEditFile(
+        fileId,
         caseId,
         currentVersion,
         highlightedEntries,
@@ -153,9 +156,7 @@ export const DocumentButton = () => {
                 })}
               </div>
             </div>
-            {user?.role !== UserRole.Client && (
-              <DownloadBasisdokumentButton/>
-            )}
+            {user?.role !== UserRole.Client && <DownloadBasisdokumentButton />}
             <DropdownMenu.Item
               onClick={() => {
                 if (user?.role === UserRole.Client) {

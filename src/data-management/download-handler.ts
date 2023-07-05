@@ -747,6 +747,7 @@ async function downloadBasisdokumentAsPDF(coverPDF: ArrayBuffer | undefined, dow
 }
 
 export function downloadBasisdokument(
+  fileId: string,
   caseId: string,
   currentVersion: number,
   versionHistory: IVersion[],
@@ -759,6 +760,7 @@ export function downloadBasisdokument(
   downloadNewAdditionally: boolean,
 ) {
   let basisdokumentObject: any = {};
+  basisdokumentObject["fileId"] = fileId;
   basisdokumentObject["caseId"] = caseId;
   basisdokumentObject["fileType"] = "basisdokument";
   basisdokumentObject["currentVersion"] = currentVersion;
@@ -799,6 +801,7 @@ export function downloadBasisdokument(
 }
 
 export function downloadEditFile(
+  fileId: string,
   caseId: string,
   currentVersion: number,
   highlightedEntries: IHighlightedEntry[],
@@ -809,6 +812,7 @@ export function downloadEditFile(
   individualEntrySorting: { [key: string]: IndividualEntrySortingEntry[] }
 ) {
   let editFileObject: any = {};
+  editFileObject["fileId"] = fileId;
   editFileObject["caseId"] = caseId;
   editFileObject["fileType"] = "editFile";
   editFileObject["currentVersion"] = currentVersion;

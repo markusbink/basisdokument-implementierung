@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
 import { Button } from "../components/Button";
+import { v4 as uuidv4 } from "uuid";
 import { Tooltip } from "../components/Tooltip";
 import {
   useBookmarks,
@@ -72,6 +73,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   // Contexts to set the state globally
   const {
     setCaseId: setCaseIdContext,
+    setFileId,
     setEntries,
     setMetaData,
     setCurrentVersion,
@@ -232,6 +234,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             surname,
             role,
             basisdokumentObject.caseId,
+            basisdokumentObject.fileId,
             basisdokumentObject.currentVersion
           );
 
@@ -243,13 +246,23 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       }
 
       if (usage === UsageMode.Create) {
+        const fileId = uuidv4();
+        setFileId(fileId);
         basisdokumentObject = createBasisdokument(
           prename,
           surname,
           role,
-          caseId
+          caseId,
+          fileId
         );
-        editFileObject = createEditFile(prename, surname, role, caseId, 1);
+        editFileObject = createEditFile(
+          prename,
+          surname,
+          role,
+          caseId,
+          fileId,
+          1
+        );
         toast("Ihr Basisdokument wurde erfolgreich erstellt!");
       }
 
