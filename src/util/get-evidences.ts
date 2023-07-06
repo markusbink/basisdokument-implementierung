@@ -3,9 +3,11 @@ import { IEvidence, IEntry, UserRole } from "../types";
 export const getEvidences = (
   entries: IEntry[],
   currentInput: string,
-  addedEvidences: IEvidence[]
+  addedEvidences: IEvidence[],
+  currentEntryId: string | undefined
 ): IEvidence[] => {
   let evs = entries
+    .filter((entry) => entry.id !== currentEntryId)
     .map((entry) => entry.evidences)
     .flat(1)
     .filter((ev) => ev !== undefined);

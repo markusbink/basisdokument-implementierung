@@ -323,7 +323,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                       {getEvidences(
                         entries,
                         currentInput,
-                        currentEvidences
+                        currentEvidences,
+                        entryId
                       ).map((ev, index) => (
                         <li
                           key={index}

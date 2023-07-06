@@ -17,7 +17,7 @@ export const SidebarEvidences = () => {
       <div className="flex justify-between items-center pt-4 px-4">
         <div className="font-bold text-darkGrey text-lg">Beweise</div>
       </div>
-      {getEvidences(entries, "", []).length <= 0 ? (
+      {getEvidences(entries, "", [], undefined).length <= 0 ? (
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm p-4">
           In einem Beitrag können Sie Beweise mit oder ohne Anlage hinzufügen.
           Alle Beweise des Basisdokuments erscheinen dann in dieser Ansicht.
