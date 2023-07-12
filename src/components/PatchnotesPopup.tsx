@@ -21,11 +21,7 @@ export const PatchnotesPopup = () => {
       <div>
         <h4 className="font-semibold">Funktionen in Arbeit:</h4>
         <ul>
-        <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
-        <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
-        <li>Erweiterte Exportfunktionen</li>
-         <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
-        <li>Erweiterte Exportfunktionen</li>
+          <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
         </ul>
       </div>
     </div>`
