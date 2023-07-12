@@ -5,23 +5,26 @@ import { useState } from "react";
 
 export const PatchnotesPopup = () => {
   const { setShowPatchnotesPopup } = usePatchnotes();
-  var [currentPatchnote, setCurrentPatchnote] = useState<string>("2.0.1");
+  var [currentPatchnote, setCurrentPatchnote] = useState<string>("2.1.0");
   var [patchnoteContent, setPatchnoteContent] = useState<string>(
-    `<h5 className="opacity-70">09. Mai 2023</h5>
-    <h3>Basisdokument Version 2.0.1</h3>
+    `<h5 className="opacity-70">14. Juli 2023</h5>
+    <h3>Basisdokument Version 2.1.0</h3>
     <div className="flex flex-col gap-2 mt-3">
       <div>
         <h4 className="font-semibold">Neue Funktionen:</h4>
         <ul>
-        <li>Aktualisiertes Onboarding mit allen neuen Funktionen</li>
-        <li>Neues Basisdokument <a href="https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html" target="_blank">Wiki</a> mit allen Funktionen</li>
+         <li>Eigener Bereich für Beweise</li>
+         <li>Erweiterte Exportfunktionen</li>
+         <li>Link zu eigener Mandanten-Domain</li>
         </ul>
       </div>
       <div>
         <h4 className="font-semibold">Funktionen in Arbeit:</h4>
         <ul>
-        <li>Eigener Bereich für Beweise</li>
         <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
+        <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
+        <li>Erweiterte Exportfunktionen</li>
+         <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
         <li>Erweiterte Exportfunktionen</li>
         </ul>
       </div>
@@ -69,7 +72,7 @@ export const PatchnotesPopup = () => {
             <h3>Basisdokument Version 1.0.1</h3>
             <div className="flex flex-col gap-2 mt-2">
               <div>
-                <h4 className="font-semibold">Behobene Fehler:</h4>
+                <h4 className="font-semibold">Änderungen:</h4>
                 <ul>
                   <li>Speicherung der Daten als txt statt json</li>
                   <li>Hinweis für Versionierung umformuliert</li>
@@ -85,7 +88,7 @@ export const PatchnotesPopup = () => {
             <h3>Basisdokument Version 1.0.2</h3>
             <div className="flex flex-col gap-2 mt-2">
               <div>
-                <h4 className="font-semibold">Behobene Fehler:</h4>
+                <h4 className="font-semibold">Änderungen:</h4>
                 <ul>
                   <li>Angepasste Benennung der Exportdateien</li>
                 </ul>
@@ -126,17 +129,32 @@ export const PatchnotesPopup = () => {
                 <li>Neues Basisdokument <a href="https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html" target="_blank">Wiki</a> mit allen Funktionen</li>
                </ul>
              </div>
+           </div>`
+        );
+        setCurrentPatchnote("2.0.1");
+        break;
+      case /2.1.0/.test(contentKey):
+        setPatchnoteContent(
+          `<h5 className="opacity-70">14. Juli 2023</h5>
+           <h3>Basisdokument Version 2.1.0</h3>
+           <div className="flex flex-col gap-2 mt-3">
+             <div>
+               <h4 className="font-semibold">Neue Funktionen:</h4>
+               <ul>
+                <li>Eigener Bereich für Beweise</li>
+                <li>Erweiterte Exportfunktionen</li>
+                <li>Link zu eigener Mandanten-Domain</li>
+               </ul>
+             </div>
              <div>
                <h4 className="font-semibold">Funktionen in Arbeit:</h4>
                <ul>
-                <li>Eigener Bereich für Beweise</li>
                 <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
-                <li>Erweiterte Exportfunktionen</li>
                </ul>
              </div>
            </div>`
         );
-        setCurrentPatchnote("2.0.1");
+        setCurrentPatchnote("2.1.0");
         break;
     }
   }
@@ -147,7 +165,7 @@ export const PatchnotesPopup = () => {
         className={cx(
           "justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
         )}>
-        <div className="w-auto my-6 mx-auto w-[700px]">
+        <div className="my-6 mx-auto w-[700px]">
           {/*content*/}
           <div className="p-6 space-y-4 border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
@@ -168,6 +186,20 @@ export const PatchnotesPopup = () => {
               <div className="flex flex-row">
                 {/*tabs*/}
                 <div className="flex flex-col">
+                  <div
+                    className={`w-36 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
+                      currentPatchnote === "2.1.0" ? "" : "border-r opacity-30"
+                    }`}
+                    onClick={() => {
+                      switchPatchnoteContent("2.1.0");
+                    }}>
+                    <div className="flex flex-col">
+                      <div className="font-semibold self-center">
+                        Version 2.1.0
+                      </div>
+                      <div className="opacity-75">14. Juli 2023</div>
+                    </div>
+                  </div>
                   <div
                     className={`w-36 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
                       currentPatchnote === "2.0.1" ? "" : "border-r opacity-30"
