@@ -184,6 +184,7 @@ async function downloadBasisdokumentAsPDF(
     timestamp:
       "Export: " +
       obj["versions"][obj["versions"].length - 1]["timestamp"].toLocaleString(),
+    regard: "Betreff: " + obj["regard"],
   };
   basisdokument.push(basicData);
 
@@ -324,16 +325,27 @@ async function downloadBasisdokumentAsPDF(
 
   // AUTOTABLES
   //autotable basisdokument metadata
+  let basic;
+  if (obj["regard"] === undefined) {
+    basic = [
+      [basisdokument[0].caseId],
+      [basisdokument[0].version],
+      [basisdokument[0].timestamp],
+    ];
+  } else {
+    basic = [
+      [basisdokument[0].caseId],
+      [basisdokument[0].version],
+      [basisdokument[0].timestamp],
+      [basisdokument[0].regard],
+    ];
+  }
   autoTable(doc, {
     theme: "grid",
     styles: { fontStyle: "bold" },
     head: [["Basisdokument"]],
     headStyles: { fontStyle: "bold", fontSize: 14, fillColor: [0, 102, 204] },
-    body: [
-      [basisdokument[0].caseId],
-      [basisdokument[0].version],
-      [basisdokument[0].timestamp],
-    ],
+    body: basic,
     didDrawPage: function () {
       doc.outline.add(null, "Basisdokument-Metadaten", {
         pageNumber: doc.getCurrentPageInfo().pageNumber,
@@ -818,7 +830,8 @@ export function downloadBasisdokument(
   hints: IHint[],
   coverPDF: ArrayBuffer | undefined,
   otherAuthor: string | undefined,
-  downloadNewAdditionally: boolean
+  downloadNewAdditionally: boolean,
+  regard: string | undefined
 ) {
   let basisdokumentObject: any = {};
   basisdokumentObject["fileId"] = fileId;
@@ -834,6 +847,7 @@ export function downloadBasisdokument(
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
   basisdokumentObject["otherAuthor"] = otherAuthor;
+  basisdokumentObject["regard"] = regard;
 
   const date: Date =
     basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1][

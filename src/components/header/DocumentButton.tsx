@@ -69,7 +69,8 @@ export const DocumentButton = () => {
         hints,
         undefined, //coverPDF
         undefined, //otherAuthor
-        false //download new entries additionally
+        false, //download new entries additionally
+        undefined //regard
       );
     }, 100);
     setTimeout(() => {
