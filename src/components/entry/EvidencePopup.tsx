@@ -1,4 +1,4 @@
-import { CaretDown, CaretUp, Plus, X, XCircle } from "phosphor-react";
+import { CaretDown, CaretUp, X, XCircle } from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
@@ -47,7 +47,6 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   setIsVisible,
   isPlaintiff,
   evidences,
-  backupEvidences,
   setEvidences,
 }) => {
   const { entries, setEntries, currentVersion } = useCase();
@@ -368,8 +367,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   bgColor="bg-lightGreen hover:bg-darkGreen"
                   textColor="text-darkGreen hover:text-white"
                   alternativePadding="p-1.5"
-                  icon={<Plus size={20} weight="bold" />}
-                  onClick={() => handleEvidenceAddedToCurrent()}></Button>
+                  onClick={() => handleEvidenceAddedToCurrent()}>
+                  Hinzufügen
+                </Button>
               </div>
             </div>
           </div>
