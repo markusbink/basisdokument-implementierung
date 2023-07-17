@@ -301,6 +301,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setMetaData(basisdokument.metaData);
     setCurrentVersion(basisdokument.currentVersion);
     setCaseIdContext(basisdokument.caseId);
+    setFileId(basisdokument.fileId);
   };
 
   const setContextFromEditFile = (editFile: any) => {
@@ -311,6 +312,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setIndividualSorting(editFile.individualSorting);
     setHighlightedEntries(editFile.highlightedEntries);
     setIndividualEntrySorting(editFile.individualEntrySorting);
+    setFileId(editFile.fileId);
   };
 
   const setReadonly = () => {
