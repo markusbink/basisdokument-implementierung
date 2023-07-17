@@ -1,6 +1,7 @@
 import { CaretDown, CaretUp, Envelope, Info, Notebook } from "phosphor-react";
 import { useState } from "react";
 import { AiFillGithub } from "react-icons/ai";
+import { Tooltip } from "./Tooltip";
 import { useImprint, usePatchnotes } from "../contexts";
 
 const studentData2021 = [
@@ -73,20 +74,24 @@ export const AboutDevelopersMenu = () => {
   return (
     <div>
       <div className="flex flex-row gap-2 justify-end">
-        <div
-          className="bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey items-center"
-          onClick={() => {
-            setShowImprintPopup(true);
-          }}>
-          <Info size={20} />
-        </div>
-        <div
-          className="bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey items-center"
-          onClick={() => {
-            setShowPatchnotesPopup(true);
-          }}>
-          <Notebook size={20} />
-        </div>
+        <Tooltip text="Impressum">
+          <div
+            className="bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey items-center"
+            onClick={() => {
+              setShowImprintPopup(true);
+            }}>
+            <Info size={20} />
+          </div>
+        </Tooltip>
+        <Tooltip text="Was gibt es Neues?">
+          <div
+            className="bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey items-center"
+            onClick={() => {
+              setShowPatchnotesPopup(true);
+            }}>
+            <Notebook size={20} />
+          </div>
+        </Tooltip>
         <div
           className="flex flex-row items-center justify-center gap-1 bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey"
           onClick={() => {

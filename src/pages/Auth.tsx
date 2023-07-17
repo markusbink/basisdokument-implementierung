@@ -362,11 +362,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             weitergegeben werden.
           </p>
         )}
+
         <div>
-          <p className="font-light">
-            Ich möchte ein Basisdokument:{" "}
-            <span className="text-darkRed">*</span>
-          </p>
+          <div className="flex flex-row w-full justify-between font-light">
+            <p>
+              Ich möchte ein Basisdokument:{" "}
+              <span className="text-darkRed">*</span>
+            </p>
+            <p>
+              Oder:{" "}
+              <a href="https://mandant.parteivortrag.de/">
+                Ich bin Mandant:in.
+              </a>
+            </p>
+          </div>
           <div className="flex flex-row w-auto mt-4 gap-4">
             {!isReadonly && (
               <>
@@ -400,20 +409,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                   )}>
                   Erstellen
                 </button>
+                <button
+                  onClick={() => {
+                    setReadonly();
+                  }}
+                  className={cx(
+                    "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
+                    {
+                      "border-2 border-darkGrey": usage === UsageMode.Readonly,
+                    }
+                  )}>
+                  Einsehen
+                </button>
               </>
             )}
-            <button
-              onClick={() => {
-                setReadonly();
-              }}
-              className={cx(
-                "flex items-center justify-center w-fit px-5 h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                {
-                  "border-2 border-darkGrey": usage === UsageMode.Readonly,
-                }
-              )}>
-              Einsehen (als Mandant:in)
-            </button>
           </div>
         </div>
 
