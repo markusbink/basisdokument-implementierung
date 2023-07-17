@@ -2,17 +2,16 @@ import { CaretDown, CaretUp, Plus, X, XCircle } from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
-import {
-  getEvidences,
-  getEvidenceAttachmentId,
-} from "../../util/get-evidences";
-import { useCase } from "../../contexts";
+import { getEvidences } from "../../util/get-evidences";
+import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEvidence, UserRole } from "../../types";
 import { ErrorPopup } from "../ErrorPopup";
 import { v4 as uuidv4 } from "uuid";
 import { Tooltip } from "../Tooltip";
 import cx from "classnames";
+import { getTheme } from "../../themes/getTheme";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 interface EvidencesPopupProps {
   entryId?: string;
@@ -52,11 +51,21 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   setEvidences,
 }) => {
   const { entries, setEntries, currentVersion } = useCase();
+  const { selectedTheme } = useHeaderContext();
+  const {
+    evidencesDefendant,
+    evidencesPlaintiff,
+    addNewEvidenceDefendant,
+    addNewEvidencePlaintiff,
+    updateEvidencesDefendant,
+    updateEvidencesPlaintiff,
+    removeEvidenceDefendant,
+    removeEvidencePlaintiff,
+  } = useEvidence();
   const [currentEvidences, setCurrentEvidences] =
     useState<IEvidence[]>(evidences);
   const [currentInput, setCurrentInput] = useState<string>("");
   const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
-  const [lastAttachmentId, setLastAttachmentId] = useState<string>("");
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
   const [evidenceToRemove, setEvidenceToRemove] = useState<IEvidence>();
@@ -84,98 +93,142 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       role: isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant,
       isInEditMode: false,
     };
+    // if has attachment add to plaintiff/defendant arrays for attachment id handling
     if (hasAttachment) {
-      ev.role = isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant;
-      let id: string;
-      if (lastAttachmentId) {
-        id =
-          (isPlaintiff ? "K" : "B") + (parseInt(lastAttachmentId.slice(1)) + 1);
+      if (ev.role === UserRole.Plaintiff) {
+        addNewEvidencePlaintiff(ev);
       } else {
-        id = getEvidenceAttachmentId(entries, ev.role);
+        addNewEvidenceDefendant(ev);
       }
-      ev.attachmentId = id;
-      setLastAttachmentId(id);
+      // get initial attachment id via index of new evidence in plaintiff/defendant arrays
+      let evAtt;
+      if (ev.role === UserRole.Plaintiff) {
+        evAtt = evidencesPlaintiff.find((e) => e!.id === ev.id);
+      } else {
+        evAtt = evidencesDefendant.find((e) => e!.id === ev.id);
+      }
+      setCurrentEvidences([...currentEvidences, evAtt!]);
+    } else {
+      // if no attachment, no adding to plaintiff/defendant arrays is needed
+      setCurrentEvidences([...currentEvidences, ev]);
     }
-    setCurrentEvidences([...currentEvidences, ev]);
     setCurrentInput("");
     setHasAttachment(false);
   };
 
+  // if existing evidence is added to entry, no handling of plaintiff/defendant arrays is needed
   const addExisting = (input: IEvidence) => {
     setCurrentEvidences([...currentEvidences, input]);
     setCurrentInput("");
   };
 
+  // check if evidence would be removed only from entry or whole document
   const removeEvidence = (evidence: IEvidence) => {
+    // set evidence for possible removal
     setEvidenceToRemove(evidence);
+    // open edit error if evidence would be removed from whole document
     if (!hasReferencesInOtherEntries(evidence.id)) {
       setIsEditErrorVisible(true);
+    } else {
+      removeFromEntry(evidence);
     }
   };
 
+  // handle input for adjusted name of evidence
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     evidenceToEdit: IEvidence
   ) => {
     const { value } = e.target;
-    const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences.map((ev) => {
+    if (entries.length > 0) {
+      const newEntries = entries.map((entry) => {
+        entry.evidences = entry.evidences?.map((ev) => {
+          if (ev.id === evidenceToEdit.id) {
+            ev.name = value;
+          } else {
+            currentEvidences.forEach((ev) => {
+              if (ev.id === evidenceToEdit.id) {
+                ev.name = value;
+              }
+            });
+          }
+          if (ev.hasAttachment) {
+            if (ev.role === UserRole.Plaintiff) {
+              updateEvidencesPlaintiff(ev);
+            } else {
+              updateEvidencesDefendant(ev);
+            }
+          }
+          return ev;
+        });
+        return entry;
+      });
+      setEntries(newEntries);
+    } else {
+      currentEvidences.forEach((ev) => {
         if (ev.id === evidenceToEdit.id) {
           ev.name = value;
         }
-        return ev;
       });
-      return entry;
-    });
-    setEntries(newEntries);
-  };
-
-  const removeFromEntry = () => {
-    const currentId = evidenceToRemove
-      ? parseInt(evidenceToRemove.attachmentId!.slice(1))
-      : -1;
-
-    if (evidenceToRemove?.version === currentVersion) {
-      let updatedEvidences = currentEvidences.filter(
-        (evidence) => evidence.id !== evidenceToRemove?.id
-      );
-      updatedEvidences = updatedEvidences.map((evidence) => {
-        if (
-          evidence.version === currentVersion &&
-          evidence.hasAttachment &&
-          evidence.isCurrentEntry
-        ) {
-          if (
-            currentId !== -1 &&
-            parseInt(evidence.attachmentId!.slice(1)) > currentId
-          ) {
-            const newId = parseInt(evidence.attachmentId!.slice(1)) - 1;
-            evidence.attachmentId = isPlaintiff ? "K" + newId : "B" + newId;
-          }
-        }
-        return evidence;
-      });
-      setCurrentEvidences(updatedEvidences);
-      setLastAttachmentId(getLastAttachemntId(updatedEvidences));
-    } else {
-      const filteredEvidences = currentEvidences.filter(
-        (evidence) => evidence.id !== evidenceToRemove?.id
-      );
-      setCurrentEvidences(filteredEvidences);
-      setLastAttachmentId(getLastAttachemntId(filteredEvidences));
+      setCurrentEvidences([...currentEvidences]);
     }
   };
 
-  const getLastAttachemntId = (newEvidences: IEvidence[]): string => {
-    let lastAttachmentId: string | undefined;
-    for (let i = 0; i < newEvidences.length; i++) {
-      if (newEvidences[i].attachmentId) {
-        lastAttachmentId = newEvidences[i].attachmentId;
+  // handle input for individual attachment id
+  const handleAttachmentIdChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    evidenceToEdit: IEvidence
+  ) => {
+    const { value } = e.target;
+    if (entries.length > 0) {
+      const newEntries = entries.map((entry) => {
+        entry.evidences = entry.evidences?.map((ev) => {
+          if (ev.id === evidenceToEdit.id) {
+            ev.attachmentId = value;
+          } else {
+            currentEvidences.forEach((ev) => {
+              if (ev.id === evidenceToEdit.id) {
+                ev.attachmentId = value;
+              }
+            });
+          }
+          if (ev.hasAttachment) {
+            if (ev.role === UserRole.Plaintiff) {
+              updateEvidencesPlaintiff(ev);
+            } else {
+              updateEvidencesDefendant(ev);
+            }
+          }
+          return ev;
+        });
+        return entry;
+      });
+      setEntries(newEntries);
+    } else {
+      currentEvidences.forEach((ev) => {
+        if (ev.id === evidenceToEdit.id) {
+          ev.attachmentId = value;
+        }
+      });
+      setCurrentEvidences([...currentEvidences]);
+    }
+  };
+
+  const removeFromEntry = (evidenceToDelete: IEvidence) => {
+    const filteredEvidences = currentEvidences.filter(
+      (evidence) => evidence.id !== evidenceToDelete?.id
+    );
+    setCurrentEvidences(filteredEvidences);
+    if (!hasReferencesInOtherEntries(evidenceToDelete.id)) {
+      if (evidenceToDelete.role === UserRole.Plaintiff) {
+        removeEvidencePlaintiff(evidenceToDelete);
+      } else {
+        removeEvidenceDefendant(evidenceToDelete);
       }
     }
-    return lastAttachmentId ? lastAttachmentId : "";
   };
 
+  // click on "save":
   const addEvidence = () => {
     const updatedEvidences = currentEvidences.map((evidence) => {
       evidence.isCurrentEntry = false;
@@ -188,7 +241,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const hasReferencesInOtherEntries = (id: string) => {
     for (let i = 0; i < entries.length; i++) {
       if (entryId && entryId !== entries[i].id) {
-        for (let j = 0; j < entries[i].evidences.length; j++) {
+        for (let j = 0; j < entries[i].evidences?.length; j++) {
           if (
             entries[i].evidences[j] &&
             entries[i].evidences[j].hasAttachment &&
@@ -229,14 +282,14 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       <div className="fixed inset-0 flex flex-col justify-center items-center z-50">
         <div
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-            p-8 bg-white rounded-lg content-center shadow-lg space-y-4 w-full max-w-[600px]">
+            p-8 bg-white rounded-lg content-center shadow-lg space-y-8 w-full max-w-[600px]">
           <div className="flex items-start justify-between rounded-lg ">
             <h3>Beweise hinzufügen</h3>
             <div>
               <button
                 onClick={() => {
                   setIsVisible(false);
-                  if (backupEvidences) setEvidences(backupEvidences);
+                  //if (backupEvidences) setEvidences(backupEvidences);
                 }}
                 className="text-darkGrey bg-offWhite p-1 rounded-md hover:bg-lightGrey">
                 <X size={24} />
@@ -244,13 +297,12 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
             </div>
           </div>
           <span className="text-sm">
-            Fügen Sie Beweise zum Beweisbereich dieses Beitrags hinzu, indem Sie
-            eine kurze Beschreibung angeben. Sie können dabei auch auf Anlagen
-            verweisen, welche Sie später mit versenden. Beweise, die hier
-            hinzugefügt wurden, können dann auch in anderen Beiträgen
+            Fügen Sie Beweise zu diesem Beitrag hinzu. Sie können dabei auch auf
+            Anlagen verweisen, welche Sie später mit versenden. Beweise, die
+            hier hinzugefügt wurden, können auch in anderen Beiträgen
             referenziert werden.
           </span>
-          <div className="flex flex-col pr-6">
+          <div className="flex flex-col mr-2">
             <div className="flex flex-row w-full items-center justify-between gap-1">
               <div className="w-full" ref={inputRef}>
                 <input
@@ -313,95 +365,154 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               </div>
               <div className="items-center flex my-1">
                 <Button
-                  bgColor="bg-offWhite hover:bg-lightGrey"
+                  bgColor="bg-lightGreen hover:bg-darkGreen"
+                  textColor="text-darkGreen hover:text-white"
                   alternativePadding="p-1.5"
-                  icon={<Plus size={20} color="grey" weight="regular" />}
+                  icon={<Plus size={20} weight="bold" />}
                   onClick={() => handleEvidenceAddedToCurrent()}></Button>
               </div>
             </div>
           </div>
-          <div className="pt-4">
-            <span>
-              {currentEvidences && currentEvidences.length > 0
-                ? "Beweise"
-                : "Bisher keine Beweise"}{" "}
-              zu diesem Beitrag
-            </span>
-            <div className="flex flex-col gap-1 w-full max-h-[20vh] overflow-auto mt-2">
-              {currentEvidences.map((ev, index) => (
-                <div className="flex flex-row">
-                  <div className="flex pr-1 flex-col">
-                    {moveEvidenceButtons.map((button, btnIndex) => (
-                      <button
-                        key={`${btnIndex}-${button.title}`}
-                        onClick={() => {
-                          handleMoveEvidence(button.action, index);
-                        }}
-                        className={cx(
-                          "flex items-center py-1 px-1 hover:bg-mediumGrey text-darkGrey hover:text-white rounded transition-all",
-                          {
-                            // Disabled buttons when cannot move up or down
-                            "cursor-default hover:bg-transparent hover:text-darkGrey opacity-50":
-                              (!(index > 0) &&
-                                button.action === Direction.Up) ||
-                              (!(index < currentEvidences.length - 1) &&
-                                button.action === Direction.Down),
-                          }
-                        )}>
-                        {button.icon}
-                      </button>
-                    ))}
-                  </div>
-                  <div
-                    className="flex flex-row items-center px-2 rounded-lg py-1 bg-offWhite justify-between w-full"
-                    key={index}>
-                    {ev.version === currentVersion ? (
-                      <Tooltip
-                        className="w-full"
-                        text="Doppelklick, um zu Editieren">
+          <div
+            className={cx("border-[1px] rounded-xl shadow mr-2", {
+              [`border-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
+                isPlaintiff,
+              [`border-${getTheme(selectedTheme)?.secondaryDefendant}`]:
+                !isPlaintiff,
+            })}>
+            <div
+              className={`flex items-center justify-between rounded-t-lg px-6 py-3 cursor-pointer select-none ${
+                isPlaintiff
+                  ? `bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                      getTheme(selectedTheme)?.primaryPlaintiff
+                    }`
+                  : `bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                      getTheme(selectedTheme)?.primaryDefendant
+                    }`
+              }`}>
+              <div>
+                <i>Vorschau</i>
+              </div>
+            </div>
+            <div className="flex border-t border-lightGrey rounded-b-lg py-2 items-center gap-2 justify-between mt-4 mb-2 mx-6">
+              {currentEvidences.length <= 0 ? (
+                <div className="flex flex-col gap-2 items-center">
+                  <span className="italic">Keine Beweise</span>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-1 w-full max-h-56 overflow-auto">
+                  <span className="ml-1 font-bold">
+                    {currentEvidences.length === 1 ? "Beweis:" : "Beweise:"}
+                  </span>
+                  <div className="flex flex-col flex-wrap gap-1">
+                    {currentEvidences.map((ev, index) => (
+                      <div key={index} className="flex flex-row">
+                        <div className="flex pr-1 flex-col">
+                          {moveEvidenceButtons.map((button, btnIndex) => (
+                            <button
+                              key={`${btnIndex}-${button.title}`}
+                              onClick={() => {
+                                handleMoveEvidence(button.action, index);
+                              }}
+                              className={cx(
+                                "flex items-center py-1 px-1 hover:bg-mediumGrey text-darkGrey hover:text-white rounded transition-all",
+                                {
+                                  // Disabled buttons when cannot move up or down
+                                  "cursor-default hover:bg-transparent hover:text-darkGrey opacity-50":
+                                    (!(index > 0) &&
+                                      button.action === Direction.Up) ||
+                                    (!(index < currentEvidences.length - 1) &&
+                                      button.action === Direction.Down),
+                                }
+                              )}>
+                              {button.icon}
+                            </button>
+                          ))}
+                        </div>
                         <div
-                          className="flex flex-row gap-2 items-center"
-                          onDoubleClick={() => {
-                            setEvidenceEditMode({
-                              evidence: ev,
-                              value: true,
-                            });
-                          }}>
-                          <span>{index + 1 + "."}</span>
-                          {evidenceEditMode?.value &&
-                          evidenceEditMode?.evidence === ev ? (
-                            <>
-                              <input
-                                autoFocus={true}
-                                type="text"
-                                name="name"
-                                placeholder="Beschreibung..."
-                                className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
-                                value={ev.name}
-                                onBlur={() => {
+                          className="flex flex-row items-center px-2 rounded-lg py-1 bg-offWhite justify-between w-full"
+                          key={index}>
+                          {ev.version === currentVersion ? (
+                            <Tooltip
+                              className="w-full"
+                              text="Doppelklick, um zu Editieren - Enter, um zu Bestätigen">
+                              <div
+                                className="flex flex-row gap-2 items-center"
+                                onDoubleClick={() => {
                                   setEvidenceEditMode({
                                     evidence: ev,
-                                    value: false,
+                                    value: true,
                                   });
-                                }}
-                                onChange={(e) => handleNameChange(e, ev)}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") {
-                                    setEvidenceEditMode({
-                                      evidence: ev,
-                                      value: false,
-                                    });
-                                  }
-                                }}
-                              />
-                              {ev.hasAttachment && (
-                                <span>
-                                  <b> als Anlage {ev.attachmentId}</b>
-                                </span>
-                              )}
-                            </>
+                                }}>
+                                <span className="w-4">{index + 1 + "."}</span>
+                                {evidenceEditMode?.value &&
+                                evidenceEditMode?.evidence === ev ? (
+                                  <>
+                                    <input
+                                      autoFocus={true}
+                                      type="text"
+                                      name="name"
+                                      placeholder="Beschreibung..."
+                                      className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] border-slate-500"
+                                      value={ev.name}
+                                      onChange={(e) => handleNameChange(e, ev)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                          setEvidenceEditMode({
+                                            evidence: ev,
+                                            value: false,
+                                          });
+                                        }
+                                      }}
+                                    />
+                                    {ev.hasAttachment && (
+                                      <span className="flex flex-row">
+                                        <b>
+                                          {" "}
+                                          als Anlage
+                                          <input
+                                            autoFocus={false}
+                                            type="text"
+                                            name="name"
+                                            placeholder="Anlagennummer"
+                                            className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] border-slate-500 w-14"
+                                            value={ev.attachmentId}
+                                            onChange={(e) =>
+                                              handleAttachmentIdChange(e, ev)
+                                            }
+                                            onKeyDown={(e) => {
+                                              if (e.key === "Enter") {
+                                                setEvidenceEditMode({
+                                                  evidence: ev,
+                                                  value: false,
+                                                });
+                                              }
+                                            }}
+                                          />
+                                        </b>
+                                      </span>
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    {ev.hasAttachment ? (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
+                                        <b> als Anlage {ev.attachmentId}</b>
+                                      </span>
+                                    ) : (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
+                                      </span>
+                                    )}
+                                  </>
+                                )}
+                              </div>
+                            </Tooltip>
                           ) : (
-                            <>
+                            <div className="flex flex-row gap-2 items-center">
+                              <span className="w-4">{index + 1 + "."}</span>
+
                               {ev.hasAttachment ? (
                                 <span className="break-words font-medium">
                                   {ev.name}
@@ -412,50 +523,35 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                   {ev.name}
                                 </span>
                               )}
-                            </>
+                            </div>
                           )}
+                          <div>
+                            <XCircle
+                              size={20}
+                              weight="fill"
+                              className="cursor-pointer"
+                              onClick={() => {
+                                removeEvidence(ev);
+                              }}
+                            />
+                          </div>
                         </div>
-                      </Tooltip>
-                    ) : (
-                      <div className="flex flex-row gap-2 items-center">
-                        <span>{index + 1 + "."}</span>
-
-                        {ev.hasAttachment ? (
-                          <span className="break-words font-medium">
-                            {ev.name}
-                            <b> als Anlage {ev.attachmentId}</b>
-                          </span>
-                        ) : (
-                          <span className="break-words font-medium">
-                            {ev.name}
-                          </span>
-                        )}
                       </div>
-                    )}
-                    <div>
-                      <XCircle
-                        size={20}
-                        weight="fill"
-                        className="cursor-pointer"
-                        onClick={() => {
-                          removeEvidence(ev);
-                        }}
-                      />
-                    </div>
+                    ))}
                   </div>
                 </div>
-              ))}
+              )}
             </div>
-
-            <div className="flex items-center justify-end pt-6">
-              <button
-                className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
-                onClick={() => {
-                  addEvidence();
-                }}>
-                Gelistete Beweise hinzufügen
-              </button>
-            </div>
+          </div>
+          <div className="flex items-center justify-end">
+            <button
+              className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
+              onClick={() => {
+                addEvidence();
+              }}>
+              {(currentEvidences.length === 1 ? "Beweis" : "Beweise") +
+                " speichern"}
+            </button>
           </div>
         </div>
       </div>
@@ -463,11 +559,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         <div className="flex flex-col items-center justify-center space-y-6">
           <p className="text-center text-base">
             Dieser Beweis wird in keinem anderen Beitrag referenziert. Wenn Sie
-            ihn also aus dem Beweisbereich dieses Beitrags löschen, wird er
-            zunächst für das ganze Basisdokument gelöscht.
+            ihn aus diesem Beitrag löschen, wird er für das gesamte
+            Basisdokument entfernt.
           </p>
           <p className="text-center text-base">
-            Um den Beweis bei einem anderen Beitrag anzuhängen, müssen Sie den
+            Um den Beweis zu einem anderen Beitrag zu referenzieren, müssen Sie
             ihn dort erneut erstellen.
           </p>
           <div className="grid grid-cols-2 gap-4">
@@ -483,7 +579,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
-                removeFromEntry();
+                removeFromEntry(evidenceToRemove!);
                 setIsEditErrorVisible(false);
               }}>
               Löschen
