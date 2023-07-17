@@ -65,6 +65,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const [isReadonly] = useState<boolean>(
     window.location.hostname.includes("mandant")
   );
+  const [isMatchingFiles, setIsMatchingFiles] = useState<boolean>(true);
 
   // Refs
   const basisdokumentFileUploadRef = useRef<HTMLInputElement>(null);
@@ -190,6 +191,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           setErrorText(
             "Die hochgeladene Bearbeitungsdatei passt nicht zum hochgeladenen Basisdokument."
           );
+          setIsMatchingFiles(false);
           inputIsValid = false;
         }
       }
@@ -526,6 +528,10 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                       {basisdokumentFilename}
                       <button
                         onClick={() => {
+                          if (!isMatchingFiles) {
+                            setErrorText("");
+                            setIsMatchingFiles(true);
+                          }
                           basisdokumentFileUploadRef?.current?.click();
                         }}
                         className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
@@ -570,6 +576,10 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                         {editFilename}
                         <button
                           onClick={() => {
+                            if (!isMatchingFiles) {
+                              setErrorText("");
+                              setIsMatchingFiles(true);
+                            }
                             editFileUploadRef?.current?.click();
                           }}
                           className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
