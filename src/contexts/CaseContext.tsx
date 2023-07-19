@@ -10,6 +10,7 @@ import {
   IEntry,
   IHighlightedEntry,
   IMetaData,
+  IIntroduction,
   IndividualEntrySortingEntry,
   UserRole,
 } from "../types";
@@ -20,6 +21,8 @@ interface ICaseContext {
   setCaseId: Dispatch<SetStateAction<string>>;
   metaData: IMetaData;
   setMetaData: Dispatch<SetStateAction<IMetaData>>;
+  introduction: IIntroduction;
+  setIntroduction: Dispatch<SetStateAction<IMetaData>>;
   entries: IEntry[];
   setEntries: Dispatch<SetStateAction<IEntry[]>>;
   groupedEntries: { [key: string]: { [key: string]: IEntry[] } };
@@ -68,6 +71,10 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
   const [entries, setEntries] = useState<IEntry[]>([]);
   const [caseId, setCaseId] = useState<string>("");
   const [metaData, setMetaData] = useState<IMetaData>({
+    plaintiff: "",
+    defendant: "",
+  });
+  const [introduction, setIntroduction] = useState<IIntroduction>({
     plaintiff: "",
     defendant: "",
   });
@@ -179,6 +186,8 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
         setCurrentVersion,
         metaData,
         setMetaData,
+        introduction,
+        setIntroduction,
         entries,
         setEntries,
         groupedEntries,

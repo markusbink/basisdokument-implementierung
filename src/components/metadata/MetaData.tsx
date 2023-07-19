@@ -18,39 +18,51 @@ interface MetaDataProps {
 }
 
 export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [isBodyOpen, setIsBodyOpen] = useState<boolean>(true);
+  const [isRubrumEditing, setIsRubrumEditing] = useState<boolean>(false);
+  const [isIntroductionEditing, setIsIntroductionEditing] =
+    useState<boolean>(false);
+  const [isRubrumEditErrorVisible, setIsRubrumEditErrorVisible] =
+    useState<boolean>(false);
+  const [isIntroductionEditErrorVisible, setIsIntroductionEditErrorVisible] =
+    useState<boolean>(false);
+  const [isMetaDataMenuOpen, setIsMetaDataMenuOpen] = useState<boolean>(false);
+  const [isMetaDataBodyOpen, setIsMetaDataBodyOpen] = useState<boolean>(true);
   const { user } = useUser();
   const { metaData, setMetaData } = useCase();
+  const { introduction, setIntroduction } = useCase();
   const menuRef = useRef(null);
-  useOutsideClick(menuRef, () => setIsMenuOpen(false));
+  useOutsideClick(menuRef, () => {
+    setIsMetaDataMenuOpen(false);
+  });
 
   const { selectedTheme } = useHeaderContext();
 
   const isPlaintiff = owner === UserRole.Plaintiff;
   const isJudge = user?.role === UserRole.Judge;
   const canEdit = isJudge || user?.role === owner;
-  const content = isPlaintiff ? metaData?.plaintiff : metaData?.defendant;
+  const rubrumContent = isPlaintiff ? metaData?.plaintiff : metaData?.defendant;
+  const introductionContent = isPlaintiff
+    ? introduction?.plaintiff
+    : introduction?.defendant;
 
-  const toggleMenu = (e: React.MouseEvent) => {
+  const toggleMetaDataMenu = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsMenuOpen(!isMenuOpen);
+    setIsMetaDataMenuOpen(!isMetaDataMenuOpen);
   };
 
   const toggleMetaData = () => {
-    setIsBodyOpen(!isBodyOpen);
-    setIsEditing(false);
+    setIsMetaDataBodyOpen(!isMetaDataBodyOpen);
+    setIsRubrumEditing(false);
+    setIsIntroductionEditing(false);
   };
 
-  const editMetaData = () => {
-    setIsEditing(!isEditing);
-    setIsBodyOpen(true);
-    setIsMenuOpen(false);
+  const editRubrum = () => {
+    setIsRubrumEditing(!isRubrumEditing);
+    setIsMetaDataBodyOpen(true);
+    setIsMetaDataMenuOpen(false);
   };
 
-  const updateMetaData = (plainText: string, rawHtml: string) => {
+  const updateRubrum = (plainText: string, rawHtml: string) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
       return;
@@ -65,7 +77,31 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
       }
       return newState;
     });
-    setIsEditing(false);
+    setIsRubrumEditing(false);
+  };
+
+  const editIntroduction = () => {
+    setIsIntroductionEditing(!isIntroductionEditing);
+    setIsMetaDataBodyOpen(true);
+    setIsMetaDataMenuOpen(false);
+  };
+
+  const updateIntroduction = (plainText: string, rawHtml: string) => {
+    if (plainText.length === 0) {
+      toast("Bitte geben Sie einen Text ein.", { type: "error" });
+      return;
+    }
+
+    setIntroduction((prevState) => {
+      const newState = { ...prevState };
+      if (isPlaintiff) {
+        newState.plaintiff = rawHtml;
+      } else {
+        newState.defendant = rawHtml;
+      }
+      return newState;
+    });
+    setIsIntroductionEditing(false);
   };
 
   return (
@@ -92,7 +128,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           size="sm"
           onClick={toggleMetaData}
           icon={
-            isBodyOpen ? (
+            isMetaDataBodyOpen ? (
               <CaretUp size={14} weight="bold" />
             ) : (
               <CaretDown size={14} weight="bold" />
@@ -107,29 +143,36 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
                 className={cx("relative", {
                   [`bg-${getTheme(selectedTheme)?.primaryPlaintiff} text-${
                     getTheme(selectedTheme)?.secondaryPlaintiff
-                  }`]: isPlaintiff && isMenuOpen,
+                  }`]: isPlaintiff && isMetaDataMenuOpen,
                   [`bg-${getTheme(selectedTheme)?.primaryDefendant} text-${
                     getTheme(selectedTheme)?.secondaryDefendant
-                  }`]: !isPlaintiff && isMenuOpen,
+                  }`]: !isPlaintiff && isMetaDataMenuOpen,
                   [`hover-text-${getTheme(selectedTheme)?.secondaryPlaintiff}`]:
                     isPlaintiff,
                   [`hover-text-${getTheme(selectedTheme)?.secondaryDefendant}`]:
                     !isPlaintiff,
                 })}
-                onClick={toggleMenu}
+                onClick={toggleMetaDataMenu}
                 isPlaintiff={isPlaintiff}>
                 <DotsThree size={20} />
               </Action>
             </Tooltip>
-            {isMenuOpen ? (
+            {isMetaDataMenuOpen ? (
               <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[150px] shadow-lg z-50 text-sm">
                 <>
                   <li
                     tabIndex={0}
-                    onClick={editMetaData}
+                    onClick={editRubrum}
                     className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
                     <Pencil size={20} />
-                    Bearbeiten
+                    Rubrum bearbeiten
+                  </li>
+                  <li
+                    tabIndex={0}
+                    onClick={editIntroduction}
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
+                    <Pencil size={20} />
+                    Einführung bearbeiten
                   </li>
                 </>
               </ul>
@@ -137,102 +180,201 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           </div>
         )}
       </div>
-      {isBodyOpen && (
-        <div
-          className={cx(
-            "flex flex-col rounded-lg shadow text-sm overflow-hidden",
-            {
-              [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
-                getTheme(selectedTheme)?.primaryPlaintiff
-              }`]: isPlaintiff,
-              [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
-                getTheme(selectedTheme)?.primaryDefendant
-              }`]: !isPlaintiff,
-            }
-          )}>
-          {isEditing ? (
-            <MetaDataForm
-              defaultContent={content}
-              onAbort={(plainText, rawHtml) => {
-                setIsEditErrorVisible(true);
-              }}
-              onSave={(plainText, rawHtml) => {
-                updateMetaData(plainText, rawHtml);
-              }}
-            />
-          ) : (
-            <MetaDataBody isPlaintiff={isPlaintiff}>
-              {content ? (
-                <p dangerouslySetInnerHTML={{ __html: content }} />
-              ) : (
-                <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
-                  <p className="text-sm">
-                    Bisher wurde noch kein Rubrum hinterlegt.
-                  </p>
-                  {canEdit && (
-                    <Button
-                      size="sm"
-                      bgColor={cx({
-                        [`bg-${
-                          getTheme(selectedTheme)?.primaryPlaintiff
-                        } hover-bg-25-${
-                          getTheme(selectedTheme)?.primaryPlaintiff
-                        }`]: isPlaintiff,
-                        [`bg-${
-                          getTheme(selectedTheme)?.primaryDefendant
-                        } hover-bg-25-${
-                          getTheme(selectedTheme)?.primaryDefendant
-                        }`]: !isPlaintiff,
-                      })}
-                      textColor={cx({
-                        [`text-${
-                          getTheme(selectedTheme)?.secondaryPlaintiff
-                        } hover-text-${
-                          getTheme(selectedTheme)?.primaryPlaintiff
-                        }`]: isPlaintiff,
-                        [`text-${
-                          getTheme(selectedTheme)?.secondaryDefendant
-                        } hover-text-${
-                          getTheme(selectedTheme)?.primaryDefendant
-                        }`]: !isPlaintiff,
-                      })}
-                      onClick={() => setIsEditing(true)}
-                      icon={<Plus size={18} />}>
-                      Hinzufügen
-                    </Button>
-                  )}
+      {isMetaDataBodyOpen && (
+        <>
+          <div
+            className={cx(
+              "flex flex-col rounded-lg shadow text-sm overflow-hidden",
+              {
+                [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                  getTheme(selectedTheme)?.primaryPlaintiff
+                }`]: isPlaintiff,
+                [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                  getTheme(selectedTheme)?.primaryDefendant
+                }`]: !isPlaintiff,
+              }
+            )}>
+            {isRubrumEditing ? (
+              <MetaDataForm
+                defaultContent={rubrumContent}
+                onAbort={(plainText, rawHtml) => {
+                  setIsRubrumEditErrorVisible(true);
+                }}
+                onSave={(plainText, rawHtml) => {
+                  updateRubrum(plainText, rawHtml);
+                }}
+              />
+            ) : (
+              <MetaDataBody isPlaintiff={isPlaintiff}>
+                {rubrumContent ? (
+                  <p dangerouslySetInnerHTML={{ __html: rubrumContent }} />
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
+                    <p className="text-sm">
+                      Bisher wurde noch kein Rubrum hinterlegt.
+                    </p>
+                    {canEdit && (
+                      <Button
+                        size="sm"
+                        bgColor={cx({
+                          [`bg-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          } hover-bg-25-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          }`]: isPlaintiff,
+                          [`bg-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          } hover-bg-25-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          }`]: !isPlaintiff,
+                        })}
+                        textColor={cx({
+                          [`text-${
+                            getTheme(selectedTheme)?.secondaryPlaintiff
+                          } hover-text-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          }`]: isPlaintiff,
+                          [`text-${
+                            getTheme(selectedTheme)?.secondaryDefendant
+                          } hover-text-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          }`]: !isPlaintiff,
+                        })}
+                        onClick={() => setIsRubrumEditing(true)}
+                        icon={<Plus size={18} />}>
+                        Hinzufügen
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </MetaDataBody>
+            )}
+            <ErrorPopup isVisible={isRubrumEditErrorVisible}>
+              <div className="flex flex-col items-center justify-center space-y-8">
+                <p className="text-center text-base">
+                  Sind Sie sicher, dass Sie Ihre Änderungen verwerfen und somit{" "}
+                  <strong>nicht</strong> speichern möchten?
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    bgColor="bg-lightGrey"
+                    textColor="text-mediumGrey font-bold"
+                    onClick={() => {
+                      setIsRubrumEditErrorVisible(false);
+                    }}>
+                    Abbrechen
+                  </Button>
+                  <Button
+                    bgColor="bg-lightRed"
+                    textColor="text-darkRed font-bold"
+                    onClick={() => {
+                      setIsRubrumEditErrorVisible(false);
+                      setIsRubrumEditing(false);
+                    }}>
+                    Verwerfen
+                  </Button>
                 </div>
-              )}
-            </MetaDataBody>
-          )}
-          <ErrorPopup isVisible={isEditErrorVisible}>
-            <div className="flex flex-col items-center justify-center space-y-8">
-              <p className="text-center text-base">
-                Sind Sie sicher, dass Sie Ihre Änderungen verwerfen und somit{" "}
-                <strong>nicht</strong> speichern möchten?
-              </p>
-              <div className="grid grid-cols-2 gap-4">
-                <Button
-                  bgColor="bg-lightGrey"
-                  textColor="text-mediumGrey font-bold"
-                  onClick={() => {
-                    setIsEditErrorVisible(false);
-                  }}>
-                  Abbrechen
-                </Button>
-                <Button
-                  bgColor="bg-lightRed"
-                  textColor="text-darkRed font-bold"
-                  onClick={() => {
-                    setIsEditErrorVisible(false);
-                    setIsEditing(false);
-                  }}>
-                  Verwerfen
-                </Button>
               </div>
-            </div>
-          </ErrorPopup>
-        </div>
+            </ErrorPopup>
+          </div>
+          <div
+            className={cx(
+              "flex flex-col rounded-lg shadow text-sm overflow-hidden",
+              {
+                [`bg-${getTheme(selectedTheme)?.secondaryPlaintiff} text-${
+                  getTheme(selectedTheme)?.primaryPlaintiff
+                }`]: isPlaintiff,
+                [`bg-${getTheme(selectedTheme)?.secondaryDefendant} text-${
+                  getTheme(selectedTheme)?.primaryDefendant
+                }`]: !isPlaintiff,
+              }
+            )}>
+            {isIntroductionEditing ? (
+              <MetaDataForm
+                defaultContent={introductionContent}
+                onAbort={(plainText, rawHtml) => {
+                  setIsIntroductionEditErrorVisible(true);
+                }}
+                onSave={(plainText, rawHtml) => {
+                  updateIntroduction(plainText, rawHtml);
+                }}
+              />
+            ) : (
+              <MetaDataBody isPlaintiff={isPlaintiff}>
+                {introductionContent ? (
+                  <p
+                    dangerouslySetInnerHTML={{ __html: introductionContent }}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
+                    <p className="text-sm">
+                      Bisher wurde noch keine Einführung hinterlegt.
+                    </p>
+                    {canEdit && (
+                      <Button
+                        size="sm"
+                        bgColor={cx({
+                          [`bg-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          } hover-bg-25-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          }`]: isPlaintiff,
+                          [`bg-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          } hover-bg-25-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          }`]: !isPlaintiff,
+                        })}
+                        textColor={cx({
+                          [`text-${
+                            getTheme(selectedTheme)?.secondaryPlaintiff
+                          } hover-text-${
+                            getTheme(selectedTheme)?.primaryPlaintiff
+                          }`]: isPlaintiff,
+                          [`text-${
+                            getTheme(selectedTheme)?.secondaryDefendant
+                          } hover-text-${
+                            getTheme(selectedTheme)?.primaryDefendant
+                          }`]: !isPlaintiff,
+                        })}
+                        onClick={() => setIsIntroductionEditing(true)}
+                        icon={<Plus size={18} />}>
+                        Hinzufügen
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </MetaDataBody>
+            )}
+            <ErrorPopup isVisible={isIntroductionEditErrorVisible}>
+              <div className="flex flex-col items-center justify-center space-y-8">
+                <p className="text-center text-base">
+                  Sind Sie sicher, dass Sie Ihre Änderungen verwerfen und somit{" "}
+                  <strong>nicht</strong> speichern möchten?
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    bgColor="bg-lightGrey"
+                    textColor="text-mediumGrey font-bold"
+                    onClick={() => {
+                      setIsIntroductionEditErrorVisible(false);
+                    }}>
+                    Abbrechen
+                  </Button>
+                  <Button
+                    bgColor="bg-lightRed"
+                    textColor="text-darkRed font-bold"
+                    onClick={() => {
+                      setIsIntroductionEditErrorVisible(false);
+                      setIsIntroductionEditing(false);
+                    }}>
+                    Verwerfen
+                  </Button>
+                </div>
+              </div>
+            </ErrorPopup>
+          </div>
+        </>
       )}
     </div>
   );

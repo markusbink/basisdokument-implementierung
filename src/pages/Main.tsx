@@ -24,8 +24,14 @@ export const Main: React.FC = () => {
   const { showJudgeHintPopup, hints } = useHints();
   const { showNotePopup, notes } = useNotes();
   const { isExportPopupOpen } = useExport();
-  const { caseId, currentVersion, metaData, entries, highlightedEntries } =
-    useCase();
+  const {
+    caseId,
+    currentVersion,
+    metaData,
+    introduction,
+    entries,
+    highlightedEntries,
+  } = useCase();
   const { sectionList, individualSorting } = useSection();
   const { versionHistory, colorSelection } = useHeaderContext();
   const { bookmarks } = useBookmarks();
@@ -41,6 +47,7 @@ export const Main: React.FC = () => {
           currentVersion={currentVersion}
           versionHistory={versionHistory}
           metaData={metaData}
+          introduction={introduction}
           entries={entries}
           sectionList={sectionList}
           hints={hints}

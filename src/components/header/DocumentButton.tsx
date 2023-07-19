@@ -39,6 +39,7 @@ export const DocumentButton = () => {
     caseId,
     currentVersion,
     metaData,
+    introduction,
     entries,
     individualEntrySorting,
     highlightedEntries,
@@ -62,6 +63,7 @@ export const DocumentButton = () => {
         currentVersion,
         versionHistory,
         metaData,
+        introduction,
         entries,
         sectionList,
         hints,
@@ -153,9 +155,7 @@ export const DocumentButton = () => {
                 })}
               </div>
             </div>
-            {user?.role !== UserRole.Client && (
-              <DownloadBasisdokumentButton/>
-            )}
+            {user?.role !== UserRole.Client && <DownloadBasisdokumentButton />}
             <DropdownMenu.Item
               onClick={() => {
                 if (user?.role === UserRole.Client) {

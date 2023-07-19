@@ -74,6 +74,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setCaseId: setCaseIdContext,
     setEntries,
     setMetaData,
+    setIntroduction,
     setCurrentVersion,
     setHighlightedEntries,
     setIndividualEntrySorting,
@@ -273,6 +274,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
     setMetaData(basisdokument.metaData);
+    setIntroduction(basisdokument.introduction);
     setCurrentVersion(basisdokument.currentVersion);
     setCaseIdContext(basisdokument.caseId);
   };
@@ -305,7 +307,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   return (
     <div className="overflow-scroll h-full">
-    {showPatchnotesPopup ? <PatchnotesPopup /> : null}
+      {showPatchnotesPopup ? <PatchnotesPopup /> : null}
       <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex-col justify-center h-auto overflow-scroll no-scrollbar">
         <AboutDevelopersMenu />
         <h1 className="text-3xl font-bold">Das Basisdokument</h1>
