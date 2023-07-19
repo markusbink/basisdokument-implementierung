@@ -7,6 +7,7 @@ import {
   ExportProvider,
   HeaderProvider,
   HintProvider,
+  ImprintProvider,
   NoteProvider,
   PatchnotesProvider,
   SectionProvider,
@@ -50,13 +51,15 @@ export const App = () => {
                           <BookmarkProvider>
                             <ExportProvider>
                               <PatchnotesProvider>
-                                {isAuthenticated ? (
-                                  <Main />
-                                ) : (
-                                  <Auth
-                                    setIsAuthenticated={setIsAuthenticated}
-                                  />
-                                )}
+                                <ImprintProvider>
+                                  {isAuthenticated ? (
+                                    <Main />
+                                  ) : (
+                                    <Auth
+                                      setIsAuthenticated={setIsAuthenticated}
+                                    />
+                                  )}
+                                </ImprintProvider>
                               </PatchnotesProvider>
                             </ExportProvider>
                           </BookmarkProvider>

@@ -26,7 +26,9 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [isInEditMode, setIsInEditMode] = useState<boolean>(false);
+  const [isInNameEditMode, setIsInNameEditMode] = useState<boolean>(false);
+  const [isInAttachmentEditMode, setIsInAttachmentEditMode] =
+    useState<boolean>(false);
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
 
@@ -39,6 +41,27 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
       entry.evidences = entry.evidences?.map((ev) => {
         if (ev.id === evidence.id) {
           ev.name = value;
+        }
+        if (ev.hasAttachment) {
+          if (ev.role === UserRole.Plaintiff) {
+            updateEvidencesPlaintiff(ev);
+          } else {
+            updateEvidencesDefendant(ev);
+          }
+        }
+        return ev;
+      });
+      return entry;
+    });
+    setEntries(newEntries);
+  };
+
+  const handleAttachmentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    const newEntries = entries.map((entry) => {
+      entry.evidences = entry.evidences?.map((ev) => {
+        if (ev.id === evidence.id) {
+          ev.attachmentId = value;
         }
         if (ev.hasAttachment) {
           if (ev.role === UserRole.Plaintiff) {
@@ -73,12 +96,35 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
 
   return (
     <div className="flex flex-col gap-2 bg-offWhite rounded-lg mt-4 p-2 font-medium">
-      {evidence.hasAttachment && (
-        <span className="text-xs font-bold flex gap-1 mt-1 ml-1 self-start w-fit">
-          Anlage {evidence.attachmentId}
-        </span>
-      )}
-      {isInEditMode ? (
+      <div className="flex flex-row mt-1 w-fit">
+        {evidence.hasAttachment && (
+          <div className="gap-1">
+            <span className="text-xs font-bold ml-1 self-center">Anlage</span>
+            {isInAttachmentEditMode ? (
+              <input
+                autoFocus={true}
+                type="text"
+                name="name"
+                placeholder="Anlage..."
+                className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
+                value={evidence.attachmentId}
+                onBlur={() => setIsInAttachmentEditMode(false)}
+                onChange={handleAttachmentIdChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setIsInAttachmentEditMode(false);
+                  }
+                }}
+              />
+            ) : (
+              <span className="text-xs font-bold ml-1 self-center">
+                {evidence.attachmentId}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+      {isInNameEditMode ? (
         <input
           autoFocus={true}
           type="text"
@@ -86,11 +132,11 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
           placeholder="Beschreibung..."
           className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
           value={evidence.name}
-          onBlur={() => setIsInEditMode(false)}
+          onBlur={() => setIsInNameEditMode(false)}
           onChange={handleNameChange}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              setIsInEditMode(false);
+              setIsInNameEditMode(false);
             }
           }}
         />
@@ -154,11 +200,23 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
               icon={<DotsThree size={20} weight="bold" />}></Button>{" "}
             {isMenuOpen ? (
               <ul className="absolute right-0 bottom-2 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
+                {evidence.hasAttachment ? (
+                  <li
+                    tabIndex={0}
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setIsInAttachmentEditMode(true);
+                    }}
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
+                    <PencilSimple size={16} />
+                    Anlage ändern
+                  </li>
+                ) : null}
                 <li
                   tabIndex={0}
                   onClick={() => {
                     setIsMenuOpen(false);
-                    setIsInEditMode(true);
+                    setIsInNameEditMode(true);
                   }}
                   className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                   <PencilSimple size={16} />

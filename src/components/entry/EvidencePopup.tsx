@@ -1,4 +1,4 @@
-import { CaretDown, CaretUp, Plus, X, XCircle } from "phosphor-react";
+import { CaretDown, CaretUp, X, XCircle } from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
@@ -47,7 +47,6 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   setIsVisible,
   isPlaintiff,
   evidences,
-  backupEvidences,
   setEvidences,
 }) => {
   const { entries, setEntries, currentVersion } = useCase();
@@ -140,23 +139,38 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     evidenceToEdit: IEvidence
   ) => {
     const { value } = e.target;
-    const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences?.map((ev) => {
+    if (entries.length > 0) {
+      const newEntries = entries.map((entry) => {
+        entry.evidences = entry.evidences?.map((ev) => {
+          if (ev.id === evidenceToEdit.id) {
+            ev.name = value;
+          } else {
+            currentEvidences.forEach((ev) => {
+              if (ev.id === evidenceToEdit.id) {
+                ev.name = value;
+              }
+            });
+          }
+          if (ev.hasAttachment) {
+            if (ev.role === UserRole.Plaintiff) {
+              updateEvidencesPlaintiff(ev);
+            } else {
+              updateEvidencesDefendant(ev);
+            }
+          }
+          return ev;
+        });
+        return entry;
+      });
+      setEntries(newEntries);
+    } else {
+      currentEvidences.forEach((ev) => {
         if (ev.id === evidenceToEdit.id) {
           ev.name = value;
         }
-        if (ev.hasAttachment) {
-          if (ev.role === UserRole.Plaintiff) {
-            updateEvidencesPlaintiff(ev);
-          } else {
-            updateEvidencesDefendant(ev);
-          }
-        }
-        return ev;
       });
-      return entry;
-    });
-    setEntries(newEntries);
+      setCurrentEvidences([...currentEvidences]);
+    }
   };
 
   // handle input for individual attachment id
@@ -165,23 +179,38 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     evidenceToEdit: IEvidence
   ) => {
     const { value } = e.target;
-    const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences?.map((ev) => {
+    if (entries.length > 0) {
+      const newEntries = entries.map((entry) => {
+        entry.evidences = entry.evidences?.map((ev) => {
+          if (ev.id === evidenceToEdit.id) {
+            ev.attachmentId = value;
+          } else {
+            currentEvidences.forEach((ev) => {
+              if (ev.id === evidenceToEdit.id) {
+                ev.attachmentId = value;
+              }
+            });
+          }
+          if (ev.hasAttachment) {
+            if (ev.role === UserRole.Plaintiff) {
+              updateEvidencesPlaintiff(ev);
+            } else {
+              updateEvidencesDefendant(ev);
+            }
+          }
+          return ev;
+        });
+        return entry;
+      });
+      setEntries(newEntries);
+    } else {
+      currentEvidences.forEach((ev) => {
         if (ev.id === evidenceToEdit.id) {
           ev.attachmentId = value;
         }
-        if (ev.hasAttachment) {
-          if (ev.role === UserRole.Plaintiff) {
-            updateEvidencesPlaintiff(ev);
-          } else {
-            updateEvidencesDefendant(ev);
-          }
-        }
-        return ev;
       });
-      return entry;
-    });
-    setEntries(newEntries);
+      setCurrentEvidences([...currentEvidences]);
+    }
   };
 
   const removeFromEntry = (evidenceToDelete: IEvidence) => {
@@ -198,6 +227,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     }
   };
 
+  // click on "save":
   const addEvidence = () => {
     const updatedEvidences = currentEvidences.map((evidence) => {
       evidence.isCurrentEntry = false;
@@ -258,7 +288,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               <button
                 onClick={() => {
                   setIsVisible(false);
-                  if (backupEvidences) setEvidences(backupEvidences);
+                  //if (backupEvidences) setEvidences(backupEvidences);
                 }}
                 className="text-darkGrey bg-offWhite p-1 rounded-md hover:bg-lightGrey">
                 <X size={24} />
@@ -292,7 +322,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                       {getEvidences(
                         entries,
                         currentInput,
-                        currentEvidences
+                        currentEvidences,
+                        entryId
                       ).map((ev, index) => (
                         <li
                           key={index}
@@ -337,8 +368,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   bgColor="bg-lightGreen hover:bg-darkGreen"
                   textColor="text-darkGreen hover:text-white"
                   alternativePadding="p-1.5"
-                  icon={<Plus size={20} weight="bold" />}
-                  onClick={() => handleEvidenceAddedToCurrent()}></Button>
+                  onClick={() => handleEvidenceAddedToCurrent()}>
+                  Hinzufügen
+                </Button>
               </div>
             </div>
           </div>

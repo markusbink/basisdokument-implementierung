@@ -29,6 +29,7 @@ export const Main: React.FC = () => {
     currentVersion,
     metaData,
     introduction,
+    fileId,
     entries,
     highlightedEntries,
   } = useCase();
@@ -43,6 +44,7 @@ export const Main: React.FC = () => {
       {showNotePopup ? <NotePopup /> : null}
       {isExportPopupOpen ? (
         <ExportPopup
+          fileId={fileId}
           caseId={caseId}
           currentVersion={currentVersion}
           versionHistory={versionHistory}

@@ -17,6 +17,8 @@ import {
 import { useSection } from "./SectionContext";
 import { v4 as uuidv4 } from "uuid";
 interface ICaseContext {
+  fileId: string;
+  setFileId: Dispatch<SetStateAction<string>>;
   caseId: string;
   setCaseId: Dispatch<SetStateAction<string>>;
   metaData: IMetaData;
@@ -69,6 +71,7 @@ export const getEntryById = (entries: IEntry[], id: string) => {
 
 export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
   const [entries, setEntries] = useState<IEntry[]>([]);
+  const [fileId, setFileId] = useState<string>("");
   const [caseId, setCaseId] = useState<string>("");
   const [metaData, setMetaData] = useState<IMetaData>({
     plaintiff: "",
@@ -180,6 +183,8 @@ export const CaseProvider: React.FC<CaseProviderProps> = ({ children }) => {
   return (
     <CaseContext.Provider
       value={{
+        fileId,
+        setFileId,
         caseId,
         setCaseId,
         currentVersion,

@@ -4,9 +4,11 @@ export function createBasisdokument(
   prename: IStateUserInput["prename"],
   surname: IStateUserInput["surname"],
   role: IStateUserInput["role"],
-  caseId: IStateUserInput["caseId"]
+  caseId: IStateUserInput["caseId"],
+  fileId: string
 ) {
   const basisdokumentObject: any = {};
+  basisdokumentObject["fileId"] = fileId;
   basisdokumentObject["caseId"] = caseId;
   basisdokumentObject["currentVersion"] = 1;
   basisdokumentObject["versions"] = [];
@@ -29,9 +31,11 @@ export function createEditFile(
   surname: IStateUserInput["surname"],
   role: IStateUserInput["role"],
   caseId: IStateUserInput["caseId"],
+  fileId: string,
   version: number
 ) {
   const editFileObject: any = {};
+  editFileObject["fileId"] = fileId;
   editFileObject["caseId"] = caseId;
   editFileObject["currentVersion"] = version;
   editFileObject["highlightedEntries"] = [];

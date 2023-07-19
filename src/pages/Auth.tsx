@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { AboutDevelopersMenu } from "../components/AboutDevelopersMenu";
 import { Button } from "../components/Button";
+import { v4 as uuidv4 } from "uuid";
 import { Tooltip } from "../components/Tooltip";
 import {
   useBookmarks,
@@ -14,6 +15,7 @@ import {
   useUser,
   useSection,
   usePatchnotes,
+  useImprint,
 } from "../contexts";
 import {
   createBasisdokument,
@@ -38,6 +40,7 @@ import { useOnboarding } from "../contexts/OnboardingContext";
 import { VersionPopup } from "../components/VersionPopup";
 import { useSidebar } from "../contexts/SidebarContext";
 import { PatchnotesPopup } from "../components/PatchnotesPopup";
+import { ImprintPopup } from "../components/ImprintPopup";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -72,6 +75,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   // Contexts to set the state globally
   const {
     setCaseId: setCaseIdContext,
+    setFileId,
     setEntries,
     setMetaData,
     setIntroduction,
@@ -89,6 +93,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setIsOnboardingVisible } = useOnboarding();
   const { setActiveSidebar } = useSidebar();
   const { showPatchnotesPopup } = usePatchnotes();
+  const { showImprintPopup } = useImprint();
 
   // Set React states when user enters/changes text input fields
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -181,6 +186,17 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           }
         }
       }
+      if (basisdokumentFile && editFile) {
+        if (
+          jsonToObject(basisdokumentFile).fileId !==
+          jsonToObject(editFile).fileId
+        ) {
+          setErrorText(
+            "Die hochgeladene Bearbeitungsdatei passt nicht zum hochgeladenen Basisdokument."
+          );
+          inputIsValid = false;
+        }
+      }
     }
 
     if ((prename === "" || surname === "") && usage !== UsageMode.Readonly) {
@@ -233,6 +249,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             surname,
             role,
             basisdokumentObject.caseId,
+            basisdokumentObject.fileId,
             basisdokumentObject.currentVersion
           );
 
@@ -244,13 +261,23 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       }
 
       if (usage === UsageMode.Create) {
+        const fileId = uuidv4();
+        setFileId(fileId);
         basisdokumentObject = createBasisdokument(
           prename,
           surname,
           role,
-          caseId
+          caseId,
+          fileId
         );
-        editFileObject = createEditFile(prename, surname, role, caseId, 1);
+        editFileObject = createEditFile(
+          prename,
+          surname,
+          role,
+          caseId,
+          fileId,
+          1
+        );
         toast("Ihr Basisdokument wurde erfolgreich erstellt!");
       }
 
@@ -307,6 +334,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   return (
     <div className="overflow-scroll h-full">
+      {showImprintPopup ? <ImprintPopup /> : null}
       {showPatchnotesPopup ? <PatchnotesPopup /> : null}
       <div className="flex gap-4 max-w-[1080px] m-auto py-20 px-10 space-y-4 flex-col justify-center h-auto overflow-scroll no-scrollbar">
         <AboutDevelopersMenu />
@@ -332,11 +360,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             weitergegeben werden.
           </p>
         )}
+
         <div>
-          <p className="font-light">
-            Ich möchte ein Basisdokument:{" "}
-            <span className="text-darkRed">*</span>
-          </p>
+          <div className="flex flex-row w-full justify-between font-light">
+            <p>
+              Ich möchte ein Basisdokument:{" "}
+              <span className="text-darkRed">*</span>
+            </p>
+            <p>
+              Oder:{" "}
+              <a href="https://mandant.parteivortrag.de/">
+                Ich bin Mandant:in.
+              </a>
+            </p>
+          </div>
           <div className="flex flex-row w-auto mt-4 gap-4">
             {!isReadonly && (
               <>
@@ -370,20 +407,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                   )}>
                   Erstellen
                 </button>
+                <button
+                  onClick={() => {
+                    setReadonly();
+                  }}
+                  className={cx(
+                    "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
+                    {
+                      "border-2 border-darkGrey": usage === UsageMode.Readonly,
+                    }
+                  )}>
+                  Einsehen
+                </button>
               </>
             )}
-            <button
-              onClick={() => {
-                setReadonly();
-              }}
-              className={cx(
-                "flex items-center justify-center w-fit px-5 h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                {
-                  "border-2 border-darkGrey": usage === UsageMode.Readonly,
-                }
-              )}>
-              Einsehen (als Mandant:in)
-            </button>
           </div>
         </div>
 
@@ -471,7 +508,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             </div>
           </div>
         ) : null}
-        {usage === UsageMode.Open || usage === UsageMode.Readonly ? (
+        {role && (usage === UsageMode.Open || usage === UsageMode.Readonly) ? (
           <div className="flex flex-col gap-4">
             <div>
               <p className="font-light">
@@ -572,6 +609,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             {usage === UsageMode.Open && (
               <div className="flex flex-row items-center gap-4">
                 <VersionPopup
+                  role={role!}
                   isVisible={showVersionPopup}
                   children={
                     <>
@@ -582,7 +620,9 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                           setShowVersionPopup(!showVersionPopup);
                           setNewVersionMode(false);
                         }}>
-                        Die hochgeladene Datei stammt von meiner Partei
+                        {role === UserRole.Judge
+                          ? "Die hochgeladene Datei stammt von meinem Gericht (Weiterbearbeiten)"
+                          : "Die hochgeladene Datei stammt von meiner Partei (Weiterbearbeiten)"}
                       </Button>
                       <Button
                         bgColor="bg-offWhite hover:bg-lightGrey"
@@ -591,7 +631,11 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                           setShowVersionPopup(!showVersionPopup);
                           setNewVersionMode(true);
                         }}>
-                        Die hochgeladene Datei stammt von einer anderen Partei
+                        {role === UserRole.Judge
+                          ? "Die hochgeladene Datei stammt von der Klage- oder Beklagtenpartei (Neue Version)"
+                          : role === UserRole.Plaintiff
+                          ? "Die hochgeladene Datei stammt von der Beklagtenpartei oder dem Gericht (Neue Version)"
+                          : "Die hochgeladene Datei stammt von der Klagepartei oder dem Gericht (Neue Version)"}
                       </Button>
                     </>
                   }

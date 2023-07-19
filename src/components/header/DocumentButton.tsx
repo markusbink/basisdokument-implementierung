@@ -36,6 +36,7 @@ export const DocumentButton = () => {
   );
 
   const {
+    fileId,
     caseId,
     currentVersion,
     metaData,
@@ -59,6 +60,7 @@ export const DocumentButton = () => {
   const reloadPageAndSave = () => {
     setTimeout(() => {
       downloadBasisdokument(
+        fileId,
         caseId,
         currentVersion,
         versionHistory,
@@ -69,11 +71,13 @@ export const DocumentButton = () => {
         hints,
         undefined, //coverPDF
         undefined, //otherAuthor
-        false //download new entries additionally
+        false, //download new entries additionally
+        undefined //regard
       );
     }, 100);
     setTimeout(() => {
       downloadEditFile(
+        fileId,
         caseId,
         currentVersion,
         highlightedEntries,

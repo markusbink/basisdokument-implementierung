@@ -25,6 +25,7 @@ import { useRef, useState } from "react";
 import { Button } from "./Button";
 
 interface IProps {
+  fileId: string;
   caseId: string;
   currentVersion: number;
   versionHistory: IVersion[];
@@ -41,6 +42,7 @@ interface IProps {
 }
 
 export const ExportPopup: React.FC<IProps> = ({
+  fileId,
   caseId,
   currentVersion,
   versionHistory,
@@ -65,6 +67,8 @@ export const ExportPopup: React.FC<IProps> = ({
   const [surname, setSurname] = useState<IStateUserInput["surname"]>("");
   let otherAuthor: string | undefined = prename + " " + surname;
   const [showAuthorChange, setShowAuthorChange] = useState<boolean>(false);
+  let [regard, setRegard] = useState<string | undefined>("");
+  const [showAddRegard, setShowAddRegard] = useState<boolean>(false);
   const [showOptionalCover, setShowOptionalCover] = useState<boolean>(false);
   var [downloadNewAdditionally, setDownloadNewAdditionally] =
     useState<boolean>(false);
@@ -118,8 +122,12 @@ export const ExportPopup: React.FC<IProps> = ({
     if (showAuthorChange === false) {
       otherAuthor = undefined;
     }
+    if (showAddRegard === false) {
+      regard = undefined;
+    }
     setTimeout(() => {
       downloadBasisdokument(
+        fileId,
         caseId,
         currentVersion,
         versionHistory,
@@ -130,11 +138,13 @@ export const ExportPopup: React.FC<IProps> = ({
         hints,
         coverPDF,
         otherAuthor,
-        downloadNewAdditionally
+        downloadNewAdditionally,
+        regard
       );
     }, 100);
     setTimeout(() => {
       downloadEditFile(
+        fileId,
         caseId,
         currentVersion,
         highlightedEntries,
@@ -156,6 +166,11 @@ export const ExportPopup: React.FC<IProps> = ({
   const onChangeGivenSurname = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSurname(newValue);
+  };
+
+  const onChangeRegard = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setRegard(newValue);
   };
 
   return (
@@ -237,6 +252,35 @@ export const ExportPopup: React.FC<IProps> = ({
                 Sie können vor dem Herunterladen des Basisdokuments optional ein
                 Deckblatt einfügen, das dem Basisdokument vorangestellt wird.
               </div>
+              <div className="flex flex-row gap-2">
+                <input
+                  className="small-checkbox accent-darkGrey cursor-pointer"
+                  type="checkbox"
+                  checked={showAddRegard}
+                  onChange={() => setShowAddRegard(!showAddRegard)}
+                />
+                <div className="font-semibold">
+                  Betreff zur Basisdokument-PDF hinzufügen
+                </div>
+              </div>
+              <div
+                className={`text-darkGrey opacity-80 ml-5 ${
+                  showAddRegard ? "" : "mb-7"
+                }`}>
+                Sie können einen Betreff zu dieser Version des Basisdokuments
+                hinzufügen.
+              </div>
+              {showAddRegard && (
+                <div className="mt-4 ml-4 mb-7">
+                  <input
+                    className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none w-full"
+                    type="text"
+                    placeholder="Betreff..."
+                    value={regard}
+                    onChange={onChangeRegard}
+                  />
+                </div>
+              )}
               <div className="flex flex-row gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"

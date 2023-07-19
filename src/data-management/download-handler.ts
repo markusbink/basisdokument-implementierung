@@ -72,20 +72,23 @@ function getEntryTitle(entryId: any, obj: any) {
   }
 }
 
-//add attachments in one string because of autotable commas
-function getAttachmentNumeration(attachments: Array<IEvidence>) {
-  var numAttachments: string = "";
-  if (attachments) {
-    for (let i = 0; i < attachments.length; i++) {
-      let attachment = i + 1 + ") " + attachments[i].name;
+//add evidences in one string because of autotable commas
+function getEvidenceNumeration(evidences: Array<IEvidence>) {
+  var numEvidences: string = "";
+  if (evidences) {
+    for (let i = 0; i < evidences.length; i++) {
+      let evidence = i + 1 + ") " + evidences[i].name;
+      if (evidences[i].hasAttachment) {
+        evidence = evidence + " als Anlage " + evidences[i].attachmentId;
+      }
       //do not add line break/empty line to last item
-      if (i === attachments.length - 1) {
-        numAttachments = numAttachments + attachment;
+      if (i === evidences.length - 1) {
+        numEvidences = numEvidences + evidence;
       } else {
-        numAttachments = numAttachments + attachment + "\n";
+        numEvidences = numEvidences + evidence + "\n";
       }
     }
-    return numAttachments;
+    return numEvidences;
   }
 }
 
@@ -184,6 +187,7 @@ async function downloadBasisdokumentAsPDF(
     timestamp:
       "Export: " +
       obj["versions"][obj["versions"].length - 1]["timestamp"].toLocaleString(),
+    regard: "Betreff: " + obj["regard"],
   };
   basisdokument.push(basicData);
 
@@ -322,8 +326,8 @@ async function downloadBasisdokumentAsPDF(
           evidences: !entry.evidences?.length
             ? undefined
             : entry.evidences?.length > 1
-            ? "Beweise:\n" + getAttachmentNumeration(entry.evidences)
-            : "Beweis:\n" + getAttachmentNumeration(entry.evidences),
+            ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
+            : "Beweis:\n" + getEvidenceNumeration(entry.evidences),
         };
         allEntries.push(tableEntry);
 
@@ -336,10 +340,11 @@ async function downloadBasisdokumentAsPDF(
             text: parseHTMLtoString(entry.text),
             version: entry.version,
             associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-            evidences:
-              entry.evidences.length > 0
-                ? "Beweise:\n" + getAttachmentNumeration(entry.evidences)
-                : undefined,
+            evidences: !entry.evidences?.length
+              ? undefined
+              : entry.evidences?.length > 1
+              ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
+              : "Beweis:\n" + getEvidenceNumeration(entry.evidences),
           };
           newEntries.push(newEntry);
         }
@@ -349,16 +354,27 @@ async function downloadBasisdokumentAsPDF(
 
   // AUTOTABLES
   //autotable basisdokument metadata
+  let basic;
+  if (obj["regard"] === undefined) {
+    basic = [
+      [basisdokument[0].caseId],
+      [basisdokument[0].version],
+      [basisdokument[0].timestamp],
+    ];
+  } else {
+    basic = [
+      [basisdokument[0].caseId],
+      [basisdokument[0].version],
+      [basisdokument[0].timestamp],
+      [basisdokument[0].regard],
+    ];
+  }
   autoTable(doc, {
     theme: "grid",
     styles: { fontStyle: "bold" },
     head: [["Basisdokument"]],
     headStyles: { fontStyle: "bold", fontSize: 14, fillColor: [0, 102, 204] },
-    body: [
-      [basisdokument[0].caseId],
-      [basisdokument[0].version],
-      [basisdokument[0].timestamp],
-    ],
+    body: basic,
     didDrawPage: function () {
       doc.outline.add(null, "Basisdokument-Metadaten", {
         pageNumber: doc.getCurrentPageInfo().pageNumber,
@@ -889,6 +905,7 @@ async function downloadBasisdokumentAsPDF(
 }
 
 export function downloadBasisdokument(
+  fileId: string,
   caseId: string,
   currentVersion: number,
   versionHistory: IVersion[],
@@ -899,9 +916,11 @@ export function downloadBasisdokument(
   hints: IHint[],
   coverPDF: ArrayBuffer | undefined,
   otherAuthor: string | undefined,
-  downloadNewAdditionally: boolean
+  downloadNewAdditionally: boolean,
+  regard: string | undefined
 ) {
   let basisdokumentObject: any = {};
+  basisdokumentObject["fileId"] = fileId;
   basisdokumentObject["caseId"] = caseId;
   basisdokumentObject["fileType"] = "basisdokument";
   basisdokumentObject["currentVersion"] = currentVersion;
@@ -915,6 +934,7 @@ export function downloadBasisdokument(
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
   basisdokumentObject["otherAuthor"] = otherAuthor;
+  basisdokumentObject["regard"] = regard;
 
   const date: Date =
     basisdokumentObject["versions"][basisdokumentObject["versions"].length - 1][
@@ -943,6 +963,7 @@ export function downloadBasisdokument(
 }
 
 export function downloadEditFile(
+  fileId: string,
   caseId: string,
   currentVersion: number,
   highlightedEntries: IHighlightedEntry[],
@@ -953,6 +974,7 @@ export function downloadEditFile(
   individualEntrySorting: { [key: string]: IndividualEntrySortingEntry[] }
 ) {
   let editFileObject: any = {};
+  editFileObject["fileId"] = fileId;
   editFileObject["caseId"] = caseId;
   editFileObject["fileType"] = "editFile";
   editFileObject["currentVersion"] = currentVersion;
