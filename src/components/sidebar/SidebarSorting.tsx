@@ -1,18 +1,22 @@
-import { useHeaderContext, useSection, useUser } from "../../contexts";
+import { useCase, useHeaderContext, useSection, useUser } from "../../contexts";
 import { getOriginalSortingPosition } from "../../util/get-original-sorting-position";
-import { Sorting, UserRole } from "../../types";
+import { ISection, Sorting, UserRole } from "../../types";
 import { SortingSelector } from "../header/SortingSelector";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { ClockClockwise, DotsSixVertical } from "phosphor-react";
+import cx from "classnames";
+import { getTheme } from "../../themes/getTheme";
 
 export const SidebarSorting = () => {
-  const { selectedSorting, setSelectedSorting } = useHeaderContext();
+  const { selectedSorting, setSelectedSorting, selectedTheme } =
+    useHeaderContext();
   const { sectionList, individualSorting, setIndividualSorting } = useSection();
   let originalSorting = sectionList.map((section) => section.id);
   const { user } = useUser();
+  const { groupedEntries } = useCase();
 
   const getSectionObject = (id: string) => {
-    let section: any = sectionList.find((section) => section.id === id);
+    let section: ISection = sectionList.find((section) => section.id === id)!;
     return section;
   };
 
@@ -39,6 +43,11 @@ export const SidebarSorting = () => {
     updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
     // Update State
     setIndividualSorting(updatedList);
+  };
+
+  const getPlainText = (entryText: string) => {
+    return new DOMParser().parseFromString(entryText, "text/html")
+      .documentElement.textContent;
   };
 
   return (
@@ -236,44 +245,80 @@ export const SidebarSorting = () => {
         ) : (
           // original sorting
           originalSorting.map((sortpoint) => (
-            <a
-              href={`#${sortpoint}`}
-              draggable={false}
-              key={getSectionObject(sortpoint).id}
-              className="flex flex-row gap-2 rounded-md p-2 my-2 text-darkGrey bg-offWhite font-bold w-full item-container text-sm"
-              onClick={(e) => e.stopPropagation()}>
-              <span className="self-center">
-                {getOriginalSortingPosition(
-                  sectionList,
-                  getSectionObject(sortpoint).id
-                )}
-                .
-              </span>
-              <div>
-                <span
-                  className={
-                    user?.role === UserRole.Defendant ? "font-light" : ""
-                  }>
-                  {getSectionObject(sortpoint).titlePlaintiff}
+            <div>
+              <a
+                href={`#${sortpoint}`}
+                draggable={false}
+                key={getSectionObject(sortpoint).id}
+                className="flex flex-row gap-2 rounded-md p-2 my-2 text-darkGrey bg-offWhite font-bold w-full item-container text-sm"
+                onClick={(e) => e.stopPropagation()}>
+                <span className="self-center">
+                  {getOriginalSortingPosition(
+                    sectionList,
+                    getSectionObject(sortpoint).id
+                  )}
+                  .
                 </span>
-                <div
-                  className={
-                    titleVisible(getSectionObject(sortpoint).titlePlaintiff) ===
-                      false ||
-                    titleVisible(getSectionObject(sortpoint).titleDefendant) ===
-                      false
-                      ? ""
-                      : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
-                  }
-                />
-                <span
-                  className={
-                    user?.role === UserRole.Plaintiff ?  "font-light" : ""
-                  }>
-                  {getSectionObject(sortpoint).titleDefendant}
-                </span>
-              </div>
-            </a>
+                <div>
+                  <span
+                    className={
+                      user?.role === UserRole.Defendant ? "font-light" : ""
+                    }>
+                    {getSectionObject(sortpoint)!.titlePlaintiff}
+                  </span>
+                  <div
+                    className={
+                      titleVisible(
+                        getSectionObject(sortpoint).titlePlaintiff
+                      ) === false ||
+                      titleVisible(
+                        getSectionObject(sortpoint).titleDefendant
+                      ) === false
+                        ? ""
+                        : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
+                    }
+                  />
+                  <span
+                    className={
+                      user?.role === UserRole.Plaintiff ? "font-light" : ""
+                    }>
+                    {getSectionObject(sortpoint).titleDefendant}
+                  </span>
+                </div>
+              </a>
+              {groupedEntries[getSectionObject(sortpoint).id]?.parent.map(
+                (entry) => {
+                  return entry ? (
+                    <div className="ml-5 mt-1 px-2 py-1 flex gap-2 bg-offWhite rounded-md">
+                      <span
+                        className={cx(
+                          "self-center text-xs rounded-full p-1 w-fit px-3 font-semibold",
+                          {
+                            [`bg-${
+                              getTheme(selectedTheme)?.primaryPlaintiff
+                            } text-${
+                              getTheme(selectedTheme)?.secondaryPlaintiff
+                            }`]: entry.entryCode?.charAt(0) === "B",
+                            [`bg-${
+                              getTheme(selectedTheme)?.primaryDefendant
+                            } text-${
+                              getTheme(selectedTheme)?.secondaryDefendant
+                            }`]: entry.entryCode?.charAt(0) === "K",
+                          }
+                        )}>
+                        {entry.entryCode}
+                      </span>
+                      <span>
+                        {getPlainText(entry.text) &&
+                        getPlainText(entry.text)!.length > 20
+                          ? getPlainText(entry.text)?.slice(0, 20) + " ..."
+                          : getPlainText(entry.text)}
+                      </span>
+                    </div>
+                  ) : null;
+                }
+              )}
+            </div>
           ))
         )}
       </div>
