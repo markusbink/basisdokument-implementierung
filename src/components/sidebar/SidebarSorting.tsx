@@ -102,113 +102,159 @@ export const SidebarSorting = () => {
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}>
-                              <div className="flex flex-row items-center select-none group">
+                              <div className="flex flex-row select-none group">
                                 <div {...provided.dragHandleProps}>
-                                  <DotsSixVertical size={24} />
+                                  <DotsSixVertical size={24} className="mt-1" />
                                 </div>
-                                <a
-                                  href={`#${section}`}
-                                  draggable={false}
-                                  key={getSectionObject(section).id}
-                                  className="flex flex-row gap-2 rounded-md p-2 bg-offWhite text-darkGrey font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm"
-                                  onClick={(e) => e.stopPropagation()}>
-                                  <span className="self-center">
-                                    {`${getOriginalSortingPosition(
-                                      sectionList,
-                                      getSectionObject(section).id
-                                    )}. `}
-                                  </span>
-                                  {user?.role === UserRole.Judge && (
-                                    <div>
-                                      <span>
-                                        {
-                                          getSectionObject(section)
-                                            .titlePlaintiff
-                                        }
-                                      </span>
-                                      <div
-                                        className={
-                                          titleVisible(
+                                <div className="w-full">
+                                  <a
+                                    href={`#${section}`}
+                                    draggable={false}
+                                    key={getSectionObject(section).id}
+                                    className="flex flex-row gap-2 rounded-md p-2 bg-offWhite text-darkGrey font-bold w-full item-container transition-all group-hover:bg-lightGrey text-sm"
+                                    onClick={(e) => e.stopPropagation()}>
+                                    <span className="self-center">
+                                      {`${getOriginalSortingPosition(
+                                        sectionList,
+                                        getSectionObject(section).id
+                                      )}. `}
+                                    </span>
+                                    {user?.role === UserRole.Judge && (
+                                      <div>
+                                        <span>
+                                          {
                                             getSectionObject(section)
                                               .titlePlaintiff
-                                          ) === false ||
-                                          titleVisible(
+                                          }
+                                        </span>
+                                        <div
+                                          className={
+                                            titleVisible(
+                                              getSectionObject(section)
+                                                .titlePlaintiff
+                                            ) === false ||
+                                            titleVisible(
+                                              getSectionObject(section)
+                                                .titleDefendant
+                                            ) === false
+                                              ? ""
+                                              : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
+                                          }
+                                        />
+                                        <span>
+                                          {
                                             getSectionObject(section)
                                               .titleDefendant
-                                          ) === false
-                                            ? ""
-                                            : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
-                                        }
-                                      />
-                                      <span>
-                                        {
-                                          getSectionObject(section)
-                                            .titleDefendant
-                                        }
-                                      </span>
-                                    </div>
-                                  )}
-                                  {user?.role === UserRole.Plaintiff && (
-                                    <div>
-                                      <span>
-                                        {
-                                          getSectionObject(section)
-                                            .titlePlaintiff
-                                        }
-                                      </span>
-                                      <div
-                                        className={
-                                          titleVisible(
+                                          }
+                                        </span>
+                                      </div>
+                                    )}
+                                    {user?.role === UserRole.Plaintiff && (
+                                      <div>
+                                        <span>
+                                          {
                                             getSectionObject(section)
                                               .titlePlaintiff
-                                          ) === false ||
-                                          titleVisible(
+                                          }
+                                        </span>
+                                        <div
+                                          className={
+                                            titleVisible(
+                                              getSectionObject(section)
+                                                .titlePlaintiff
+                                            ) === false ||
+                                            titleVisible(
+                                              getSectionObject(section)
+                                                .titleDefendant
+                                            ) === false
+                                              ? ""
+                                              : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
+                                          }
+                                        />
+                                        <span className="font-light">
+                                          {
                                             getSectionObject(section)
                                               .titleDefendant
-                                          ) === false
-                                            ? ""
-                                            : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
-                                        }
-                                      />
-                                      <span className="font-light">
-                                        {
-                                          getSectionObject(section)
-                                            .titleDefendant
-                                        }
-                                      </span>
-                                    </div>
-                                  )}
-                                  {user?.role === UserRole.Defendant && (
-                                    <div>
-                                      <span>
-                                        {
-                                          getSectionObject(section)
-                                            .titleDefendant
-                                        }
-                                      </span>
-                                      <div
-                                        className={
-                                          titleVisible(
+                                          }
+                                        </span>
+                                      </div>
+                                    )}
+                                    {user?.role === UserRole.Defendant && (
+                                      <div>
+                                        <span>
+                                          {
+                                            getSectionObject(section)
+                                              .titleDefendant
+                                          }
+                                        </span>
+                                        <div
+                                          className={
+                                            titleVisible(
+                                              getSectionObject(section)
+                                                .titlePlaintiff
+                                            ) === false ||
+                                            titleVisible(
+                                              getSectionObject(section)
+                                                .titleDefendant
+                                            ) === false
+                                              ? ""
+                                              : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
+                                          }
+                                        />
+                                        <span className="font-light">
+                                          {
                                             getSectionObject(section)
                                               .titlePlaintiff
-                                          ) === false ||
-                                          titleVisible(
-                                            getSectionObject(section)
-                                              .titleDefendant
-                                          ) === false
-                                            ? ""
-                                            : "h-0.5 w-24 bg-lightGrey rounded-full my-1"
-                                        }
-                                      />
-                                      <span className="font-light">
-                                        {
-                                          getSectionObject(section)
-                                            .titlePlaintiff
-                                        }
-                                      </span>
-                                    </div>
+                                          }
+                                        </span>
+                                      </div>
+                                    )}
+                                  </a>
+                                  {groupedEntries[section]?.parent.map(
+                                    (entry) => {
+                                      return entry ? (
+                                        <div className="ml-5 mt-1 px-2 py-1 flex gap-2 bg-offWhite rounded-md">
+                                          <span
+                                            className={cx(
+                                              "self-center text-xs rounded-full p-1 w-fit px-3 font-semibold",
+                                              {
+                                                [`bg-${
+                                                  getTheme(selectedTheme)
+                                                    ?.primaryPlaintiff
+                                                } text-${
+                                                  getTheme(selectedTheme)
+                                                    ?.secondaryPlaintiff
+                                                }`]:
+                                                  entry.entryCode?.charAt(0) ===
+                                                  "B",
+                                                [`bg-${
+                                                  getTheme(selectedTheme)
+                                                    ?.primaryDefendant
+                                                } text-${
+                                                  getTheme(selectedTheme)
+                                                    ?.secondaryDefendant
+                                                }`]:
+                                                  entry.entryCode?.charAt(0) ===
+                                                  "K",
+                                              }
+                                            )}>
+                                            {entry.entryCode}
+                                          </span>
+                                          <span>
+                                            {getPlainText(entry.text) &&
+                                            getPlainText(entry.text)!.length >
+                                              20
+                                              ? getPlainText(entry.text)?.slice(
+                                                  0,
+                                                  20
+                                                ) + " ..."
+                                              : getPlainText(entry.text)}
+                                          </span>
+                                        </div>
+                                      ) : null;
+                                    }
                                   )}
-                                </a>
+                                </div>
                               </div>
                             </div>
                           )}
