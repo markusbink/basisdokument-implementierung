@@ -158,7 +158,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
               </Action>
             </Tooltip>
             {isMetaDataMenuOpen ? (
-              <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[150px] shadow-lg z-50 text-sm">
+              <ul className="absolute right-0 top-full p-2 bg-white text-darkGrey rounded-xl min-w-[200px] shadow-lg z-50 text-sm">
                 <>
                   <li
                     tabIndex={0}
@@ -206,6 +206,9 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
               />
             ) : (
               <MetaDataBody isPlaintiff={isPlaintiff}>
+                <div className="mb-2 border-b-[1px] border-grey">
+                  <b>Rubrum</b>
+                </div>
                 {rubrumContent ? (
                   <p dangerouslySetInnerHTML={{ __html: rubrumContent }} />
                 ) : (
@@ -301,6 +304,9 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
               />
             ) : (
               <MetaDataBody isPlaintiff={isPlaintiff}>
+                <div className="mb-2 border-b-[1px] border-grey">
+                  <b>Einführung</b>
+                </div>
                 {introductionContent ? (
                   <p
                     dangerouslySetInnerHTML={{ __html: introductionContent }}
