@@ -126,6 +126,11 @@ export interface IMetaData {
   defendant: string;
 }
 
+export interface IIntroduction {
+  plaintiff: string;
+  defendant: string;
+}
+
 export interface IHighlightedEntry {
   entryId: string;
   highlightedText: string;

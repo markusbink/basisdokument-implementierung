@@ -25,10 +25,11 @@ export const Main: React.FC = () => {
   const { showNotePopup, notes } = useNotes();
   const { isExportPopupOpen } = useExport();
   const {
-    fileId,
     caseId,
     currentVersion,
     metaData,
+    introduction,
+    fileId,
     entries,
     highlightedEntries,
   } = useCase();
@@ -48,6 +49,7 @@ export const Main: React.FC = () => {
           currentVersion={currentVersion}
           versionHistory={versionHistory}
           metaData={metaData}
+          introduction={introduction}
           entries={entries}
           sectionList={sectionList}
           hints={hints}
