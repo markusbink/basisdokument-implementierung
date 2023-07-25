@@ -151,7 +151,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     }
   };
 
-  const validateUserInput = () => {
+  const isValidUsageMode = () => {
     if (
       usage !== UsageMode.Open &&
       usage !== UsageMode.Create &&
@@ -160,24 +160,33 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       setErrorText(
         "Bitte spezifizieren Sie, ob Sie ein Basisdokument öffnen, erstellen oder einsehen möchten!"
       );
-      return;
+      return false;
     }
+    return true;
+  };
 
+  const isValidRole = () => {
     if (!role) {
       setErrorText(
         "Bitte spezifizieren Sie, ob Sie das Basisdokument als Klagepartei, Beklagtenpartei oder Richter:in bearbeiten möchten!"
       );
-      return;
+      return false;
     }
+    return true;
+  };
 
+  const isValidNames = () => {
     if ((prename === "" || surname === "") && usage !== UsageMode.Readonly) {
       setErrorText(
         "Bitte geben Sie sowohl Ihren Vornamen als auch einen Nachnamen an!"
       );
-      return;
+      return false;
     }
+    return true;
+  };
 
-    // check if file exists and validate
+  const isValidFiles = () => {
+    // check if basisdokument file exists and has valid file format
     if (usage === UsageMode.Open || usage === UsageMode.Readonly) {
       if (
         !basisdokumentFilename.endsWith(".txt") ||
@@ -188,33 +197,35 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         setErrorText(
           "Bitte laden Sie eine valide Basisdokumentdatei (.txt) hoch!"
         );
-        return;
+        return false;
       } else {
         if (jsonToObject(basisdokumentFile).fileType !== "basisdokument") {
           setIsValidBasisdokumentFile(false);
           setErrorText(
             "Bitte laden Sie eine valide Basisdokumentdatei (.txt) hoch!"
           );
-          return;
+          return false;
         }
       }
+      // check if edit file exists and has valid file format
       if (editFile) {
         if (!editFilename.endsWith(".txt") || typeof editFile !== "string") {
           setIsValidEditFile(false);
           setErrorText(
             "Bitte laden Sie eine valide Bearbeitungsdatei (.txt) hoch!"
           );
-          return;
+          return false;
         } else {
           if (jsonToObject(editFile).fileType !== "editFile") {
             setIsValidEditFile(false);
             setErrorText(
               "Bitte laden Sie eine valide Bearbeitungsdatei (.txt) hoch!"
             );
-            return;
+            return false;
           }
         }
       }
+      // check if basisdokument and edit files are matching
       if (basisdokumentFile && editFile) {
         if (
           jsonToObject(basisdokumentFile).fileId !==
@@ -224,10 +235,18 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           setErrorText(
             "Die hochgeladene Bearbeitungsdatei passt nicht zum hochgeladenen Basisdokument."
           );
-          return;
+          return false;
         }
       }
     }
+    return true;
+  };
+
+  const validateUserInputAndOpen = () => {
+    if (!isValidUsageMode()) return;
+    if (!isValidRole()) return;
+    if (!isValidNames()) return;
+    if (!isValidFiles()) return;
 
     let basisdokumentObject, editFileObject;
 
@@ -700,7 +719,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         </div>
 
         <div className="flex flew-row items-end justify-between space-y-2">
-          <Button onClick={validateUserInput}>
+          <Button onClick={validateUserInputAndOpen}>
             Basisdokument{" "}
             {usage === UsageMode.Open
               ? "öffnen"
