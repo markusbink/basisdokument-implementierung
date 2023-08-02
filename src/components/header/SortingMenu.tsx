@@ -7,7 +7,6 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { UserRole } from "../../types";
 import { getOriginalSortingPosition } from "../../util/get-original-sorting-position";
 
-// drag menu platzieren bei doppeltem titel (zentrieren)
 // update on entry add
 
 export const SortingMenu = () => {

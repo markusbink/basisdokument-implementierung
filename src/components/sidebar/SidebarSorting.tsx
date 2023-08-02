@@ -141,7 +141,21 @@ export const SidebarSorting = () => {
                               {...provided.draggableProps}>
                               <div className="flex flex-row select-none group">
                                 <div {...provided.dragHandleProps}>
-                                  <DotsSixVertical size={24} className="mt-1" />
+                                  <DotsSixVertical
+                                    size={24}
+                                    className={cx("", {
+                                      "mt-5":
+                                        getSectionObject(section)
+                                          .titlePlaintiff &&
+                                        getSectionObject(section)
+                                          .titleDefendant,
+                                      "mt-1":
+                                        !getSectionObject(section)
+                                          .titlePlaintiff ||
+                                        !getSectionObject(section)
+                                          .titleDefendant,
+                                    })}
+                                  />
                                 </div>
                                 <div className="w-full">
                                   <div className="flex rounded-md p-2 bg-offWhite hover:bg-lightGrey items-center">
