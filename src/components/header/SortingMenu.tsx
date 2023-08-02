@@ -7,8 +7,6 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { UserRole } from "../../types";
 import { getOriginalSortingPosition } from "../../util/get-original-sorting-position";
 
-// update on entry add
-
 export const SortingMenu = () => {
   const { sectionList, individualSorting, setIndividualSorting } = useSection();
   const [showSortingMenu, setShowSortingMenu] = useState<boolean>(false);

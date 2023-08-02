@@ -19,7 +19,7 @@ export const SidebarSorting = () => {
   const { sectionList, individualSorting, setIndividualSorting } = useSection();
   let originalSorting = sectionList.map((section) => section.id);
   const { user } = useUser();
-  const { groupedEntries } = useCase();
+  const { entries } = useCase();
   const [entriesVisible, setEntriesVisible] = useState<boolean>(true);
   const [entriesVisibleForSection, setEntriesVisibleForSection] = useState<
     { section: string; visible: boolean }[]
@@ -310,8 +310,11 @@ export const SidebarSorting = () => {
                                   {entriesVisibleForSection.find(
                                     (entrVisib) => entrVisib.section === section
                                   )?.visible &&
-                                    groupedEntries[section]?.parent.map(
-                                      (entry) => {
+                                    entries
+                                      .filter(
+                                        (entry) => entry.sectionId === section
+                                      )
+                                      .map((entry) => {
                                         return entry ? (
                                           <a
                                             href={`#${entry.entryCode}`}
@@ -355,8 +358,7 @@ export const SidebarSorting = () => {
                                             </span>
                                           </a>
                                         ) : null;
-                                      }
-                                    )}
+                                      })}
                                 </div>
                               </div>
                             </div>
@@ -473,38 +475,40 @@ export const SidebarSorting = () => {
               {entriesVisibleForSection.find(
                 (entrVisib) => entrVisib.section === sortpoint
               )?.visible &&
-                groupedEntries[sortpoint]?.parent.map((entry) => {
-                  return entry ? (
-                    <a
-                      href={`#${entry.entryCode}`}
-                      className="ml-5 mt-1 px-2 py-1 flex gap-2 bg-offWhite hover:bg-lightGrey rounded-md text-darkGrey font-normal">
-                      <span
-                        className={cx(
-                          "self-center text-xs rounded-full p-1 w-fit px-3 font-semibold",
-                          {
-                            [`bg-${
-                              getTheme(selectedTheme)?.primaryPlaintiff
-                            } text-${
-                              getTheme(selectedTheme)?.secondaryPlaintiff
-                            }`]: entry.entryCode?.charAt(0) === "B",
-                            [`bg-${
-                              getTheme(selectedTheme)?.primaryDefendant
-                            } text-${
-                              getTheme(selectedTheme)?.secondaryDefendant
-                            }`]: entry.entryCode?.charAt(0) === "K",
-                          }
-                        )}>
-                        {entry.entryCode}
-                      </span>
-                      <span>
-                        {getPlainText(entry.text) &&
-                        getPlainText(entry.text)!.length > 20
-                          ? getPlainText(entry.text)?.slice(0, 20) + " ..."
-                          : getPlainText(entry.text)}
-                      </span>
-                    </a>
-                  ) : null;
-                })}
+                entries
+                  .filter((entry) => entry.sectionId === sortpoint)
+                  .map((entry) => {
+                    return entry ? (
+                      <a
+                        href={`#${entry.entryCode}`}
+                        className="ml-5 mt-1 px-2 py-1 flex gap-2 bg-offWhite hover:bg-lightGrey rounded-md text-darkGrey font-normal">
+                        <span
+                          className={cx(
+                            "self-center text-xs rounded-full p-1 w-fit px-3 font-semibold",
+                            {
+                              [`bg-${
+                                getTheme(selectedTheme)?.primaryPlaintiff
+                              } text-${
+                                getTheme(selectedTheme)?.secondaryPlaintiff
+                              }`]: entry.entryCode?.charAt(0) === "B",
+                              [`bg-${
+                                getTheme(selectedTheme)?.primaryDefendant
+                              } text-${
+                                getTheme(selectedTheme)?.secondaryDefendant
+                              }`]: entry.entryCode?.charAt(0) === "K",
+                            }
+                          )}>
+                          {entry.entryCode}
+                        </span>
+                        <span>
+                          {getPlainText(entry.text) &&
+                          getPlainText(entry.text)!.length > 20
+                            ? getPlainText(entry.text)?.slice(0, 20) + " ..."
+                            : getPlainText(entry.text)}
+                        </span>
+                      </a>
+                    ) : null;
+                  })}
             </div>
           ))
         )}
