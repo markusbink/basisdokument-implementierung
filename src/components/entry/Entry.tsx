@@ -309,7 +309,6 @@ export const Entry: React.FC<EntryProps> = ({
               hideEntriesHighlighter &&
               getCurrentTool.id === Tool.Cursor),
           "pointer-events-none": isHidden,
-          "mt-6": !shownInPopup && view !== ViewMode.SideBySide,
           "w-1/2": shownInPopup,
         })}>
         <div
