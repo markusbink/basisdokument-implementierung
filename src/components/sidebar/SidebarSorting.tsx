@@ -64,6 +64,15 @@ export const SidebarSorting = () => {
       .documentElement.textContent;
   };
 
+  const toggleAllEntries = (newVisibility: boolean) => {
+    const updated = entriesVisibleForSection.map((entrVisib) =>
+      entrVisib.visible !== newVisibility
+        ? { section: entrVisib.section, visible: newVisibility }
+        : entrVisib
+    );
+    setEntriesVisibleForSection(updated);
+  };
+
   return (
     //h-[calc(100vh-56px)] -> overflow scroll needs a fixed height of parent: 56px (height of sidebar header)
     <div className="flex flex-col gap-3 h-[calc(100vh-56px)]">
@@ -95,6 +104,20 @@ export const SidebarSorting = () => {
           Es wurden noch keine Gliederungspunkte angelegt.
         </span>
       )}
+      <div
+        className={cx(
+          "self-end px-6 text-sm hover:underline hover:cursor-pointer",
+          {
+            "-mb-5": selectedSorting === Sorting.Privat,
+            "-mb-3": selectedSorting === Sorting.Original,
+          }
+        )}
+        onClick={() => {
+          toggleAllEntries(!entriesVisible);
+          setEntriesVisible(!entriesVisible);
+        }}>
+        {`Alle ${entriesVisible ? "ein" : "aus"}klappen`}
+      </div>
       <div className="px-4 mb-4 flex-1 overflow-y-scroll scroll-smooth">
         {selectedSorting === Sorting.Privat ? (
           // private sorting
