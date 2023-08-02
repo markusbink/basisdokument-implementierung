@@ -309,7 +309,6 @@ export const Entry: React.FC<EntryProps> = ({
               hideEntriesHighlighter &&
               getCurrentTool.id === Tool.Cursor),
           "pointer-events-none": isHidden,
-          "mt-6": !shownInPopup && view !== ViewMode.SideBySide,
           "w-1/2": shownInPopup,
         })}>
         <div
@@ -370,7 +369,10 @@ export const Entry: React.FC<EntryProps> = ({
                     }></ArrowSquareOut>
                 </Tooltip>
               </a>
-            ) : null}
+            ) : (
+              //spacing
+              <div className="h-6"></div>
+            )}
             <div
               className={cx("shadow rounded-lg", {
                 "outline outline-2 outline-offset-4 outline-blue-600":
@@ -589,25 +591,28 @@ export const Entry: React.FC<EntryProps> = ({
             </div>
             {/* Button to add response */}
             {canAddEntry &&
-              !isNewEntryVisible &&
-              !showEntrySorting &&
-              !shownInPopup &&
-              user?.role !== UserRole.Client && (
-                <a
-                  className="inline-block"
-                  href={`#${entry.sectionId}-scroll`}
-                  ref={createAssociatedEntryButton}>
-                  <Button
-                    size="sm"
-                    alternativePadding="mt-2"
-                    bgColor="bg-lightGrey hover:bg-mediumGrey"
-                    textColor="text-darkGrey hover:text-offWhite"
-                    onClick={showNewEntry}
-                    icon={<ArrowBendLeftUp weight="bold" size={18} />}>
-                    Auf diesen Beitrag Bezug nehmen
-                  </Button>
-                </a>
-              )}
+            !isNewEntryVisible &&
+            !showEntrySorting &&
+            !shownInPopup &&
+            user?.role !== UserRole.Client ? (
+              <a
+                className="inline-block"
+                href={`#${entry.sectionId}-scroll`}
+                ref={createAssociatedEntryButton}>
+                <Button
+                  size="sm"
+                  alternativePadding="mt-2"
+                  bgColor="bg-lightGrey hover:bg-mediumGrey"
+                  textColor="text-darkGrey hover:text-offWhite"
+                  onClick={showNewEntry}
+                  icon={<ArrowBendLeftUp weight="bold" size={18} />}>
+                  Auf diesen Beitrag Bezug nehmen
+                </Button>
+              </a>
+            ) : (
+              //spacing
+              <div className="h-9"></div>
+            )}
           </div>
           {isNewEntryVisible && (
             <div className={cx(`flex flex-col w-full`)}>
