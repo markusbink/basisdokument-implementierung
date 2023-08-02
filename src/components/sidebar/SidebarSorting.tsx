@@ -21,6 +21,13 @@ export const SidebarSorting = () => {
   const { user } = useUser();
   const { groupedEntries } = useCase();
   const [entriesVisible, setEntriesVisible] = useState<boolean>(true);
+  const [entriesVisibleForSection, setEntriesVisibleForSection] = useState<
+    { section: string; visible: boolean }[]
+  >(
+    originalSorting.map((sortpoint: string) => {
+      return { section: sortpoint, visible: true };
+    })
+  );
 
   const getSectionObject = (id: string) => {
     let section: ISection = sectionList.find((section) => section.id === id)!;
@@ -218,23 +225,54 @@ export const SidebarSorting = () => {
                                         </div>
                                       )}
                                     </a>
-                                    {entriesVisible ? (
+                                    {entriesVisibleForSection.find(
+                                      (entrVisib) =>
+                                        entrVisib.section === section
+                                    )?.visible ? (
                                       <CaretUp
                                         size={12}
                                         className="text-darkGrey cursor-pointer"
                                         weight="bold"
-                                        onClick={() => setEntriesVisible(false)}
+                                        onClick={() => {
+                                          const updated =
+                                            entriesVisibleForSection.map(
+                                              (entrVisib) =>
+                                                entrVisib.section === section
+                                                  ? {
+                                                      section:
+                                                        entrVisib.section,
+                                                      visible: false,
+                                                    }
+                                                  : entrVisib
+                                            );
+                                          setEntriesVisibleForSection(updated);
+                                        }}
                                       />
                                     ) : (
                                       <CaretDown
                                         size={12}
                                         className="text-darkGrey cursor-pointer"
                                         weight="bold"
-                                        onClick={() => setEntriesVisible(true)}
+                                        onClick={() => {
+                                          const updated =
+                                            entriesVisibleForSection.map(
+                                              (entrVisib) =>
+                                                entrVisib.section === section
+                                                  ? {
+                                                      section:
+                                                        entrVisib.section,
+                                                      visible: true,
+                                                    }
+                                                  : entrVisib
+                                            );
+                                          setEntriesVisibleForSection(updated);
+                                        }}
                                       />
                                     )}
                                   </div>
-                                  {entriesVisible &&
+                                  {entriesVisibleForSection.find(
+                                    (entrVisib) => entrVisib.section === section
+                                  )?.visible &&
                                     groupedEntries[section]?.parent.map(
                                       (entry) => {
                                         return entry ? (
@@ -361,23 +399,43 @@ export const SidebarSorting = () => {
                     </span>
                   </div>
                 </a>
-                {entriesVisible ? (
+                {entriesVisibleForSection.find(
+                  (entrVisib) => entrVisib.section === sortpoint
+                )?.visible ? (
                   <CaretUp
                     size={12}
                     className="text-darkGrey cursor-pointer"
                     weight="bold"
-                    onClick={() => setEntriesVisible(false)}
+                    onClick={() => {
+                      const updated = entriesVisibleForSection.map(
+                        (entrVisib) =>
+                          entrVisib.section === sortpoint
+                            ? { section: entrVisib.section, visible: false }
+                            : entrVisib
+                      );
+                      setEntriesVisibleForSection(updated);
+                    }}
                   />
                 ) : (
                   <CaretDown
                     size={12}
                     className="text-darkGrey cursor-pointer"
                     weight="bold"
-                    onClick={() => setEntriesVisible(true)}
+                    onClick={() => {
+                      const updated = entriesVisibleForSection.map(
+                        (entrVisib) =>
+                          entrVisib.section === sortpoint
+                            ? { section: entrVisib.section, visible: true }
+                            : entrVisib
+                      );
+                      setEntriesVisibleForSection(updated);
+                    }}
                   />
                 )}
               </div>
-              {entriesVisible &&
+              {entriesVisibleForSection.find(
+                (entrVisib) => entrVisib.section === sortpoint
+              )?.visible &&
                 groupedEntries[sortpoint]?.parent.map((entry) => {
                   return entry ? (
                     <a

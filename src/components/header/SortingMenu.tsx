@@ -7,6 +7,10 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { UserRole } from "../../types";
 import { getOriginalSortingPosition } from "../../util/get-original-sorting-position";
 
+// drag menu platzieren bei doppeltem titel (zentrieren)
+// alle ein/ausklappen extra button
+// update on entry add
+
 export const SortingMenu = () => {
   const { sectionList, individualSorting, setIndividualSorting } = useSection();
   const [showSortingMenu, setShowSortingMenu] = useState<boolean>(false);
