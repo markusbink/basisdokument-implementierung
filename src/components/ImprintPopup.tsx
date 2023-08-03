@@ -1,6 +1,5 @@
 import { X } from "phosphor-react";
 import { useImprint } from "../contexts";
-import cx from "classnames";
 
 export const ImprintPopup = () => {
   const { setShowImprintPopup } = useImprint();
