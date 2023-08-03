@@ -11,17 +11,18 @@ import {
 } from "phosphor-react";
 import cx from "classnames";
 import { getTheme } from "../../themes/getTheme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const SidebarSorting = () => {
   const { selectedSorting, setSelectedSorting, selectedTheme } =
     useHeaderContext();
   const { sectionList, individualSorting, setIndividualSorting } = useSection();
   let originalSorting = sectionList.map((section) => section.id);
+
   const { user } = useUser();
   const { entries } = useCase();
-  const [entriesVisible, setEntriesVisible] = useState<boolean>(true);
-  const [entriesVisibleForSection, setEntriesVisibleForSection] = useState<
+  const [allExpanded, setAllExpanded] = useState<boolean>(true);
+  const [sectionExpandedPairs, setSectionExpandedPairs] = useState<
     { section: string; visible: boolean }[]
   >(
     originalSorting.map((sortpoint: string) => {
@@ -64,17 +65,32 @@ export const SidebarSorting = () => {
       .documentElement.textContent;
   };
 
-  const toggleAllEntries = (newVisibility: boolean) => {
-    const updated = entriesVisibleForSection.map((entrVisib) =>
+  const toggleAllEntries = () => {
+    const newVisibility = !sectionExpandedPairs.some((pair) => pair.visible);
+    const updated = sectionExpandedPairs.map((entrVisib) =>
       entrVisib.visible !== newVisibility
         ? { section: entrVisib.section, visible: newVisibility }
         : entrVisib
     );
-    setEntriesVisibleForSection(updated);
+    setSectionExpandedPairs(updated);
   };
 
+  useEffect(() => {
+    const newlyAddedSections = sectionList.filter(
+      (section) =>
+        !sectionExpandedPairs.map((ev) => ev.section).includes(section.id)
+    );
+    const updated = sectionExpandedPairs.concat(
+      newlyAddedSections.map((section) => {
+        return { section: section.id, visible: true };
+      })
+    );
+    setSectionExpandedPairs(updated);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectionList]);
+
   return (
-    //h-[calc(100vh-56px)] -> overflow scroll needs a fixed height of parent: 56px (height of sidebar header)
+    //h-[calc(100vh-56px)] -> overflow scroll needs a fixed height of parent: 56px (height of sidebar header) */}
     <div className="flex flex-col gap-3 h-[calc(100vh-56px)]">
       <div className="flex flex-row justify-between pt-4 px-4">
         <div className="font-bold text-darkGrey text-lg">Gliederung</div>
@@ -107,18 +123,17 @@ export const SidebarSorting = () => {
       <div
         className={cx(
           "self-end px-6 text-sm hover:underline hover:cursor-pointer",
-          {
-            "-mb-5": selectedSorting === Sorting.Privat,
-            "-mb-3": selectedSorting === Sorting.Original,
-          }
+          { "-mb-2": selectedSorting === Sorting.Original }
         )}
         onClick={() => {
-          toggleAllEntries(!entriesVisible);
-          setEntriesVisible(!entriesVisible);
+          toggleAllEntries();
+          setAllExpanded(!allExpanded);
         }}>
-        {`Alle ${entriesVisible ? "ein" : "aus"}klappen`}
+        {`Alle ${
+          sectionExpandedPairs.some((pair) => pair.visible) ? "ein" : "aus"
+        }klappen`}
       </div>
-      <div className="px-4 mb-4 flex-1 overflow-y-scroll scroll-smooth">
+      <div className="px-4 pb-12 mb-2 flex-1 overflow-y-scroll scroll-smooth">
         {selectedSorting === Sorting.Privat ? (
           // private sorting
           <>
@@ -127,7 +142,7 @@ export const SidebarSorting = () => {
                 <Droppable droppableId="sorting-menu-sidebar">
                   {(provided) => (
                     <div
-                      className="sorting-menu flex flex-col sorting-menu-sidebar gap-2 mt-4"
+                      className="sorting-menu flex flex-col sorting-menu-sidebar gap-2"
                       {...provided.droppableProps}
                       ref={provided.innerRef}>
                       {individualSorting.map((section, index) => (
@@ -262,7 +277,7 @@ export const SidebarSorting = () => {
                                         </div>
                                       )}
                                     </a>
-                                    {entriesVisibleForSection.find(
+                                    {sectionExpandedPairs.find(
                                       (entrVisib) =>
                                         entrVisib.section === section
                                     )?.visible ? (
@@ -272,7 +287,7 @@ export const SidebarSorting = () => {
                                         weight="bold"
                                         onClick={() => {
                                           const updated =
-                                            entriesVisibleForSection.map(
+                                            sectionExpandedPairs.map(
                                               (entrVisib) =>
                                                 entrVisib.section === section
                                                   ? {
@@ -282,7 +297,7 @@ export const SidebarSorting = () => {
                                                     }
                                                   : entrVisib
                                             );
-                                          setEntriesVisibleForSection(updated);
+                                          setSectionExpandedPairs(updated);
                                         }}
                                       />
                                     ) : (
@@ -292,7 +307,7 @@ export const SidebarSorting = () => {
                                         weight="bold"
                                         onClick={() => {
                                           const updated =
-                                            entriesVisibleForSection.map(
+                                            sectionExpandedPairs.map(
                                               (entrVisib) =>
                                                 entrVisib.section === section
                                                   ? {
@@ -302,12 +317,12 @@ export const SidebarSorting = () => {
                                                     }
                                                   : entrVisib
                                             );
-                                          setEntriesVisibleForSection(updated);
+                                          setSectionExpandedPairs(updated);
                                         }}
                                       />
                                     )}
                                   </div>
-                                  {entriesVisibleForSection.find(
+                                  {sectionExpandedPairs.find(
                                     (entrVisib) => entrVisib.section === section
                                   )?.visible &&
                                     entries
@@ -317,6 +332,7 @@ export const SidebarSorting = () => {
                                       .map((entry) => {
                                         return entry ? (
                                           <a
+                                            key={entry.entryCode}
                                             href={`#${entry.entryCode}`}
                                             className="ml-5 mt-1 px-2 py-1 flex gap-2 bg-offWhite hover:bg-lightGrey rounded-md text-darkGrey font-normal">
                                             <span
@@ -378,25 +394,23 @@ export const SidebarSorting = () => {
                 </Droppable>
               </DragDropContext>
             </div>
-            <div>
-              {sectionList.length !== 0 ? (
-                <div className="flex justify-end mt-2">
-                  <div
-                    className="flex flex-row gap-1 items-center cursor-pointer bg-darkGrey hover:bg-mediumGrey text-white text-[10px] font-bold px-1.5 py-1 rounded-md"
-                    onClick={() => {
-                      resetPrivateSorting();
-                    }}>
-                    <ClockClockwise size={16} />
-                    <span>Sortierung zurücksetzen</span>
-                  </div>
+            {sectionList.length !== 0 && (
+              <div className="absolute right-0 bottom-1 w-fit bg-offWhite px-2 py-1">
+                <div
+                  className="flex gap-1 items-center cursor-pointer bg-darkGrey hover:bg-mediumGrey text-white text-xs p-1.5 rounded-md"
+                  onClick={() => {
+                    resetPrivateSorting();
+                  }}>
+                  <ClockClockwise size={16} />
+                  <span>Sortierung zurücksetzen</span>
                 </div>
-              ) : null}
-            </div>
+              </div>
+            )}
           </>
         ) : (
           // original sorting
           originalSorting.map((sortpoint) => (
-            <div>
+            <div key={sortpoint}>
               <div className="flex bg-offWhite hover:bg-lightGrey rounded-md p-2 my-2 items-center">
                 <a
                   href={`#${sortpoint}`}
@@ -438,7 +452,7 @@ export const SidebarSorting = () => {
                     </span>
                   </div>
                 </a>
-                {entriesVisibleForSection.find(
+                {sectionExpandedPairs.find(
                   (entrVisib) => entrVisib.section === sortpoint
                 )?.visible ? (
                   <CaretUp
@@ -446,13 +460,12 @@ export const SidebarSorting = () => {
                     className="text-darkGrey cursor-pointer"
                     weight="bold"
                     onClick={() => {
-                      const updated = entriesVisibleForSection.map(
-                        (entrVisib) =>
-                          entrVisib.section === sortpoint
-                            ? { section: entrVisib.section, visible: false }
-                            : entrVisib
+                      const updated = sectionExpandedPairs.map((entrVisib) =>
+                        entrVisib.section === sortpoint
+                          ? { section: entrVisib.section, visible: false }
+                          : entrVisib
                       );
-                      setEntriesVisibleForSection(updated);
+                      setSectionExpandedPairs(updated);
                     }}
                   />
                 ) : (
@@ -461,18 +474,18 @@ export const SidebarSorting = () => {
                     className="text-darkGrey cursor-pointer"
                     weight="bold"
                     onClick={() => {
-                      const updated = entriesVisibleForSection.map(
-                        (entrVisib) =>
-                          entrVisib.section === sortpoint
-                            ? { section: entrVisib.section, visible: true }
-                            : entrVisib
+                      const updated = sectionExpandedPairs.map((entrVisib) =>
+                        entrVisib.section === sortpoint
+                          ? { section: entrVisib.section, visible: true }
+                          : entrVisib
                       );
-                      setEntriesVisibleForSection(updated);
+                      setSectionExpandedPairs(updated);
                     }}
                   />
                 )}
               </div>
-              {entriesVisibleForSection.find(
+
+              {sectionExpandedPairs.find(
                 (entrVisib) => entrVisib.section === sortpoint
               )?.visible &&
                 entries
@@ -480,6 +493,7 @@ export const SidebarSorting = () => {
                   .map((entry) => {
                     return entry ? (
                       <a
+                        key={entry.entryCode}
                         href={`#${entry.entryCode}`}
                         className="ml-5 mt-1 px-2 py-1 flex gap-2 bg-offWhite hover:bg-lightGrey rounded-md text-darkGrey font-normal">
                         <span
