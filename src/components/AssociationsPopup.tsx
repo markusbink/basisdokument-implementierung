@@ -1,5 +1,4 @@
 import { X } from "phosphor-react";
-import cx from "classnames";
 import { IEntry, UserRole } from "../types";
 import { Entry } from "./entry";
 import { useUser } from "../contexts";
