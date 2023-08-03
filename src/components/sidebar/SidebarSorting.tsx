@@ -115,24 +115,26 @@ export const SidebarSorting = () => {
           </span>
         ) : null}
       </div>
-      {individualSorting.length <= 0 && (
+      {(!sectionList || sectionList.length) <= 0 && (
         <span className="mt-7 text-darkGrey opacity-40 text-center text-sm px-4">
           Es wurden noch keine Gliederungspunkte angelegt.
         </span>
       )}
-      <div
-        className={cx(
-          "self-end px-6 text-sm hover:underline hover:cursor-pointer",
-          { "-mb-2": selectedSorting === Sorting.Original }
-        )}
-        onClick={() => {
-          toggleAllEntries();
-          setAllExpanded(!allExpanded);
-        }}>
-        {`Alle ${
-          sectionExpandedPairs.some((pair) => pair.visible) ? "ein" : "aus"
-        }klappen`}
-      </div>
+      {sectionList && sectionList.length > 0 && (
+        <div
+          className={cx(
+            "self-end px-6 text-sm hover:underline hover:cursor-pointer",
+            { "-mb-2": selectedSorting === Sorting.Original }
+          )}
+          onClick={() => {
+            toggleAllEntries();
+            setAllExpanded(!allExpanded);
+          }}>
+          {`Alle ${
+            sectionExpandedPairs.some((pair) => pair.visible) ? "ein" : "aus"
+          }klappen`}
+        </div>
+      )}
       <div className="px-4 pb-12 mb-2 flex-1 overflow-y-scroll scroll-smooth">
         {selectedSorting === Sorting.Privat ? (
           // private sorting
@@ -382,13 +384,6 @@ export const SidebarSorting = () => {
                         </Draggable>
                       ))}
                       {provided.placeholder}
-                      {sectionList.length === 0 ? (
-                        <div className="flex justify-center items-center p-8">
-                          <p className="text-mediumGrey opacity-70 text-center text-sm w-48">
-                            Es wurden noch keine Gliederungspunkte angelegt.
-                          </p>
-                        </div>
-                      ) : null}
                     </div>
                   )}
                 </Droppable>
