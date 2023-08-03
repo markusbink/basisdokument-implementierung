@@ -395,7 +395,7 @@ export const SidebarSorting = () => {
               </DragDropContext>
             </div>
             {sectionList.length !== 0 && (
-              <div className="absolute right-0 bottom-1 w-fit bg-offWhite px-2 py-1">
+              <div className="absolute right-0 bottom-1 w-fit bg-white px-2 py-1">
                 <div
                   className="flex gap-1 items-center cursor-pointer bg-darkGrey hover:bg-mediumGrey text-white text-xs p-1.5 rounded-md"
                   onClick={() => {
