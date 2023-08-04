@@ -542,8 +542,11 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <div className="flex flex-col gap-4">
             <div>
               <p className="font-light">
-                Basisdokument-Dateien hochladen:{" "}
-                <span className="text-darkRed">*</span>
+                Basisdokument-
+                {isReadonly || usage === UsageMode.Readonly
+                  ? "Datei"
+                  : "Dateien"}{" "}
+                hochladen: <span className="text-darkRed">*</span>
               </p>
               <div className="flex flex-col items-start w-auto mt-8 mb-8 gap-4">
                 <div className="flex flex-row items-center justify-center gap-2">
