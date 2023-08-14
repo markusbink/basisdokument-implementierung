@@ -11,41 +11,43 @@ import { Tooltip } from "../Tooltip";
 import { MetaDataBody } from "./MetaDataBody";
 import { MetaDataForm } from "./MetaDataForm";
 
-interface MetaDataProps {
+interface IntroProps {
   owner: UserRole;
 }
 
-export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
+export const Intro: React.FC<IntroProps> = ({ owner }) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false);
 
   const { user } = useUser();
-  const { metaData, setMetaData } = useCase();
+  const { introduction, setIntroduction } = useCase();
   const { selectedTheme } = useHeaderContext();
 
   const isPlaintiff = owner === UserRole.Plaintiff;
   const isJudge = user?.role === UserRole.Judge;
   const canEdit = isJudge || user?.role === owner;
-  const rubrumContent = isPlaintiff ? metaData?.plaintiff : metaData?.defendant;
+  const introductionContent = isPlaintiff
+    ? introduction?.plaintiff
+    : introduction?.defendant;
 
   const toggleMetaData = () => {
     setIsOpen(!isOpen);
     setIsEditing(false);
   };
 
-  const editRubrum = () => {
+  const editIntroduction = () => {
     setIsEditing(!isEditing);
     setIsOpen(true);
   };
 
-  const updateRubrum = (plainText: string, rawHtml: string) => {
+  const updateIntroduction = (plainText: string, rawHtml: string) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
       return;
     }
 
-    setMetaData((prevState) => {
+    setIntroduction((prevState) => {
       const newState = { ...prevState };
       if (isPlaintiff) {
         newState.plaintiff = rawHtml;
@@ -64,13 +66,13 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           className="flex items-center gap-2 cursor-pointer font-bold text-darkGrey"
           onClick={() => toggleMetaData()}>
           {isOpen ? <CaretDown></CaretDown> : <CaretRight></CaretRight>}
-          <span>Rubrum</span>
+          <span>Einführung</span>
         </div>
         {canEdit && (
-          <Tooltip text="Rubrum bearbeiten">
+          <Tooltip text="Einführung bearbeiten">
             <PencilSimple
               className="cursor-pointer opacity-50"
-              onClick={() => editRubrum()}></PencilSimple>
+              onClick={() => editIntroduction()}></PencilSimple>
           </Tooltip>
         )}
       </div>
@@ -89,22 +91,22 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           )}>
           {isEditing ? (
             <MetaDataForm
-              defaultContent={rubrumContent}
+              defaultContent={introductionContent}
               onAbort={(plainText, rawHtml) => {
                 setIsErrorVisible(true);
               }}
               onSave={(plainText, rawHtml) => {
-                updateRubrum(plainText, rawHtml);
+                updateIntroduction(plainText, rawHtml);
               }}
             />
           ) : (
             <MetaDataBody isPlaintiff={isPlaintiff}>
-              {rubrumContent ? (
-                <p dangerouslySetInnerHTML={{ __html: rubrumContent }} />
+              {introductionContent ? (
+                <p dangerouslySetInnerHTML={{ __html: introductionContent }} />
               ) : (
                 <div className="flex flex-col items-center justify-center py-4 max-w-[200px] m-auto text-center space-y-3">
                   <p className="text-sm">
-                    Bisher wurde noch kein Rubrum hinterlegt.
+                    Bisher wurde noch keine Einführung hinterlegt.
                   </p>
                   {canEdit && (
                     <Button
