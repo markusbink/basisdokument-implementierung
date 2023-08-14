@@ -145,8 +145,12 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   // The onboarding should only be displayed when if the user opens a basisdokument for the first time.
   // It is still possible to access the onboarding via the ?-icon in the header.
+  // The onboarding is also not shown with 'mandantendomain'
   const checkOnboardingShownBefore = () => {
-    if (Cookies.get("onboarding") === undefined) {
+    if (
+      Cookies.get("onboarding") === undefined &&
+      usage !== UsageMode.Readonly
+    ) {
       Cookies.set("onboarding", "true");
       setIsOnboardingVisible(true);
     }
