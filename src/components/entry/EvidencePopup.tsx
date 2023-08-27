@@ -1,11 +1,19 @@
-import { CaretDown, CaretUp, X, XCircle } from "phosphor-react";
+import {
+  CaretDown,
+  CaretUp,
+  ImageSquare,
+  Trash,
+  Upload,
+  X,
+  XCircle,
+} from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
 import { getEvidences } from "../../util/get-evidences";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEvidence, UserRole } from "../../types";
+import { IEvidence, UserRole, IStateUserInput } from "../../types";
 import { ErrorPopup } from "../ErrorPopup";
 import { v4 as uuidv4 } from "uuid";
 import { Tooltip } from "../Tooltip";
@@ -66,12 +74,17 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const [currentInput, setCurrentInput] = useState<string>("");
   const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
+  const [hasImageFile, setHasImageFile] = useState<boolean>(false);
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
   const [evidenceToRemove, setEvidenceToRemove] = useState<IEvidence>();
   const [evidenceEditMode, setEvidenceEditMode] = useState<{
     evidence: IEvidence;
     value: boolean;
   }>();
+  const [imagePopupFilename, setImagePopupFilename] = useState<string>("");
+  const [imagePopupData, setImagePopupData] = useState<string>("");
+  const [imagePopupAttachment, setImagePopupAttachment] = useState<string>("");
+  const [imagePopupVisible, setImagePopupVisible] = useState<boolean>(false);
 
   const inputRef = useRef(null);
   useOutsideClick(inputRef, () => setSuggestionsActive(false));
@@ -81,17 +94,51 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     handleEvidenceAddedToCurrent();
   };
 
+  const [isValidImageFile, setIsValidImageFile] = useState<boolean>(true);
+  const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
+  const [imageFile, setImageFile] = useState<string | undefined>("");
+  const [imageFilename, setImageFilename] = useState<string>("");
+  const imageFileUploadRef = useRef<HTMLInputElement>(null);
+
+  const handleImageFileUpload = (e: any) => {
+    const fileReader = new FileReader();
+    try {
+      fileReader.readAsDataURL(e.target.files[0]);
+      setImageFilename(e.target.files[0].name);
+      fileReader.onload = (e: any) => {
+        let result = e.target.result;
+        setImageFile(result);
+        setHasImageFile(true);
+      };
+      e.target.value = "";
+    } catch (error) {}
+  };
+
+  const showImage = (filedata: string, filename: string, attId: string) => {
+    setImagePopupVisible(!imagePopupVisible);
+    setImagePopupData(filedata);
+    setImagePopupAttachment(attId);
+    setImagePopupFilename(filename);
+  };
+
   const handleEvidenceAddedToCurrent = () => {
     if (!currentInput || currentInput?.trim().length <= 0) return;
     const ev: IEvidence = {
       id: uuidv4(),
       name: currentInput,
       hasAttachment: hasAttachment,
+      hasImageFile: hasImageFile,
       version: currentVersion,
       isCurrentEntry: true,
       role: isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant,
       isInEditMode: false,
     };
+    if (hasImageFile) {
+      ev.imageFile = imageFile;
+      ev.imageFilename = imageFilename;
+      setImageFile("");
+      setImageFilename("");
+    }
     // if has attachment add to plaintiff/defendant arrays for attachment id handling
     if (hasAttachment) {
       if (ev.role === UserRole.Plaintiff) {
@@ -113,6 +160,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     }
     setCurrentInput("");
     setHasAttachment(false);
+    setHasImageFile(false);
   };
 
   // if existing evidence is added to entry, no handling of plaintiff/defendant arrays is needed
@@ -350,28 +398,90 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                 <input
                   className="w-2.5 h-2.5 cursor-pointer"
                   type="checkbox"
-                  id="new"
-                  name="new"
-                  value="new"
+                  id="att"
+                  name="att"
+                  value="att"
                   checked={hasAttachment}
                   onChange={() => setHasAttachment(!hasAttachment)}
                 />
                 <label
-                  htmlFor="new"
+                  htmlFor="att"
                   className="cursor-pointer whitespace-nowrap pl-2">
                   {" "}
                   als Anlage
                 </label>
               </div>
-              <div className="items-center flex my-1">
-                <Button
-                  bgColor="bg-lightGreen hover:bg-darkGreen"
-                  textColor="text-darkGreen hover:text-white"
-                  alternativePadding="p-1.5"
-                  onClick={() => handleEvidenceAddedToCurrent()}>
-                  Hinzufügen
-                </Button>
+              <div className="bg-offWhite rounded-lg px-2 py-1.5 self-center items-center flex">
+                <input
+                  className="w-2.5 h-2.5 cursor-pointer"
+                  type="checkbox"
+                  id="img"
+                  name="img"
+                  value="img"
+                  checked={hasImageFile}
+                  onChange={(e) => {
+                    setHasImageFile(!hasImageFile);
+                    if (e.target.checked) setHasAttachment(true);
+                    else {
+                      setImageFile("");
+                      setImageFilename("");
+                    }
+                  }}
+                />
+                <label
+                  htmlFor="img"
+                  className="cursor-pointer whitespace-nowrap pl-2">
+                  {" "}
+                  als Bild
+                </label>
               </div>
+            </div>
+            {hasImageFile && (
+              <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 my-2 flex flex-row justify-between items-center gap-2">
+                {(imageFile ? "Bild hochgeladen: " : "Bild hochladen: ") +
+                  imageFilename}
+                <div className="flex gap-2">
+                  <label
+                    role="button"
+                    className="flex items-center justify-center gap-2 cursor-pointer">
+                    <input
+                      type="file"
+                      ref={imageFileUploadRef}
+                      onChange={handleImageFileUpload}
+                    />
+                    <button
+                      onClick={() => {
+                        if (!isValidImageFile) {
+                          setErrorText("");
+                          setIsValidImageFile(true);
+                        }
+                        imageFileUploadRef?.current?.click();
+                      }}
+                      className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                      <Upload size={24} color={"white"} />
+                    </button>
+                  </label>
+                  {true && (
+                    <button
+                      onClick={() => {
+                        console.log("test");
+                        setImageFile(undefined);
+                      }}
+                      className="bg-lightRed hover:bg-marker-red rounded-md p-1">
+                      <Trash size={24} color={"darkRed"} />
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+            <div className="items-center flex my-1 w-full">
+              <Button
+                bgColor="bg-lightGreen hover:bg-darkGreen"
+                textColor="text-darkGreen hover:text-white"
+                alternativePadding="p-1.5 w-full"
+                onClick={() => handleEvidenceAddedToCurrent()}>
+                Hinzufügen
+              </Button>
             </div>
           </div>
           <div
@@ -493,6 +603,17 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                         </b>
                                       </span>
                                     )}
+                                    {/* TODO: edit upload on click */}
+                                    {ev.hasImageFile && (
+                                      <ImageSquare
+                                        size={20}
+                                        className="text-mediumGrey hover:text-black"
+                                        onClick={() => {
+                                          console.log("edit upload");
+                                        }}
+                                      />
+                                    )}
+                                    {/* end TODO */}
                                   </>
                                 ) : (
                                   <>
@@ -505,6 +626,19 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                       <span className="break-words font-medium">
                                         {ev.name}
                                       </span>
+                                    )}
+                                    {ev.hasImageFile && (
+                                      <ImageSquare
+                                        size={20}
+                                        className="text-mediumGrey hover:text-black"
+                                        onClick={() => {
+                                          showImage(
+                                            ev.imageFile!,
+                                            ev.imageFilename!,
+                                            ev.attachmentId!
+                                          );
+                                        }}
+                                      />
                                     )}
                                   </>
                                 )}
@@ -544,6 +678,16 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               )}
             </div>
           </div>
+          {/* TODO: in popup auslagern */}
+          {imagePopupVisible && (
+            <div>
+              {`Bild zu Anlage ${imagePopupAttachment}: ${imagePopupFilename}`}
+              <img
+                src={imagePopupData}
+                alt={`Bild zu Anlage ${imagePopupAttachment}`}></img>
+            </div>
+          )}
+          {/* end TODO */}
           <div className="flex items-center justify-end">
             <button
               className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"

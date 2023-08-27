@@ -179,4 +179,7 @@ export interface IEvidence {
   tag?: string;
   attachmentId?: string;
   isInEditMode: boolean;
+  hasImageFile: boolean;
+  imageFile?: string;
+  imageFilename?: string;
 }

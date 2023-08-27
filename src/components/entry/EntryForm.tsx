@@ -152,7 +152,9 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             </div>
           ) : (
             <div className="flex flex-col gap-1">
-              <span className="ml-1 font-bold">{evidences.length === 1 ? "Beweis:" : "Beweise:"}</span>
+              <span className="ml-1 font-bold">
+                {evidences.length === 1 ? "Beweis:" : "Beweise:"}
+              </span>
               <div className="flex flex-col flex-wrap gap-1">
                 {entryEvidences.map((evidence, index) => (
                   <div className="flex flex-row items-center px-2" key={index}>
