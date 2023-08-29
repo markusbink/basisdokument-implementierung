@@ -20,6 +20,7 @@ import { Tooltip } from "../Tooltip";
 import cx from "classnames";
 import { getTheme } from "../../themes/getTheme";
 import { useEvidence } from "../../contexts/EvidenceContext";
+import { ImageViewerPopup } from "./ImageViewerPopup";
 
 interface EvidencesPopupProps {
   entryId?: string;
@@ -84,6 +85,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const [imagePopupFilename, setImagePopupFilename] = useState<string>("");
   const [imagePopupData, setImagePopupData] = useState<string>("");
   const [imagePopupAttachment, setImagePopupAttachment] = useState<string>("");
+  const [imagePopupTitle, setImagePopupTitle] = useState<string>("");
   const [imagePopupVisible, setImagePopupVisible] = useState<boolean>(false);
 
   const inputRef = useRef(null);
@@ -114,11 +116,17 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     } catch (error) {}
   };
 
-  const showImage = (filedata: string, filename: string, attId: string) => {
+  const showImage = (
+    filedata: string,
+    filename: string,
+    attId: string,
+    title: string
+  ) => {
     setImagePopupVisible(!imagePopupVisible);
     setImagePopupData(filedata);
     setImagePopupAttachment(attId);
     setImagePopupFilename(filename);
+    setImagePopupTitle(title);
   };
 
   const handleEvidenceAddedToCurrent = () => {
@@ -635,7 +643,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                           showImage(
                                             ev.imageFile!,
                                             ev.imageFilename!,
-                                            ev.attachmentId!
+                                            ev.attachmentId!,
+                                            ev.name
                                           );
                                         }}
                                       />
@@ -678,16 +687,13 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               )}
             </div>
           </div>
-          {/* TODO: in popup auslagern */}
-          {imagePopupVisible && (
-            <div>
-              {`Bild zu Anlage ${imagePopupAttachment}: ${imagePopupFilename}`}
-              <img
-                src={imagePopupData}
-                alt={`Bild zu Anlage ${imagePopupAttachment}`}></img>
-            </div>
-          )}
-          {/* end TODO */}
+          <ImageViewerPopup
+            isVisible={imagePopupVisible}
+            filedata={imagePopupData}
+            filename={imagePopupFilename}
+            title={imagePopupTitle}
+            attachmentId={imagePopupAttachment}
+            setIsVisible={setImagePopupVisible}></ImageViewerPopup>
           <div className="flex items-center justify-end">
             <button
               className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
