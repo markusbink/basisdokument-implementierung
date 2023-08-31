@@ -13,7 +13,7 @@ import { Button } from "../Button";
 import { getEvidences } from "../../util/get-evidences";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
-import { IEvidence, UserRole, IStateUserInput } from "../../types";
+import { IEvidence, UserRole } from "../../types";
 import { ErrorPopup } from "../ErrorPopup";
 import { v4 as uuidv4 } from "uuid";
 import { Tooltip } from "../Tooltip";
@@ -97,7 +97,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   };
 
   const [isValidImageFile, setIsValidImageFile] = useState<boolean>(true);
-  const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
+  const [errorText, setErrorText] = useState<string>("");
   const [imageFile, setImageFile] = useState<string | undefined>("");
   const [imageFilename, setImageFilename] = useState<string>("");
   const imageFileUploadRef = useRef<HTMLInputElement>(null);
@@ -115,6 +115,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         setHasImageFile(true);
       };
       e.target.value = "";
+      setErrorText("");
     } catch (error) {
       setErrorText("Bitte laden Sie eine valide Bilddatei hoch.");
     }
@@ -278,7 +279,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     evidenceToEdit: IEvidence
   ) => {
     const file = e.target.files ? e.target.files[0] : null;
-    if (file && !(file.type as string).includes("image")) {
+    if (file && (file.type as string).includes("image")) {
       const fileReader = new FileReader();
       try {
         fileReader.readAsDataURL(file);
@@ -296,21 +297,18 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
             });
             setEntries(newEntries);
           } else {
-            currentEvidences.forEach((ev) => {
+            const newEvidences = currentEvidences.map((ev) => {
               if (ev.id === evidenceToEdit.id) {
                 ev.imageFile = e.target.result;
                 ev.imageFilename = file.name;
               }
+              return ev;
             });
-            setCurrentEvidences([...currentEvidences]);
+            setCurrentEvidences(newEvidences);
           }
         };
         e.target.value = "";
-      } catch (error) {
-        setErrorText("Bitte laden Sie eine valide Bilddatei hoch.");
-      }
-    } else {
-      setErrorText("Bitte laden Sie eine valide Bilddatei hoch.");
+      } catch (error) {}
     }
   };
 
@@ -483,6 +481,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                     else {
                       setImageFile("");
                       setImageFilename("");
+                      setErrorText("");
                     }
                   }}
                 />
