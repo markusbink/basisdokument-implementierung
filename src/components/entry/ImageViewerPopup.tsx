@@ -23,9 +23,8 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
 
   return (
     <>
-      {/* TODO: centern */}
-      <div className="opacity-25 fixed inset-0 z-40 bg-black !m-0" />
-      <div className="justify-center items-center flex bg-white overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-fit h-fit px-5 rounded-md shadow-md">
+      <div className="opacity-25 fixed inset-0 z-50 bg-black !m-0" />
+      <div className="justify-center -translate-y-1/2 -translate-x-1/2 left-1/2 top-1/2 items-center flex bg-white overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-fit h-fit px-5 rounded-md shadow-md">
         <div className="my-6 mx-auto w-fit">
           <div className="flex justify-between">
             <h3>{title}</h3>

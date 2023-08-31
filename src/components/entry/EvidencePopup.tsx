@@ -269,6 +269,44 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     }
   };
 
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    evidenceToEdit: IEvidence
+  ) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file) {
+      const fileReader = new FileReader();
+      try {
+        fileReader.readAsDataURL(file);
+        setImageFilename(file.name);
+        fileReader.onload = (e: any) => {
+          if (entries.length > 0) {
+            const newEntries = entries.map((entry) => {
+              entry.evidences = entry.evidences?.map((ev) => {
+                if (ev.id === evidenceToEdit.id) {
+                  ev.imageFile = e.target.result;
+                  ev.imageFilename = file.name;
+                }
+                return ev;
+              });
+              return entry;
+            });
+            setEntries(newEntries);
+          } else {
+            currentEvidences.forEach((ev) => {
+              if (ev.id === evidenceToEdit.id) {
+                ev.imageFile = e.target.result;
+                ev.imageFilename = file.name;
+              }
+            });
+            setCurrentEvidences([...currentEvidences]);
+          }
+        };
+        e.target.value = "";
+      } catch (error) {}
+    }
+  };
+
   const removeFromEntry = (evidenceToDelete: IEvidence) => {
     const filteredEvidences = currentEvidences.filter(
       (evidence) => evidence.id !== evidenceToDelete?.id
@@ -410,7 +448,12 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   name="att"
                   value="att"
                   checked={hasAttachment}
-                  onChange={() => setHasAttachment(!hasAttachment)}
+                  onChange={(e) => {
+                    if (hasImageFile && !e.target.checked) {
+                      setHasImageFile(false);
+                    }
+                    setHasAttachment(!hasAttachment);
+                  }}
                 />
                 <label
                   htmlFor="att"
@@ -487,6 +530,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                 bgColor="bg-lightGreen hover:bg-darkGreen"
                 textColor="text-darkGreen hover:text-white"
                 alternativePadding="p-1.5 w-full"
+                disabled={hasImageFile && !imageFile}
                 onClick={() => handleEvidenceAddedToCurrent()}>
                 Hinzufügen
               </Button>
@@ -611,17 +655,28 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                         </b>
                                       </span>
                                     )}
-                                    {/* TODO: edit upload on click */}
                                     {ev.hasImageFile && (
-                                      <ImageSquare
-                                        size={20}
-                                        className="text-mediumGrey hover:text-black"
-                                        onClick={() => {
-                                          console.log("edit upload");
-                                        }}
-                                      />
+                                      <>
+                                        <input
+                                          type="file"
+                                          ref={imageFileUploadRef}
+                                          onChange={(e) => {
+                                            handleImageChange(e, ev);
+                                          }}
+                                        />
+                                        <ImageSquare
+                                          size={20}
+                                          className="text-mediumGrey hover:text-black"
+                                          onClick={() => {
+                                            if (!isValidImageFile) {
+                                              setErrorText("");
+                                              setIsValidImageFile(true);
+                                            }
+                                            imageFileUploadRef?.current?.click();
+                                          }}
+                                        />
+                                      </>
                                     )}
-                                    {/* end TODO */}
                                   </>
                                 ) : (
                                   <>
@@ -687,13 +742,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               )}
             </div>
           </div>
-          <ImageViewerPopup
-            isVisible={imagePopupVisible}
-            filedata={imagePopupData}
-            filename={imagePopupFilename}
-            title={imagePopupTitle}
-            attachmentId={imagePopupAttachment}
-            setIsVisible={setImagePopupVisible}></ImageViewerPopup>
+
           <div className="flex items-center justify-end">
             <button
               className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
@@ -738,6 +787,13 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
           </div>
         </div>
       </ErrorPopup>
+      <ImageViewerPopup
+        isVisible={imagePopupVisible}
+        filedata={imagePopupData}
+        filename={imagePopupFilename}
+        title={imagePopupTitle}
+        attachmentId={imagePopupAttachment}
+        setIsVisible={setImagePopupVisible}></ImageViewerPopup>
     </>
   );
 };
