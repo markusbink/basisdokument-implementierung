@@ -105,6 +105,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const handleImageFileUpload = (e: any) => {
     const fileReader = new FileReader();
     try {
+      if (!(e.target.files[0].type as string).includes("image"))
+        throw new Error();
       fileReader.readAsDataURL(e.target.files[0]);
       setImageFilename(e.target.files[0].name);
       fileReader.onload = (e: any) => {
@@ -113,7 +115,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         setHasImageFile(true);
       };
       e.target.value = "";
-    } catch (error) {}
+    } catch (error) {
+      setErrorText("Bitte laden Sie eine valide Bilddatei hoch.");
+    }
   };
 
   const showImage = (
@@ -274,11 +278,10 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     evidenceToEdit: IEvidence
   ) => {
     const file = e.target.files ? e.target.files[0] : null;
-    if (file) {
+    if (file && !(file.type as string).includes("image")) {
       const fileReader = new FileReader();
       try {
         fileReader.readAsDataURL(file);
-        setImageFilename(file.name);
         fileReader.onload = (e: any) => {
           if (entries.length > 0) {
             const newEntries = entries.map((entry) => {
@@ -303,7 +306,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
           }
         };
         e.target.value = "";
-      } catch (error) {}
+      } catch (error) {
+        setErrorText("Bitte laden Sie eine valide Bilddatei hoch.");
+      }
+    } else {
+      setErrorText("Bitte laden Sie eine valide Bilddatei hoch.");
     }
   };
 
@@ -488,42 +495,54 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               </div>
             </div>
             {hasImageFile && (
-              <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 my-2 flex flex-row justify-between items-center gap-2">
-                {(imageFile ? "Bild hochgeladen: " : "Bild hochladen: ") +
-                  imageFilename}
-                <div className="flex gap-2">
-                  <label
-                    role="button"
-                    className="flex items-center justify-center gap-2 cursor-pointer">
-                    <input
-                      type="file"
-                      ref={imageFileUploadRef}
-                      onChange={handleImageFileUpload}
-                    />
-                    <button
-                      onClick={() => {
-                        if (!isValidImageFile) {
+              <>
+                <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 my-2 flex flex-row justify-between items-center gap-2">
+                  {(imageFile ? "Bild hochgeladen: " : "Bild hochladen: ") +
+                    imageFilename}
+                  <div className="flex gap-2">
+                    <label
+                      role="button"
+                      className="flex items-center justify-center gap-2 cursor-pointer">
+                      <input
+                        type="file"
+                        ref={imageFileUploadRef}
+                        onChange={handleImageFileUpload}
+                      />
+                      <button
+                        onClick={() => {
+                          if (!isValidImageFile) {
+                            setErrorText("");
+                            setIsValidImageFile(true);
+                          }
+                          imageFileUploadRef?.current?.click();
+                        }}
+                        className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                        <Upload size={24} color={"white"} />
+                      </button>
+                    </label>
+                    {true && (
+                      <button
+                        onClick={() => {
+                          setImageFile(undefined);
+                          setImageFilename("");
                           setErrorText("");
-                          setIsValidImageFile(true);
-                        }
-                        imageFileUploadRef?.current?.click();
-                      }}
-                      className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
-                      <Upload size={24} color={"white"} />
-                    </button>
-                  </label>
-                  {true && (
-                    <button
-                      onClick={() => {
-                        console.log("test");
-                        setImageFile(undefined);
-                      }}
-                      className="bg-lightRed hover:bg-marker-red rounded-md p-1">
-                      <Trash size={24} color={"darkRed"} />
-                    </button>
-                  )}
+                        }}
+                        className="bg-lightRed hover:bg-marker-red rounded-md p-1">
+                        <Trash size={24} color={"darkRed"} />
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
+                <div>
+                  {errorText !== "" ? (
+                    <div className="flex bg-lightRed p-2 -mt-1 mb-1 rounded-md">
+                      <p className="text-darkRed">
+                        <span className="font-bold">Fehler:</span> {errorText}
+                      </p>
+                    </div>
+                  ) : null}
+                </div>
+              </>
             )}
             <div className="items-center flex my-1 w-full">
               <Button
