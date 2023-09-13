@@ -18,6 +18,7 @@ import autoTable from "jspdf-autotable";
 import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
 import { format } from "date-fns";
 import { PDFDocument } from "pdf-lib";
+import JSZip from "jszip";
 
 //define data arrays
 let allEntries: any[] = [];
@@ -37,6 +38,89 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
 
   // Save the file
   saveAs(fileToSave, fileName + ".txt");
+}
+
+function downloadAdditionalFiles(obj: any) {
+  //var additionalFilesToSave: any = [];
+  var currEntries = obj["entries"];
+
+  const zip = new JSZip();
+  const plaintiffFolder = zip.folder("Anhang Klagepartei");
+  const defendantFolder = zip.folder("Anhang Beklagtenpartei");
+
+  for (var i = 0; i < currEntries.length; i++) {
+    let currEvidences = currEntries[i]?.evidences;
+    if (currEvidences) {
+      for (var j = 0; j < currEvidences?.length; j++) {
+        if (currEvidences[j].hasImageFile) {
+          if (currEvidences[j].role === "Klagepartei") {
+            plaintiffFolder?.file(
+              currEvidences[j].attachmentId +
+                "_" +
+                currEvidences[j].name +
+                "_" +
+                currEvidences[j].imageFilename,
+              dataURItoBlob(currEvidences[j].imageFile)
+            );
+          } else {
+            defendantFolder?.file(
+              currEvidences[j].attachmentId +
+                "_" +
+                currEvidences[j].name +
+                "_" +
+                currEvidences[j].imageFilename,
+              dataURItoBlob(currEvidences[j].imageFile)
+            );
+          }
+        }
+      }
+    }
+  }
+  if (
+    countZipFiles(zip.folder("Anhang Klagepartei")) ||
+    countZipFiles(zip.folder("Anhang Beklagtenpartei"))
+  ) {
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+      saveAs(content, "Anhang.zip");
+    });
+  }
+}
+
+function countZipFiles(zipFolder: any) {
+  let countFiles = 0;
+  zipFolder.forEach(function () {
+    countFiles++;
+  });
+  if (countFiles > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//source: https://stackoverflow.com/questions/46405773/saving-base64-image-with-filesaver-js
+function dataURItoBlob(dataURI: any) {
+  // convert base64 to raw binary data held in a string
+  // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+  var byteString = atob(dataURI.split(",")[1]);
+
+  // separate out the mime component
+  var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+  // write the bytes of the string to an ArrayBuffer
+  var ab = new ArrayBuffer(byteString.length);
+
+  // create a view into the buffer
+  var ia = new Uint8Array(ab);
+
+  // set the bytes of the buffer to the correct values
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  // write the ArrayBuffer to a blob, and you're done
+  var blob = new Blob([ab], { type: mimeString });
+  return blob;
 }
 
 function downloadPDF(PDF: any, fileName: string) {
@@ -80,6 +164,9 @@ function getEvidenceNumeration(evidences: Array<IEvidence>) {
       let evidence = i + 1 + ") " + evidences[i].name;
       if (evidences[i].hasAttachment) {
         evidence = evidence + " als Anlage " + evidences[i].attachmentId;
+      }
+      if (evidences[i].hasImageFile) {
+        evidence = evidence + ": " + evidences[i].imageFilename;
       }
       //do not add line break/empty line to last item
       if (i === evidences.length - 1) {
@@ -516,11 +603,11 @@ async function downloadBasisdokumentAsPDF(
   doc.addPage();
   autoTable(doc, {
     theme: "grid",
-    head: [["Hinweise des Richters nach (nach §139 ZPO)"]],
+    head: [["Hinweise des Richters (nach §139 ZPO)"]],
     headStyles: { fontStyle: "bold", fontSize: 12, fillColor: [0, 102, 204] },
     margin: { top: 6, bottom: 6, left: 6, right: 6 },
     didDrawPage: function () {
-      doc.outline.add(null, "Hinweise des Richters nach (nach §139 ZPO)", {
+      doc.outline.add(null, "Hinweise des Richters (nach §139 ZPO)", {
         pageNumber: doc.getCurrentPageInfo().pageNumber,
       });
     },
@@ -960,6 +1047,7 @@ export function downloadBasisdokument(
     basisdokumentObject,
     `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
+  downloadAdditionalFiles(basisdokumentObject);
 }
 
 export function downloadEditFile(
