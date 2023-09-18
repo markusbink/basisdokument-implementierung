@@ -96,7 +96,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     handleEvidenceAddedToCurrent();
   };
 
-  const [isValidImageFile, setIsValidImageFile] = useState<boolean>(true);
+  const [isValidImageFile, setIsValidImageFile] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string>("");
   const [imageFile, setImageFile] = useState<string | undefined>("");
   const [imageFilename, setImageFilename] = useState<string>("");
@@ -140,7 +140,10 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   };
 
   const handleEvidenceAddedToCurrent = () => {
-    if (!currentInput || currentInput?.trim().length <= 0) return;
+    if (!currentInput || currentInput?.trim().length <= 0) {
+      setErrorText("Bitte Beschreibung hinzufügen");
+      return;
+    }
     const ev: IEvidence = {
       id: uuidv4(),
       name: currentInput,
@@ -177,6 +180,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       setCurrentEvidences([...currentEvidences, ev]);
     }
     setCurrentInput("");
+    setErrorText("");
     setHasAttachment(false);
     setHasImageFile(false);
   };
