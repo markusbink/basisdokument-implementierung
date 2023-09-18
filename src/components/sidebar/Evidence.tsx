@@ -1,4 +1,10 @@
-import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
+import {
+  DotsThree,
+  Eye,
+  ImageSquare,
+  PencilSimple,
+  Trash,
+} from "phosphor-react";
 import React, { useRef, useState } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
 import { IEvidence, UserRole } from "../../types";
@@ -9,6 +15,7 @@ import { ErrorPopup } from "../ErrorPopup";
 import { getTheme } from "../../themes/getTheme";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { useEvidence } from "../../contexts/EvidenceContext";
+import { ImageViewerPopup } from "../entry/ImageViewerPopup";
 
 export interface EvidenceProps {
   evidence: IEvidence;
@@ -29,6 +36,11 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const [isInNameEditMode, setIsInNameEditMode] = useState<boolean>(false);
   const [isInAttachmentEditMode, setIsInAttachmentEditMode] =
     useState<boolean>(false);
+  const [imagePopupFilename, setImagePopupFilename] = useState<string>("");
+  const [imagePopupData, setImagePopupData] = useState<string>("");
+  const [imagePopupAttachment, setImagePopupAttachment] = useState<string>("");
+  const [imagePopupTitle, setImagePopupTitle] = useState<string>("");
+  const [imagePopupVisible, setImagePopupVisible] = useState<boolean>(false);
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
 
@@ -94,34 +106,65 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
     setEntries(newEntries);
   };
 
+  const showImage = (
+    filedata: string,
+    filename: string,
+    attId: string,
+    title: string
+  ) => {
+    setImagePopupVisible(!imagePopupVisible);
+    setImagePopupData(filedata);
+    setImagePopupAttachment(attId);
+    setImagePopupFilename(filename);
+    setImagePopupTitle(title);
+  };
+
   return (
     <div className="flex flex-col gap-2 bg-offWhite rounded-lg mt-4 p-2 font-medium">
-      <div className="flex flex-row mt-1 w-fit">
+      <div className="flex flex-row justify-between mt-1 w-full">
         {evidence.hasAttachment && (
-          <div className="gap-1">
-            <span className="text-xs font-bold ml-1 self-center">Anlage</span>
-            {isInAttachmentEditMode ? (
-              <input
-                autoFocus={true}
-                type="text"
-                name="name"
-                placeholder="Anlage..."
-                className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
-                value={evidence.attachmentId}
-                onBlur={() => setIsInAttachmentEditMode(false)}
-                onChange={handleAttachmentIdChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    setIsInAttachmentEditMode(false);
-                  }
-                }}
-              />
-            ) : (
-              <span className="text-xs font-bold ml-1 self-center">
-                {evidence.attachmentId}
-              </span>
-            )}
-          </div>
+          <>
+            <div className="gap-1">
+              <span className="text-xs font-bold ml-1 self-center">Anlage</span>
+              {isInAttachmentEditMode ? (
+                <input
+                  autoFocus={true}
+                  type="text"
+                  name="name"
+                  placeholder="Anlage..."
+                  className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
+                  value={evidence.attachmentId}
+                  onBlur={() => setIsInAttachmentEditMode(false)}
+                  onChange={handleAttachmentIdChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setIsInAttachmentEditMode(false);
+                    }
+                  }}
+                />
+              ) : (
+                <span className="text-xs font-bold ml-1 self-center">
+                  {evidence.attachmentId}
+                </span>
+              )}
+            </div>
+            <div>
+              {evidence.hasImageFile && (
+                <ImageSquare
+                  size={20}
+                  className="text-mediumGrey hover:text-black"
+                  onClick={() => {
+                    showImage(
+                      evidence.imageFile!,
+                      evidence.imageFilename!,
+                      evidence.attachmentId!,
+                      evidence.name
+                    );
+                  }}
+                />
+              )}
+            </div>
+          </>
         )}
       </div>
       {isInNameEditMode ? (
@@ -235,6 +278,13 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
           </div>
         )}
       </div>
+      <ImageViewerPopup
+        isVisible={imagePopupVisible}
+        filedata={imagePopupData}
+        filename={imagePopupFilename}
+        title={imagePopupTitle}
+        attachmentId={imagePopupAttachment}
+        setIsVisible={setImagePopupVisible}></ImageViewerPopup>
       <ErrorPopup isVisible={isDeleteErrorVisible}>
         <div className="flex flex-col items-center justify-center space-y-8">
           <p className="text-center text-base">
