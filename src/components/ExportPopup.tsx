@@ -71,6 +71,8 @@ export const ExportPopup: React.FC<IProps> = ({
   const [showOptionalCover, setShowOptionalCover] = useState<boolean>(false);
   var [downloadNewAdditionally, setDownloadNewAdditionally] =
     useState<boolean>(false);
+  var [dontDownloadAttachments, setDontDownloadAttachments] =
+    useState<boolean>(false);
   var validUserInput: boolean = true;
 
   //Refs
@@ -138,7 +140,8 @@ export const ExportPopup: React.FC<IProps> = ({
         coverPDF,
         otherAuthor,
         downloadNewAdditionally,
-        regard
+        regard,
+        dontDownloadAttachments
       );
     }, 100);
     setTimeout(() => {
@@ -330,6 +333,25 @@ export const ExportPopup: React.FC<IProps> = ({
               <div className="text-darkGrey opacity-80 ml-5 mb-7">
                 Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge
                 herunterladen.
+              </div>
+              <div className="flex flex-row items-center justify-left gap-2">
+                <input
+                  className="small-checkbox accent-darkGrey cursor-pointer"
+                  type="checkbox"
+                  checked={dontDownloadAttachments}
+                  onChange={() =>
+                    setDontDownloadAttachments(!dontDownloadAttachments)
+                  }
+                />
+                <div className="flex flex-row gap-0.5">
+                  <span className="font-semibold">
+                    Anhänge nicht herunterladen
+                  </span>
+                </div>
+              </div>
+              <div className="text-darkGrey opacity-80 ml-5 mb-7">
+                Sie können verhindern, dass die im Basisdokument hinterlegten
+                Anhänge mit heruntergeladen werden.
               </div>
               <div>
                 {errorText !== "" ? (

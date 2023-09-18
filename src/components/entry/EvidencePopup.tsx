@@ -105,17 +105,22 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const handleImageFileUpload = (e: any) => {
     const fileReader = new FileReader();
     try {
-      if (!(e.target.files[0].type as string).includes("image"))
+      if (
+        (e.target.files[0].type as string).includes("image") ||
+        (e.target.files[0].type as string).includes("pdf")
+      ) {
+        fileReader.readAsDataURL(e.target.files[0]);
+        setImageFilename(e.target.files[0].name);
+        fileReader.onload = (e: any) => {
+          let result = e.target.result;
+          setImageFile(result);
+          setHasImageFile(true);
+        };
+        e.target.value = "";
+        setErrorText("");
+      } else {
         throw new Error();
-      fileReader.readAsDataURL(e.target.files[0]);
-      setImageFilename(e.target.files[0].name);
-      fileReader.onload = (e: any) => {
-        let result = e.target.result;
-        setImageFile(result);
-        setHasImageFile(true);
-      };
-      e.target.value = "";
-      setErrorText("");
+      }
     } catch (error) {
       setErrorText("Bitte laden Sie eine valide Bilddatei hoch.");
     }
@@ -489,21 +494,23 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   htmlFor="img"
                   className="cursor-pointer whitespace-nowrap pl-2">
                   {" "}
-                  als Bild
+                  als Bild/PDF
                 </label>
               </div>
             </div>
             {hasImageFile && (
               <>
                 <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 my-2 flex flex-row justify-between items-center gap-2">
-                  {(imageFile ? "Bild hochgeladen: " : "Bild hochladen: ") +
-                    imageFilename}
+                  {(imageFile
+                    ? "Bild/PDF hochgeladen: "
+                    : "Bild/PDF hochladen: ") + imageFilename}
                   <div className="flex gap-2">
                     <label
                       role="button"
                       className="flex items-center justify-center gap-2 cursor-pointer">
                       <input
                         type="file"
+                        accept="image/*,.pdf"
                         ref={imageFileUploadRef}
                         onChange={handleImageFileUpload}
                       />

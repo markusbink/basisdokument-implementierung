@@ -1004,7 +1004,8 @@ export function downloadBasisdokument(
   coverPDF: ArrayBuffer | undefined,
   otherAuthor: string | undefined,
   downloadNewAdditionally: boolean,
-  regard: string | undefined
+  regard: string | undefined,
+  dontDownloadAttachments: boolean
 ) {
   let basisdokumentObject: any = {};
   basisdokumentObject["fileId"] = fileId;
@@ -1047,7 +1048,9 @@ export function downloadBasisdokument(
     basisdokumentObject,
     `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
-  downloadAdditionalFiles(basisdokumentObject);
+  if (!dontDownloadAttachments) {
+    downloadAdditionalFiles(basisdokumentObject);
+  }
 }
 
 export function downloadEditFile(
