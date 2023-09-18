@@ -122,7 +122,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         throw new Error();
       }
     } catch (error) {
-      setErrorText("Bitte laden Sie eine valide Bilddatei hoch.");
+      setErrorText("Bitte laden Sie eine valide Bild- oder PDF-Datei hoch.");
     }
   };
 
