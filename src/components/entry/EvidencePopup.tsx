@@ -460,7 +460,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               </div>
               <div className="bg-offWhite rounded-lg px-2 py-1.5 self-center items-center flex">
                 <input
-                  className="w-2.5 h-2.5 cursor-pointer"
+                  className="w-2.5 h-2.5 cursor-pointer accent-darkGrey"
                   type="checkbox"
                   id="att"
                   name="att"
@@ -482,7 +482,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               </div>
               <div className="bg-offWhite rounded-lg px-2 py-1.5 self-center items-center flex">
                 <input
-                  className="w-2.5 h-2.5 cursor-pointer"
+                  className="w-2.5 h-2.5 cursor-pointer accent-darkGrey"
                   type="checkbox"
                   id="img"
                   name="img"
