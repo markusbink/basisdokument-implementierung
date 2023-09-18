@@ -144,6 +144,10 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       setErrorText("Bitte Beschreibung hinzufügen");
       return;
     }
+    if (hasImageFile && !imageFile) {
+      setErrorText("Bitte Bild oder PDF-Datei hochladen");
+      return;
+    }
     const ev: IEvidence = {
       id: uuidv4(),
       name: currentInput,
