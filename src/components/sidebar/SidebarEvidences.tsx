@@ -1,46 +1,86 @@
 import { CaretDown, CaretRight, Funnel } from "phosphor-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCase } from "../../contexts";
-import { UserRole } from "../../types";
-import { getEvidences, getEvidencesForRole } from "../../util/get-evidences";
+import { IEvidence, UserRole } from "../../types";
+import {
+  getEvidences,
+  FilterTypes,
+  getFilteredEvidences,
+} from "../../util/get-evidences";
 import { Evidence } from "./Evidence";
 import { Button } from "../Button";
 
 export const SidebarEvidences = () => {
+  const { entries, evidenceFilters, setEvidenceFilters } = useCase();
   const [plaintiffEvidencesOpen, setPlaintiffEvidencesOpen] =
     useState<boolean>(true);
   const [defendantEvidencesOpen, setDefendantEvidencesOpen] =
     useState<boolean>(true);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [filterAttachment, setFilterAttachment] = useState<boolean>(false);
-  const [filterFile, setFilterFile] = useState<boolean>(false);
-  const [filterNoFileAttachment, setFilterNoFileAttachment] =
-    useState<boolean>(false);
-  const [filterNoAttachment, setFilterNoAttachment] = useState<boolean>(false);
-  const { entries } = useCase();
+  const [visibleEvidences, setVisibleEvidences] = useState<IEvidence[]>(
+    getEvidences(entries, "", [], undefined)
+  );
+  const [visibleEvidencesPlaintiff, setVisibleEvidencesPlaintiff] = useState<
+    IEvidence[]
+  >(visibleEvidences.filter((ev) => ev.role === UserRole.Plaintiff));
+  const [visibleEvidencesDefendant, setVisibleEvidencesDefendant] = useState<
+    IEvidence[]
+  >(visibleEvidences.filter((ev) => ev.role === UserRole.Defendant));
+
+  useEffect(() => {
+    filter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const filter = () => {
-    console.log("filter entries");
+    const updatedEvidences = getFilteredEvidences(entries, evidenceFilters);
+    setVisibleEvidences(updatedEvidences);
+    setVisibleEvidencesPlaintiff(
+      updatedEvidences.filter((ev) => ev.role === UserRole.Plaintiff)
+    );
+    setVisibleEvidencesDefendant(
+      updatedEvidences.filter((ev) => ev.role === UserRole.Defendant)
+    );
     setIsMenuOpen(false);
+  };
+
+  const addFilter = (filter: FilterTypes) => {
+    setEvidenceFilters([...evidenceFilters, filter]);
+  };
+
+  const removeFilter = (filter: FilterTypes) => {
+    const updatedFilters = evidenceFilters.filter((f) => f !== filter);
+    setEvidenceFilters(updatedFilters);
+  };
+
+  const resetFilters = () => {
+    setEvidenceFilters([]);
   };
 
   return (
     <div className="flex flex-col gap-3 flex-1 h-[calc(100vh_-_3.5rem)] overflow-auto">
       <div className="flex justify-between items-center pt-4 px-4">
         <div className="font-bold text-darkGrey text-lg">Beweise</div>
-        <Button
-          key="createNote"
-          onClick={() => {
-            setIsMenuOpen(!isMenuOpen);
-          }}
-          bgColor="bg-darkGrey hover:bg-mediumGrey"
-          size="sm"
-          textColor="text-white"
-          hasText={false}
-          alternativePadding="p-1"
-          icon={
-            <Funnel size={18} weight="bold" className="p-[1px]" />
-          }></Button>
+        <div className="flex items-center gap-2">
+          {evidenceFilters.length > 0 && (
+            <div className="text-xs bg-lightGrey rounded-lg py-[1px] px-2 w-fit h-fit">
+              Filter aktiv
+            </div>
+          )}
+          <Button
+            key="createNote"
+            onClick={() => {
+              setIsMenuOpen(!isMenuOpen);
+            }}
+            bgColor="p-1 bg-darkGrey hover:bg-mediumGrey"
+            size="sm"
+            textColor="text-offWhite"
+            hasText={false}
+            alternativePadding="p-1"
+            icon={
+              <Funnel size={18} weight="bold" className="p-[1px]" />
+            }></Button>
+        </div>
         {isMenuOpen ? (
           <ul className="absolute right-4 top-20 p-2 bg-white text-darkGrey rounded-xl w-[220px] shadow-lg z-50 font-medium text-xs">
             <li
@@ -49,8 +89,11 @@ export const SidebarEvidences = () => {
               <input
                 type="checkbox"
                 className="accent-darkGrey cursor-pointer"
-                checked={filterAttachment}
-                onChange={(e) => setFilterAttachment(e.target.checked)}
+                checked={evidenceFilters.includes(FilterTypes.Attchment)}
+                onChange={(e) => {
+                  if (e.target.checked) addFilter(FilterTypes.Attchment);
+                  else removeFilter(FilterTypes.Attchment);
+                }}
               />
               Beweise mit Anlage
             </li>
@@ -60,8 +103,11 @@ export const SidebarEvidences = () => {
               <input
                 type="checkbox"
                 className="accent-darkGrey cursor-pointer"
-                checked={filterFile}
-                onChange={(e) => setFilterFile(e.target.checked)}
+                checked={evidenceFilters.includes(FilterTypes.File)}
+                onChange={(e) => {
+                  if (e.target.checked) addFilter(FilterTypes.File);
+                  else removeFilter(FilterTypes.File);
+                }}
               />
               Beweise mit Bild/PDF
             </li>
@@ -71,8 +117,11 @@ export const SidebarEvidences = () => {
               <input
                 type="checkbox"
                 className="accent-darkGrey cursor-pointer"
-                checked={filterNoFileAttachment}
-                onChange={(e) => setFilterNoFileAttachment(e.target.checked)}
+                checked={evidenceFilters.includes(FilterTypes.AttachmentNoFile)}
+                onChange={(e) => {
+                  if (e.target.checked) addFilter(FilterTypes.AttachmentNoFile);
+                  else removeFilter(FilterTypes.AttachmentNoFile);
+                }}
               />
               Beweise mit externer Anlage
             </li>
@@ -82,8 +131,11 @@ export const SidebarEvidences = () => {
               <input
                 type="checkbox"
                 className="accent-darkGrey cursor-pointer"
-                checked={filterNoAttachment}
-                onChange={(e) => setFilterNoAttachment(e.target.checked)}
+                checked={evidenceFilters.includes(FilterTypes.NoAttchment)}
+                onChange={(e) => {
+                  if (e.target.checked) addFilter(FilterTypes.NoAttchment);
+                  else removeFilter(FilterTypes.NoAttchment);
+                }}
               />
               Beweise ohne Anlage
             </li>
@@ -91,18 +143,8 @@ export const SidebarEvidences = () => {
               tabIndex={0}
               className="flex justify-between gap-2 items-center">
               <button
-                onClick={() => {
-                  setFilterAttachment(false);
-                  setFilterFile(false);
-                  setFilterNoFileAttachment(false);
-                  setFilterNoAttachment(false);
-                }}
-                disabled={
-                  !filterAttachment &&
-                  !filterFile &&
-                  !filterNoFileAttachment &&
-                  !filterNoAttachment
-                }
+                onClick={resetFilters}
+                disabled={evidenceFilters.length <= 0}
                 className="w-full p-2 rounded-lg text-center bg-darkGrey text-offWhite hover:bg-mediumGrey disabled:bg-lightGrey disabled:cursor-not-allowed cursor-pointer">
                 Zurücksetzen
               </button>
@@ -115,6 +157,7 @@ export const SidebarEvidences = () => {
           </ul>
         ) : null}
       </div>
+
       {getEvidences(entries, "", [], undefined).length <= 0 ? (
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm p-4">
           In einem Beitrag können Sie Beweise mit oder ohne Anlage hinzufügen.
@@ -134,16 +177,14 @@ export const SidebarEvidences = () => {
           </div>
           <div>
             {plaintiffEvidencesOpen &&
-              (getEvidencesForRole(entries, UserRole.Plaintiff).length <= 0 ? (
+              (visibleEvidencesPlaintiff.length <= 0 ? (
                 <div className="text-darkGrey opacity-40 text-center text-sm p-4">
                   Die Klagepartei hat noch keine Beweise hinzugefügt.
                 </div>
               ) : (
-                getEvidencesForRole(entries, UserRole.Plaintiff).map(
-                  (evidence) => (
-                    <Evidence key={evidence.id} evidence={evidence} />
-                  )
-                )
+                visibleEvidencesPlaintiff.map((evidence) => (
+                  <Evidence key={evidence.id} evidence={evidence} />
+                ))
               ))}
           </div>
           <div
@@ -158,16 +199,14 @@ export const SidebarEvidences = () => {
           </div>
           <div>
             {defendantEvidencesOpen &&
-              (getEvidencesForRole(entries, UserRole.Defendant).length <= 0 ? (
+              (visibleEvidencesDefendant.length <= 0 ? (
                 <div className="text-darkGrey opacity-40 text-center text-sm p-4">
                   Die Beklagtenpartei hat noch keine Beweise hinzugefügt.
                 </div>
               ) : (
-                getEvidencesForRole(entries, UserRole.Defendant).map(
-                  (evidence) => (
-                    <Evidence key={evidence.id} evidence={evidence} />
-                  )
-                )
+                visibleEvidencesDefendant.map((evidence) => (
+                  <Evidence key={evidence.id} evidence={evidence} />
+                ))
               ))}
           </div>
         </div>

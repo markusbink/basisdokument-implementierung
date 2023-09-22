@@ -1,4 +1,11 @@
-import { IEvidence, IEntry, UserRole } from "../types";
+import { IEvidence, IEntry } from "../types";
+
+export const enum FilterTypes {
+  Attchment = 1,
+  File = 2,
+  AttachmentNoFile = 3,
+  NoAttchment = 4
+}
 
 export const getEvidences = (
   entries: IEntry[],
@@ -18,17 +25,38 @@ export const getEvidences = (
   return Array.from(new Set(evs));
 };
 
-export const getEvidencesForRole = (
+
+export const getFilteredEvidences = (
   entries: IEntry[],
-  role: UserRole
+  filters: FilterTypes[],
 ): IEvidence[] => {
   let evs = entries
     .map((entry) => entry.evidences)
     .flat(1)
     .filter((ev) => ev !== undefined);
-  evs = evs.filter((ev) => ev.role === role);
-  const uniqueEvs: IEvidence[] = evs.filter(
-    (ev, index) => evs.findIndex((evidence) => evidence.id === ev.id) === index
+  let resultingEvidences: IEvidence[] = [];
+  if (filters.length <= 0) {
+    resultingEvidences = evs;
+  } else {
+    filters.forEach(filter => {
+      switch (filter) {
+        case FilterTypes.Attchment:
+          resultingEvidences = resultingEvidences.concat(evs.filter((ev) => ev.hasAttachment));
+          break;
+        case FilterTypes.File:
+          resultingEvidences = resultingEvidences.concat(evs.filter((ev) => ev.hasImageFile));
+          break;
+        case FilterTypes.AttachmentNoFile:
+          resultingEvidences = resultingEvidences.concat(evs.filter((ev) => ev.hasAttachment && !ev.hasImageFile));
+          break;
+        case FilterTypes.NoAttchment:
+          resultingEvidences = resultingEvidences.concat(evs.filter((ev) => !ev.hasAttachment));
+          break;
+      }    
+    });
+  }
+  const uniqueEvs: IEvidence[] = resultingEvidences.filter(
+    (ev, index) => resultingEvidences.findIndex((evidence) => evidence.id === ev.id) === index
   );
   return Array.from(new Set(uniqueEvs));
 };
