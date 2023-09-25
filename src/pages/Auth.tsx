@@ -144,8 +144,12 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
 
   // The onboarding should only be displayed when if the user opens a basisdokument for the first time.
   // It is still possible to access the onboarding via the ?-icon in the header.
+  // The onboarding is also not shown with 'mandantendomain'
   const checkOnboardingShownBefore = () => {
-    if (Cookies.get("onboarding") === undefined) {
+    if (
+      Cookies.get("onboarding") === undefined &&
+      usage !== UsageMode.Readonly
+    ) {
       Cookies.set("onboarding", "true");
       setIsOnboardingVisible(true);
     }
@@ -385,68 +389,72 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           </p>
         )}
 
-        <div>
-          <div className="flex flex-row w-full justify-between font-light">
-            <p>
-              Ich möchte ein Basisdokument:{" "}
-              <span className="text-darkRed">*</span>
-            </p>
-            <p>
-              Oder:{" "}
-              <a href="https://mandant.parteivortrag.de/">
-                Ich bin Mandant:in.
-              </a>
-            </p>
+        {!isReadonly && (
+          <div>
+            <div className="flex flex-row w-full justify-between font-light">
+              <p>
+                Ich möchte ein Basisdokument:{" "}
+                <span className="text-darkRed">*</span>
+              </p>
+              <p>
+                Oder:{" "}
+                <a href="https://mandant.parteivortrag.de/">
+                  Ich bin Mandant:in.
+                </a>
+              </p>
+            </div>
+
+            <div className="flex flex-row w-auto mt-4 gap-4">
+              {!isReadonly && (
+                <>
+                  <button
+                    onClick={() => {
+                      if (usage !== UsageMode.Open) {
+                        setErrorText("");
+                      }
+                      setUsage(UsageMode.Open);
+                    }}
+                    className={cx(
+                      "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
+                      {
+                        "border-2 border-darkGrey": usage === UsageMode.Open,
+                      }
+                    )}>
+                    Öffnen
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (usage !== UsageMode.Create) {
+                        setErrorText("");
+                      }
+                      setUsage(UsageMode.Create);
+                    }}
+                    className={cx(
+                      "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
+                      {
+                        "border-2 border-darkGrey": usage === UsageMode.Create,
+                      }
+                    )}>
+                    Erstellen
+                  </button>
+                  <button
+                    onClick={() => {
+                      setReadonly();
+                    }}
+                    className={cx(
+                      "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
+                      {
+                        "border-2 border-darkGrey":
+                          usage === UsageMode.Readonly,
+                      }
+                    )}>
+                    Einsehen
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-          <div className="flex flex-row w-auto mt-4 gap-4">
-            {!isReadonly && (
-              <>
-                <button
-                  onClick={() => {
-                    if (usage !== UsageMode.Open) {
-                      setErrorText("");
-                    }
-                    setUsage(UsageMode.Open);
-                  }}
-                  className={cx(
-                    "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                    {
-                      "border-2 border-darkGrey": usage === UsageMode.Open,
-                    }
-                  )}>
-                  Öffnen
-                </button>
-                <button
-                  onClick={() => {
-                    if (usage !== UsageMode.Create) {
-                      setErrorText("");
-                    }
-                    setUsage(UsageMode.Create);
-                  }}
-                  className={cx(
-                    "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                    {
-                      "border-2 border-darkGrey": usage === UsageMode.Create,
-                    }
-                  )}>
-                  Erstellen
-                </button>
-                <button
-                  onClick={() => {
-                    setReadonly();
-                  }}
-                  className={cx(
-                    "flex items-center justify-center w-[100px] h-[50px] font-bold rounded-md bg-offWhite hover:bg-lightGrey hover:cursor-pointer",
-                    {
-                      "border-2 border-darkGrey": usage === UsageMode.Readonly,
-                    }
-                  )}>
-                  Einsehen
-                </button>
-              </>
-            )}
-          </div>
-        </div>
+        )}
 
         {usage !== UsageMode.Readonly && (
           <div className="flex gap-8 flex-col">
@@ -536,8 +544,11 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           <div className="flex flex-col gap-4">
             <div>
               <p className="font-light">
-                Basisdokument-Dateien hochladen:{" "}
-                <span className="text-darkRed">*</span>
+                Basisdokument-
+                {isReadonly || usage === UsageMode.Readonly
+                  ? "Datei"
+                  : "Dateien"}{" "}
+                hochladen: <span className="text-darkRed">*</span>
               </p>
               <div className="flex flex-col items-start w-auto mt-8 mb-8 gap-4">
                 <div className="flex flex-row items-center justify-center gap-2">
