@@ -28,7 +28,6 @@ export const Main: React.FC = () => {
     caseId,
     currentVersion,
     metaData,
-    introduction,
     fileId,
     entries,
     highlightedEntries,
@@ -49,7 +48,6 @@ export const Main: React.FC = () => {
           currentVersion={currentVersion}
           versionHistory={versionHistory}
           metaData={metaData}
-          introduction={introduction}
           entries={entries}
           sectionList={sectionList}
           hints={hints}

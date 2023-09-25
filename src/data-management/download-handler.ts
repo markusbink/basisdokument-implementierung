@@ -7,7 +7,6 @@ import {
   IHighlighter,
   IHint,
   IMetaData,
-  IIntroduction,
   IndividualEntrySortingEntry,
   INote,
   ISection,
@@ -25,8 +24,6 @@ let allEntries: any[] = [];
 let newEntries: any[] = [];
 let rubrumKlage: any[] = [];
 let rubrumBeklagt: any[] = [];
-let introductionKlage: any[] = [];
-let introductionBeklagt: any[] = [];
 let basisdokument: any[] = [];
 let allHints: any[] = [];
 
@@ -296,32 +293,6 @@ async function downloadBasisdokumentAsPDF(
   }
   rubrumBeklagt = [parseHTMLtoString(metaDefendant)];
 
-  // introduction Plaintiff
-  let metaIntroPlaintiff;
-  if (
-    obj["introduction"] &&
-    obj["introduction"]["plaintiff"] !== (undefined || "")
-  ) {
-    metaIntroPlaintiff = obj["introduction"]["plaintiff"];
-  } else {
-    metaIntroPlaintiff =
-      "Es wurde keine Einführung von der Klagepartei angelegt.";
-  }
-  introductionKlage = [parseHTMLtoString(metaIntroPlaintiff)];
-
-  // introduction Defendant
-  let metaIntroDefendant;
-  if (
-    obj["introduction"] &&
-    obj["introduction"]["defendant"] !== (undefined || "")
-  ) {
-    metaIntroDefendant = obj["introduction"]["defendant"];
-  } else {
-    metaIntroDefendant =
-      "Es wurde keine Einführung von der Beklagtenpartei angelegt.";
-  }
-  introductionBeklagt = [parseHTMLtoString(metaIntroDefendant)];
-
   // hints from the judge §139 ZPO
   if (obj["judgeHints"].length === 0) {
     //no hints
@@ -542,62 +513,6 @@ async function downloadBasisdokumentAsPDF(
     },
   });
   rubrumBeklagt = [];
-
-  //autotable introduction plaintiff
-  autoTable(doc, {
-    theme: "grid",
-    styles: { halign: "center" },
-    head: [["Einführung Klagepartei"]],
-    headStyles: { fillColor: [0, 102, 204] },
-    body: [introductionKlage],
-    didDrawPage: function () {
-      doc.outline.add(null, "Einführung Klagepartei", {
-        pageNumber: doc.getCurrentPageInfo().pageNumber,
-      });
-    },
-  });
-  //additional pdf with only new entries
-  autoTable(newDoc, {
-    theme: "grid",
-    styles: { halign: "center" },
-    head: [["Einführung Klagepartei"]],
-    headStyles: { fillColor: [0, 122, 122] },
-    body: [introductionKlage],
-    didDrawPage: function () {
-      newDoc.outline.add(null, "Einführung Klagepartei", {
-        pageNumber: newDoc.getCurrentPageInfo().pageNumber,
-      });
-    },
-  });
-  introductionKlage = [];
-
-  //autotable introduction defendant
-  autoTable(doc, {
-    theme: "grid",
-    styles: { halign: "center" },
-    head: [["Einführung Beklagtenpartei"]],
-    headStyles: { fillColor: [0, 102, 204] },
-    body: [introductionBeklagt],
-    didDrawPage: function () {
-      doc.outline.add(null, "Einführung Beklagtenpartei", {
-        pageNumber: doc.getCurrentPageInfo().pageNumber,
-      });
-    },
-  });
-  //additional pdf with only new entries
-  autoTable(newDoc, {
-    theme: "grid",
-    styles: { halign: "center" },
-    head: [["Einführung Beklagtenpartei"]],
-    headStyles: { fillColor: [0, 122, 122] },
-    body: [introductionBeklagt],
-    didDrawPage: function () {
-      newDoc.outline.add(null, "Einführung Beklagtenpartei", {
-        pageNumber: newDoc.getCurrentPageInfo().pageNumber,
-      });
-    },
-  });
-  introductionBeklagt = [];
 
   //autotable hints
   doc.addPage();
@@ -997,7 +912,6 @@ export function downloadBasisdokument(
   currentVersion: number,
   versionHistory: IVersion[],
   metaData: IMetaData | null,
-  introduction: IIntroduction | null,
   entries: IEntry[],
   sectionList: ISection[],
   hints: IHint[],
@@ -1017,7 +931,6 @@ export function downloadBasisdokument(
     "timestamp"
   ] = new Date() /*.toLocaleString("de-DE", {timeZone: "Europe/Berlin"})*/;
   basisdokumentObject["metaData"] = metaData;
-  basisdokumentObject["introduction"] = introduction;
   basisdokumentObject["entries"] = entries;
   basisdokumentObject["sections"] = sectionList;
   basisdokumentObject["judgeHints"] = hints;
