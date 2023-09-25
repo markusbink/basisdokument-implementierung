@@ -70,6 +70,7 @@ export const DocumentButton = () => {
         undefined, //coverPDF
         undefined, //otherAuthor
         false, //download new entries additionally
+        false, //download evidences in additional list
         undefined, //regard
         false //download attachments by default
       );
