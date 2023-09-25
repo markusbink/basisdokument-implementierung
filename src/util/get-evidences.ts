@@ -1,4 +1,4 @@
-import { IEvidence, IEntry } from "../types";
+import { IEvidence, IEntry, UserRole } from "../types";
 
 export const enum FilterTypes {
   Attchment = 1,
@@ -25,10 +25,26 @@ export const getEvidences = (
   return Array.from(new Set(evs));
 };
 
+export const getEvidencesForRole = (
+  entries: IEntry[],
+  role: UserRole
+): IEvidence[] => {
+  let evs = entries
+    .map((entry) => entry.evidences)
+    .flat(1)
+    .filter((ev) => ev !== undefined);
+  evs = evs.filter((ev) => ev.role === role);
+  const uniqueEvs: IEvidence[] = evs.filter(
+    (ev, index) => evs.findIndex((evidence) => evidence.id === ev.id) === index
+  );
+  return Array.from(new Set(uniqueEvs));
+};
+
 
 export const getFilteredEvidences = (
   entries: IEntry[],
   filters: FilterTypes[],
+  role?: UserRole
 ): IEvidence[] => {
   let evs = entries
     .map((entry) => entry.evidences)
@@ -58,5 +74,9 @@ export const getFilteredEvidences = (
   const uniqueEvs: IEvidence[] = resultingEvidences.filter(
     (ev, index) => resultingEvidences.findIndex((evidence) => evidence.id === ev.id) === index
   );
-  return Array.from(new Set(uniqueEvs));
+  if (role) {
+    return uniqueEvs.filter((ev) => ev.role === role);
+  } else {
+    return Array.from(new Set(uniqueEvs));
+  }
 };

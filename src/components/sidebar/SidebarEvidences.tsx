@@ -1,7 +1,7 @@
 import { CaretDown, CaretRight, Funnel } from "phosphor-react";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { useCase } from "../../contexts";
-import { IEvidence, UserRole } from "../../types";
+import { UserRole } from "../../types";
 import {
   getEvidences,
   FilterTypes,
@@ -9,6 +9,7 @@ import {
 } from "../../util/get-evidences";
 import { Evidence } from "./Evidence";
 import { Button } from "../Button";
+import { useOutsideClick } from "../../hooks/use-outside-click";
 
 export const SidebarEvidences = () => {
   const { entries, evidenceFilters, setEvidenceFilters } = useCase();
@@ -17,32 +18,9 @@ export const SidebarEvidences = () => {
   const [defendantEvidencesOpen, setDefendantEvidencesOpen] =
     useState<boolean>(true);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [visibleEvidences, setVisibleEvidences] = useState<IEvidence[]>(
-    getEvidences(entries, "", [], undefined)
-  );
-  const [visibleEvidencesPlaintiff, setVisibleEvidencesPlaintiff] = useState<
-    IEvidence[]
-  >(visibleEvidences.filter((ev) => ev.role === UserRole.Plaintiff));
-  const [visibleEvidencesDefendant, setVisibleEvidencesDefendant] = useState<
-    IEvidence[]
-  >(visibleEvidences.filter((ev) => ev.role === UserRole.Defendant));
 
-  useEffect(() => {
-    filter();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const filter = () => {
-    const updatedEvidences = getFilteredEvidences(entries, evidenceFilters);
-    setVisibleEvidences(updatedEvidences);
-    setVisibleEvidencesPlaintiff(
-      updatedEvidences.filter((ev) => ev.role === UserRole.Plaintiff)
-    );
-    setVisibleEvidencesDefendant(
-      updatedEvidences.filter((ev) => ev.role === UserRole.Defendant)
-    );
-    setIsMenuOpen(false);
-  };
+  const menuRef = useRef(null);
+  useOutsideClick(menuRef, () => setIsMenuOpen(false));
 
   const addFilter = (filter: FilterTypes) => {
     setEvidenceFilters([...evidenceFilters, filter]);
@@ -82,7 +60,9 @@ export const SidebarEvidences = () => {
             }></Button>
         </div>
         {isMenuOpen ? (
-          <ul className="absolute right-4 top-20 p-2 bg-white text-darkGrey rounded-xl w-[220px] shadow-lg z-50 font-medium text-xs">
+          <ul
+            ref={menuRef}
+            className="absolute right-4 top-20 p-2 bg-white text-darkGrey rounded-xl w-[220px] shadow-lg z-50 font-medium text-xs">
             <li
               tabIndex={0}
               className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-default">
@@ -148,11 +128,6 @@ export const SidebarEvidences = () => {
                 className="w-full p-2 rounded-lg text-center bg-darkGrey text-offWhite hover:bg-mediumGrey disabled:bg-lightGrey disabled:cursor-not-allowed cursor-pointer">
                 Zurücksetzen
               </button>
-              <button
-                className="w-full p-2 rounded-lg text-center bg-darkGrey text-offWhite hover:bg-mediumGrey cursor-pointer"
-                onClick={filter}>
-                Anwenden
-              </button>
             </li>
           </ul>
         ) : null}
@@ -177,12 +152,20 @@ export const SidebarEvidences = () => {
           </div>
           <div>
             {plaintiffEvidencesOpen &&
-              (visibleEvidencesPlaintiff.length <= 0 ? (
+              (getFilteredEvidences(
+                entries,
+                evidenceFilters,
+                UserRole.Plaintiff
+              ).length <= 0 ? (
                 <div className="text-darkGrey opacity-40 text-center text-sm p-4">
                   Die Klagepartei hat noch keine Beweise hinzugefügt.
                 </div>
               ) : (
-                visibleEvidencesPlaintiff.map((evidence) => (
+                getFilteredEvidences(
+                  entries,
+                  evidenceFilters,
+                  UserRole.Plaintiff
+                ).map((evidence) => (
                   <Evidence key={evidence.id} evidence={evidence} />
                 ))
               ))}
@@ -199,12 +182,20 @@ export const SidebarEvidences = () => {
           </div>
           <div>
             {defendantEvidencesOpen &&
-              (visibleEvidencesDefendant.length <= 0 ? (
+              (getFilteredEvidences(
+                entries,
+                evidenceFilters,
+                UserRole.Defendant
+              ).length <= 0 ? (
                 <div className="text-darkGrey opacity-40 text-center text-sm p-4">
                   Die Beklagtenpartei hat noch keine Beweise hinzugefügt.
                 </div>
               ) : (
-                visibleEvidencesDefendant.map((evidence) => (
+                getFilteredEvidences(
+                  entries,
+                  evidenceFilters,
+                  UserRole.Defendant
+                ).map((evidence) => (
                   <Evidence key={evidence.id} evidence={evidence} />
                 ))
               ))}
