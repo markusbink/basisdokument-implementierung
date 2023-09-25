@@ -221,6 +221,7 @@ export const ExportPopup: React.FC<IProps> = ({
                         ref={coverFileUploadRef}
                         type="file"
                         onChange={handleCoverFileUploadChange}
+                        accept=".pdf"
                       />
                       {coverFilename}
                       <button

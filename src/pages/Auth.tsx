@@ -563,6 +563,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                         ref={basisdokumentFileUploadRef}
                         type="file"
                         onChange={handleBasisdokumentFileUploadChange}
+                        accept=".txt"
                       />
                       {basisdokumentFilename}
                       <button
@@ -612,6 +613,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
                           ref={editFileUploadRef}
                           type="file"
                           onChange={handleEditFileUploadChange}
+                          accept=".txt"
                         />
                         {editFilename}
                         <button
