@@ -158,7 +158,9 @@ export const SidebarEvidences = () => {
                 UserRole.Plaintiff
               ).length <= 0 ? (
                 <div className="text-darkGrey opacity-40 text-center text-sm p-4">
-                  Die Klagepartei hat noch keine Beweise hinzugefügt.
+                  {evidenceFilters && evidenceFilters.length > 0
+                    ? "Die Klagepartei hat noch keine Beweise hinzugefügt, die zu diesem Filter passen."
+                    : "Die Klagepartei hat noch keine Beweise hinzugefügt."}
                 </div>
               ) : (
                 getFilteredEvidences(
@@ -188,7 +190,9 @@ export const SidebarEvidences = () => {
                 UserRole.Defendant
               ).length <= 0 ? (
                 <div className="text-darkGrey opacity-40 text-center text-sm p-4">
-                  Die Beklagtenpartei hat noch keine Beweise hinzugefügt.
+                  {evidenceFilters && evidenceFilters.length > 0
+                    ? "Die Beklagtenpartei hat noch keine Beweise hinzugefügt, die zu diesem Filter passen."
+                    : "Die Beklagtenpartei hat noch keine Beweise hinzugefügt."}
                 </div>
               ) : (
                 getFilteredEvidences(
