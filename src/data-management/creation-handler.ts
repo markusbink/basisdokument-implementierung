@@ -18,7 +18,6 @@ export function createBasisdokument(
     timestamp: "",
   });
   basisdokumentObject["metadata"] = { plaintiff: "", defendant: "" };
-  basisdokumentObject["introduction"] = { plaintiff: "", defendant: "" };
   basisdokumentObject["entries"] = [];
   basisdokumentObject["sections"] = [];
   basisdokumentObject["judgeHints"] = [];
