@@ -66,7 +66,7 @@ export const MetaData: React.FC<MetaDataProps> = ({ owner }) => {
           {isOpen ? <CaretDown></CaretDown> : <CaretRight></CaretRight>}
           <span>Rubrum</span>
         </div>
-        {canEdit && (
+        {canEdit && rubrumContent && (
           <Tooltip text="Rubrum bearbeiten">
             <PencilSimple
               className="cursor-pointer opacity-50"

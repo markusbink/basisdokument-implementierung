@@ -11,7 +11,6 @@ import {
   IHighlighter,
   IHint,
   IMetaData,
-  IIntroduction,
   INote,
   ISection,
   IStateUserInput,
@@ -30,7 +29,6 @@ interface IProps {
   currentVersion: number;
   versionHistory: IVersion[];
   metaData: IMetaData | null;
-  introduction: IIntroduction | null;
   entries: IEntry[];
   sectionList: ISection[];
   hints: IHint[];
@@ -47,7 +45,6 @@ export const ExportPopup: React.FC<IProps> = ({
   currentVersion,
   versionHistory,
   metaData,
-  introduction,
   entries,
   sectionList,
   hints,
@@ -132,7 +129,6 @@ export const ExportPopup: React.FC<IProps> = ({
         currentVersion,
         versionHistory,
         metaData,
-        introduction,
         entries,
         sectionList,
         hints,

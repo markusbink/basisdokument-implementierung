@@ -10,7 +10,6 @@ import { EntryList } from "./entry";
 import { JudgeDiscussion } from "./JudgeDiscussion";
 import { MetaData } from "./metadata/MetaData";
 import { SectionHeader } from "./section-header/SectionHeader";
-import { Intro } from "./metadata/Intro";
 import { MetaDataHeader } from "./metadata/MetaDataHeader";
 import { useState } from "react";
 
@@ -73,14 +72,6 @@ export const Discussion = () => {
               <div></div>
             )}
             {isBodyOpenDefendant && <MetaData owner={UserRole.Defendant} />}
-          </div>
-          <div className="grid grid-cols-2 gap-6 ml-[40px] mt-4">
-            {isBodyOpenPlaintiff ? (
-              <Intro owner={UserRole.Plaintiff} />
-            ) : (
-              <div></div>
-            )}
-            {isBodyOpenDefendant && <Intro owner={UserRole.Defendant} />}
           </div>
           {selectedSorting === Sorting.Privat && showEntrySorting ? (
             <JudgeDiscussion />
