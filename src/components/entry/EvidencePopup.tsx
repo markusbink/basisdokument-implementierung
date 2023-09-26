@@ -1,4 +1,12 @@
-import { CaretDown, CaretUp, X, XCircle } from "phosphor-react";
+import {
+  CaretDown,
+  CaretUp,
+  ImageSquare,
+  Trash,
+  Upload,
+  X,
+  XCircle,
+} from "phosphor-react";
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
@@ -12,6 +20,7 @@ import { Tooltip } from "../Tooltip";
 import cx from "classnames";
 import { getTheme } from "../../themes/getTheme";
 import { useEvidence } from "../../contexts/EvidenceContext";
+import { ImageViewerPopup } from "./ImageViewerPopup";
 
 interface EvidencesPopupProps {
   entryId?: string;
@@ -66,12 +75,18 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const [currentInput, setCurrentInput] = useState<string>("");
   const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
+  const [hasImageFile, setHasImageFile] = useState<boolean>(false);
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
   const [evidenceToRemove, setEvidenceToRemove] = useState<IEvidence>();
   const [evidenceEditMode, setEvidenceEditMode] = useState<{
     evidence: IEvidence;
     value: boolean;
   }>();
+  const [imagePopupFilename, setImagePopupFilename] = useState<string>("");
+  const [imagePopupData, setImagePopupData] = useState<string>("");
+  const [imagePopupAttachment, setImagePopupAttachment] = useState<string>("");
+  const [imagePopupTitle, setImagePopupTitle] = useState<string>("");
+  const [imagePopupVisible, setImagePopupVisible] = useState<boolean>(false);
 
   const inputRef = useRef(null);
   useOutsideClick(inputRef, () => setSuggestionsActive(false));
@@ -81,17 +96,74 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     handleEvidenceAddedToCurrent();
   };
 
+  const [isValidImageFile, setIsValidImageFile] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string>("");
+  const [imageFile, setImageFile] = useState<string | undefined>("");
+  const [imageFilename, setImageFilename] = useState<string>("");
+  const imageFileUploadRef = useRef<HTMLInputElement>(null);
+
+  const handleImageFileUpload = (e: any) => {
+    const fileReader = new FileReader();
+    try {
+      if (
+        (e.target.files[0].type as string).includes("image") ||
+        (e.target.files[0].type as string).includes("pdf")
+      ) {
+        fileReader.readAsDataURL(e.target.files[0]);
+        setImageFilename(e.target.files[0].name);
+        fileReader.onload = (e: any) => {
+          let result = e.target.result;
+          setImageFile(result);
+          setHasImageFile(true);
+        };
+        e.target.value = "";
+        setErrorText("");
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      setErrorText("Bitte laden Sie eine valide Bild- oder PDF-Datei hoch.");
+    }
+  };
+
+  const showImage = (
+    filedata: string,
+    filename: string,
+    attId: string,
+    title: string
+  ) => {
+    setImagePopupVisible(!imagePopupVisible);
+    setImagePopupData(filedata);
+    setImagePopupAttachment(attId);
+    setImagePopupFilename(filename);
+    setImagePopupTitle(title);
+  };
+
   const handleEvidenceAddedToCurrent = () => {
-    if (!currentInput || currentInput?.trim().length <= 0) return;
+    if (!currentInput || currentInput?.trim().length <= 0) {
+      setErrorText("Bitte Beschreibung hinzufügen");
+      return;
+    }
+    if (hasImageFile && !imageFile) {
+      setErrorText("Bitte Bild oder PDF-Datei hochladen");
+      return;
+    }
     const ev: IEvidence = {
       id: uuidv4(),
       name: currentInput,
       hasAttachment: hasAttachment,
+      hasImageFile: hasImageFile,
       version: currentVersion,
       isCurrentEntry: true,
       role: isPlaintiff ? UserRole.Plaintiff : UserRole.Defendant,
       isInEditMode: false,
     };
+    if (hasImageFile) {
+      ev.imageFile = imageFile;
+      ev.imageFilename = imageFilename;
+      setImageFile("");
+      setImageFilename("");
+    }
     // if has attachment add to plaintiff/defendant arrays for attachment id handling
     if (hasAttachment) {
       if (ev.role === UserRole.Plaintiff) {
@@ -112,7 +184,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       setCurrentEvidences([...currentEvidences, ev]);
     }
     setCurrentInput("");
+    setErrorText("");
     setHasAttachment(false);
+    setHasImageFile(false);
   };
 
   // if existing evidence is added to entry, no handling of plaintiff/defendant arrays is needed
@@ -210,6 +284,44 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         }
       });
       setCurrentEvidences([...currentEvidences]);
+    }
+  };
+
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    evidenceToEdit: IEvidence
+  ) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file && (file.type as string).includes("image")) {
+      const fileReader = new FileReader();
+      try {
+        fileReader.readAsDataURL(file);
+        fileReader.onload = (e: any) => {
+          if (entries.length > 0) {
+            const newEntries = entries.map((entry) => {
+              entry.evidences = entry.evidences?.map((ev) => {
+                if (ev.id === evidenceToEdit.id) {
+                  ev.imageFile = e.target.result;
+                  ev.imageFilename = file.name;
+                }
+                return ev;
+              });
+              return entry;
+            });
+            setEntries(newEntries);
+          } else {
+            const newEvidences = currentEvidences.map((ev) => {
+              if (ev.id === evidenceToEdit.id) {
+                ev.imageFile = e.target.result;
+                ev.imageFilename = file.name;
+              }
+              return ev;
+            });
+            setCurrentEvidences(newEvidences);
+          }
+        };
+        e.target.value = "";
+      } catch (error) {}
     }
   };
 
@@ -348,30 +460,113 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               </div>
               <div className="bg-offWhite rounded-lg px-2 py-1.5 self-center items-center flex">
                 <input
-                  className="w-2.5 h-2.5 cursor-pointer"
+                  className="w-2.5 h-2.5 cursor-pointer accent-darkGrey"
                   type="checkbox"
-                  id="new"
-                  name="new"
-                  value="new"
+                  id="att"
+                  name="att"
+                  value="att"
                   checked={hasAttachment}
-                  onChange={() => setHasAttachment(!hasAttachment)}
+                  onChange={(e) => {
+                    if (hasImageFile && !e.target.checked) {
+                      setHasImageFile(false);
+                    }
+                    setHasAttachment(!hasAttachment);
+                  }}
                 />
                 <label
-                  htmlFor="new"
+                  htmlFor="att"
                   className="cursor-pointer whitespace-nowrap pl-2">
                   {" "}
                   als Anlage
                 </label>
               </div>
-              <div className="items-center flex my-1">
-                <Button
-                  bgColor="bg-lightGreen hover:bg-darkGreen"
-                  textColor="text-darkGreen hover:text-white"
-                  alternativePadding="p-1.5"
-                  onClick={() => handleEvidenceAddedToCurrent()}>
-                  Hinzufügen
-                </Button>
+              <div className="bg-offWhite rounded-lg px-2 py-1.5 self-center items-center flex">
+                <input
+                  className="w-2.5 h-2.5 cursor-pointer accent-darkGrey"
+                  type="checkbox"
+                  id="img"
+                  name="img"
+                  value="img"
+                  checked={hasImageFile}
+                  onChange={(e) => {
+                    setHasImageFile(!hasImageFile);
+                    if (e.target.checked) setHasAttachment(true);
+                    else {
+                      setImageFile("");
+                      setImageFilename("");
+                      setErrorText("");
+                    }
+                  }}
+                />
+                <label
+                  htmlFor="img"
+                  className="cursor-pointer whitespace-nowrap pl-2">
+                  {" "}
+                  als Bild/PDF
+                </label>
               </div>
+            </div>
+            {hasImageFile && (
+              <>
+                <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 my-2 flex flex-row justify-between items-center gap-2">
+                  {(imageFile
+                    ? "Bild/PDF hochgeladen: "
+                    : "Bild/PDF hochladen: ") + imageFilename}
+                  <div className="flex gap-2">
+                    <label
+                      role="button"
+                      className="flex items-center justify-center gap-2 cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*,.pdf"
+                        ref={imageFileUploadRef}
+                        onChange={handleImageFileUpload}
+                      />
+                      <button
+                        onClick={() => {
+                          if (!isValidImageFile) {
+                            setErrorText("");
+                            setIsValidImageFile(true);
+                          }
+                          imageFileUploadRef?.current?.click();
+                        }}
+                        className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                        <Upload size={24} color={"white"} />
+                      </button>
+                    </label>
+                    {true && (
+                      <button
+                        onClick={() => {
+                          setImageFile(undefined);
+                          setImageFilename("");
+                          setErrorText("");
+                        }}
+                        className="bg-lightRed hover:bg-marker-red rounded-md p-1">
+                        <Trash size={24} color={"darkRed"} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  {errorText !== "" ? (
+                    <div className="flex bg-lightRed p-2 -mt-1 mb-1 rounded-md">
+                      <p className="text-darkRed">
+                        <span className="font-bold">Fehler:</span> {errorText}
+                      </p>
+                    </div>
+                  ) : null}
+                </div>
+              </>
+            )}
+            <div className="items-center flex my-1 w-full">
+              <Button
+                bgColor="bg-lightGreen hover:bg-darkGreen"
+                textColor="text-darkGreen hover:text-white"
+                alternativePadding="p-1.5 w-full"
+                disabled={hasImageFile && !imageFile}
+                onClick={() => handleEvidenceAddedToCurrent()}>
+                Hinzufügen
+              </Button>
             </div>
           </div>
           <div
@@ -493,6 +688,28 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                         </b>
                                       </span>
                                     )}
+                                    {ev.hasImageFile && (
+                                      <>
+                                        <input
+                                          type="file"
+                                          ref={imageFileUploadRef}
+                                          onChange={(e) => {
+                                            handleImageChange(e, ev);
+                                          }}
+                                        />
+                                        <ImageSquare
+                                          size={20}
+                                          className="text-mediumGrey hover:text-black"
+                                          onClick={() => {
+                                            if (!isValidImageFile) {
+                                              setErrorText("");
+                                              setIsValidImageFile(true);
+                                            }
+                                            imageFileUploadRef?.current?.click();
+                                          }}
+                                        />
+                                      </>
+                                    )}
                                   </>
                                 ) : (
                                   <>
@@ -505,6 +722,20 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                       <span className="break-words font-medium">
                                         {ev.name}
                                       </span>
+                                    )}
+                                    {ev.hasImageFile && (
+                                      <ImageSquare
+                                        size={20}
+                                        className="text-mediumGrey hover:text-black"
+                                        onClick={() => {
+                                          showImage(
+                                            ev.imageFile!,
+                                            ev.imageFilename!,
+                                            ev.attachmentId!,
+                                            ev.name
+                                          );
+                                        }}
+                                      />
                                     )}
                                   </>
                                 )}
@@ -544,6 +775,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               )}
             </div>
           </div>
+
           <div className="flex items-center justify-end">
             <button
               className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
@@ -588,6 +820,13 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
           </div>
         </div>
       </ErrorPopup>
+      <ImageViewerPopup
+        isVisible={imagePopupVisible}
+        filedata={imagePopupData}
+        filename={imagePopupFilename}
+        title={imagePopupTitle}
+        attachmentId={imagePopupAttachment}
+        setIsVisible={setImagePopupVisible}></ImageViewerPopup>
     </>
   );
 };

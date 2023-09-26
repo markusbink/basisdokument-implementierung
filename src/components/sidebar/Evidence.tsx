@@ -1,4 +1,10 @@
-import { DotsThree, Eye, PencilSimple, Trash } from "phosphor-react";
+import {
+  DotsThree,
+  Eye,
+  ImageSquare,
+  PencilSimple,
+  Trash,
+} from "phosphor-react";
 import React, { useRef, useState } from "react";
 import { useCase, useHeaderContext } from "../../contexts";
 import { IEvidence, UserRole } from "../../types";
@@ -9,6 +15,8 @@ import { ErrorPopup } from "../ErrorPopup";
 import { getTheme } from "../../themes/getTheme";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { useEvidence } from "../../contexts/EvidenceContext";
+import { ImageViewerPopup } from "../entry/ImageViewerPopup";
+import { toast } from "react-toastify";
 
 export interface EvidenceProps {
   evidence: IEvidence;
@@ -29,11 +37,49 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const [isInNameEditMode, setIsInNameEditMode] = useState<boolean>(false);
   const [isInAttachmentEditMode, setIsInAttachmentEditMode] =
     useState<boolean>(false);
+  const [imagePopupFilename, setImagePopupFilename] = useState<string>("");
+  const [imagePopupData, setImagePopupData] = useState<string>("");
+  const [imagePopupAttachment, setImagePopupAttachment] = useState<string>("");
+  const [imagePopupTitle, setImagePopupTitle] = useState<string>("");
+  const [imagePopupVisible, setImagePopupVisible] = useState<boolean>(false);
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
 
   let entryCodes: string[] = [];
   entryCodes = getEntryCodesForEvidence(entries, evidence);
+
+  const imageFileUploadRef = useRef<HTMLInputElement>(null);
+  const handleImageFileUpload = (e: any) => {
+    const fileReader = new FileReader();
+    try {
+      if (
+        (e.target.files[0].type as string).includes("image") ||
+        (e.target.files[0].type as string).includes("pdf")
+      ) {
+        fileReader.readAsDataURL(e.target.files[0]);
+        let filename = e.target.files[0].name;
+        fileReader.onload = (e: any) => {
+          let result = e.target.result;
+          const newEntries = entries.map((entry) => {
+            entry.evidences = entry.evidences?.map((ev) => {
+              if (ev.id === evidence.id) {
+                ev.imageFile = result;
+                ev.imageFilename = filename;
+              }
+              return ev;
+            });
+            return entry;
+          });
+          setEntries(newEntries);
+        };
+        e.target.value = "";
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      toast.error("Bitte laden Sie eine valide Bild- oder PDF-Datei hoch.");
+    }
+  };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -94,34 +140,65 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
     setEntries(newEntries);
   };
 
+  const showImage = (
+    filedata: string,
+    filename: string,
+    attId: string,
+    title: string
+  ) => {
+    setImagePopupVisible(!imagePopupVisible);
+    setImagePopupData(filedata);
+    setImagePopupAttachment(attId);
+    setImagePopupFilename(filename);
+    setImagePopupTitle(title);
+  };
+
   return (
     <div className="flex flex-col gap-2 bg-offWhite rounded-lg mt-4 p-2 font-medium">
-      <div className="flex flex-row mt-1 w-fit">
+      <div className="flex flex-row justify-between mt-1 w-full">
         {evidence.hasAttachment && (
-          <div className="gap-1">
-            <span className="text-xs font-bold ml-1 self-center">Anlage</span>
-            {isInAttachmentEditMode ? (
-              <input
-                autoFocus={true}
-                type="text"
-                name="name"
-                placeholder="Anlage..."
-                className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
-                value={evidence.attachmentId}
-                onBlur={() => setIsInAttachmentEditMode(false)}
-                onChange={handleAttachmentIdChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    setIsInAttachmentEditMode(false);
-                  }
-                }}
-              />
-            ) : (
-              <span className="text-xs font-bold ml-1 self-center">
-                {evidence.attachmentId}
-              </span>
-            )}
-          </div>
+          <>
+            <div className="gap-1">
+              <span className="text-xs font-bold ml-1 self-center">Anlage</span>
+              {isInAttachmentEditMode ? (
+                <input
+                  autoFocus={true}
+                  type="text"
+                  name="name"
+                  placeholder="Anlage..."
+                  className="focus:outline focus:outline-offWhite focus:bg-offWhite px-2 m-0 border-b-[1px]"
+                  value={evidence.attachmentId}
+                  onBlur={() => setIsInAttachmentEditMode(false)}
+                  onChange={handleAttachmentIdChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setIsInAttachmentEditMode(false);
+                    }
+                  }}
+                />
+              ) : (
+                <span className="text-xs font-bold ml-1 self-center">
+                  {evidence.attachmentId}
+                </span>
+              )}
+            </div>
+            <div>
+              {evidence.hasImageFile && (
+                <ImageSquare
+                  size={20}
+                  className="text-mediumGrey hover:text-black"
+                  onClick={() => {
+                    showImage(
+                      evidence.imageFile!,
+                      evidence.imageFilename!,
+                      evidence.attachmentId!,
+                      evidence.name
+                    );
+                  }}
+                />
+              )}
+            </div>
+          </>
         )}
       </div>
       {isInNameEditMode ? (
@@ -199,7 +276,27 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
               }}
               icon={<DotsThree size={20} weight="bold" />}></Button>{" "}
             {isMenuOpen ? (
-              <ul className="absolute right-0 bottom-2 p-2 bg-white text-darkGrey rounded-xl w-[150px] shadow-lg z-50 font-medium">
+              <ul className="absolute right-0 bottom-2 p-2 bg-white text-darkGrey rounded-xl w-[220px] shadow-lg z-50 font-medium text-xs">
+                {evidence.hasImageFile ? (
+                  <li
+                    tabIndex={0}
+                    onClick={() => {
+                      imageFileUploadRef?.current?.click();
+                    }}
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*,.pdf"
+                      ref={imageFileUploadRef}
+                      onChange={(e) => {
+                        handleImageFileUpload(e);
+                        setIsMenuOpen(false);
+                      }}
+                    />
+                    <PencilSimple size={16} />
+                    Datei bearbeiten
+                  </li>
+                ) : null}
                 {evidence.hasAttachment ? (
                   <li
                     tabIndex={0}
@@ -209,7 +306,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
                     }}
                     className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                     <PencilSimple size={16} />
-                    Anlage ändern
+                    Anlage bearbeiten
                   </li>
                 ) : null}
                 <li
@@ -220,7 +317,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
                   }}
                   className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                   <PencilSimple size={16} />
-                  Bearbeiten
+                  Benennung bearbeiten
                 </li>
 
                 <li
@@ -235,6 +332,13 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
           </div>
         )}
       </div>
+      <ImageViewerPopup
+        isVisible={imagePopupVisible}
+        filedata={imagePopupData}
+        filename={imagePopupFilename}
+        title={imagePopupTitle}
+        attachmentId={imagePopupAttachment}
+        setIsVisible={setImagePopupVisible}></ImageViewerPopup>
       <ErrorPopup isVisible={isDeleteErrorVisible}>
         <div className="flex flex-col items-center justify-center space-y-8">
           <p className="text-center text-base">

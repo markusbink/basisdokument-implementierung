@@ -2,7 +2,7 @@ import cx from "classnames";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
-import { FloppyDisk, PencilSimple, X } from "phosphor-react";
+import { FloppyDisk, ImageSquare, PencilSimple, X } from "phosphor-react";
 import { useEffect, useRef, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useCase, useHeaderContext } from "../../contexts";
@@ -12,6 +12,7 @@ import { IEvidence, ViewMode } from "../../types";
 import { Button } from "../Button";
 import { ExpandButton } from "./ExpandButton";
 import { EvidencesPopup } from "./EvidencePopup";
+import { ImageViewerPopup } from "./ImageViewerPopup";
 
 const toolbarOptions = {
   options: ["blockType", "inline", "list", "textAlign"],
@@ -71,6 +72,12 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     return EditorState.createWithContent(contentState);
   });
 
+  const [imagePopupFilename, setImagePopupFilename] = useState<string>("");
+  const [imagePopupData, setImagePopupData] = useState<string>("");
+  const [imagePopupAttachment, setImagePopupAttachment] = useState<string>("");
+  const [imagePopupTitle, setImagePopupTitle] = useState<string>("");
+  const [imagePopupVisible, setImagePopupVisible] = useState<boolean>(false);
+
   const { selectedTheme } = useHeaderContext();
   const { view } = useView();
   const { entries } = useCase();
@@ -92,6 +99,19 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
     // Focus the editor when the component is mounted.
     editorRef.current?.focusEditor();
   }, []);
+
+  const showImage = (
+    filedata: string,
+    filename: string,
+    attId: string,
+    title: string
+  ) => {
+    setImagePopupVisible(!imagePopupVisible);
+    setImagePopupData(filedata);
+    setImagePopupAttachment(attId);
+    setImagePopupFilename(filename);
+    setImagePopupTitle(title);
+  };
 
   return (
     <>
@@ -173,6 +193,20 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
                             {evidence.name}
                           </span>
                         )}
+                        {evidence.hasImageFile && (
+                          <ImageSquare
+                            size={20}
+                            className="text-mediumGrey hover:text-black"
+                            onClick={() => {
+                              showImage(
+                                evidence.imageFile!,
+                                evidence.imageFilename!,
+                                evidence.attachmentId!,
+                                evidence.name
+                              );
+                            }}
+                          />
+                        )}
                       </div>
                     </div>
                   ))}
@@ -230,6 +264,13 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         evidences={entryEvidences}
         backupEvidences={backupEvidences}
         setEvidences={setEntryEvidences}></EvidencesPopup>
+      <ImageViewerPopup
+        isVisible={imagePopupVisible}
+        filedata={imagePopupData}
+        filename={imagePopupFilename}
+        title={imagePopupTitle}
+        attachmentId={imagePopupAttachment}
+        setIsVisible={setImagePopupVisible}></ImageViewerPopup>
     </>
   );
 };
