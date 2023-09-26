@@ -11,12 +11,15 @@ import {
   INote,
   ISection,
   IVersion,
+  UserRole,
 } from "../types";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
 import { format } from "date-fns";
 import { PDFDocument } from "pdf-lib";
+import JSZip from "jszip";
+import { getEvidencesForRole } from "../util/get-evidences";
 
 //define data arrays
 let allEntries: any[] = [];
@@ -25,6 +28,8 @@ let rubrumKlage: any[] = [];
 let rubrumBeklagt: any[] = [];
 let basisdokument: any[] = [];
 let allHints: any[] = [];
+let klageEvidences: any[] = [];
+let beklagtEvidences: any[] = [];
 
 function downloadObjectAsJSON(obj: object, fileName: string) {
   // Create a blob of the data
@@ -34,6 +39,89 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
 
   // Save the file
   saveAs(fileToSave, fileName + ".txt");
+}
+
+function downloadAdditionalFiles(obj: any) {
+  //var additionalFilesToSave: any = [];
+  var currEntries = obj["entries"];
+
+  const zip = new JSZip();
+  const plaintiffFolder = zip.folder("Anhang Klagepartei");
+  const defendantFolder = zip.folder("Anhang Beklagtenpartei");
+
+  for (var i = 0; i < currEntries.length; i++) {
+    let currEvidences = currEntries[i]?.evidences;
+    if (currEvidences) {
+      for (var j = 0; j < currEvidences?.length; j++) {
+        if (currEvidences[j].hasImageFile) {
+          if (currEvidences[j].role === "Klagepartei") {
+            plaintiffFolder?.file(
+              currEvidences[j].attachmentId +
+                "_" +
+                currEvidences[j].name +
+                "_" +
+                currEvidences[j].imageFilename,
+              dataURItoBlob(currEvidences[j].imageFile)
+            );
+          } else {
+            defendantFolder?.file(
+              currEvidences[j].attachmentId +
+                "_" +
+                currEvidences[j].name +
+                "_" +
+                currEvidences[j].imageFilename,
+              dataURItoBlob(currEvidences[j].imageFile)
+            );
+          }
+        }
+      }
+    }
+  }
+  if (
+    countZipFiles(zip.folder("Anhang Klagepartei")) ||
+    countZipFiles(zip.folder("Anhang Beklagtenpartei"))
+  ) {
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+      saveAs(content, "Anhang.zip");
+    });
+  }
+}
+
+function countZipFiles(zipFolder: any) {
+  let countFiles = 0;
+  zipFolder.forEach(function () {
+    countFiles++;
+  });
+  if (countFiles > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//source: https://stackoverflow.com/questions/46405773/saving-base64-image-with-filesaver-js
+function dataURItoBlob(dataURI: any) {
+  // convert base64 to raw binary data held in a string
+  // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+  var byteString = atob(dataURI.split(",")[1]);
+
+  // separate out the mime component
+  var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+  // write the bytes of the string to an ArrayBuffer
+  var ab = new ArrayBuffer(byteString.length);
+
+  // create a view into the buffer
+  var ia = new Uint8Array(ab);
+
+  // set the bytes of the buffer to the correct values
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  // write the ArrayBuffer to a blob, and you're done
+  var blob = new Blob([ab], { type: mimeString });
+  return blob;
 }
 
 function downloadPDF(PDF: any, fileName: string) {
@@ -77,6 +165,9 @@ function getEvidenceNumeration(evidences: Array<IEvidence>) {
       let evidence = i + 1 + ") " + evidences[i].name;
       if (evidences[i].hasAttachment) {
         evidence = evidence + " als Anlage " + evidences[i].attachmentId;
+      }
+      if (evidences[i].hasImageFile) {
+        evidence = evidence + ": " + evidences[i].imageFilename;
       }
       //do not add line break/empty line to last item
       if (i === evidences.length - 1) {
@@ -170,11 +261,13 @@ async function mergePDF(
 async function downloadBasisdokumentAsPDF(
   coverPDF: ArrayBuffer | undefined,
   downloadNew: boolean,
+  downloadEvidences: boolean,
   obj: any,
   fileName: string
 ) {
   let doc = new jsPDF();
   let newDoc = new jsPDF(); //additional pdf with only new entries
+  let evDoc = new jsPDF(); //additional pdf with only evidences
 
   //DATA for autotables
   // basic data
@@ -323,6 +416,44 @@ async function downloadBasisdokumentAsPDF(
     }
   }
 
+  //get evidences of plaintiff and defendant
+  let plaintiffEv = getEvidencesForRole(obj["entries"], UserRole.Plaintiff);
+  for (let i = 0; i < plaintiffEv.length; i++) {
+    let ev;
+    if (plaintiffEv[i].hasImageFile) {
+      ev = {
+        designation: plaintiffEv[i].attachmentId + ": " + plaintiffEv[i].name,
+        imageDesignation: plaintiffEv[i].imageFilename,
+      };
+    } else if (plaintiffEv[i].hasAttachment) {
+      ev = {
+        designation: plaintiffEv[i].attachmentId + ": " + plaintiffEv[i].name,
+      };
+    } else {
+      ev = { designation: plaintiffEv[i].name };
+    }
+    klageEvidences.push(ev);
+  }
+  let defendantEv = getEvidencesForRole(obj["entries"], UserRole.Defendant);
+  for (let i = 0; i < defendantEv.length; i++) {
+    let ev;
+    if (defendantEv[i].hasImageFile) {
+      ev = {
+        designation: defendantEv[i].attachmentId + ": " + defendantEv[i].name,
+        imageDesignation: defendantEv[i].imageFilename,
+      };
+    } else if (defendantEv[i].hasAttachment) {
+      ev = {
+        designation: defendantEv[i].attachmentId + ": " + defendantEv[i].name,
+      };
+    } else {
+      ev = {
+        designation: defendantEv[i].name,
+      };
+    }
+    beklagtEvidences.push(ev);
+  }
+
   // AUTOTABLES
   //autotable basisdokument metadata
   let basic;
@@ -369,6 +500,18 @@ async function downloadBasisdokumentAsPDF(
       });
     },
   });
+  //additional pdf with only evidences
+  autoTable(evDoc, {
+    theme: "grid",
+    styles: { fontStyle: "bold" },
+    head: [["Basisdokument - Beweisliste"]],
+    headStyles: { fontStyle: "bold", fontSize: 14, fillColor: [0, 122, 122] },
+    body: [
+      [basisdokument[0].caseId],
+      [basisdokument[0].version],
+      [basisdokument[0].timestamp],
+    ],
+  });
   basisdokument = [];
 
   //autotable rubrum plaintiff
@@ -396,6 +539,14 @@ async function downloadBasisdokumentAsPDF(
         pageNumber: newDoc.getCurrentPageInfo().pageNumber,
       });
     },
+  });
+  //additional pdf with only evidences
+  autoTable(evDoc, {
+    theme: "grid",
+    styles: { halign: "center" },
+    head: [["Rubrum Klagepartei"]],
+    headStyles: { fillColor: [0, 122, 122] },
+    body: [rubrumKlage],
   });
   rubrumKlage = [];
 
@@ -425,17 +576,25 @@ async function downloadBasisdokumentAsPDF(
       });
     },
   });
+  //additional pdf with only evidences
+  autoTable(evDoc, {
+    theme: "grid",
+    styles: { halign: "center" },
+    head: [["Rubrum Beklagtenpartei"]],
+    headStyles: { fillColor: [0, 122, 122] },
+    body: [rubrumBeklagt],
+  });
   rubrumBeklagt = [];
 
   //autotable hints
   doc.addPage();
   autoTable(doc, {
     theme: "grid",
-    head: [["Hinweise des Richters nach (nach §139 ZPO)"]],
+    head: [["Hinweise des Richters (nach §139 ZPO)"]],
     headStyles: { fontStyle: "bold", fontSize: 12, fillColor: [0, 102, 204] },
     margin: { top: 6, bottom: 6, left: 6, right: 6 },
     didDrawPage: function () {
-      doc.outline.add(null, "Hinweise des Richters nach (nach §139 ZPO)", {
+      doc.outline.add(null, "Hinweise des Richters (nach §139 ZPO)", {
         pageNumber: doc.getCurrentPageInfo().pageNumber,
       });
     },
@@ -730,6 +889,52 @@ async function downloadBasisdokumentAsPDF(
   allHints = [];
   allEntries = [];
 
+  // additional evidences pdf
+
+  autoTable(evDoc, {
+    theme: "grid",
+    head: [["Beweisliste Kläger"]],
+    headStyles: { fillColor: [0, 122, 122] },
+  });
+
+  for (let i = 0; i < klageEvidences.length; i++) {
+    let data;
+    if (klageEvidences[i].imageDesignation) {
+      data = [
+        [klageEvidences[i].designation],
+        [klageEvidences[i].imageDesignation],
+      ];
+    } else {
+      data = [[klageEvidences[i].designation]];
+    }
+    autoTable(evDoc, {
+      theme: "grid",
+      body: data,
+    });
+  }
+
+  autoTable(evDoc, {
+    theme: "grid",
+    head: [["Beweisliste Beklagter"]],
+    headStyles: { fillColor: [0, 122, 122] },
+  });
+
+  for (let i = 0; i < beklagtEvidences.length; i++) {
+    let data;
+    if (beklagtEvidences[i].imageDesignation) {
+      data = [
+        [beklagtEvidences[i].designation],
+        [beklagtEvidences[i].imageDesignation],
+      ];
+    } else {
+      data = [[beklagtEvidences[i].designation]];
+    }
+    autoTable(evDoc, {
+      theme: "grid",
+      body: data,
+    });
+  }
+
   //signature page
   let signatureData: any = [
     [
@@ -817,6 +1022,9 @@ async function downloadBasisdokumentAsPDF(
   if (downloadNew) {
     newDoc.save("neue_beitraege_" + fileName);
   }
+  if (downloadEvidences) {
+    evDoc.save("beweisliste_" + fileName);
+  }
 }
 
 export function downloadBasisdokument(
@@ -831,7 +1039,9 @@ export function downloadBasisdokument(
   coverPDF: ArrayBuffer | undefined,
   otherAuthor: string | undefined,
   downloadNewAdditionally: boolean,
-  regard: string | undefined
+  downloadEvidencesAdditionally: boolean,
+  regard: string | undefined,
+  dontDownloadAttachments: boolean
 ) {
   let basisdokumentObject: any = {};
   basisdokumentObject["fileId"] = fileId;
@@ -870,9 +1080,13 @@ export function downloadBasisdokument(
   downloadBasisdokumentAsPDF(
     coverPDF,
     downloadNewAdditionally,
+    downloadEvidencesAdditionally,
     basisdokumentObject,
     `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
+  if (!dontDownloadAttachments) {
+    downloadAdditionalFiles(basisdokumentObject);
+  }
 }
 
 export function downloadEditFile(

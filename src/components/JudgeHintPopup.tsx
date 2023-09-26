@@ -197,10 +197,10 @@ export const JudgeHintPopup = () => {
                   defaultEditorState={editorState}
                   stripPastedStyles={true}
                   onEditorStateChange={setEditorState}
-                  wrapperClassName={cx("w-full focus:outline-none")}
+                  wrapperClassName="w-full focus:outline-none"
                   editorClassName="p-2 text-sm bg-offWhite text-mediumGrey rounded min-h-[100px] max-h-[200px]"
                   placeholder="Text eingeben..."
-                  toolbarClassName={cx("p-2 border-none border-white")}
+                  toolbarClassName="p-2 border-none border-white"
                   toolbar={toolbarOptions}
                 />
               </div>
