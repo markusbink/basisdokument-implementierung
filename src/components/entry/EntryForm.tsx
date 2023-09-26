@@ -160,7 +160,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           }
         />
         <div className="flex border-t border-lightGrey rounded-b-lg px-3 py-2 items-center gap-2 justify-between">
-          {entryEvidences.length <= 0 ? (
+          {entryEvidences && entryEvidences.length <= 0 ? (
             <div
               className="flex flex-col gap-2 items-center cursor-pointer"
               onClick={(e) => {
@@ -173,40 +173,43 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           ) : (
             <div className="flex flex-col gap-1">
               <span className="ml-1 font-bold">
-                {evidences.length === 1 ? "Beweis:" : "Beweise:"}
+                {evidences && evidences.length > 1 ? "Beweise:" : "Beweis:"}
               </span>
               <div className="flex flex-col flex-wrap gap-1">
-                {entryEvidences.map((evidence, index) => (
-                  <div className="flex flex-row items-center px-2" key={index}>
-                    <div className="flex flex-row gap-2">
-                      <span className="w-4">{index + 1 + "."}</span>
-                      {evidence.hasAttachment ? (
-                        <span className="break-words font-medium">
-                          {evidence.name}
-                          <b> als Anlage {evidence.attachmentId}</b>
-                        </span>
-                      ) : (
-                        <span className="break-words font-medium">
-                          {evidence.name}
-                        </span>
-                      )}
-                      {evidence.hasImageFile && (
-                        <ImageSquare
-                          size={20}
-                          className="text-mediumGrey hover:text-black"
-                          onClick={() => {
-                            showImage(
-                              evidence.imageFile!,
-                              evidence.imageFilename!,
-                              evidence.attachmentId!,
-                              evidence.name
-                            );
-                          }}
-                        />
-                      )}
+                {entryEvidences &&
+                  entryEvidences.map((evidence, index) => (
+                    <div
+                      className="flex flex-row items-center px-2"
+                      key={index}>
+                      <div className="flex flex-row gap-2">
+                        <span className="w-4">{index + 1 + "."}</span>
+                        {evidence.hasAttachment ? (
+                          <span className="break-words font-medium">
+                            {evidence.name}
+                            <b> als Anlage {evidence.attachmentId}</b>
+                          </span>
+                        ) : (
+                          <span className="break-words font-medium">
+                            {evidence.name}
+                          </span>
+                        )}
+                        {evidence.hasImageFile && (
+                          <ImageSquare
+                            size={20}
+                            className="text-mediumGrey hover:text-black"
+                            onClick={() => {
+                              showImage(
+                                evidence.imageFile!,
+                                evidence.imageFilename!,
+                                evidence.attachmentId!,
+                                evidence.name
+                              );
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           )}
