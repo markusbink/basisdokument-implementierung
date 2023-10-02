@@ -231,15 +231,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       }
       // check if basisdokument and edit files are matching
       if (basisdokumentFile && editFile) {
-        if (
-          jsonToObject(basisdokumentFile).fileId !==
-          jsonToObject(editFile).fileId
-        ) {
+        let basisdokId = jsonToObject(basisdokumentFile).fileId;
+        let editId = jsonToObject(editFile).fileId;
+        const basisdokHasId = basisdokId && basisdokId.length > 0;
+        const editHasId = editId && editId.length > 0;
+        if (basisdokHasId && editHasId && basisdokId !== editId) {
           setIsMatchingFiles(false);
           setErrorText(
             "Die hochgeladene Bearbeitungsdatei passt nicht zum hochgeladenen Basisdokument."
           );
           return false;
+        } else if (basisdokHasId && !editHasId) {
+          editId = basisdokId;
+        } else if (!basisdokHasId && editHasId) {
+          basisdokId = editId;
         }
       }
     }
