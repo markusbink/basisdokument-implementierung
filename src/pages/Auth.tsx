@@ -231,22 +231,20 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       }
       // check if basisdokument and edit files are matching
       if (basisdokumentFile && editFile) {
-        let basisdokId = jsonToObject(basisdokumentFile).fileId;
-        let editId = jsonToObject(editFile).fileId;
-        const basisdokHasId = basisdokId && basisdokId.length > 0;
-        const editHasId = editId && editId.length > 0;
-        if (basisdokHasId && editHasId && basisdokId !== editId) {
+        const basisdokId = jsonToObject(basisdokumentFile).fileId;
+        const editId = jsonToObject(editFile).fileId;
+        if (
+          basisdokId &&
+          basisdokId.length > 0 &&
+          editId &&
+          editId.length > 0 &&
+          basisdokId !== editId
+        ) {
           setIsMatchingFiles(false);
           setErrorText(
             "Die hochgeladene Bearbeitungsdatei passt nicht zum hochgeladenen Basisdokument."
           );
           return false;
-        } else if (!basisdokHasId && !editHasId) {
-          setFileId(uuidv4());
-        } else if (basisdokHasId && !editHasId) {
-          setFileId(basisdokId);
-        } else if (!basisdokHasId && editHasId) {
-          setFileId(editId);
         }
       }
     }
@@ -292,6 +290,24 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           basisdokumentObject,
           editFileObject
         );
+      }
+
+      // ensure compatibility with older releases (matching fileId feature)
+      const basisdokFileId = basisdokumentObject["fileId"];
+      const editFileId = editFileObject["fileId"];
+      const basisdokHasId = basisdokFileId && basisdokFileId.length > 0;
+      const editHasId = editFileId && editFileId.length > 0;
+      if (!basisdokHasId && !editHasId) {
+        const id = uuidv4();
+        basisdokumentObject["fileId"] = id;
+        editFileObject["fileId"] = id;
+        setFileId(id);
+      } else if (basisdokHasId && !editHasId) {
+        editFileObject["fileId"] = basisdokFileId;
+        setFileId(basisdokFileId);
+      } else if (!basisdokHasId && editHasId) {
+        basisdokumentObject["fileId"] = editFileId;
+        setFileId(editFileId);
       }
     }
 
