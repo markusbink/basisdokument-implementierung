@@ -241,10 +241,12 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
             "Die hochgeladene Bearbeitungsdatei passt nicht zum hochgeladenen Basisdokument."
           );
           return false;
+        } else if (!basisdokHasId && !editHasId) {
+          setFileId(uuidv4());
         } else if (basisdokHasId && !editHasId) {
-          editId = basisdokId;
+          setFileId(basisdokId);
         } else if (!basisdokHasId && editHasId) {
-          basisdokId = editId;
+          setFileId(editId);
         }
       }
     }
