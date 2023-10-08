@@ -640,7 +640,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                     value: true,
                                   });
                                 }}>
-                                <span className="w-4">{index + 1 + "."}</span>
+                                {currentEvidences.length !== 1 && (
+                                  <span className="w-4">{index + 1 + "."}</span>
+                                )}
                                 {evidenceEditMode?.value &&
                                 evidenceEditMode?.evidence === ev ? (
                                   <>
@@ -743,7 +745,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                             </Tooltip>
                           ) : (
                             <div className="flex flex-row gap-2 items-center">
-                              <span className="w-4">{index + 1 + "."}</span>
+                              <span className="w-4">
+                                {evidences.length === 1 ? "" : index + 1 + "."}
+                              </span>
 
                               {ev.hasAttachment ? (
                                 <span className="break-words font-medium">
