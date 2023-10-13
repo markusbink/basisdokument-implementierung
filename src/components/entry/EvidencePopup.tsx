@@ -24,6 +24,7 @@ import { ImageViewerPopup } from "./ImageViewerPopup";
 
 interface EvidencesPopupProps {
   entryId?: string;
+  caveatOfProof: boolean;
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isPlaintiff: boolean;
@@ -57,6 +58,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   isPlaintiff,
   evidences,
   setEvidences,
+  caveatOfProof,
 }) => {
   const { entries, setEntries, currentVersion } = useCase();
   const { selectedTheme } = useHeaderContext();
@@ -73,6 +75,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const [currentEvidences, setCurrentEvidences] =
     useState<IEvidence[]>(evidences);
   const [currentInput, setCurrentInput] = useState<string>("");
+  const [currentCaveatOfProof, setCurrentCaveatOfProof] =
+    useState<boolean>(caveatOfProof);
   const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
   const [hasImageFile, setHasImageFile] = useState<boolean>(false);
@@ -346,6 +350,16 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       return evidence;
     });
     setEvidences(updatedEvidences);
+
+    let updatedEntries = [...entries];
+    updatedEntries.map((entry) => {
+      if (entry.id === entryId) {
+        entry.caveatOfProof = currentCaveatOfProof;
+      }
+      return entry;
+    });
+    setEntries(updatedEntries);
+
     setIsVisible(false);
   };
 
@@ -598,8 +612,13 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               ) : (
                 <div className="flex flex-col gap-1 w-full max-h-56 overflow-auto">
                   <span className="ml-1 font-bold">
-                    {currentEvidences.length === 1 ? "Beweis:" : "Beweise:"}
+                    {(currentEvidences.length === 1 ? "Beweis" : "Beweise") +
+                      (currentCaveatOfProof
+                        ? " unter Verwahrung gegen die Beweislast"
+                        : "") +
+                      ":"}
                   </span>
+
                   <div className="flex flex-col flex-wrap gap-1">
                     {currentEvidences.map((ev, index) => (
                       <div key={index} className="flex flex-row">
@@ -775,6 +794,29 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               )}
             </div>
           </div>
+
+          {((isPlaintiff &&
+            currentEvidences.find((ev) => ev.role !== UserRole.Plaintiff)) ||
+            (!isPlaintiff &&
+              currentEvidences.find(
+                (ev) => ev.role === UserRole.Plaintiff
+              ))) && (
+            <div>
+              <div className="p-2">
+                Hinweis: Es werden Beweise der Gegenpartei mitangeführt.
+              </div>
+              <input
+                autoFocus={false}
+                type="checkbox"
+                name="caveat"
+                checked={currentCaveatOfProof}
+                placeholder="Beweislast"
+                className="bg-offWhite px-2 m-0 w-8 accent-darkGrey"
+                onChange={(e) => setCurrentCaveatOfProof(e.target.checked)}
+              />
+              Zusatz "Unter Verwahrung gegen die Beweislast" hinzufügen
+            </div>
+          )}
 
           <div className="flex items-center justify-end">
             <button

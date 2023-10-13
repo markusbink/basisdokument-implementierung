@@ -561,6 +561,7 @@ export const Entry: React.FC<EntryProps> = ({
                     }
                     lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
                     entryId={entry.id}
+                    caveatOfProof={entry.caveatOfProof}
                     showInPopup={shownInPopup}
                     evidences={entry.evidences}>
                     {entry.text}
@@ -569,6 +570,7 @@ export const Entry: React.FC<EntryProps> = ({
                 {isBodyOpen && isEditing && (
                   <EntryForm
                     entryId={entry.id}
+                    caveatOfProof={entry.caveatOfProof}
                     defaultContent={entry.text}
                     isPlaintiff={isPlaintiff}
                     isExpanded={isExpanded}

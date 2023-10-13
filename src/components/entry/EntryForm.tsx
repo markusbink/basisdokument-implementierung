@@ -37,6 +37,7 @@ const toolbarOptions = {
 
 interface EntryBodyProps {
   entryId?: string;
+  caveatOfProof: boolean;
   isPlaintiff: boolean;
   isExpanded: boolean;
   setIsExpanded: () => void;
@@ -48,6 +49,7 @@ interface EntryBodyProps {
 
 export const EntryForm: React.FC<EntryBodyProps> = ({
   entryId,
+  caveatOfProof,
   isPlaintiff,
   isExpanded,
   setIsExpanded,
@@ -173,7 +175,11 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           ) : (
             <div className="flex flex-col gap-1">
               <span className="ml-1 font-bold">
-                {evidences && evidences.length > 1 ? "Beweise:" : "Beweis:"}
+                {(evidences.length === 1 ? "Beweis" : "Beweise") +
+                  (caveatOfProof
+                    ? " unter Verwahrung gegen die Beweislast"
+                    : "") +
+                  ":"}
               </span>
               <div className="flex flex-col flex-wrap gap-1">
                 {entryEvidences &&
@@ -258,6 +264,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       </div>
       <EvidencesPopup
         entryId={entryId}
+        caveatOfProof={caveatOfProof}
         isVisible={evidencePopupVisible}
         setIsVisible={setEvidencePopupVisible}
         isPlaintiff={isPlaintiff}

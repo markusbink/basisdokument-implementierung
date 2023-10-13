@@ -69,6 +69,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
 
     const entry: IEntry = {
       id: uuidv4(),
+      caveatOfProof: false,
       entryCode: `${entryCodePrefix}-${sectionNumber}-${newEntryCount}`,
       author: authorName || user!.name,
       role: roleForNewEntry,
@@ -217,6 +218,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
           </EntryHeader>
           {/* Toolbar */}
           <EntryForm
+            caveatOfProof={false}
             isPlaintiff={isPlaintiff}
             isExpanded={isExpanded}
             setIsExpanded={() => {
