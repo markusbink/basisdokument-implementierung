@@ -27,6 +27,7 @@ import { themeData } from "../../themes/theme-data";
 import Cookies from "js-cookie";
 import cx from "classnames";
 import { UserRole } from "../../types";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 export const DocumentButton = () => {
   const { user } = useUser();
@@ -45,6 +46,8 @@ export const DocumentButton = () => {
     highlightedEntries,
   } = useCase();
   const { sectionList, individualSorting } = useSection();
+  const { evidenceList, evidenceIdsPlaintiff, evidenceIdsDefendant } =
+    useEvidence();
   const { versionHistory, colorSelection, selectedTheme, setSelectedTheme } =
     useHeaderContext();
   const { hints } = useHints();
@@ -66,6 +69,9 @@ export const DocumentButton = () => {
         metaData,
         entries,
         sectionList,
+        evidenceList,
+        evidenceIdsPlaintiff,
+        evidenceIdsDefendant,
         hints,
         undefined, //coverPDF
         undefined, //otherAuthor

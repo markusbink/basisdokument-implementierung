@@ -19,7 +19,7 @@ import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
 import { format } from "date-fns";
 import { PDFDocument } from "pdf-lib";
 import JSZip from "jszip";
-import { getEvidencesForRole } from "../util/get-evidences";
+import { getEvidences, getEvidencesForRole } from "../util/get-evidences";
 
 //define data arrays
 let allEntries: any[] = [];
@@ -158,9 +158,13 @@ function getEntryTitle(entryId: any, obj: any) {
 }
 
 //add evidences in one string because of autotable commas
-function getEvidenceNumeration(evidences: Array<IEvidence>) {
+function getEvidenceNumeration(
+  evidenceList: IEvidence[],
+  evidenceIds: Array<string>
+) {
   var numEvidences: string = "";
-  if (evidences) {
+  if (evidenceIds) {
+    let evidences = getEvidences(evidenceList, evidenceIds);
     for (let i = 0; i < evidences.length; i++) {
       let evidence = i + 1 + ") " + evidences[i].name;
       if (evidences[i].hasAttachment) {
@@ -387,11 +391,13 @@ async function downloadBasisdokumentAsPDF(
           text: parseHTMLtoString(entry.text),
           version: entry.version,
           associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-          evidences: !entry.evidences?.length
+          evidences: !entry.evidenceIds?.length
             ? undefined
             : entry.evidences?.length > 1
-            ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
-            : "Beweis:\n" + getEvidenceNumeration(entry.evidences),
+            ? "Beweise:\n" +
+              getEvidenceNumeration(obj["evidences"], entry.evidenceIds)
+            : "Beweis:\n" +
+              getEvidenceNumeration(obj["evidences"], entry.evidenceIds),
         };
         allEntries.push(tableEntry);
 
@@ -404,11 +410,13 @@ async function downloadBasisdokumentAsPDF(
             text: parseHTMLtoString(entry.text),
             version: entry.version,
             associatedEntry: getEntryTitle(entry.associatedEntry, obj),
-            evidences: !entry.evidences?.length
+            evidences: !entry.evidenceIds?.length
               ? undefined
               : entry.evidences?.length > 1
-              ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
-              : "Beweis:\n" + getEvidenceNumeration(entry.evidences),
+              ? "Beweise:\n" +
+                getEvidenceNumeration(obj["evidences"], entry.evidenceIds)
+              : "Beweis:\n" +
+                getEvidenceNumeration(obj["evidences"], entry.evidenceIds),
           };
           newEntries.push(newEntry);
         }
@@ -417,7 +425,7 @@ async function downloadBasisdokumentAsPDF(
   }
 
   //get evidences of plaintiff and defendant
-  let plaintiffEv = getEvidencesForRole(obj["entries"], UserRole.Plaintiff);
+  let plaintiffEv = getEvidencesForRole(obj["evidences"], UserRole.Plaintiff);
   for (let i = 0; i < plaintiffEv.length; i++) {
     let ev;
     if (plaintiffEv[i].hasImageFile) {
@@ -434,7 +442,7 @@ async function downloadBasisdokumentAsPDF(
     }
     klageEvidences.push(ev);
   }
-  let defendantEv = getEvidencesForRole(obj["entries"], UserRole.Defendant);
+  let defendantEv = getEvidencesForRole(obj["evidences"], UserRole.Defendant);
   for (let i = 0; i < defendantEv.length; i++) {
     let ev;
     if (defendantEv[i].hasImageFile) {
@@ -1035,6 +1043,9 @@ export function downloadBasisdokument(
   metaData: IMetaData | null,
   entries: IEntry[],
   sectionList: ISection[],
+  evidenceList: IEvidence[],
+  evidencesNumPlaintiff: (string | undefined)[],
+  evidencesNumDefendant: (string | undefined)[],
   hints: IHint[],
   coverPDF: ArrayBuffer | undefined,
   otherAuthor: string | undefined,
@@ -1055,6 +1066,9 @@ export function downloadBasisdokument(
   basisdokumentObject["metaData"] = metaData;
   basisdokumentObject["entries"] = entries;
   basisdokumentObject["sections"] = sectionList;
+  basisdokumentObject["evidences"] = evidenceList;
+  basisdokumentObject["evidencesNumPlaintiff"] = evidencesNumPlaintiff;
+  basisdokumentObject["evidencesNumDefendant"] = evidencesNumDefendant;
   basisdokumentObject["judgeHints"] = hints;
   basisdokumentObject["otherAuthor"] = otherAuthor;
   basisdokumentObject["regard"] = regard;

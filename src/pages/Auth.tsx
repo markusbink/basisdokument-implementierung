@@ -28,6 +28,8 @@ import {
   updateSortingsIfVersionIsDifferent,
 } from "../data-management/opening-handler";
 import {
+  IEntry,
+  IEvidence,
   IStateUserInput,
   IUser,
   SidebarState,
@@ -41,10 +43,13 @@ import { VersionPopup } from "../components/VersionPopup";
 import { useSidebar } from "../contexts/SidebarContext";
 import { PatchnotesPopup } from "../components/PatchnotesPopup";
 import { ImprintPopup } from "../components/ImprintPopup";
+import { useEvidence } from "../contexts/EvidenceContext";
 
 interface AuthProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
 }
+
+//TODO: Evidences richtig zuordnen!!!!!
 
 export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   // States for the form
@@ -97,6 +102,12 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setActiveSidebar } = useSidebar();
   const { showPatchnotesPopup } = usePatchnotes();
   const { showImprintPopup } = useImprint();
+  const {
+    setEvidenceList,
+    setEvidenceIdsPlaintiff,
+    evidenceIdsDefendant,
+    setEvidenceIdsDefendant,
+  } = useEvidence();
 
   // Set React states when user enters/changes text input fields
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -273,9 +284,6 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         );
       } else {
         editFileObject = createEditFile(
-          prename,
-          surname,
-          role,
           basisdokumentObject.caseId,
           basisdokumentObject.fileId,
           basisdokumentObject.currentVersion
@@ -298,14 +306,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         caseId,
         fileId
       );
-      editFileObject = createEditFile(
-        prename,
-        surname,
-        role,
-        caseId,
-        fileId,
-        1
-      );
+      editFileObject = createEditFile(caseId, fileId, 1);
       toast("Ihr Basisdokument wurde erfolgreich erstellt!");
     }
 
@@ -324,7 +325,56 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   // The imported data from the files is then merged into a React state (context provider).
   const setContextFromBasisdokument = (basisdokument: any) => {
     setVersionHistory(basisdokument.versions);
-    setEntries(basisdokument.entries);
+    //if evidences are already in own list
+    if (basisdokument.evidences) {
+      setEntries(basisdokument.entries);
+      setEvidenceList(basisdokument.evidences);
+      setEvidenceIdsPlaintiff(basisdokument.evidencesNumPlaintiff);
+      setEvidenceIdsDefendant(basisdokument.evidencesNumDefendant);
+    } else {
+      //if evidences are not already in own list
+      let newEvidenceList: IEvidence[] = [];
+      let updatedEntries: IEntry[] = [];
+      let oldEntries = basisdokument.entries;
+      for (let i = 0; i < oldEntries.length; i++) {
+        if (oldEntries[i].evidences) {
+          let updatedEntry: IEntry = oldEntries[i];
+          let newEvIds: string[] = [];
+          for (let j = 0; j < oldEntries[i].evidences.length; j++) {
+            newEvIds.push(oldEntries[i].evidences[j].id);
+            //check if evidence is already in new evidence list
+            if (
+              !newEvidenceList.find(
+                (ev) => ev.id === oldEntries[i].evidences[j].id
+              )
+            ) {
+              newEvidenceList.push(oldEntries[i].evidences[j]);
+            }
+          }
+          updatedEntry["evidenceIds"] = newEvIds;
+          //delete outdated property after getting all data correctly
+          delete updatedEntry.evidences;
+          updatedEntries.push(updatedEntry);
+        } else {
+          updatedEntries.push(oldEntries[i]);
+        }
+      }
+      setEntries(updatedEntries);
+      setEvidenceList(newEvidenceList);
+      //set plaintiff/defendant arrays
+      let newPlaintiffArr: string[] = [];
+      let newDefendantArr: string[] = [];
+      for (let i = 0; i < newEvidenceList.length; i++) {
+        if (newEvidenceList[i].hasAttachment) {
+          let newIndex = Number(newEvidenceList[i].attachmentId?.slice(2));
+          newEvidenceList[i].attachmentId?.includes("K")
+            ? newPlaintiffArr.splice(newIndex, 0, newEvidenceList[i].id)
+            : newDefendantArr.splice(newIndex, 0, newEvidenceList[i].id);
+        }
+      }
+      setEvidenceIdsPlaintiff(newPlaintiffArr);
+      setEvidenceIdsDefendant(newDefendantArr);
+    }
     setSectionList(basisdokument.sections);
     setHints(basisdokument.judgeHints);
     setMetaData(basisdokument.metaData);

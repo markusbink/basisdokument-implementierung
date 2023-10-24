@@ -8,16 +8,20 @@ import {
 import { IEvidence } from "../types";
 
 interface IEvidenceContext {
-  evidencesPlaintiff: (IEvidence | undefined)[];
-  setEvidencesPlaintiff: Dispatch<SetStateAction<(IEvidence | undefined)[]>>;
-  addNewEvidencePlaintiff: (evidence: IEvidence) => void;
-  updateEvidencesPlaintiff: (evidence: IEvidence) => void;
-  removeEvidencePlaintiff: (evidence: IEvidence) => void;
-  evidencesDefendant:  (IEvidence | undefined)[];
-  setEvidencesDefendant: Dispatch<SetStateAction<(IEvidence | undefined)[]>>;
-  addNewEvidenceDefendant: (evidence: IEvidence) => void;
-  updateEvidencesDefendant: (evidence: IEvidence) => void;
-  removeEvidenceDefendant: (evidence: IEvidence) => void;
+  evidenceList: IEvidence[];
+  setEvidenceList: React.Dispatch<React.SetStateAction<IEvidence[]>>;
+  updateEvidenceList: (evidence: IEvidence) => void;
+  removeFromEvidenceList: (evidenceId: string) => void;
+  evidenceIdsPlaintiff: (string | undefined)[];
+  setEvidenceIdsPlaintiff: Dispatch<SetStateAction<(string | undefined)[]>>;
+  addNewEvidenceIdPlaintiff: (evidence: IEvidence) => void;
+  updateEvidenceIdsPlaintiff: (evidenceId: string) => void;
+  removeEvidenceIdPlaintiff: (evidenceId: string) => void;
+  evidenceIdsDefendant: (string | undefined)[];
+  setEvidenceIdsDefendant: Dispatch<SetStateAction<(string | undefined)[]>>;
+  addNewEvidenceIdDefendant: (evidence: IEvidence) => void;
+  updateEvidenceIdsDefendant: (evidenceId: string) => void;
+  removeEvidenceIdDefendant: (evidenceId: string) => void;
 }
 
 export const EvidenceContext = createContext<IEvidenceContext | null>(null);
@@ -29,88 +33,130 @@ interface EvidenceProviderProps {
 export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
   children,
 }) => {
-  const [evidencesDefendant, setEvidencesDefendant] = useState<(IEvidence | undefined)[]>([]);
-  const [evidencesPlaintiff, setEvidencesPlaintiff] = useState<(IEvidence | undefined)[]>([]);
+  const [evidenceList, setEvidenceList] = useState<IEvidence[]>([]);
+  const [evidenceIdsDefendant, setEvidenceIdsDefendant] = useState<
+    (string | undefined)[]
+  >([]);
+  const [evidenceIdsPlaintiff, setEvidenceIdsPlaintiff] = useState<
+    (string | undefined)[]
+  >([]);
 
-  const addNewEvidenceDefendant = (evidence: IEvidence) => {
+  const addNewEvidenceIdDefendant = (evidence: IEvidence) => {
     let emptySpace = false;
-    for (let i=0; i<evidencesDefendant.length; i++) {
-        if (evidencesDefendant[i] === undefined) {
-            // set initial attachmentId value
-            evidence.attachmentId = "B" + (i + 1);
-            evidencesDefendant[i] = evidence;
-            emptySpace = true;
-        }
+    for (let i = 0; i < evidenceIdsDefendant.length; i++) {
+      if (evidenceIdsDefendant[i] === undefined) {
+        // set initial attachmentId value
+        evidence.attachmentId = "B" + (i + 1);
+        evidenceIdsDefendant[i] = evidence.id;
+        emptySpace = true;
+      }
     }
     if (emptySpace === false) {
       // set initial attachmentId value
-      evidence.attachmentId = "B" + (evidencesDefendant.length + 1).toString();
-      evidencesDefendant.push(evidence);
+      evidence.attachmentId =
+        "B" + (evidenceIdsDefendant.length + 1).toString();
+      evidenceIdsDefendant.push(evidence.id);
     }
+    updateEvidenceList(evidence);
   };
 
-  const addNewEvidencePlaintiff = (evidence: IEvidence) => {
+  const addNewEvidenceIdPlaintiff = (evidence: IEvidence) => {
     let emptySpace = false;
-    for (let i=0; i<evidencesPlaintiff.length; i++) {
-        if (evidencesPlaintiff[i] === undefined) {
-            // set initial attachmentId value
-            evidence.attachmentId = "K" + (i + 1);
-            evidencesPlaintiff[i] = evidence;
-            emptySpace = true;
-        }
+    for (let i = 0; i < evidenceIdsPlaintiff.length; i++) {
+      if (evidenceIdsPlaintiff[i] === undefined) {
+        // set initial attachmentId value
+        evidence.attachmentId = "K" + (i + 1);
+        evidenceIdsPlaintiff[i] = evidence.id;
+        emptySpace = true;
+      }
     }
     if (emptySpace === false) {
       // set initial attachmentId value
-      evidence.attachmentId = "K" + (evidencesPlaintiff.length + 1).toString();
-      evidencesPlaintiff.push(evidence);
+      evidence.attachmentId =
+        "K" + (evidenceIdsPlaintiff.length + 1).toString();
+      evidenceIdsPlaintiff.push(evidence.id);
     }
+    updateEvidenceList(evidence);
   };
 
-  const updateEvidencesDefendant = (evidence: IEvidence) => {
-    setEvidencesDefendant(
-      evidencesDefendant.map((e) => (e!.id === evidence.id ? evidence : e))
+  const updateEvidenceList = (evidence: IEvidence) => {
+    let updatedEvidences: IEvidence[] = [];
+    let evidenceUpdated: boolean = false;
+    for (let i = 0; i < evidenceList.length; i++) {
+      if (evidenceList[i].id === evidence.id) {
+        updatedEvidences.push(evidence);
+        evidenceUpdated = true;
+      } else {
+        updatedEvidences.push(evidenceList[i]);
+      }
+    }
+    if (evidenceUpdated === false) {
+      updatedEvidences.push(evidence);
+    }
+    setEvidenceList(updatedEvidences);
+  };
+
+  const removeFromEvidenceList = (evidenceId: string) => {
+    setEvidenceList(evidenceList.filter((ev) => ev.id !== evidenceId));
+  };
+
+  const updateEvidenceIdsDefendant = (evidenceId: string) => {
+    setEvidenceIdsDefendant(
+      evidenceIdsDefendant.map((evId) =>
+        evId === evidenceId ? evidenceId : evId
+      )
     );
   };
 
-  const updateEvidencesPlaintiff = (evidence: IEvidence) => {
-    setEvidencesPlaintiff(
-      evidencesPlaintiff.map((e) => (e!.id === evidence.id ? evidence : e))
+  const updateEvidenceIdsPlaintiff = (evidenceId: string) => {
+    setEvidenceIdsPlaintiff(
+      evidenceIdsPlaintiff.map((evId) =>
+        evId === evidenceId ? evidenceId : evId
+      )
     );
   };
 
-  const removeEvidenceDefendant = (evidence: IEvidence) => {
-    setEvidencesDefendant(
-        evidencesDefendant.map((e) => (e!.id === evidence.id ? undefined : e))
+  const removeEvidenceIdDefendant = (evidenceId: string) => {
+    setEvidenceIdsDefendant(
+      evidenceIdsDefendant.map((evId) =>
+        evId === evidenceId ? undefined : evId
+      )
     );
-    removeLast(evidencesDefendant);
-  }
+    removeLast(evidenceIdsDefendant);
+  };
 
-  const removeEvidencePlaintiff = (evidence: IEvidence) => {
-    setEvidencesPlaintiff(
-        evidencesPlaintiff.map((e) => (e!.id === evidence.id ? undefined : e))
+  const removeEvidenceIdPlaintiff = (evidenceId: string) => {
+    setEvidenceIdsPlaintiff(
+      evidenceIdsPlaintiff.map((evId) =>
+        evId === evidenceId ? undefined : evId
+      )
     );
-    removeLast(evidencesPlaintiff);
-  }
+    removeLast(evidenceIdsPlaintiff);
+  };
 
-  const removeLast = (evidences: (IEvidence | undefined)[]) => {
-    if (evidences[evidences.length - 1] === undefined) {
-        evidences.pop();
+  const removeLast = (evidenceIds: (string | undefined)[]) => {
+    if (evidenceIds[evidenceIds.length - 1] === undefined) {
+      evidenceIds.pop();
     }
   };
 
   return (
     <EvidenceContext.Provider
       value={{
-        evidencesDefendant,
-        setEvidencesDefendant,
-        addNewEvidenceDefendant,
-        updateEvidencesDefendant,
-        removeEvidenceDefendant,
-        evidencesPlaintiff,
-        setEvidencesPlaintiff,
-        addNewEvidencePlaintiff,
-        updateEvidencesPlaintiff,
-        removeEvidencePlaintiff,
+        evidenceList,
+        setEvidenceList,
+        updateEvidenceList,
+        removeFromEvidenceList,
+        evidenceIdsDefendant,
+        setEvidenceIdsDefendant,
+        addNewEvidenceIdDefendant,
+        updateEvidenceIdsDefendant,
+        removeEvidenceIdDefendant,
+        evidenceIdsPlaintiff,
+        setEvidenceIdsPlaintiff,
+        addNewEvidenceIdPlaintiff,
+        updateEvidenceIdsPlaintiff,
+        removeEvidenceIdPlaintiff,
       }}>
       {children}
     </EvidenceContext.Provider>

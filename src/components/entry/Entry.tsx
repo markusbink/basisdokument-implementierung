@@ -31,7 +31,6 @@ import {
   SidebarState,
   IndividualEntrySortingEntry,
   ViewMode,
-  IEvidence,
 } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -46,6 +45,8 @@ import { useView } from "../../contexts/ViewContext";
 import { getBrowser } from "../../util/get-browser";
 import { AssociationsPopup } from "../AssociationsPopup";
 import { getEntryById } from "../../contexts/CaseContext";
+import { getEvidences } from "../../util/get-evidences";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 interface EntryProps {
   entry: IEntry;
@@ -95,6 +96,7 @@ export const Entry: React.FC<EntryProps> = ({
   const { setShowNotePopup, setAssociatedEntryIdNote } = useNotes();
   const { setShowJudgeHintPopup, setAssociatedEntryIdHint } = useHints();
   const { view } = useView();
+  const { evidenceList } = useEvidence();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
 
@@ -271,7 +273,7 @@ export const Entry: React.FC<EntryProps> = ({
   const updateEntry = (
     plainText: string,
     rawHtml: string,
-    evidences: IEvidence[]
+    evidenceIds: string[]
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
@@ -286,7 +288,7 @@ export const Entry: React.FC<EntryProps> = ({
       );
       newEntries[entryIndex].text = rawHtml;
       newEntries[entryIndex].author = authorName || entry.author;
-      newEntries[entryIndex].evidences = evidences;
+      newEntries[entryIndex].evidenceIds = evidenceIds;
       return newEntries;
     });
 
@@ -562,7 +564,7 @@ export const Entry: React.FC<EntryProps> = ({
                     lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
                     entryId={entry.id}
                     showInPopup={shownInPopup}
-                    evidences={entry.evidences}>
+                    evidences={getEvidences(evidenceList, entry.evidenceIds)}>
                     {entry.text}
                   </EntryBody>
                 )}
@@ -579,12 +581,12 @@ export const Entry: React.FC<EntryProps> = ({
                     onSave={(
                       plainText: string,
                       rawHtml: string,
-                      evidences: IEvidence[]
+                      evidenceIds: string[]
                     ) => {
-                      updateEntry(plainText, rawHtml, evidences);
+                      updateEntry(plainText, rawHtml, evidenceIds);
                       setIsExpanded(false);
                     }}
-                    evidences={entry.evidences}
+                    evidenceIds={entry.evidenceIds}
                   />
                 )}
               </div>

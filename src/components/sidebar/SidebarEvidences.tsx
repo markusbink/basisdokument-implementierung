@@ -2,17 +2,15 @@ import { CaretDown, CaretRight, Funnel } from "phosphor-react";
 import { useRef, useState } from "react";
 import { useCase } from "../../contexts";
 import { UserRole } from "../../types";
-import {
-  getEvidences,
-  FilterTypes,
-  getFilteredEvidences,
-} from "../../util/get-evidences";
+import { FilterTypes, getFilteredEvidences } from "../../util/get-evidences";
 import { Evidence } from "./Evidence";
 import { Button } from "../Button";
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 export const SidebarEvidences = () => {
-  const { entries, evidenceFilters, setEvidenceFilters } = useCase();
+  const { evidenceFilters, setEvidenceFilters } = useCase();
+  const { evidenceList } = useEvidence();
   const [plaintiffEvidencesOpen, setPlaintiffEvidencesOpen] =
     useState<boolean>(true);
   const [defendantEvidencesOpen, setDefendantEvidencesOpen] =
@@ -133,7 +131,7 @@ export const SidebarEvidences = () => {
         ) : null}
       </div>
 
-      {getEvidences(entries, "", [], undefined).length <= 0 ? (
+      {evidenceList.length <= 0 ? (
         <div className="mt-7 text-darkGrey opacity-40 text-center text-sm p-4">
           In einem Beitrag können Sie Beweise mit oder ohne Anlage hinzufügen.
           Alle Beweise des Basisdokuments erscheinen dann in dieser Ansicht.
@@ -153,7 +151,7 @@ export const SidebarEvidences = () => {
           <div>
             {plaintiffEvidencesOpen &&
               (getFilteredEvidences(
-                entries,
+                evidenceList,
                 evidenceFilters,
                 UserRole.Plaintiff
               ).length <= 0 ? (
@@ -164,7 +162,7 @@ export const SidebarEvidences = () => {
                 </div>
               ) : (
                 getFilteredEvidences(
-                  entries,
+                  evidenceList,
                   evidenceFilters,
                   UserRole.Plaintiff
                 ).map((evidence) => (
@@ -185,7 +183,7 @@ export const SidebarEvidences = () => {
           <div>
             {defendantEvidencesOpen &&
               (getFilteredEvidences(
-                entries,
+                evidenceList,
                 evidenceFilters,
                 UserRole.Defendant
               ).length <= 0 ? (
@@ -196,7 +194,7 @@ export const SidebarEvidences = () => {
                 </div>
               ) : (
                 getFilteredEvidences(
-                  entries,
+                  evidenceList,
                   evidenceFilters,
                   UserRole.Defendant
                 ).map((evidence) => (

@@ -15,6 +15,7 @@ import {
 import { JudgeHintPopup } from "../components/JudgeHintPopup";
 import { NotePopup } from "../components/NotePopup";
 import { ExportPopup } from "../components/ExportPopup";
+import { useEvidence } from "../contexts/EvidenceContext";
 
 export const Main: React.FC = () => {
   useBeforeunload(
@@ -33,6 +34,8 @@ export const Main: React.FC = () => {
     highlightedEntries,
   } = useCase();
   const { sectionList, individualSorting } = useSection();
+  const { evidenceList, evidenceIdsPlaintiff, evidenceIdsDefendant } =
+    useEvidence();
   const { versionHistory, colorSelection } = useHeaderContext();
   const { bookmarks } = useBookmarks();
 
@@ -50,6 +53,9 @@ export const Main: React.FC = () => {
           metaData={metaData}
           entries={entries}
           sectionList={sectionList}
+          evidenceList={evidenceList}
+          evidenceIdsPlaintiff={evidenceIdsPlaintiff}
+          evidenceIdsDefendant={evidenceIdsDefendant}
           hints={hints}
           highlightedEntries={highlightedEntries}
           colorSelection={colorSelection}

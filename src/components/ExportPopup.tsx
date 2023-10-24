@@ -6,6 +6,7 @@ import { Tooltip } from "../components/Tooltip";
 import {
   IBookmark,
   IEntry,
+  IEvidence,
   IHighlightedEntry,
   IHighlighter,
   IHint,
@@ -30,6 +31,9 @@ interface IProps {
   metaData: IMetaData | null;
   entries: IEntry[];
   sectionList: ISection[];
+  evidenceList: IEvidence[];
+  evidenceIdsPlaintiff: (string | undefined)[];
+  evidenceIdsDefendant: (string | undefined)[];
   hints: IHint[];
   highlightedEntries: IHighlightedEntry[];
   colorSelection: IHighlighter[];
@@ -46,6 +50,9 @@ export const ExportPopup: React.FC<IProps> = ({
   metaData,
   entries,
   sectionList,
+  evidenceList,
+  evidenceIdsPlaintiff,
+  evidenceIdsDefendant,
   hints,
   highlightedEntries,
   colorSelection,
@@ -134,6 +141,9 @@ export const ExportPopup: React.FC<IProps> = ({
         metaData,
         entries,
         sectionList,
+        evidenceList,
+        evidenceIdsPlaintiff,
+        evidenceIdsDefendant,
         hints,
         coverPDF,
         otherAuthor,
