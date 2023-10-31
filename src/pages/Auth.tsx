@@ -231,9 +231,14 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       }
       // check if basisdokument and edit files are matching
       if (basisdokumentFile && editFile) {
+        const basisdokId = jsonToObject(basisdokumentFile).fileId;
+        const editId = jsonToObject(editFile).fileId;
         if (
-          jsonToObject(basisdokumentFile).fileId !==
-          jsonToObject(editFile).fileId
+          basisdokId &&
+          basisdokId.length > 0 &&
+          editId &&
+          editId.length > 0 &&
+          basisdokId !== editId
         ) {
           setIsMatchingFiles(false);
           setErrorText(
@@ -285,6 +290,24 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
           basisdokumentObject,
           editFileObject
         );
+      }
+
+      // ensure compatibility with older releases (matching fileId feature)
+      const basisdokFileId = basisdokumentObject["fileId"];
+      const editFileId = editFileObject["fileId"];
+      const basisdokHasId = basisdokFileId && basisdokFileId.length > 0;
+      const editHasId = editFileId && editFileId.length > 0;
+      if (!basisdokHasId && !editHasId) {
+        const id = uuidv4();
+        basisdokumentObject["fileId"] = id;
+        editFileObject["fileId"] = id;
+        setFileId(id);
+      } else if (basisdokHasId && !editHasId) {
+        editFileObject["fileId"] = basisdokFileId;
+        setFileId(basisdokFileId);
+      } else if (!basisdokHasId && editHasId) {
+        basisdokumentObject["fileId"] = editFileId;
+        setFileId(editFileId);
       }
     }
 
