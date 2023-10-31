@@ -390,8 +390,14 @@ async function downloadBasisdokumentAsPDF(
           evidences: !entry.evidences?.length
             ? undefined
             : entry.evidences?.length > 1
-            ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
-            : "Beweis:\n" + getEvidenceNumeration(entry.evidences),
+            ? !entry.caveatOfProof
+              ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
+              : "Beweise unter Verwahrung gegen die Beweislast:\n" +
+                getEvidenceNumeration(entry.evidences)
+            : !entry.caveatOfProof
+            ? "Beweis:\n" + getEvidenceNumeration(entry.evidences)
+            : "Beweis unter Verwahrung gegen die Beweislast:\n" +
+              getEvidenceNumeration(entry.evidences),
         };
         allEntries.push(tableEntry);
 
@@ -407,8 +413,14 @@ async function downloadBasisdokumentAsPDF(
             evidences: !entry.evidences?.length
               ? undefined
               : entry.evidences?.length > 1
-              ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
-              : "Beweis:\n" + getEvidenceNumeration(entry.evidences),
+              ? !entry.caveatOfProof
+                ? "Beweise:\n" + getEvidenceNumeration(entry.evidences)
+                : "Beweise unter Verwahrung gegen die Beweislast:\n" +
+                  getEvidenceNumeration(entry.evidences)
+              : !entry.caveatOfProof
+              ? "Beweis:\n" + getEvidenceNumeration(entry.evidences)
+              : "Beweis unter Verwahrung gegen die Beweislast:\n" +
+                getEvidenceNumeration(entry.evidences),
           };
           newEntries.push(newEntry);
         }
