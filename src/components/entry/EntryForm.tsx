@@ -42,7 +42,12 @@ interface EntryBodyProps {
   isExpanded: boolean;
   setIsExpanded: () => void;
   onAbort: (plainText: string, rawHtml: string) => void;
-  onSave: (plainText: string, rawHtml: string, evidences: IEvidence[]) => void;
+  onSave: (
+    plainText: string,
+    rawHtml: string,
+    evidences: IEvidence[],
+    caveatOfProof: boolean
+  ) => void;
   defaultContent?: string;
   evidences: IEvidence[];
 }
@@ -58,6 +63,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   defaultContent,
   evidences,
 }) => {
+  const [currCaveatOfProof, setCaveatOfProof] =
+    useState<boolean>(caveatOfProof);
   const [entryEvidences, setEntryEvidences] = useState<IEvidence[]>(evidences);
   const [backupEvidences, setBackupEvidences] = useState<IEvidence[]>();
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
@@ -176,7 +183,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
             <div className="flex flex-col gap-1">
               <span className="ml-1 font-bold">
                 {(evidences.length === 1 ? "Beweis" : "Beweise") +
-                  (caveatOfProof
+                  (currCaveatOfProof
                     ? " unter Verwahrung gegen die Beweislast"
                     : "") +
                   ":"}
@@ -253,7 +260,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
                 convertToRaw(editorState.getCurrentContent())
               );
 
-              onSave(plainText, newHtml, entryEvidences);
+              onSave(plainText, newHtml, entryEvidences, currCaveatOfProof);
             }}
             size="sm"
             bgColor="bg-lightGreen hover:bg-darkGreen"
@@ -264,7 +271,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       </div>
       <EvidencesPopup
         entryId={entryId}
-        caveatOfProof={caveatOfProof}
+        caveatOfProof={currCaveatOfProof}
+        setCaveatOfProof={setCaveatOfProof}
         isVisible={evidencePopupVisible}
         setIsVisible={setEvidencePopupVisible}
         isPlaintiff={isPlaintiff}

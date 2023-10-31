@@ -25,6 +25,7 @@ import { ImageViewerPopup } from "./ImageViewerPopup";
 interface EvidencesPopupProps {
   entryId?: string;
   caveatOfProof: boolean;
+  setCaveatOfProof: React.Dispatch<React.SetStateAction<boolean>>;
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isPlaintiff: boolean;
@@ -59,6 +60,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   evidences,
   setEvidences,
   caveatOfProof,
+  setCaveatOfProof,
 }) => {
   const { entries, setEntries, currentVersion } = useCase();
   const { selectedTheme } = useHeaderContext();
@@ -350,16 +352,6 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       return evidence;
     });
     setEvidences(updatedEvidences);
-
-    let updatedEntries = [...entries];
-    updatedEntries.map((entry) => {
-      if (entry.id === entryId) {
-        entry.caveatOfProof = currentCaveatOfProof;
-      }
-      return entry;
-    });
-    setEntries(updatedEntries);
-
     setIsVisible(false);
   };
 
@@ -400,6 +392,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   if (!isVisible) {
     return null;
   }
+
+  const caveatOfProofClicked = (e: any) => {
+    setCurrentCaveatOfProof(e.target.checked);
+    setCaveatOfProof(e.target.checked);
+  };
 
   return (
     <>
@@ -812,7 +809,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                 checked={currentCaveatOfProof}
                 placeholder="Beweislast"
                 className="bg-offWhite px-2 m-0 w-8 accent-darkGrey"
-                onChange={(e) => setCurrentCaveatOfProof(e.target.checked)}
+                onChange={(e) => caveatOfProofClicked(e)}
               />
               Zusatz "Unter Verwahrung gegen die Beweislast" hinzufügen
             </div>
