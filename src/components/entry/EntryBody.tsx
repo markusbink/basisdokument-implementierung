@@ -15,6 +15,7 @@ import { ImageViewerPopup } from "./ImageViewerPopup";
 interface EntryBodyProps {
   isPlaintiff: boolean;
   entryId: string;
+  caveatOfProof: boolean;
   children: React.ReactNode;
   setLowerOpcacityForSearch: React.Dispatch<React.SetStateAction<boolean>>;
   lowerOpcacityForHighlighters: boolean;
@@ -28,6 +29,7 @@ interface EntryBodyProps {
 export const EntryBody: React.FC<EntryBodyProps> = ({
   isPlaintiff,
   entryId,
+  caveatOfProof,
   setLowerOpcacityForSearch,
   lowerOpcacityForHighlighters,
   setLowerOpcacityForHighlighters,
@@ -256,8 +258,12 @@ export const EntryBody: React.FC<EntryBodyProps> = ({
         ) : null}
         {evidences && evidences.length > 0 && (
           <div className="flex flex-col gap-1 border-t border-lightGrey pt-2">
-            <span className="font-bold">
-              {evidences.length === 1 ? "Beweis:" : "Beweise:"}
+            <span className="ml-1 font-bold">
+              {(evidences.length === 1 ? "Beweis" : "Beweise") +
+                (caveatOfProof
+                  ? " unter Verwahrung gegen die Beweislast"
+                  : "") +
+                ":"}
             </span>
             <div className="flex flex-col flex-wrap gap-1">
               {evidences.map((evidence, index) => (

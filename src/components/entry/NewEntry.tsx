@@ -57,7 +57,8 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const createEntry = (
     plainText: string,
     rawHtml: string,
-    evidences: IEvidence[]
+    evidences: IEvidence[],
+    caveatOfProof: boolean
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben sie einen Text ein.", { type: "error" });
@@ -69,6 +70,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
 
     const entry: IEntry = {
       id: uuidv4(),
+      caveatOfProof: caveatOfProof,
       entryCode: `${entryCodePrefix}-${sectionNumber}-${newEntryCount}`,
       author: authorName || user!.name,
       role: roleForNewEntry,
@@ -217,6 +219,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
           </EntryHeader>
           {/* Toolbar */}
           <EntryForm
+            caveatOfProof={false}
             isPlaintiff={isPlaintiff}
             isExpanded={isExpanded}
             setIsExpanded={() => {
@@ -225,8 +228,8 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             onAbort={(plainText, rawHtml) => {
               closeNewEntryForm(plainText, rawHtml);
             }}
-            onSave={(plainText, rawHtml, evidences) => {
-              createEntry(plainText, rawHtml, evidences);
+            onSave={(plainText, rawHtml, evidences, caveatOfProof) => {
+              createEntry(plainText, rawHtml, evidences, caveatOfProof);
             }}
             evidences={[]}
           />

@@ -271,7 +271,8 @@ export const Entry: React.FC<EntryProps> = ({
   const updateEntry = (
     plainText: string,
     rawHtml: string,
-    evidences: IEvidence[]
+    evidences: IEvidence[],
+    caveatOfProof: boolean
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
@@ -287,6 +288,7 @@ export const Entry: React.FC<EntryProps> = ({
       newEntries[entryIndex].text = rawHtml;
       newEntries[entryIndex].author = authorName || entry.author;
       newEntries[entryIndex].evidences = evidences;
+      newEntries[entryIndex].caveatOfProof = caveatOfProof;
       return newEntries;
     });
 
@@ -561,6 +563,7 @@ export const Entry: React.FC<EntryProps> = ({
                     }
                     lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
                     entryId={entry.id}
+                    caveatOfProof={entry.caveatOfProof}
                     showInPopup={shownInPopup}
                     evidences={entry.evidences}>
                     {entry.text}
@@ -569,6 +572,7 @@ export const Entry: React.FC<EntryProps> = ({
                 {isBodyOpen && isEditing && (
                   <EntryForm
                     entryId={entry.id}
+                    caveatOfProof={entry.caveatOfProof}
                     defaultContent={entry.text}
                     isPlaintiff={isPlaintiff}
                     isExpanded={isExpanded}
@@ -579,9 +583,10 @@ export const Entry: React.FC<EntryProps> = ({
                     onSave={(
                       plainText: string,
                       rawHtml: string,
-                      evidences: IEvidence[]
+                      evidences: IEvidence[],
+                      caveatOfProof: boolean
                     ) => {
-                      updateEntry(plainText, rawHtml, evidences);
+                      updateEntry(plainText, rawHtml, evidences, caveatOfProof);
                       setIsExpanded(false);
                     }}
                     evidences={entry.evidences}
