@@ -192,10 +192,12 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
                 {entryEvidences &&
                   entryEvidences.map((evidence, index) => (
                     <div
-                      className="flex flex-row items-center px-2"
+                      className="flex flex-row items-center px-1"
                       key={index}>
                       <div className="flex flex-row gap-2">
-                        <span className="w-4">{index + 1 + "."}</span>
+                        {entryEvidences.length !== 1 && (
+                          <span className="w-4">{index + 1 + "."}</span>
+                        )}
                         {evidence.hasAttachment ? (
                           <span className="break-words font-medium">
                             {evidence.name}

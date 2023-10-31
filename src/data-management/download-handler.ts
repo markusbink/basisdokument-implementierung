@@ -161,19 +161,30 @@ function getEntryTitle(entryId: any, obj: any) {
 function getEvidenceNumeration(evidences: Array<IEvidence>) {
   var numEvidences: string = "";
   if (evidences) {
-    for (let i = 0; i < evidences.length; i++) {
-      let evidence = i + 1 + ") " + evidences[i].name;
-      if (evidences[i].hasAttachment) {
-        evidence = evidence + " als Anlage " + evidences[i].attachmentId;
+    if (evidences.length === 1) {
+      let evidence = evidences[0].name;
+      if (evidences[0].hasAttachment) {
+        evidence = evidence + " als Anlage " + evidences[0].attachmentId;
       }
-      if (evidences[i].hasImageFile) {
-        evidence = evidence + ": " + evidences[i].imageFilename;
+      if (evidences[0].hasImageFile) {
+        evidence = evidence + ": " + evidences[0].imageFilename;
       }
-      //do not add line break/empty line to last item
-      if (i === evidences.length - 1) {
-        numEvidences = numEvidences + evidence;
-      } else {
-        numEvidences = numEvidences + evidence + "\n";
+      numEvidences = numEvidences + evidence;
+    } else {
+      for (let i = 0; i < evidences.length; i++) {
+        let evidence = i + 1 + ") " + evidences[i].name;
+        if (evidences[i].hasAttachment) {
+          evidence = evidence + " als Anlage " + evidences[i].attachmentId;
+        }
+        if (evidences[i].hasImageFile) {
+          evidence = evidence + ": " + evidences[i].imageFilename;
+        }
+        //do not add line break/empty line to last item
+        if (i === evidences.length - 1) {
+          numEvidences = numEvidences + evidence;
+        } else {
+          numEvidences = numEvidences + evidence + "\n";
+        }
       }
     }
     return numEvidences;
