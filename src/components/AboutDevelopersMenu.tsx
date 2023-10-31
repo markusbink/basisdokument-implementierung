@@ -1,8 +1,17 @@
-import { CaretDown, CaretUp, Envelope, Info, Notebook } from "phosphor-react";
+import {
+  CaretDown,
+  CaretUp,
+  Envelope,
+  Info,
+  Notebook,
+  Question,
+} from "phosphor-react";
 import { useState } from "react";
 import { AiFillGithub } from "react-icons/ai";
 import { Tooltip } from "./Tooltip";
 import { useImprint, usePatchnotes } from "../contexts";
+import { useOnboarding } from "../contexts/OnboardingContext";
+import { Onboarding } from "./Onboarding";
 
 const studentData2021 = [
   {
@@ -70,6 +79,7 @@ export const AboutDevelopersMenu = () => {
   const [showDevelopers2023, setShowDevelopers2023] = useState<boolean>(false);
   const { setShowPatchnotesPopup } = usePatchnotes();
   const { setShowImprintPopup } = useImprint();
+  const { isOnboardingVisible, setIsOnboardingVisible } = useOnboarding();
 
   return (
     <div>
@@ -92,6 +102,15 @@ export const AboutDevelopersMenu = () => {
             <Notebook size={20} />
           </div>
         </Tooltip>
+        <Tooltip text="Hilfe">
+          <div
+            className="bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey items-center"
+            onClick={() => {
+              setIsOnboardingVisible(true);
+            }}>
+            <Question size={20} />
+          </div>
+        </Tooltip>
         <div
           className="flex flex-row items-center justify-center gap-1 bg-offWhite p-2 rounded-md cursor-pointer hover:bg-lightGrey"
           onClick={() => {
@@ -105,7 +124,8 @@ export const AboutDevelopersMenu = () => {
           )}
         </div>
       </div>
-      {showDevelopersMenu ? (
+      {isOnboardingVisible && <Onboarding></Onboarding>}
+      {showDevelopersMenu && (
         <div className="w-full bg-offWhite rounded-md p-6 mt-2">
           <div className="pt-4 pb-6">
             <img
@@ -286,7 +306,7 @@ export const AboutDevelopersMenu = () => {
             </div>
           )}
         </div>
-      ) : null}
+      )}
     </div>
   );
 };
