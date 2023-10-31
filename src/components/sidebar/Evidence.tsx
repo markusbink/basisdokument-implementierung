@@ -17,6 +17,7 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { useEvidence } from "../../contexts/EvidenceContext";
 import { ImageViewerPopup } from "../entry/ImageViewerPopup";
 import { toast } from "react-toastify";
+import { getEvidenceById } from "../../util/get-evidences";
 
 export interface EvidenceProps {
   evidence: IEvidence;
@@ -26,10 +27,12 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const { entries, setEntries, currentVersion } = useCase();
   const { selectedTheme } = useHeaderContext();
   const {
-    updateEvidencesDefendant,
-    updateEvidencesPlaintiff,
-    removeEvidenceDefendant,
-    removeEvidencePlaintiff,
+    evidenceList,
+    removeFromEvidenceList,
+    updateEvidenceIdsDefendant,
+    updateEvidenceIdsPlaintiff,
+    removeEvidenceIdDefendant,
+    removeEvidenceIdPlaintiff,
   } = useEvidence();
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
@@ -45,7 +48,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const ref = useRef(null);
   useOutsideClick(ref, () => setIsMenuOpen(false));
 
-  let entryCodes: string[] = [];
+  let entryCodes: string[] | undefined = [];
   entryCodes = getEntryCodesForEvidence(entries, evidence);
 
   const imageFileUploadRef = useRef<HTMLInputElement>(null);
@@ -61,12 +64,12 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
         fileReader.onload = (e: any) => {
           let result = e.target.result;
           const newEntries = entries.map((entry) => {
-            entry.evidences = entry.evidences?.map((ev) => {
-              if (ev.id === evidence.id) {
-                ev.imageFile = result;
-                ev.imageFilename = filename;
+            entry.evidenceIds = entry.evidenceIds?.map((evId) => {
+              if (evId === evidence.id) {
+                getEvidenceById(evidenceList, evId)!.imageFile = result;
+                getEvidenceById(evidenceList, evId)!.imageFilename = filename;
               }
-              return ev;
+              return evId;
             });
             return entry;
           });
@@ -84,18 +87,20 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences?.map((ev) => {
-        if (ev.id === evidence.id) {
-          ev.name = value;
+      entry.evidenceIds = entry.evidenceIds?.map((evId) => {
+        if (evId === evidence.id) {
+          getEvidenceById(evidenceList, evId)!.name = value;
         }
-        if (ev.hasAttachment) {
-          if (ev.role === UserRole.Plaintiff) {
-            updateEvidencesPlaintiff(ev);
+        if (getEvidenceById(evidenceList, evId)!.hasAttachment) {
+          if (
+            getEvidenceById(evidenceList, evId)!.role === UserRole.Plaintiff
+          ) {
+            updateEvidenceIdsPlaintiff(evId);
           } else {
-            updateEvidencesDefendant(ev);
+            updateEvidenceIdsDefendant(evId);
           }
         }
-        return ev;
+        return evId;
       });
       return entry;
     });
@@ -105,18 +110,20 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const handleAttachmentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences?.map((ev) => {
-        if (ev.id === evidence.id) {
-          ev.attachmentId = value;
+      entry.evidenceIds = entry.evidenceIds?.map((evId) => {
+        if (evId === evidence.id) {
+          getEvidenceById(evidenceList, evId)!.attachmentId = value;
         }
-        if (ev.hasAttachment) {
-          if (ev.role === UserRole.Plaintiff) {
-            updateEvidencesPlaintiff(ev);
+        if (getEvidenceById(evidenceList, evId)!.hasAttachment) {
+          if (
+            getEvidenceById(evidenceList, evId)!.role === UserRole.Plaintiff
+          ) {
+            updateEvidenceIdsPlaintiff(evId);
           } else {
-            updateEvidencesDefendant(ev);
+            updateEvidenceIdsDefendant(evId);
           }
         }
-        return ev;
+        return evId;
       });
       return entry;
     });
@@ -124,15 +131,14 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   };
 
   const removeEvidenceOverall = (id: string) => {
+    removeFromEvidenceList(id);
     const newEntries = entries.map((entry) => {
-      entry.evidences = entry.evidences?.filter(
-        (evidence) => evidence.id !== id
-      );
+      entry.evidenceIds = entry.evidenceIds?.filter((evId) => evId !== id);
       if (evidence.hasAttachment) {
         if (evidence.role === UserRole.Plaintiff) {
-          removeEvidencePlaintiff(evidence);
+          removeEvidenceIdPlaintiff(id);
         } else {
-          removeEvidenceDefendant(evidence);
+          removeEvidenceIdDefendant(id);
         }
       }
       return entry;

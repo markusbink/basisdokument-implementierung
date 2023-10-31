@@ -1,82 +1,108 @@
-import { IEvidence, IEntry, UserRole } from "../types";
+import { IEvidence, UserRole } from "../types";
 
 export const enum FilterTypes {
   Attchment = 1,
   File = 2,
   AttachmentNoFile = 3,
-  NoAttchment = 4
+  NoAttchment = 4,
 }
 
+// get evidence via id from evidencelist
+export const getEvidenceById = (
+  evidenceList: IEvidence[],
+  evidenceId: string
+): IEvidence | undefined => {
+  return evidenceList.find((e) => e.id === evidenceId);
+};
+
 export const getEvidences = (
-  entries: IEntry[],
-  currentInput: string,
-  addedEvidences: IEvidence[],
-  currentEntryId: string | undefined
+  evidenceList: IEvidence[],
+  evidenceIds: string[]
 ): IEvidence[] => {
-  let evs = entries
-    .filter((entry) => entry.id !== currentEntryId)
-    .map((entry) => entry.evidences)
+  let evs = evidenceList
+    .filter((ev) => evidenceIds?.some((evidenceId) => evidenceId === ev.id))
     .flat(1)
     .filter((ev) => ev !== undefined);
-  if (currentInput) {
-    evs = evs.filter((att) => att.name.startsWith(currentInput));
-  }
-  evs = evs.filter((att) => !addedEvidences.includes(att));
   return Array.from(new Set(evs));
 };
 
-export const getEvidencesForRole = (
-  entries: IEntry[],
-  role: UserRole
+export const getFilteredEvidencesSuggestions = (
+  evidenceList: IEvidence[],
+  currentInput: string,
+  addedEvidences: string[]
 ): IEvidence[] => {
-  let evs = entries
-    .map((entry) => entry.evidences)
-    .flat(1)
+  let evs = evidenceList
+    //filters/excludes current to entry added evidences
+    .filter((ev) => !addedEvidences.some((evidenceId) => evidenceId === ev.id))
     .filter((ev) => ev !== undefined);
-  evs = evs.filter((ev) => ev.role === role);
-  const uniqueEvs: IEvidence[] = evs.filter(
-    (ev, index) => evs.findIndex((evidence) => evidence.id === ev.id) === index
-  );
-  return Array.from(new Set(uniqueEvs));
+  //filters current input for clarity in suggestions
+  if (currentInput) {
+    evs = evs.filter((att) => att.name.startsWith(currentInput));
+  }
+  return Array.from(new Set(evs));
 };
 
-
 export const getFilteredEvidences = (
-  entries: IEntry[],
+  evidenceList: IEvidence[],
   filters: FilterTypes[],
   role?: UserRole
 ): IEvidence[] => {
-  let evs = entries
-    .map((entry) => entry.evidences)
-    .flat(1)
-    .filter((ev) => ev !== undefined);
   let resultingEvidences: IEvidence[] = [];
   if (filters.length <= 0) {
-    resultingEvidences = evs;
+    resultingEvidences = evidenceList;
   } else {
-    filters.forEach(filter => {
+    filters.forEach((filter) => {
       switch (filter) {
         case FilterTypes.Attchment:
-          resultingEvidences = resultingEvidences.concat(evs.filter((ev) => ev.hasAttachment));
+          resultingEvidences = resultingEvidences.concat(
+            evidenceList.filter((ev) => ev.hasAttachment)
+          );
           break;
         case FilterTypes.File:
-          resultingEvidences = resultingEvidences.concat(evs.filter((ev) => ev.hasImageFile));
+          resultingEvidences = resultingEvidences.concat(
+            evidenceList.filter((ev) => ev.hasImageFile)
+          );
           break;
         case FilterTypes.AttachmentNoFile:
-          resultingEvidences = resultingEvidences.concat(evs.filter((ev) => ev.hasAttachment && !ev.hasImageFile));
+          resultingEvidences = resultingEvidences.concat(
+            evidenceList.filter((ev) => ev.hasAttachment && !ev.hasImageFile)
+          );
           break;
         case FilterTypes.NoAttchment:
-          resultingEvidences = resultingEvidences.concat(evs.filter((ev) => !ev.hasAttachment));
+          resultingEvidences = resultingEvidences.concat(
+            evidenceList.filter((ev) => !ev.hasAttachment)
+          );
           break;
-      }    
+      }
     });
   }
   const uniqueEvs: IEvidence[] = resultingEvidences.filter(
-    (ev, index) => resultingEvidences.findIndex((evidence) => evidence.id === ev.id) === index
+    (ev, index) =>
+      resultingEvidences.findIndex((evidence) => evidence.id === ev.id) ===
+      index
   );
   if (role) {
     return uniqueEvs.filter((ev) => ev.role === role);
   } else {
     return Array.from(new Set(uniqueEvs));
   }
+};
+
+export const getEvidencesForRole = (
+  evidenceList: IEvidence[],
+  role: UserRole
+): IEvidence[] => {
+  let evs = evidenceList.filter((ev) => ev.role === role);
+  const uniqueEvs: IEvidence[] = evs.filter(
+    (ev, index) => evs.findIndex((evidence) => evidence.id === ev.id) === index
+  );
+  return Array.from(new Set(uniqueEvs));
+};
+
+export const getEvidenceIds = (evidences: IEvidence[]): string[] => {
+  let evidenceIds = [];
+  for (let i = 0; i < evidences.length; i++) {
+    evidenceIds.push(evidences[i].id);
+  }
+  return evidenceIds;
 };
