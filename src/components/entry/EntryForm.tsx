@@ -39,17 +39,24 @@ const toolbarOptions = {
 
 interface EntryBodyProps {
   entryId?: string;
+  caveatOfProof: boolean;
   isPlaintiff: boolean;
   isExpanded: boolean;
   setIsExpanded: () => void;
   onAbort: (plainText: string, rawHtml: string) => void;
-  onSave: (plainText: string, rawHtml: string, evidenceIds: string[]) => void;
+  onSave: (
+    plainText: string,
+    rawHtml: string,
+    evidenceIds: string[],
+    caveatOfProof: boolean
+  ) => void;
   defaultContent?: string;
   evidenceIds: string[];
 }
 
 export const EntryForm: React.FC<EntryBodyProps> = ({
   entryId,
+  caveatOfProof,
   isPlaintiff,
   isExpanded,
   setIsExpanded,
@@ -58,6 +65,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   defaultContent,
   evidenceIds,
 }) => {
+  const [currCaveatOfProof, setCaveatOfProof] =
+    useState<boolean>(caveatOfProof);
   const [entryEvidences, setEntryEvidences] = useState<string[]>(evidenceIds);
   const [backupEvidences, setBackupEvidences] = useState<string[]>();
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
@@ -194,17 +203,23 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
           ) : (
             <div className="flex flex-col gap-1">
               <span className="ml-1 font-bold">
-                {evidenceIds && evidenceIds.length > 1 ? "Beweise:" : "Beweis:"}
+                {(evidenceIds.length === 1 ? "Beweis" : "Beweise") +
+                  (currCaveatOfProof
+                    ? " unter Verwahrung gegen die Beweislast"
+                    : "") +
+                  ":"}
               </span>
               <div className="flex flex-col flex-wrap gap-1">
                 {entryEvidences &&
                   getEvidences(evidenceList, entryEvidences).map(
                     (evidence, index) => (
                       <div
-                        className="flex flex-row items-center px-2"
+                        className="flex flex-row items-center px-1"
                         key={index}>
                         <div className="flex flex-row gap-2">
-                          <span className="w-4">{index + 1 + "."}</span>
+                          {entryEvidences.length !== 1 && (
+                            <span className="w-4">{index + 1 + "."}</span>
+                          )}
                           {evidence.hasAttachment ? (
                             <span className="break-words font-medium">
                               {evidence.name}
@@ -272,7 +287,7 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
                 convertToRaw(editorState.getCurrentContent())
               );
 
-              onSave(plainText, newHtml, entryEvidences);
+              onSave(plainText, newHtml, entryEvidences, currCaveatOfProof);
             }}
             size="sm"
             bgColor="bg-lightGreen hover:bg-darkGreen"
@@ -283,6 +298,8 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
       </div>
       <EvidencesPopup
         entryId={entryId}
+        caveatOfProof={currCaveatOfProof}
+        setCaveatOfProof={setCaveatOfProof}
         isVisible={evidencePopupVisible}
         setIsVisible={setEvidencePopupVisible}
         isPlaintiff={isPlaintiff}

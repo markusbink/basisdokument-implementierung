@@ -28,6 +28,8 @@ import { ImageViewerPopup } from "./ImageViewerPopup";
 
 interface EvidencesPopupProps {
   entryId?: string;
+  caveatOfProof: boolean;
+  setCaveatOfProof: React.Dispatch<React.SetStateAction<boolean>>;
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isPlaintiff: boolean;
@@ -61,6 +63,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   isPlaintiff,
   evidenceIds,
   setEvidenceIds,
+  caveatOfProof,
+  setCaveatOfProof,
 }) => {
   const { entries, setEntries, currentVersion } = useCase();
   const { selectedTheme } = useHeaderContext();
@@ -81,6 +85,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const [currentEvidenceIds, setCurrentEvidenceIds] =
     useState<string[]>(evidenceIds);
   const [currentInput, setCurrentInput] = useState<string>("");
+  const [currentCaveatOfProof, setCurrentCaveatOfProof] =
+    useState<boolean>(caveatOfProof);
   const [suggestionsActive, setSuggestionsActive] = useState<boolean>(false);
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
   const [hasImageFile, setHasImageFile] = useState<boolean>(false);
@@ -412,6 +418,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     return null;
   }
 
+  const caveatOfProofClicked = (e: any) => {
+    setCurrentCaveatOfProof(e.target.checked);
+    setCaveatOfProof(e.target.checked);
+  };
+
   return (
     <>
       <div className="opacity-25 fixed inset-0 z-40 bg-black !m-0" />
@@ -622,8 +633,13 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               ) : (
                 <div className="flex flex-col gap-1 w-full max-h-56 overflow-auto">
                   <span className="ml-1 font-bold">
-                    {currentEvidenceIds.length === 1 ? "Beweis:" : "Beweise:"}
+                    {(currentEvidenceIds.length === 1 ? "Beweis" : "Beweise") +
+                      (currentCaveatOfProof
+                        ? " unter Verwahrung gegen die Beweislast"
+                        : "") +
+                      ":"}
                   </span>
+
                   <div className="flex flex-col flex-wrap gap-1">
                     {getEvidences(evidenceList, currentEvidenceIds).map(
                       (ev, index) => (
@@ -668,7 +684,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                                       value: true,
                                     });
                                   }}>
-                                  <span className="w-4">{index + 1 + "."}</span>
+                                  {currentEvidenceIds.length !== 1 && (
+                                    <span className="w-4">
+                                      {index + 1 + "."}
+                                    </span>
+                                  )}
                                   {evidenceEditMode?.value &&
                                   evidenceEditMode?.evidence === ev ? (
                                     <>
@@ -773,7 +793,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                               </Tooltip>
                             ) : (
                               <div className="flex flex-row gap-2 items-center">
-                                <span className="w-4">{index + 1 + "."}</span>
+                                <span className="w-4">
+                                  {evidenceIds.length === 1
+                                    ? ""
+                                    : index + 1 + "."}
+                                </span>
 
                                 {ev.hasAttachment ? (
                                   <span className="break-words font-medium">
@@ -806,6 +830,31 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               )}
             </div>
           </div>
+
+          {((isPlaintiff &&
+            getEvidences(evidenceList, currentEvidenceIds).find(
+              (ev) => ev.role !== UserRole.Plaintiff
+            )) ||
+            (!isPlaintiff &&
+              getEvidences(evidenceList, currentEvidenceIds).find(
+                (ev) => ev.role === UserRole.Plaintiff
+              ))) && (
+            <div>
+              <div className="p-2">
+                Hinweis: Es werden Beweise der Gegenpartei mitangeführt.
+              </div>
+              <input
+                autoFocus={false}
+                type="checkbox"
+                name="caveat"
+                checked={currentCaveatOfProof}
+                placeholder="Beweislast"
+                className="bg-offWhite px-2 m-0 w-8 accent-darkGrey"
+                onChange={(e) => caveatOfProofClicked(e)}
+              />
+              Zusatz "Unter Verwahrung gegen die Beweislast" hinzufügen
+            </div>
+          )}
 
           <div className="flex items-center justify-end">
             <button

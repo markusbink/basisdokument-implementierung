@@ -165,19 +165,30 @@ function getEvidenceNumeration(
   var numEvidences: string = "";
   if (evidenceIds) {
     let evidences = getEvidences(evidenceList, evidenceIds);
-    for (let i = 0; i < evidences.length; i++) {
-      let evidence = i + 1 + ") " + evidences[i].name;
-      if (evidences[i].hasAttachment) {
-        evidence = evidence + " als Anlage " + evidences[i].attachmentId;
+    if (evidences.length === 1) {
+      let evidence = evidences[0].name;
+      if (evidences[0].hasAttachment) {
+        evidence = evidence + " als Anlage " + evidences[0].attachmentId;
       }
-      if (evidences[i].hasImageFile) {
-        evidence = evidence + ": " + evidences[i].imageFilename;
+      if (evidences[0].hasImageFile) {
+        evidence = evidence + ": " + evidences[0].imageFilename;
       }
-      //do not add line break/empty line to last item
-      if (i === evidences.length - 1) {
-        numEvidences = numEvidences + evidence;
-      } else {
-        numEvidences = numEvidences + evidence + "\n";
+      numEvidences = numEvidences + evidence;
+    } else {
+      for (let i = 0; i < evidences.length; i++) {
+        let evidence = i + 1 + ") " + evidences[i].name;
+        if (evidences[i].hasAttachment) {
+          evidence = evidence + " als Anlage " + evidences[i].attachmentId;
+        }
+        if (evidences[i].hasImageFile) {
+          evidence = evidence + ": " + evidences[i].imageFilename;
+        }
+        //do not add line break/empty line to last item
+        if (i === evidences.length - 1) {
+          numEvidences = numEvidences + evidence;
+        } else {
+          numEvidences = numEvidences + evidence + "\n";
+        }
       }
     }
     return numEvidences;
@@ -394,9 +405,15 @@ async function downloadBasisdokumentAsPDF(
           evidences: !entry.evidenceIds?.length
             ? undefined
             : entry.evidences?.length > 1
-            ? "Beweise:\n" +
+            ? !entry.caveatOfProof
+              ? "Beweise:\n" +
+                getEvidenceNumeration(obj["evidences"], entry.evidenceIds)
+              : "Beweise unter Verwahrung gegen die Beweislast:\n" +
+                getEvidenceNumeration(obj["evidences"], entry.evidenceIds)
+            : !entry.caveatOfProof
+            ? "Beweis:\n" +
               getEvidenceNumeration(obj["evidences"], entry.evidenceIds)
-            : "Beweis:\n" +
+            : "Beweis unter Verwahrung gegen die Beweislast:\n" +
               getEvidenceNumeration(obj["evidences"], entry.evidenceIds),
         };
         allEntries.push(tableEntry);
@@ -413,9 +430,15 @@ async function downloadBasisdokumentAsPDF(
             evidences: !entry.evidenceIds?.length
               ? undefined
               : entry.evidences?.length > 1
-              ? "Beweise:\n" +
+              ? !entry.caveatOfProof
+                ? "Beweise:\n" +
+                  getEvidenceNumeration(obj["evidences"], entry.evidenceIds)
+                : "Beweise unter Verwahrung gegen die Beweislast:\n" +
+                  getEvidenceNumeration(obj["evidences"], entry.evidenceIds)
+              : !entry.caveatOfProof
+              ? "Beweis:\n" +
                 getEvidenceNumeration(obj["evidences"], entry.evidenceIds)
-              : "Beweis:\n" +
+              : "Beweis unter Verwahrung gegen die Beweislast:\n" +
                 getEvidenceNumeration(obj["evidences"], entry.evidenceIds),
           };
           newEntries.push(newEntry);

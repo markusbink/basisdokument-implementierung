@@ -273,7 +273,8 @@ export const Entry: React.FC<EntryProps> = ({
   const updateEntry = (
     plainText: string,
     rawHtml: string,
-    evidenceIds: string[]
+    evidenceIds: string[],
+    caveatOfProof: boolean
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
@@ -289,6 +290,7 @@ export const Entry: React.FC<EntryProps> = ({
       newEntries[entryIndex].text = rawHtml;
       newEntries[entryIndex].author = authorName || entry.author;
       newEntries[entryIndex].evidenceIds = evidenceIds;
+      newEntries[entryIndex].caveatOfProof = caveatOfProof;
       return newEntries;
     });
 
@@ -563,6 +565,7 @@ export const Entry: React.FC<EntryProps> = ({
                     }
                     lowerOpcacityForHighlighters={lowerOpcacityForHighlighters}
                     entryId={entry.id}
+                    caveatOfProof={entry.caveatOfProof}
                     showInPopup={shownInPopup}
                     evidences={getEvidences(evidenceList, entry.evidenceIds)}>
                     {entry.text}
@@ -571,6 +574,7 @@ export const Entry: React.FC<EntryProps> = ({
                 {isBodyOpen && isEditing && (
                   <EntryForm
                     entryId={entry.id}
+                    caveatOfProof={entry.caveatOfProof}
                     defaultContent={entry.text}
                     isPlaintiff={isPlaintiff}
                     isExpanded={isExpanded}
@@ -581,9 +585,15 @@ export const Entry: React.FC<EntryProps> = ({
                     onSave={(
                       plainText: string,
                       rawHtml: string,
-                      evidenceIds: string[]
+                      evidenceIds: string[],
+                      caveatOfProof: boolean
                     ) => {
-                      updateEntry(plainText, rawHtml, evidenceIds);
+                      updateEntry(
+                        plainText,
+                        rawHtml,
+                        evidenceIds,
+                        caveatOfProof
+                      );
                       setIsExpanded(false);
                     }}
                     evidenceIds={entry.evidenceIds}

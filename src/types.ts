@@ -96,6 +96,7 @@ export interface IEntry {
   associatedEntry?: string;
   evidences?: IEvidence[];
   evidenceIds: string[];
+  caveatOfProof: boolean;
 }
 
 export enum IDragItemType {
