@@ -19,7 +19,7 @@ import { groupEntriesBySectionAndParent } from "../contexts/CaseContext";
 import { format } from "date-fns";
 import { PDFDocument } from "pdf-lib";
 import JSZip from "jszip";
-import { getEvidences, getEvidencesForRole } from "../util/get-evidences";
+import { getEvidences } from "../util/get-evidences";
 
 //define data arrays
 let allEntries: any[] = [];
