@@ -271,6 +271,7 @@ async function downloadBasisdokumentAsPDF(
   coverPDF: ArrayBuffer | undefined,
   downloadNew: boolean,
   downloadEvidences: boolean,
+  evidenceList: IEvidence[],
   obj: any,
   fileName: string
 ) {
@@ -442,41 +443,25 @@ async function downloadBasisdokumentAsPDF(
   }
 
   //get evidences of plaintiff and defendant
-  let plaintiffEv = getEvidencesForRole(obj["evidences"], UserRole.Plaintiff);
-  for (let i = 0; i < plaintiffEv.length; i++) {
-    let ev;
-    if (plaintiffEv[i].hasImageFile) {
+  let ev;
+  for (let i = 0; i < evidenceList.length; i++) {
+    if (evidenceList[i].hasImageFile) {
       ev = {
-        designation: plaintiffEv[i].attachmentId + ": " + plaintiffEv[i].name,
-        imageDesignation: plaintiffEv[i].imageFilename,
+        designation: evidenceList[i].attachmentId + ": " + evidenceList[i].name,
+        imageDesignation: evidenceList[i].imageFilename,
       };
-    } else if (plaintiffEv[i].hasAttachment) {
+    } else if (evidenceList[i].hasAttachment) {
       ev = {
-        designation: plaintiffEv[i].attachmentId + ": " + plaintiffEv[i].name,
-      };
-    } else {
-      ev = { designation: plaintiffEv[i].name };
-    }
-    klageEvidences.push(ev);
-  }
-  let defendantEv = getEvidencesForRole(obj["evidences"], UserRole.Defendant);
-  for (let i = 0; i < defendantEv.length; i++) {
-    let ev;
-    if (defendantEv[i].hasImageFile) {
-      ev = {
-        designation: defendantEv[i].attachmentId + ": " + defendantEv[i].name,
-        imageDesignation: defendantEv[i].imageFilename,
-      };
-    } else if (defendantEv[i].hasAttachment) {
-      ev = {
-        designation: defendantEv[i].attachmentId + ": " + defendantEv[i].name,
+        designation: evidenceList[i].attachmentId + ": " + evidenceList[i].name,
       };
     } else {
-      ev = {
-        designation: defendantEv[i].name,
-      };
+      ev = { designation: evidenceList[i].name };
     }
-    beklagtEvidences.push(ev);
+    if (evidenceList[i].role === UserRole.Plaintiff) {
+      klageEvidences.push(ev);
+    } else {
+      beklagtEvidences.push(ev);
+    }
   }
 
   // AUTOTABLES
@@ -937,6 +922,7 @@ async function downloadBasisdokumentAsPDF(
       body: data,
     });
   }
+  klageEvidences = [];
 
   autoTable(evDoc, {
     theme: "grid",
@@ -959,6 +945,7 @@ async function downloadBasisdokumentAsPDF(
       body: data,
     });
   }
+  beklagtEvidences = [];
 
   //signature page
   let signatureData: any = [
@@ -1112,6 +1099,7 @@ export function downloadBasisdokument(
     coverPDF,
     downloadNewAdditionally,
     downloadEvidencesAdditionally,
+    evidenceList,
     basisdokumentObject,
     `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
