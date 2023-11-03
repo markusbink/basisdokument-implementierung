@@ -41,38 +41,32 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
   saveAs(fileToSave, fileName + ".txt");
 }
 
-function downloadAdditionalFiles(obj: any) {
-  //var additionalFilesToSave: any = [];
-  var currEntries = obj["entries"];
-
+function downloadAdditionalFiles(evidences: IEvidence[]) {
   const zip = new JSZip();
   const plaintiffFolder = zip.folder("Anhang Klagepartei");
   const defendantFolder = zip.folder("Anhang Beklagtenpartei");
 
-  for (var i = 0; i < currEntries.length; i++) {
-    let currEvidences = currEntries[i]?.evidences;
-    if (currEvidences) {
-      for (var j = 0; j < currEvidences?.length; j++) {
-        if (currEvidences[j].hasImageFile) {
-          if (currEvidences[j].role === "Klagepartei") {
-            plaintiffFolder?.file(
-              currEvidences[j].attachmentId +
-                "_" +
-                currEvidences[j].name +
-                "_" +
-                currEvidences[j].imageFilename,
-              dataURItoBlob(currEvidences[j].imageFile)
-            );
-          } else {
-            defendantFolder?.file(
-              currEvidences[j].attachmentId +
-                "_" +
-                currEvidences[j].name +
-                "_" +
-                currEvidences[j].imageFilename,
-              dataURItoBlob(currEvidences[j].imageFile)
-            );
-          }
+  if (evidences) {
+    for (let i = 0; i < evidences?.length; i++) {
+      if (evidences[i].hasImageFile) {
+        if (evidences[i].role === "Klagepartei") {
+          plaintiffFolder?.file(
+            evidences[i].attachmentId +
+              "_" +
+              evidences[i].name +
+              "_" +
+              evidences[i].imageFilename,
+            dataURItoBlob(evidences[i].imageFile)
+          );
+        } else {
+          defendantFolder?.file(
+            evidences[i].attachmentId +
+              "_" +
+              evidences[i].name +
+              "_" +
+              evidences[i].imageFilename,
+            dataURItoBlob(evidences[i].imageFile)
+          );
         }
       }
     }
@@ -1122,7 +1116,7 @@ export function downloadBasisdokument(
     `basisdokument_version_${currentVersion}_az_${caseIdForFilename}_${dateString}`
   );
   if (!dontDownloadAttachments) {
-    downloadAdditionalFiles(basisdokumentObject);
+    downloadAdditionalFiles(evidenceList);
   }
 }
 
