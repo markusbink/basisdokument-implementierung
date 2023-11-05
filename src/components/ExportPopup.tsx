@@ -1,5 +1,5 @@
 import { X, Info, Trash, Upload } from "phosphor-react";
-import { useExport, useCase } from "../contexts";
+import { useExport, useCase, useUser } from "../contexts";
 import { FileArrowDown } from "phosphor-react";
 import { toast } from "react-toastify";
 import { Tooltip } from "../components/Tooltip";
@@ -15,6 +15,7 @@ import {
   ISection,
   IStateUserInput,
   IVersion,
+  UserRole,
 } from "../types";
 import {
   downloadBasisdokument,
@@ -62,12 +63,14 @@ export const ExportPopup: React.FC<IProps> = ({
 }) => {
   const { setIsExportPopupOpen } = useExport();
   const { individualEntrySorting } = useCase();
+  const { user } = useUser();
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
   let [coverPDF, setCoverPDF] = useState<ArrayBuffer>();
   const [coverFilename, setCoverFilename] =
     useState<IStateUserInput["coverFilename"]>("");
   const [prename, setPrename] = useState<IStateUserInput["prename"]>("");
   const [surname, setSurname] = useState<IStateUserInput["surname"]>("");
+  // TODO: besprechen, hier auch? const [title, setTitle] = useState<JudgeTitle>(JudgeTitle.Default);
   let otherAuthor: string | undefined = prename + " " + surname;
   const [showAuthorChange, setShowAuthorChange] = useState<boolean>(false);
   let [regard, setRegard] = useState<string | undefined>("");
@@ -323,6 +326,16 @@ export const ExportPopup: React.FC<IProps> = ({
                     value={surname}
                     onChange={onChangeGivenSurname}
                   />
+                  {/* TODO: besprechen, hier auch? */}
+                  {user?.role === UserRole.Judge && (
+                    <input
+                      className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none"
+                      type="text"
+                      placeholder="Titel..."
+                      // value={title}
+                      // onChange={onChangeGivenTitle}
+                    />
+                  )}
                 </div>
               )}
               <div className="flex flex-row items-center justify-left gap-2">
