@@ -27,15 +27,10 @@ import { themeData } from "../../themes/theme-data";
 import Cookies from "js-cookie";
 import cx from "classnames";
 import { UserRole } from "../../types";
-import { JudgeTitle } from "../../types";
 import { useEvidence } from "../../contexts/EvidenceContext";
 
 export const DocumentButton = () => {
-  const { user, setUser } = useUser();
-  const [showJudgeTitleMenu, setShowJudgeTitleMenu] = useState<boolean>(false);
-  const [selectedJudgeTitle, setSelectedJudgeTitle] = useState<JudgeTitle>(
-    user?.signature ? user.signature : JudgeTitle.Default
-  );
+  const { user } = useUser();
   const [showDownloadMenu, setShowDownloadMenu] = useState<boolean>(false);
   const [showPopupUpload, setShowPopupUpload] = useState<boolean | undefined>(
     false
@@ -135,59 +130,7 @@ export const DocumentButton = () => {
                     {user!.name}
                   </p>
                 )}
-                <div className="flex items-normal gap-2">
-                  {user?.role !== UserRole.Judge ? (
-                    <p className="text-sm text-darkGrey">{user!.role}</p>
-                  ) : (
-                    <DropdownMenu.Root
-                      modal={false}
-                      onOpenChange={() => {
-                        setShowJudgeTitleMenu(!showJudgeTitleMenu);
-                      }}>
-                      <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 px-2 h-8 hover:cursor-pointer">
-                        <span className="text-sm">{selectedJudgeTitle}</span>
-                        {showJudgeTitleMenu ? (
-                          <CaretDown
-                            size={12}
-                            className="text-darkGrey"
-                            weight="bold"
-                          />
-                        ) : (
-                          <CaretUp
-                            size={12}
-                            className="text-darkGrey"
-                            weight="bold"
-                          />
-                        )}
-                      </DropdownMenu.Trigger>
-                      <DropdownMenu.Portal>
-                        <DropdownMenu.Content
-                          side="bottom"
-                          align="center"
-                          className="flex flex-col bg-white shadow-md rounded-lg p-2 z-50 items-center">
-                          {Object.values(JudgeTitle).map((title) => {
-                            return (
-                              <DropdownMenu.Item
-                                className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
-                                onClick={() => {
-                                  setSelectedJudgeTitle(title as JudgeTitle);
-                                  setUser({
-                                    name: user.name,
-                                    role: user.role,
-                                    signature: title as JudgeTitle,
-                                  });
-                                }}>
-                                <div className="text-darkGrey text-sm font-medium">
-                                  {title}
-                                </div>
-                              </DropdownMenu.Item>
-                            );
-                          })}
-                        </DropdownMenu.Content>
-                      </DropdownMenu.Portal>
-                    </DropdownMenu.Root>
-                  )}
-                </div>
+                {/* TODO: altes einfügen */}
               </div>
             </div>
             <div className="flex flex-col align-middle justify-center items-center gap-2 bg-offWhite rounded-md p-3 pl-2 pr-2 h-full">
