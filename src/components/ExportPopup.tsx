@@ -82,9 +82,6 @@ export const ExportPopup: React.FC<IProps> = ({
     useState<boolean>(false);
   const [dontDownloadAttachments, setDontDownloadAttachments] =
     useState<boolean>(false);
-  const [additionalOptionsStates, setAdditionalOptionsState] = useState<
-    boolean[]
-  >(Array(6).fill(false));
 
   let [regard, setRegard] = useState<string | undefined>("");
   let [coverPDF, setCoverPDF] = useState<ArrayBuffer>();

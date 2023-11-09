@@ -130,7 +130,7 @@ export const DocumentButton = () => {
                     {user!.name}
                   </p>
                 )}
-                {/* TODO: altes einfügen */}
+                <p className="text-sm text-darkGrey">{user!.role}</p>
               </div>
             </div>
             <div className="flex flex-col align-middle justify-center items-center gap-2 bg-offWhite rounded-md p-3 pl-2 pr-2 h-full">
