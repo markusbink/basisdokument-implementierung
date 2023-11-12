@@ -1,5 +1,5 @@
-import { X, Info, Trash, Upload } from "phosphor-react";
-import { useExport, useCase } from "../contexts";
+import { X, Info, Trash, Upload, CaretDown, CaretUp } from "phosphor-react";
+import { useExport, useCase, useUser } from "../contexts";
 import { FileArrowDown } from "phosphor-react";
 import { toast } from "react-toastify";
 import { Tooltip } from "../components/Tooltip";
@@ -15,6 +15,8 @@ import {
   ISection,
   IStateUserInput,
   IVersion,
+  JudgeTitle,
+  UserRole,
 } from "../types";
 import {
   downloadBasisdokument,
@@ -22,6 +24,7 @@ import {
 } from "../data-management/download-handler";
 import { useRef, useState } from "react";
 import { Button } from "./Button";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 interface IProps {
   fileId: string;
@@ -62,24 +65,30 @@ export const ExportPopup: React.FC<IProps> = ({
 }) => {
   const { setIsExportPopupOpen } = useExport();
   const { individualEntrySorting } = useCase();
+  const { user, setUser } = useUser();
   const [errorText, setErrorText] = useState<IStateUserInput["errorText"]>("");
-  let [coverPDF, setCoverPDF] = useState<ArrayBuffer>();
-  const [coverFilename, setCoverFilename] =
-    useState<IStateUserInput["coverFilename"]>("");
   const [prename, setPrename] = useState<IStateUserInput["prename"]>("");
   const [surname, setSurname] = useState<IStateUserInput["surname"]>("");
-  let otherAuthor: string | undefined = prename + " " + surname;
+  const [showJudgeTitleMenu, setShowJudgeTitleMenu] = useState<boolean>(false);
+  const [selectedJudgeTitle, setSelectedJudgeTitle] = useState<JudgeTitle>(
+    user?.signature ? user.signature : JudgeTitle.Default
+  );
   const [showAuthorChange, setShowAuthorChange] = useState<boolean>(false);
-  let [regard, setRegard] = useState<string | undefined>("");
   const [showAddRegard, setShowAddRegard] = useState<boolean>(false);
   const [showOptionalCover, setShowOptionalCover] = useState<boolean>(false);
-  var [downloadNewAdditionally, setDownloadNewAdditionally] =
+  const [downloadNewAdditionally, setDownloadNewAdditionally] =
     useState<boolean>(false);
-  var [downloadEvidencesAdditionally, setDownloadEvidencesAdditionally] =
+  const [downloadEvidencesAdditionally, setDownloadEvidencesAdditionally] =
     useState<boolean>(false);
-  var [dontDownloadAttachments, setDontDownloadAttachments] =
+  const [dontDownloadAttachments, setDontDownloadAttachments] =
     useState<boolean>(false);
-  var validUserInput: boolean = true;
+
+  let [regard, setRegard] = useState<string | undefined>("");
+  let [coverPDF, setCoverPDF] = useState<ArrayBuffer>();
+  let [coverFilename, setCoverFilename] =
+    useState<IStateUserInput["coverFilename"]>("");
+  let otherAuthor: string | undefined = prename + " " + surname;
+  let validUserInput: boolean = true;
 
   //Refs
   const coverFileUploadRef = useRef<HTMLInputElement>(null);
@@ -186,8 +195,8 @@ export const ExportPopup: React.FC<IProps> = ({
 
   return (
     <>
-      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="w-auto my-6 mx-auto max-w-3xl min-w-[500px]">
+      <div className="justify-center items-center flex overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none">
+        <div className="w-[55vw] h-[85vh] my-6 mx-auto">
           {/*content*/}
           <div className="p-6 space-y-4 border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
@@ -205,30 +214,47 @@ export const ExportPopup: React.FC<IProps> = ({
                 </button>
               </div>
             </div>
-            {/*body*/}
             <div>
-              <div className="flex flex-row items-center justify-left gap-2">
+              {errorText !== "" ? (
+                <div className="flex bg-lightRed p-4 rounded-md">
+                  <p className="text-darkRed">
+                    <span className="font-bold">Fehler:</span> {errorText}
+                  </p>
+                </div>
+              ) : null}
+            </div>
+            {/*body*/}
+            <div className="flex flex-col gap-7 max-h-[450px] overflow-y-auto">
+              <div className="flex justify-left gap-2 items-center">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
                   type="checkbox"
                   checked={showOptionalCover}
                   onChange={() => setShowOptionalCover(!showOptionalCover)}
                 />
+                <span className="font-semibold">Deckblatt</span>
                 <div className="flex flex-row gap-0.5">
-                  <span className="font-semibold">Deckblatt:</span>
                   <Tooltip
-                    text="Optional Deckblatt PDF-Datei hochladen"
+                    text="Sie können vor dem Herunterladen des Basisdokuments optional ein
+                    Deckblatt einfügen, das dem Basisdokument vorangestellt wird."
                     position="top"
                     delayDuration={0}
                     disabled={true}>
                     <Info size={18} color={"slateGray"} />
                   </Tooltip>
                 </div>
-                {showOptionalCover && (
-                  <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 flex flex-row gap-2">
+              </div>
+              {showOptionalCover && (
+                <div className="rounded-md flex flex-col gap-2 -mt-5 mb-4">
+                  <div className="text-darkGrey opacity-80">
+                    Sie können vor dem Herunterladen des Basisdokuments optional
+                    ein Deckblatt einfügen, das dem Basisdokument vorangestellt
+                    wird.
+                  </div>
+                  <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 flex flex-row gap-2 max-w-fit">
                     <label
                       role="button"
-                      className="flex items-center justify-center gap-2 cursor-pointer">
+                      className="flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
                       <input
                         ref={coverFileUploadRef}
                         type="file"
@@ -240,7 +266,7 @@ export const ExportPopup: React.FC<IProps> = ({
                         onClick={() => {
                           coverFileUploadRef?.current?.click();
                         }}
-                        className="bg-darkGrey hover:bg-mediumGrey rounded-md pl-2 pr-2 p-1">
+                        className="bg-darkGrey hover:bg-mediumGrey rounded-md px-2 p-1 flex flex-col w-full items-center">
                         <Upload size={24} color={"white"} />
                       </button>
                     </label>
@@ -255,12 +281,9 @@ export const ExportPopup: React.FC<IProps> = ({
                       </button>
                     )}
                   </div>
-                )}
-              </div>
-              <div className="text-darkGrey opacity-80 ml-5 mb-7">
-                Sie können vor dem Herunterladen des Basisdokuments optional ein
-                Deckblatt einfügen, das dem Basisdokument vorangestellt wird.
-              </div>
+                </div>
+              )}
+
               <div className="flex flex-row gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -268,21 +291,29 @@ export const ExportPopup: React.FC<IProps> = ({
                   checked={showAddRegard}
                   onChange={() => setShowAddRegard(!showAddRegard)}
                 />
-                <div className="font-semibold">
-                  Betreff zur Basisdokument-PDF hinzufügen
+                <div className="flex flex-row gap-0.5">
+                  <span className="font-semibold">
+                    Betreff zur Basisdokument-PDF hinzufügen
+                  </span>
+                  <Tooltip
+                    text="Sie können einen Betreff zu dieser Version des Basisdokuments
+                    hinzufügen."
+                    position="top"
+                    delayDuration={0}
+                    disabled={true}>
+                    <Info size={18} color={"slateGray"} />
+                  </Tooltip>
                 </div>
               </div>
-              <div
-                className={`text-darkGrey opacity-80 ml-5 ${
-                  showAddRegard ? "" : "mb-7"
-                }`}>
-                Sie können einen Betreff zu dieser Version des Basisdokuments
-                hinzufügen.
-              </div>
+
               {showAddRegard && (
-                <div className="mt-4 ml-4 mb-7">
+                <div className="flex flex-col gap-2 -mt-5 mb-4">
+                  <div className="text-darkGrey opacity-80">
+                    Sie können einen Betreff zu dieser Version des
+                    Basisdokuments hinzufügen.
+                  </div>
                   <input
-                    className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none w-full"
+                    className="p-2 px-3 h-[50px] bg-offWhite rounded-md outline-none"
                     type="text"
                     placeholder="Betreff..."
                     value={regard}
@@ -297,32 +328,100 @@ export const ExportPopup: React.FC<IProps> = ({
                   checked={showAuthorChange}
                   onChange={() => setShowAuthorChange(!showAuthorChange)}
                 />
-                <div className="font-semibold">
-                  Signatur im Basisdokument-PDF ändern
+                <div className="flex flex-row gap-0.5">
+                  <span className="font-semibold">
+                    Signatur im Basisdokument-PDF ändern
+                  </span>
+                  <Tooltip
+                    text="Sie können die Signatur des Basisdokuments ändern."
+                    position="top"
+                    delayDuration={0}
+                    disabled={true}>
+                    <Info size={18} color={"slateGray"} />
+                  </Tooltip>
                 </div>
               </div>
-              <div
-                className={`text-darkGrey opacity-80 ml-5 ${
-                  showAuthorChange ? "" : "mb-7"
-                }`}>
-                Sie können die Signatur des Basisdokuments ändern.
-              </div>
+
               {showAuthorChange && (
-                <div className="flex flex-row w-auto mt-4 gap-4 ml-4 mb-7">
-                  <input
-                    className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none"
-                    type="text"
-                    placeholder="Vorname..."
-                    value={prename}
-                    onChange={onChangeGivenPrename}
-                  />
-                  <input
-                    className="p-2 pl-3 pr-3 h-[50px] bg-offWhite rounded-md outline-none"
-                    type="text"
-                    placeholder="Nachname..."
-                    value={surname}
-                    onChange={onChangeGivenSurname}
-                  />
+                <div className="flex flex-col w-full gap-2 -mt-5 mb-4">
+                  <div className="text-darkGrey opacity-80">
+                    Sie können die Signatur des Basisdokuments ändern.
+                  </div>
+                  <div className="flex gap-4 w-[90%]">
+                    <input
+                      className="p-2 px-3 h-[50px] bg-offWhite rounded-md outline-none"
+                      type="text"
+                      placeholder="Vorname..."
+                      value={prename}
+                      onChange={onChangeGivenPrename}
+                    />
+                    <input
+                      className="p-2 px-3 h-[50px] bg-offWhite rounded-md outline-none"
+                      type="text"
+                      placeholder="Nachname..."
+                      value={surname}
+                      onChange={onChangeGivenSurname}
+                    />
+                    <div className="flex items-normal gap-2">
+                      {user?.role !== UserRole.Judge ? (
+                        <p className="p-2 px-3 bg-offWhite rounded-md outline-none">
+                          {user!.role}
+                        </p>
+                      ) : (
+                        <DropdownMenu.Root
+                          modal={false}
+                          onOpenChange={() => {
+                            setShowJudgeTitleMenu(!showJudgeTitleMenu);
+                          }}>
+                          <DropdownMenu.Trigger className="flex flex-row justify-between bg-offWhite hover:bg-lightGrey items-center rounded-md gap-2 px-2 h-full hover:cursor-pointer">
+                            <span className="text-sm">
+                              {selectedJudgeTitle}
+                            </span>
+                            {showJudgeTitleMenu ? (
+                              <CaretDown
+                                size={12}
+                                className="text-darkGrey"
+                                weight="bold"
+                              />
+                            ) : (
+                              <CaretUp
+                                size={12}
+                                className="text-darkGrey"
+                                weight="bold"
+                              />
+                            )}
+                          </DropdownMenu.Trigger>
+                          <DropdownMenu.Portal>
+                            <DropdownMenu.Content
+                              side="bottom"
+                              align="center"
+                              className="flex flex-col bg-white shadow-md rounded-lg p-2 z-50 items-center">
+                              {Object.values(JudgeTitle).map((title) => {
+                                return (
+                                  <DropdownMenu.Item
+                                    className="flex flex-row items-center p-2 gap-2 hover:bg-offWhite rounded-md cursor-pointer"
+                                    onClick={() => {
+                                      setSelectedJudgeTitle(
+                                        title as JudgeTitle
+                                      );
+                                      setUser({
+                                        name: user.name,
+                                        role: user.role,
+                                        signature: title as JudgeTitle,
+                                      });
+                                    }}>
+                                    <div className="text-darkGrey text-sm font-medium">
+                                      {title}
+                                    </div>
+                                  </DropdownMenu.Item>
+                                );
+                              })}
+                            </DropdownMenu.Content>
+                          </DropdownMenu.Portal>
+                        </DropdownMenu.Root>
+                      )}
+                    </div>
+                  </div>
                 </div>
               )}
               <div className="flex flex-row items-center justify-left gap-2">
@@ -338,12 +437,17 @@ export const ExportPopup: React.FC<IProps> = ({
                   <span className="font-semibold">
                     Zusätzlich alle neuen Beiträge als eigene PDF herunterladen
                   </span>
+                  <Tooltip
+                    text="Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge
+                    herunterladen."
+                    position="top"
+                    delayDuration={0}
+                    disabled={true}>
+                    <Info size={18} color={"slateGray"} />
+                  </Tooltip>
                 </div>
               </div>
-              <div className="text-darkGrey opacity-80 ml-5 mb-7">
-                Sie können zusätzlich alle von Ihnen neu hinzugefügten Beiträge
-                herunterladen.
-              </div>
+
               <div className="flex flex-row items-center justify-left gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -360,12 +464,17 @@ export const ExportPopup: React.FC<IProps> = ({
                     Zusätzlich eine Liste aller Beweise in einer eigenen PDF
                     herunterladen
                   </span>
+                  <Tooltip
+                    text="Sie können zusätzlich alle Beweise im Basisdokument als eigenes
+                    PDF-Dokument herunterladen."
+                    position="top"
+                    delayDuration={0}
+                    disabled={true}>
+                    <Info size={18} color={"slateGray"} />
+                  </Tooltip>
                 </div>
               </div>
-              <div className="text-darkGrey opacity-80 ml-5 mb-7">
-                Sie können zusätzlich alle Beweise im Basisdokument als eigenes
-                PDF-Dokument herunterladen.
-              </div>
+
               <div className="flex flex-row items-center justify-left gap-2">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -379,35 +488,30 @@ export const ExportPopup: React.FC<IProps> = ({
                   <span className="font-semibold">
                     Anhänge nicht herunterladen
                   </span>
+                  <Tooltip
+                    text="Sie können verhindern, dass die im Basisdokument hinterlegten
+                    Anhänge mit heruntergeladen werden."
+                    position="top"
+                    delayDuration={0}
+                    disabled={true}>
+                    <Info size={18} color={"slateGray"} />
+                  </Tooltip>
                 </div>
               </div>
-              <div className="text-darkGrey opacity-80 ml-5 mb-7">
-                Sie können verhindern, dass die im Basisdokument hinterlegten
-                Anhänge mit heruntergeladen werden.
-              </div>
-              <div>
-                {errorText !== "" ? (
-                  <div className="flex bg-lightRed p-4 rounded-md">
-                    <p className="text-darkRed">
-                      <span className="font-bold">Fehler:</span> {errorText}
-                    </p>
-                  </div>
-                ) : null}
-              </div>
-              <div className="flex flex-row justify-end">
-                <Button
-                  size="md"
-                  bgColor="bg-darkGrey hover:bg-darkGrey/60"
-                  textColor="text-white"
-                  onClick={onClickDownloadButton}>
-                  <FileArrowDown
-                    size={18}
-                    className="text-white mr-2"
-                    weight="bold"
-                  />
-                  Basisdokument herunterladen
-                </Button>
-              </div>
+            </div>
+            <div className="flex flex-row justify-end">
+              <Button
+                size="md"
+                bgColor="bg-darkGrey hover:bg-darkGrey/60"
+                textColor="text-white"
+                onClick={onClickDownloadButton}>
+                <FileArrowDown
+                  size={18}
+                  className="text-white mr-2"
+                  weight="bold"
+                />
+                Basisdokument herunterladen
+              </Button>
             </div>
           </div>
         </div>
