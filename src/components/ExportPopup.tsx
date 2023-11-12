@@ -196,7 +196,7 @@ export const ExportPopup: React.FC<IProps> = ({
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="w-[55vw] h-[85vh] my-6 mx-auto overflow-y-auto">
+        <div className="w-[55vw] h-[85vh] my-6 mx-auto">
           {/*content*/}
           <div className="p-6 space-y-4 border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
@@ -214,8 +214,17 @@ export const ExportPopup: React.FC<IProps> = ({
                 </button>
               </div>
             </div>
+            <div>
+              {errorText !== "" ? (
+                <div className="flex bg-lightRed p-4 rounded-md">
+                  <p className="text-darkRed">
+                    <span className="font-bold">Fehler:</span> {errorText}
+                  </p>
+                </div>
+              ) : null}
+            </div>
             {/*body*/}
-            <div className="flex flex-col gap-7">
+            <div className="flex flex-col gap-7 max-h-[450px] overflow-y-auto">
               <div className="flex justify-left gap-2 items-center">
                 <input
                   className="small-checkbox accent-darkGrey cursor-pointer"
@@ -242,34 +251,36 @@ export const ExportPopup: React.FC<IProps> = ({
                     ein Deckblatt einfügen, das dem Basisdokument vorangestellt
                     wird.
                   </div>
-                  <label
-                    role="button"
-                    className="flex items-center justify-center gap-2 cursor-pointer">
-                    <input
-                      ref={coverFileUploadRef}
-                      type="file"
-                      onChange={handleCoverFileUploadChange}
-                      accept=".pdf"
-                    />
-                    {coverFilename}
-                    <button
-                      onClick={() => {
-                        coverFileUploadRef?.current?.click();
-                      }}
-                      className="bg-darkGrey hover:bg-mediumGrey rounded-md px-2 p-1 flex flex-col w-full items-center">
-                      <Upload size={24} color={"white"} />
-                    </button>
-                  </label>
-                  {coverFilename && (
-                    <button
-                      onClick={() => {
-                        setCoverFilename("");
-                        setCoverPDF(undefined);
-                      }}
-                      className="bg-lightRed hover:bg-marker-red rounded-md p-1">
-                      <Trash size={24} color={"darkRed"} />
-                    </button>
-                  )}
+                  <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 flex flex-row gap-2 max-w-fit">
+                    <label
+                      role="button"
+                      className="flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
+                      <input
+                        ref={coverFileUploadRef}
+                        type="file"
+                        onChange={handleCoverFileUploadChange}
+                        accept=".pdf"
+                      />
+                      {coverFilename}
+                      <button
+                        onClick={() => {
+                          coverFileUploadRef?.current?.click();
+                        }}
+                        className="bg-darkGrey hover:bg-mediumGrey rounded-md px-2 p-1 flex flex-col w-full items-center">
+                        <Upload size={24} color={"white"} />
+                      </button>
+                    </label>
+                    {coverFilename && (
+                      <button
+                        onClick={() => {
+                          setCoverFilename("");
+                          setCoverPDF(undefined);
+                        }}
+                        className="bg-lightRed hover:bg-marker-red rounded-md p-1">
+                        <Trash size={24} color={"darkRed"} />
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -487,30 +498,20 @@ export const ExportPopup: React.FC<IProps> = ({
                   </Tooltip>
                 </div>
               </div>
-
-              <div>
-                {errorText !== "" ? (
-                  <div className="flex bg-lightRed p-4 rounded-md">
-                    <p className="text-darkRed">
-                      <span className="font-bold">Fehler:</span> {errorText}
-                    </p>
-                  </div>
-                ) : null}
-              </div>
-              <div className="flex flex-row justify-end">
-                <Button
-                  size="md"
-                  bgColor="bg-darkGrey hover:bg-darkGrey/60"
-                  textColor="text-white"
-                  onClick={onClickDownloadButton}>
-                  <FileArrowDown
-                    size={18}
-                    className="text-white mr-2"
-                    weight="bold"
-                  />
-                  Basisdokument herunterladen
-                </Button>
-              </div>
+            </div>
+            <div className="flex flex-row justify-end">
+              <Button
+                size="md"
+                bgColor="bg-darkGrey hover:bg-darkGrey/60"
+                textColor="text-white"
+                onClick={onClickDownloadButton}>
+                <FileArrowDown
+                  size={18}
+                  className="text-white mr-2"
+                  weight="bold"
+                />
+                Basisdokument herunterladen
+              </Button>
             </div>
           </div>
         </div>
