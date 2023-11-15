@@ -10,7 +10,8 @@ import { useEvidence } from "../../contexts/EvidenceContext";
 
 export const SidebarEvidences = () => {
   const { evidenceFilters, setEvidenceFilters } = useCase();
-  const { evidenceList } = useEvidence();
+  const { evidenceList, plaintiffFileVolume, defendantFileVolume } =
+    useEvidence();
   const [plaintiffEvidencesOpen, setPlaintiffEvidencesOpen] =
     useState<boolean>(true);
   const [defendantEvidencesOpen, setDefendantEvidencesOpen] =
@@ -148,6 +149,21 @@ export const SidebarEvidences = () => {
             )}
             ERSTELLT VON KLAGEPARTEI
           </div>
+          <div className="flex flex-row w-full my-2 gap-2 items-center">
+            <label htmlFor="fileVolume">Dateivolumen frei</label>
+            {/* styling the progress-bar: https://github.com/tailwindlabs/tailwindcss/discussions/3921 */}
+            <progress
+              className="[&::-webkit-progress-bar]:bg-offWhite [&::-webkit-progress-value]:bg-purple-300 [&::-moz-progress-bar]:bg-purple-300"
+              id="fileVolume"
+              max="40000000"
+              value={plaintiffFileVolume}></progress>
+            <span className="text-xs">
+              {Number(
+                (100 - 100 / (40000000 / plaintiffFileVolume)).toFixed(1)
+              )}{" "}
+              %
+            </span>
+          </div>
           <div>
             {plaintiffEvidencesOpen &&
               (getFilteredEvidences(
@@ -179,6 +195,21 @@ export const SidebarEvidences = () => {
               <CaretRight size={14} className="inline mr-1" weight="bold" />
             )}
             ERSTELLT VON BEKLAGTENPARTEI
+          </div>
+          <div className="flex flex-row w-full my-2 gap-2 items-center">
+            <label htmlFor="fileVolume">Dateivolumen frei</label>
+            {/* styling the progress-bar: https://github.com/tailwindlabs/tailwindcss/discussions/3921 */}
+            <progress
+              className="[&::-webkit-progress-bar]:bg-offWhite [&::-webkit-progress-value]:bg-purple-300 [&::-moz-progress-bar]:bg-purple-300"
+              id="fileVolume"
+              max="40000000"
+              value={defendantFileVolume}></progress>
+            <span className="text-xs">
+              {Number(
+                (100 - 100 / (40000000 / defendantFileVolume)).toFixed(1)
+              )}{" "}
+              %
+            </span>
           </div>
           <div>
             {defendantEvidencesOpen &&

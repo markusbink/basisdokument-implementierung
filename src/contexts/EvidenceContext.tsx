@@ -5,7 +5,8 @@ import {
   useContext,
   useState,
 } from "react";
-import { IEvidence } from "../types";
+import { IEvidence, UserRole } from "../types";
+import { getEvidenceById } from "../util/get-evidences";
 
 interface IEvidenceContext {
   evidenceList: IEvidence[];
@@ -22,6 +23,10 @@ interface IEvidenceContext {
   addNewEvidenceIdDefendant: (evidence: IEvidence) => void;
   updateEvidenceIdsDefendant: (evidenceId: string) => void;
   removeEvidenceIdDefendant: (evidenceId: string) => void;
+  plaintiffFileVolume: number;
+  setPlaintiffFileVolume: Dispatch<SetStateAction<number>>;
+  defendantFileVolume: number;
+  setDefendantFileVolume: Dispatch<SetStateAction<number>>;
 }
 
 export const EvidenceContext = createContext<IEvidenceContext | null>(null);
@@ -40,6 +45,8 @@ export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
   const [evidenceIdsPlaintiff, setEvidenceIdsPlaintiff] = useState<
     (string | undefined)[]
   >([]);
+  const [plaintiffFileVolume, setPlaintiffFileVolume] = useState<number>(0);
+  const [defendantFileVolume, setDefendantFileVolume] = useState<number>(0);
 
   const addNewEvidenceIdDefendant = (evidence: IEvidence) => {
     let emptySpace = false;
@@ -97,6 +104,27 @@ export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
   };
 
   const removeFromEvidenceList = (evidenceId: string) => {
+    let currEvidence = getEvidenceById(evidenceList, evidenceId);
+    if (currEvidence?.hasImageFile) {
+      let shortBase64 =
+        currEvidence.imageFile!.length -
+        (currEvidence.imageFile!.indexOf(",") + 1);
+      let padding =
+        currEvidence.imageFile!.charAt(currEvidence.imageFile!.length - 2) ===
+        "="
+          ? 2
+          : currEvidence.imageFile!.charAt(
+              currEvidence.imageFile!.length - 1
+            ) === "="
+          ? 1
+          : 0;
+      let imgFileSize = shortBase64 * 0.75 - padding;
+      if (currEvidence.role === UserRole.Plaintiff) {
+        setPlaintiffFileVolume(plaintiffFileVolume - imgFileSize);
+      } else {
+        setDefendantFileVolume(defendantFileVolume - imgFileSize);
+      }
+    }
     setEvidenceList(evidenceList.filter((ev) => ev.id !== evidenceId));
   };
 
@@ -157,6 +185,10 @@ export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
         addNewEvidenceIdPlaintiff,
         updateEvidenceIdsPlaintiff,
         removeEvidenceIdPlaintiff,
+        plaintiffFileVolume,
+        setPlaintiffFileVolume,
+        defendantFileVolume,
+        setDefendantFileVolume,
       }}>
       {children}
     </EvidenceContext.Provider>

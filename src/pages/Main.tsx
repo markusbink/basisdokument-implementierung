@@ -34,8 +34,13 @@ export const Main: React.FC = () => {
     highlightedEntries,
   } = useCase();
   const { sectionList, individualSorting } = useSection();
-  const { evidenceList, evidenceIdsPlaintiff, evidenceIdsDefendant } =
-    useEvidence();
+  const {
+    evidenceList,
+    evidenceIdsPlaintiff,
+    evidenceIdsDefendant,
+    plaintiffFileVolume,
+    defendantFileVolume,
+  } = useEvidence();
   const { versionHistory, colorSelection } = useHeaderContext();
   const { bookmarks } = useBookmarks();
 
@@ -56,6 +61,8 @@ export const Main: React.FC = () => {
           evidenceList={evidenceList}
           evidenceIdsPlaintiff={evidenceIdsPlaintiff}
           evidenceIdsDefendant={evidenceIdsDefendant}
+          plaintiffFileVolume={plaintiffFileVolume}
+          defendantFileVolume={defendantFileVolume}
           hints={hints}
           highlightedEntries={highlightedEntries}
           colorSelection={colorSelection}

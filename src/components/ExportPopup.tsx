@@ -37,6 +37,8 @@ interface IProps {
   evidenceList: IEvidence[];
   evidenceIdsPlaintiff: (string | undefined)[];
   evidenceIdsDefendant: (string | undefined)[];
+  plaintiffFileVolume: number;
+  defendantFileVolume: number;
   hints: IHint[];
   highlightedEntries: IHighlightedEntry[];
   colorSelection: IHighlighter[];
@@ -56,6 +58,8 @@ export const ExportPopup: React.FC<IProps> = ({
   evidenceList,
   evidenceIdsPlaintiff,
   evidenceIdsDefendant,
+  plaintiffFileVolume,
+  defendantFileVolume,
   hints,
   highlightedEntries,
   colorSelection,
@@ -153,6 +157,8 @@ export const ExportPopup: React.FC<IProps> = ({
         evidenceList,
         evidenceIdsPlaintiff,
         evidenceIdsDefendant,
+        plaintiffFileVolume,
+        defendantFileVolume,
         hints,
         coverPDF,
         otherAuthor,
