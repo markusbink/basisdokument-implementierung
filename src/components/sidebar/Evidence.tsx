@@ -312,7 +312,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
                     }}
                     className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none cursor-pointer">
                     <PencilSimple size={16} />
-                    Anlage bearbeiten
+                    Nummerierung bearbeiten
                   </li>
                 ) : null}
                 <li
