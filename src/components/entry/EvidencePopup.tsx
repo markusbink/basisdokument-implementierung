@@ -136,7 +136,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         throw new Error();
       }
     } catch (error) {
-      setErrorText("Bitte laden Sie eine valide Bild- oder PDF-Datei hoch.");
+      setErrorText("Bitte laden Sie eine valide PDF- oder TIFF-Datei hoch.");
     }
   };
 
@@ -159,7 +159,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       return;
     }
     if (hasImageFile && !imageFile) {
-      setErrorText("Bitte Bild oder PDF-Datei hochladen");
+      setErrorText("Bitte PDF oder TIFF-Datei hochladen");
       return;
     }
     const ev: IEvidence = {
@@ -537,7 +537,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   htmlFor="img"
                   className="cursor-pointer whitespace-nowrap pl-2">
                   {" "}
-                  als Bild/PDF
+                  als PDF/TIFF
                 </label>
               </div>
             </div>
@@ -545,8 +545,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               <>
                 <div className="bg-offWhite rounded-md pl-3 pr-3 p-2 my-2 flex flex-row justify-between items-center gap-2">
                   {(imageFile
-                    ? "Bild/PDF hochgeladen: "
-                    : "Bild/PDF hochladen: ") + imageFilename}
+                    ? "PDF/TIFF hochgeladen: "
+                    : "PDF/TIFF hochladen: ") + imageFilename}
                   <div className="flex gap-2">
                     <label
                       role="button"

@@ -80,7 +80,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
         throw new Error();
       }
     } catch (error) {
-      toast.error("Bitte laden Sie eine valide Bild- oder PDF-Datei hoch.");
+      toast.error("Bitte laden Sie eine valide PDF- oder TIFF-Datei hoch.");
     }
   };
 

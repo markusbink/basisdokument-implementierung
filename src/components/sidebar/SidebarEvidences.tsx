@@ -87,7 +87,7 @@ export const SidebarEvidences = () => {
                   else removeFilter(FilterTypes.File);
                 }}
               />
-              Beweise mit Bild/PDF
+              Beweise mit PDF/TIFF
             </li>
             <li
               tabIndex={0}

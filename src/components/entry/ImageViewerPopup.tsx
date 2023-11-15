@@ -47,7 +47,7 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
             <embed src={filedata} type={filetype}></embed>
           </div>
           <span className="text-sm text-darkGrey opacity-80">{`${
-            filetype.includes("image") ? "Bild" : "PDF"
+            filetype.includes("image") ? "TIFF" : "PDF"
           } zu Anlage ${attachmentId}: ${filename}`}</span>
         </div>
       </div>
