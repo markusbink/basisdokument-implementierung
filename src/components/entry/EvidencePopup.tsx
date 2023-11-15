@@ -81,6 +81,10 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     updateEvidenceIdsPlaintiff,
     removeEvidenceIdDefendant,
     removeEvidenceIdPlaintiff,
+    plaintiffFileVolume,
+    setPlaintiffFileVolume,
+    defendantFileVolume,
+    setDefendantFileVolume,
   } = useEvidence();
   const [currentEvidenceIds, setCurrentEvidenceIds] =
     useState<string[]>(evidenceIds);
@@ -101,6 +105,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const [imagePopupAttachment, setImagePopupAttachment] = useState<string>("");
   const [imagePopupTitle, setImagePopupTitle] = useState<string>("");
   const [imagePopupVisible, setImagePopupVisible] = useState<boolean>(false);
+  const [fileVolumeExceeded, setFileVolumeExceeded] = useState<boolean>(false);
+  const [currPlaintiffFileVolume, setCurrPlaintiffFileVolume] =
+    useState<number>(plaintiffFileVolume);
+  const [currDefendantFileVolume, setCurrDefendantFileVolume] =
+    useState<number>(defendantFileVolume);
 
   const inputRef = useRef(null);
   useOutsideClick(inputRef, () => setSuggestionsActive(false));
@@ -119,8 +128,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const handleImageFileUpload = (e: any) => {
     const fileReader = new FileReader();
     try {
+      // only tiff and pdf allowed
       if (
-        (e.target.files[0].type as string).includes("image") ||
+        (e.target.files[0].type as string).includes("tiff") ||
         (e.target.files[0].type as string).includes("pdf")
       ) {
         fileReader.readAsDataURL(e.target.files[0]);
@@ -128,6 +138,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         fileReader.onload = (e: any) => {
           let result = e.target.result;
           setImageFile(result);
+          getImageFileSize(result);
           setHasImageFile(true);
         };
         e.target.value = "";
@@ -136,7 +147,43 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
         throw new Error();
       }
     } catch (error) {
-      setErrorText("Bitte laden Sie eine valide Bild- oder PDF-Datei hoch.");
+      setErrorText(
+        "Bitte laden Sie eine valide PDF oder Bild-Datei im tiff-Format hoch."
+      );
+    }
+  };
+
+  // source for getting file size of base64: https://stackoverflow.com/questions/47852277/image-file-size-from-data-uri-in-javascript
+  const getImageFileSize = (imgfile: string | undefined) => {
+    if (imgfile) {
+      let shortBase64 = imgfile.length - (imgfile.indexOf(",") + 1);
+      let padding =
+        imgfile.charAt(imgfile.length - 2) === "="
+          ? 2
+          : imgfile.charAt(imgfile.length - 1) === "="
+          ? 1
+          : 0;
+      let imgFileSize = shortBase64 * 0.75 - padding;
+      // check if new file would exceed data limit of 40MB for plaintiff/defendant
+      if (
+        (isPlaintiff ? currPlaintiffFileVolume : defendantFileVolume) +
+          imgFileSize <
+        40000000
+      ) {
+        if (isPlaintiff) {
+          setCurrPlaintiffFileVolume(currPlaintiffFileVolume + imgFileSize);
+        } else {
+          setCurrDefendantFileVolume(currDefendantFileVolume + imgFileSize);
+        }
+      } else {
+        setFileVolumeExceeded(true);
+        setErrorText(
+          "Die PDF oder Bild-Datei ist zu groß! Bitte verkleinern Sie die Datei."
+        );
+      }
+      return imgFileSize;
+    } else {
+      return 0;
     }
   };
 
@@ -159,7 +206,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       return;
     }
     if (hasImageFile && !imageFile) {
-      setErrorText("Bitte Bild oder PDF-Datei hochladen");
+      setErrorText("Bitte Bild im tiff-Format oder PDF-Datei hochladen");
       return;
     }
     const ev: IEvidence = {
@@ -366,13 +413,21 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     );
     setCurrentEvidenceIds(filteredEvidenceIds);
     if (!hasReferencesInOtherEntries(evidenceIdToDelete)) {
-      if (
-        getEvidenceById(evidenceList, evidenceIdToDelete)!.role ===
-        UserRole.Plaintiff
-      ) {
+      let currEv = getEvidenceById(evidenceList, evidenceIdToDelete);
+      if (currEv!.role === UserRole.Plaintiff) {
         removeEvidenceIdPlaintiff(evidenceIdToDelete);
+        if (currEv?.hasImageFile) {
+          setCurrPlaintiffFileVolume(
+            currPlaintiffFileVolume - getImageFileSize(currEv.imageFile)
+          );
+        }
       } else {
         removeEvidenceIdDefendant(evidenceIdToDelete);
+        if (currEv?.hasImageFile) {
+          setCurrDefendantFileVolume(
+            currDefendantFileVolume - getImageFileSize(currEv.imageFile)
+          );
+        }
       }
     }
     removeFromEvidenceList(evidenceIdToDelete);
@@ -381,6 +436,11 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   // click on "save":
   const addEvidence = () => {
     setEvidenceIds(currentEvidenceIds);
+    if (isPlaintiff) {
+      setPlaintiffFileVolume(currPlaintiffFileVolume);
+    } else {
+      setDefendantFileVolume(currDefendantFileVolume);
+    }
     setIsVisible(false);
   };
 
@@ -553,7 +613,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                       className="flex items-center justify-center gap-2 cursor-pointer">
                       <input
                         type="file"
-                        accept="image/*,.pdf"
+                        accept=".tiff,.pdf"
                         ref={imageFileUploadRef}
                         onChange={handleImageFileUpload}
                       />
@@ -572,6 +632,18 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                     {true && (
                       <button
                         onClick={() => {
+                          if (isPlaintiff) {
+                            setCurrPlaintiffFileVolume(
+                              currPlaintiffFileVolume -
+                                getImageFileSize(imageFile)
+                            );
+                          } else {
+                            setCurrDefendantFileVolume(
+                              currDefendantFileVolume -
+                                getImageFileSize(imageFile)
+                            );
+                          }
+                          setFileVolumeExceeded(false);
                           setImageFile(undefined);
                           setImageFilename("");
                           setErrorText("");
@@ -581,6 +653,35 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                       </button>
                     )}
                   </div>
+                </div>
+                <div className="flex flex-row w-full gap-2 mb-2 items-center">
+                  <label htmlFor="fileVolume">
+                    {isPlaintiff ? "Klagepartei" : "Beklagtenpartei"}{" "}
+                    Dateivolumen verbleibend:
+                  </label>
+                  {/* styling the progress-bar: https://github.com/tailwindlabs/tailwindcss/discussions/3921 */}
+                  <progress
+                    className="[&::-webkit-progress-bar]:bg-offWhite [&::-webkit-progress-value]:bg-purple-300 [&::-moz-progress-bar]:bg-purple-300"
+                    id="fileVolume"
+                    max="40000000"
+                    value={
+                      isPlaintiff
+                        ? currPlaintiffFileVolume
+                        : currDefendantFileVolume
+                    }></progress>
+                  <span>
+                    {Number(
+                      (
+                        100 -
+                        100 /
+                          (40000000 /
+                            (isPlaintiff
+                              ? currPlaintiffFileVolume
+                              : currDefendantFileVolume))
+                      ).toFixed(1)
+                    )}{" "}
+                    %
+                  </span>
                 </div>
                 <div>
                   {errorText !== "" ? (
@@ -598,8 +699,10 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                 bgColor="bg-lightGreen hover:bg-darkGreen"
                 textColor="text-darkGreen hover:text-white"
                 alternativePadding="p-1.5 w-full"
-                disabled={hasImageFile && !imageFile}
-                onClick={() => handleEvidenceAddedToCurrent()}>
+                disabled={(hasImageFile && !imageFile) || fileVolumeExceeded}
+                onClick={() => {
+                  if (!fileVolumeExceeded) handleEvidenceAddedToCurrent();
+                }}>
                 Hinzufügen
               </Button>
             </div>

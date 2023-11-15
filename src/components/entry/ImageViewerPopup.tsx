@@ -30,7 +30,7 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
     <>
       <div className="opacity-25 fixed inset-0 z-50 bg-black !m-0" />
       <div className="justify-center -translate-y-1/2 -translate-x-1/2 left-1/2 top-1/2 items-center flex bg-white overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-fit h-fit px-5 rounded-md shadow-md">
-        <div className="my-6 mx-auto w-fit max-h-[75vh] max-w-[75vw]">
+        <div className="my-6 mx-auto">
           <div className="flex justify-between">
             <h3>{title}</h3>
             <div>
@@ -43,12 +43,22 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
               </button>
             </div>
           </div>
-          <div className="flex justify-center w-full overflow-auto mb-3">
-            <embed src={filedata} type={filetype}></embed>
+          <div>
+            <div className="flex justify-center w-full overflow-auto mb-3">
+              <embed
+                className="w-[40vw] h-[50vh]"
+                src={filedata}
+                type={filetype}></embed>
+            </div>
+            <span className="text-sm text-darkGrey opacity-80">{`${
+              filetype.includes("image") ? "Bild" : "PDF"
+            } zu Anlage ${attachmentId}: ${filename}`}</span>
           </div>
-          <span className="text-sm text-darkGrey opacity-80">{`${
-            filetype.includes("image") ? "Bild" : "PDF"
-          } zu Anlage ${attachmentId}: ${filename}`}</span>
+          <span hidden={!filetype.includes("tiff")} className="text-xs pt-4">
+            Hinweis: Eine TIFF-Vorschau ist derzeit leider nicht für alle
+            Browser möglich. <br /> Bitte laden Sie das Basisdokument herunter,
+            um alle Anhänge zu überprüfen.
+          </span>
         </div>
       </div>
     </>
