@@ -54,7 +54,9 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
               filetype.includes("image") ? "TIFF" : "PDF"
             } zu Anlage ${attachmentId}: ${filename}`}</span>
           </div>
-          <span hidden={!filetype.includes("tiff")} className="text-xs pt-4">
+          <span
+            hidden={!filetype.includes("tiff")}
+            className="text-xs pt-4 text-red-600">
             Hinweis: Eine TIFF-Vorschau ist derzeit leider nicht für alle
             Browser möglich. <br /> Bitte laden Sie das Basisdokument herunter,
             um alle Anhänge zu überprüfen.
