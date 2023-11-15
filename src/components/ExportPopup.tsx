@@ -141,6 +141,8 @@ export const ExportPopup: React.FC<IProps> = ({
     }
     if (showAuthorChange === false) {
       otherAuthor = undefined;
+    } else if (showAuthorChange === true && selectedJudgeTitle) {
+      otherAuthor = otherAuthor + " " + selectedJudgeTitle;
     }
     if (showAddRegard === false) {
       regard = undefined;
