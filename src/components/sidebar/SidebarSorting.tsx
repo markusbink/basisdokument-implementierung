@@ -350,7 +350,7 @@ export const SidebarSorting = () => {
                                                   }`]:
                                                     entry.entryCode?.charAt(
                                                       0
-                                                    ) === "B",
+                                                    ) === "K",
                                                   [`bg-${
                                                     getTheme(selectedTheme)
                                                       ?.primaryDefendant
@@ -360,7 +360,7 @@ export const SidebarSorting = () => {
                                                   }`]:
                                                     entry.entryCode?.charAt(
                                                       0
-                                                    ) === "K",
+                                                    ) === "B",
                                                 }
                                               )}>
                                               {entry.entryCode}
@@ -499,12 +499,12 @@ export const SidebarSorting = () => {
                                 getTheme(selectedTheme)?.primaryPlaintiff
                               } text-${
                                 getTheme(selectedTheme)?.secondaryPlaintiff
-                              }`]: entry.entryCode?.charAt(0) === "B",
+                              }`]: entry.entryCode?.charAt(0) === "K",
                               [`bg-${
                                 getTheme(selectedTheme)?.primaryDefendant
                               } text-${
                                 getTheme(selectedTheme)?.secondaryDefendant
-                              }`]: entry.entryCode?.charAt(0) === "K",
+                              }`]: entry.entryCode?.charAt(0) === "B",
                             }
                           )}>
                           {entry.entryCode}
