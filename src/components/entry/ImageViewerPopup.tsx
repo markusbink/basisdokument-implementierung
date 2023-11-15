@@ -47,7 +47,7 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
             <div className="flex justify-center w-full overflow-auto mb-3">
               <embed
                 className="w-[40vw] h-[50vh]"
-                src={filedata}
+                src={filedata + "#navpanes=0"} // hide the nav-panel of pdf-embed at first
                 type={filetype}></embed>
             </div>
             <span className="text-sm text-darkGrey opacity-80">{`${
