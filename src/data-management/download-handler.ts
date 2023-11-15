@@ -53,24 +53,27 @@ function downloadAdditionalFiles(evidences: IEvidence[]) {
           plaintiffFolder?.file(
             evidences[i].attachmentId +
               "_" +
-              evidences[i].name +
+              cleanFileName(evidences[i].name) +
               "_" +
-              evidences[i].imageFilename,
-            dataURItoBlob(evidences[i].imageFile)
+              cleanFileName(evidences[i].imageFilename!),
+            dataURItoBlob(evidences[i].imageFile),
+            { binary: true, compression: "DEFLATE" }
           );
         } else {
           defendantFolder?.file(
             evidences[i].attachmentId +
               "_" +
-              evidences[i].name +
+              cleanFileName(evidences[i].name) +
               "_" +
-              evidences[i].imageFilename,
-            dataURItoBlob(evidences[i].imageFile)
+              cleanFileName(evidences[i].imageFilename!),
+            dataURItoBlob(evidences[i].imageFile),
+            { binary: true, compression: "DEFLATE" }
           );
         }
       }
     }
   }
+  // only download combined zip-folder if one of the two folders is not empty
   if (
     countZipFiles(zip.folder("Anhang Klagepartei")) ||
     countZipFiles(zip.folder("Anhang Beklagtenpartei"))
@@ -79,6 +82,11 @@ function downloadAdditionalFiles(evidences: IEvidence[]) {
       saveAs(content, "Anhang.zip");
     });
   }
+}
+
+// clean all illegal characters in filenames
+function cleanFileName(name: string) {
+  return name.replace(/[/\\?%*:|"<>]/g, "");
 }
 
 function countZipFiles(zipFolder: any) {
