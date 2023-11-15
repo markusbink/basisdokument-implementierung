@@ -102,8 +102,13 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { setActiveSidebar } = useSidebar();
   const { showPatchnotesPopup } = usePatchnotes();
   const { showImprintPopup } = useImprint();
-  const { setEvidenceList, setEvidenceIdsPlaintiff, setEvidenceIdsDefendant } =
-    useEvidence();
+  const {
+    setEvidenceList,
+    setEvidenceIdsPlaintiff,
+    setEvidenceIdsDefendant,
+    setPlaintiffFileVolume,
+    setDefendantFileVolume,
+  } = useEvidence();
 
   // Set React states when user enters/changes text input fields
   const onChangeGivenPrename = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -350,6 +355,16 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
       setEvidenceList(basisdokument.evidences);
       setEvidenceIdsPlaintiff(basisdokument.evidencesNumPlaintiff);
       setEvidenceIdsDefendant(basisdokument.evidencesNumDefendant);
+      if (basisdokument.plaintiffFileVolume) {
+        setPlaintiffFileVolume(basisdokument.plaintiffFileVolume);
+      } else {
+        setDefendantFileVolume(0);
+      }
+      if (basisdokument.defendantFileVolume) {
+        setDefendantFileVolume(basisdokument.defendantFileVolume);
+      } else {
+        setDefendantFileVolume(0);
+      }
     } else {
       //if evidences are not already in own list
       let newEvidenceList: IEvidence[] = [];

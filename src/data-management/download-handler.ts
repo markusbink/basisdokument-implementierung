@@ -1050,6 +1050,8 @@ export function downloadBasisdokument(
   evidenceList: IEvidence[],
   evidencesNumPlaintiff: (string | undefined)[],
   evidencesNumDefendant: (string | undefined)[],
+  plaintiffFileVolume: number,
+  defendantFileVolume: number,
   hints: IHint[],
   coverPDF: ArrayBuffer | undefined,
   otherAuthor: string | undefined,
@@ -1073,6 +1075,8 @@ export function downloadBasisdokument(
   basisdokumentObject["evidences"] = evidenceList;
   basisdokumentObject["evidencesNumPlaintiff"] = evidencesNumPlaintiff;
   basisdokumentObject["evidencesNumDefendant"] = evidencesNumDefendant;
+  basisdokumentObject["plaintiffFileVolume"] = plaintiffFileVolume;
+  basisdokumentObject["defendantFileVolume"] = defendantFileVolume;
   basisdokumentObject["judgeHints"] = hints;
   basisdokumentObject["otherAuthor"] = otherAuthor;
   basisdokumentObject["regard"] = regard;

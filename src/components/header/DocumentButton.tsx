@@ -46,8 +46,13 @@ export const DocumentButton = () => {
     highlightedEntries,
   } = useCase();
   const { sectionList, individualSorting } = useSection();
-  const { evidenceList, evidenceIdsPlaintiff, evidenceIdsDefendant } =
-    useEvidence();
+  const {
+    evidenceList,
+    evidenceIdsPlaintiff,
+    evidenceIdsDefendant,
+    plaintiffFileVolume,
+    defendantFileVolume,
+  } = useEvidence();
   const { versionHistory, colorSelection, selectedTheme, setSelectedTheme } =
     useHeaderContext();
   const { hints } = useHints();
@@ -72,6 +77,8 @@ export const DocumentButton = () => {
         evidenceList,
         evidenceIdsPlaintiff,
         evidenceIdsDefendant,
+        plaintiffFileVolume,
+        defendantFileVolume,
         hints,
         undefined, //coverPDF
         undefined, //otherAuthor
