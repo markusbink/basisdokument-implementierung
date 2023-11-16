@@ -31,6 +31,7 @@ import {
   SidebarState,
   IndividualEntrySortingEntry,
   ViewMode,
+  IEvidence,
 } from "../../types";
 import { Button } from "../Button";
 import { ErrorPopup } from "../ErrorPopup";
@@ -45,7 +46,7 @@ import { useView } from "../../contexts/ViewContext";
 import { getBrowser } from "../../util/get-browser";
 import { AssociationsPopup } from "../AssociationsPopup";
 import { getEntryById } from "../../contexts/CaseContext";
-import { getEvidences } from "../../util/get-evidences";
+import { getEvidenceIds, getEvidences } from "../../util/get-evidences";
 import { useEvidence } from "../../contexts/EvidenceContext";
 
 interface EntryProps {
@@ -96,7 +97,8 @@ export const Entry: React.FC<EntryProps> = ({
   const { setShowNotePopup, setAssociatedEntryIdNote } = useNotes();
   const { setShowJudgeHintPopup, setAssociatedEntryIdHint } = useHints();
   const { view } = useView();
-  const { evidenceList } = useEvidence();
+  const { evidenceList, updateEvidenceList, removeEvidencesWithoutReferences } =
+    useEvidence();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
 
@@ -217,30 +219,30 @@ export const Entry: React.FC<EntryProps> = ({
     sectionId: string
   ) => {
     deleteBookmarkByReference(entryId);
-    setEntries((prevEntries) =>
-      prevEntries
-        .filter((entry) => entry.id !== entryId)
-        .map((entry, index) => {
-          // Only update entries that were added in the current version and
-          // are contained withing the specified section
-          const isCurrentVersion = entry.version === currentVersion;
-          const isInSection = entry.sectionId === sectionId;
+    let prevEntries = entries
+      .filter((entry) => entry.id !== entryId)
+      .map((entry, index) => {
+        // Only update entries that were added in the current version and
+        // are contained withing the specified section
+        const isCurrentVersion = entry.version === currentVersion;
+        const isInSection = entry.sectionId === sectionId;
 
-          if (isCurrentVersion && isInSection) {
-            const newEntryCode = entry.entryCode.split("-");
-            if (
-              Number(newEntryCode[newEntryCode.length - 1]) >
-              Number(entryCode.split("-")[newEntryCode.length - 1])
-            ) {
-              newEntryCode[newEntryCode.length - 1] = String(
-                Number(newEntryCode[newEntryCode.length - 1]) - 1
-              );
-              entry.entryCode = newEntryCode.join("-");
-            }
+        if (isCurrentVersion && isInSection) {
+          const newEntryCode = entry.entryCode.split("-");
+          if (
+            Number(newEntryCode[newEntryCode.length - 1]) >
+            Number(entryCode.split("-")[newEntryCode.length - 1])
+          ) {
+            newEntryCode[newEntryCode.length - 1] = String(
+              Number(newEntryCode[newEntryCode.length - 1]) - 1
+            );
+            entry.entryCode = newEntryCode.join("-");
           }
-          return entry;
-        })
-    );
+        }
+        return entry;
+      });
+    removeEvidencesWithoutReferences(prevEntries);
+    setEntries(prevEntries);
 
     setIndividualEntrySorting((prevEntrySorting) => {
       let newEntrySorting: { [key: string]: IndividualEntrySortingEntry[] } = {
@@ -273,14 +275,15 @@ export const Entry: React.FC<EntryProps> = ({
   const updateEntry = (
     plainText: string,
     rawHtml: string,
-    evidenceIds: string[],
+    evidences: IEvidence[],
     caveatOfProof: boolean
   ) => {
     if (plainText.length === 0) {
       toast("Bitte geben Sie einen Text ein.", { type: "error" });
       return;
     }
-
+    updateEvidenceList(evidences, entries);
+    const newEvidenceIds = getEvidenceIds(evidences);
     setIsEditing(false);
     setEntries((oldEntries) => {
       const newEntries = [...oldEntries];
@@ -289,8 +292,9 @@ export const Entry: React.FC<EntryProps> = ({
       );
       newEntries[entryIndex].text = rawHtml;
       newEntries[entryIndex].author = authorName || entry.author;
-      newEntries[entryIndex].evidenceIds = evidenceIds;
+      newEntries[entryIndex].evidenceIds = newEvidenceIds;
       newEntries[entryIndex].caveatOfProof = caveatOfProof;
+      removeEvidencesWithoutReferences(newEntries);
       return newEntries;
     });
 
@@ -585,18 +589,13 @@ export const Entry: React.FC<EntryProps> = ({
                     onSave={(
                       plainText: string,
                       rawHtml: string,
-                      evidenceIds: string[],
+                      evidences: IEvidence[],
                       caveatOfProof: boolean
                     ) => {
-                      updateEntry(
-                        plainText,
-                        rawHtml,
-                        evidenceIds,
-                        caveatOfProof
-                      );
+                      updateEntry(plainText, rawHtml, evidences, caveatOfProof);
                       setIsExpanded(false);
                     }}
-                    evidenceIds={entry.evidenceIds}
+                    evidences={getEvidences(evidenceList, entry.evidenceIds)}
                   />
                 )}
               </div>

@@ -10,11 +10,7 @@ import {
 import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
-import {
-  getEvidenceById,
-  getEvidences,
-  getFilteredEvidencesSuggestions,
-} from "../../util/get-evidences";
+import { getFilteredEvidencesSuggestions } from "../../util/get-evidences";
 import { useCase, useHeaderContext } from "../../contexts";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { IEvidence, UserRole } from "../../types";
@@ -23,8 +19,8 @@ import { v4 as uuidv4 } from "uuid";
 import { Tooltip } from "../Tooltip";
 import cx from "classnames";
 import { getTheme } from "../../themes/getTheme";
-import { useEvidence } from "../../contexts/EvidenceContext";
 import { ImageViewerPopup } from "./ImageViewerPopup";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 interface EvidencesPopupProps {
   entryId?: string;
@@ -33,9 +29,8 @@ interface EvidencesPopupProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isPlaintiff: boolean;
-  evidenceIds: string[];
-  setEvidenceIds: React.Dispatch<React.SetStateAction<string[]>>;
-  backupEvidences: string[] | undefined;
+  evidences: IEvidence[];
+  setEvidencesToSave: React.Dispatch<React.SetStateAction<IEvidence[]>>;
 }
 
 const enum Direction {
@@ -61,33 +56,31 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   isVisible,
   setIsVisible,
   isPlaintiff,
-  evidenceIds,
-  setEvidenceIds,
+  evidences,
+  setEvidencesToSave,
   caveatOfProof,
   setCaveatOfProof,
 }) => {
-  const { entries, setEntries, currentVersion } = useCase();
+  const { entries, currentVersion } = useCase();
   const { selectedTheme } = useHeaderContext();
   const {
     evidenceList,
-    setEvidenceList,
-    updateEvidenceList,
-    removeFromEvidenceList,
     evidenceIdsDefendant,
     evidenceIdsPlaintiff,
-    addNewEvidenceIdDefendant,
-    addNewEvidenceIdPlaintiff,
-    updateEvidenceIdsDefendant,
-    updateEvidenceIdsPlaintiff,
-    removeEvidenceIdDefendant,
-    removeEvidenceIdPlaintiff,
+    removeLast,
     plaintiffFileVolume,
     setPlaintiffFileVolume,
     defendantFileVolume,
     setDefendantFileVolume,
+    getFileSize,
   } = useEvidence();
-  const [currentEvidenceIds, setCurrentEvidenceIds] =
-    useState<string[]>(evidenceIds);
+  const [currentEvidenceList, setCurrentEvidenceList] =
+    useState<IEvidence[]>(evidences);
+  const [currEvIdsPlaintiff, setCurrEvIdsPlaintiff] =
+    useState<(string | undefined)[]>(evidenceIdsPlaintiff);
+  const [currEvIdsDefendant, setCurrEvIdsDefendant] =
+    useState<(string | undefined)[]>(evidenceIdsDefendant);
+
   const [currentInput, setCurrentInput] = useState<string>("");
   const [currentCaveatOfProof, setCurrentCaveatOfProof] =
     useState<boolean>(caveatOfProof);
@@ -95,7 +88,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const [hasAttachment, setHasAttachment] = useState<boolean>(false);
   const [hasImageFile, setHasImageFile] = useState<boolean>(false);
   const [isEditErrorVisible, setIsEditErrorVisible] = useState<boolean>(false);
-  const [evidenceIdToRemove, setEvidenceIdToRemove] = useState<string>();
+  const [evidenceToRemove, setEvidenceToRemove] = useState<IEvidence>();
   const [evidenceEditMode, setEvidenceEditMode] = useState<{
     evidence: IEvidence;
     value: boolean;
@@ -151,17 +144,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     }
   };
 
-  // source for getting file size of base64: https://stackoverflow.com/questions/47852277/image-file-size-from-data-uri-in-javascript
   const getImageFileSize = (imgfile: string | undefined) => {
     if (imgfile) {
-      let shortBase64 = imgfile.length - (imgfile.indexOf(",") + 1);
-      let padding =
-        imgfile.charAt(imgfile.length - 2) === "="
-          ? 2
-          : imgfile.charAt(imgfile.length - 1) === "="
-          ? 1
-          : 0;
-      let imgFileSize = shortBase64 * 0.75 - padding;
+      let imgFileSize = getFileSize(imgfile);
       // check if new file would exceed data limit of 40MB for plaintiff/defendant
       if (
         (isPlaintiff ? currPlaintiffFileVolume : defendantFileVolume) +
@@ -183,6 +168,73 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     } else {
       return 0;
     }
+  };
+
+  const updateCurrEvidenceList = (evidenceToUpdate: IEvidence) => {
+    let updatedCurrEvidenceList: IEvidence[] = [];
+    let evidenceUpdated: boolean = false;
+    for (let i = 0; i < currentEvidenceList.length; i++) {
+      if (currentEvidenceList[i].id === evidenceToUpdate.id) {
+        updatedCurrEvidenceList.push(evidenceToUpdate);
+        evidenceUpdated = true;
+      } else {
+        updatedCurrEvidenceList.push(currentEvidenceList[i]);
+      }
+    }
+    if (evidenceUpdated === false) {
+      updatedCurrEvidenceList.push(evidenceToUpdate);
+    }
+    setCurrentEvidenceList(updatedCurrEvidenceList);
+  };
+
+  const addToCurrEvidenceIdDefendant = (evidence: IEvidence) => {
+    let emptySpace = false;
+    for (let i = 0; i < currEvIdsDefendant.length; i++) {
+      if (currEvIdsDefendant[i] === undefined) {
+        // set initial attachmentId value
+        evidence.attachmentId = "B" + (i + 1);
+        currEvIdsDefendant[i] = evidence.id;
+        emptySpace = true;
+      }
+    }
+    if (emptySpace === false) {
+      // set initial attachmentId value
+      evidence.attachmentId = "B" + (currEvIdsDefendant.length + 1).toString();
+      currEvIdsDefendant.push(evidence.id);
+    }
+    updateCurrEvidenceList(evidence);
+  };
+
+  const addToCurrEvidenceIdPlaintiff = (evidence: IEvidence) => {
+    let emptySpace = false;
+    for (let i = 0; i < currEvIdsPlaintiff.length; i++) {
+      if (currEvIdsPlaintiff[i] === undefined) {
+        // set initial attachmentId value
+        evidence.attachmentId = "K" + (i + 1);
+        currEvIdsPlaintiff[i] = evidence.id;
+        emptySpace = true;
+      }
+    }
+    if (emptySpace === false) {
+      // set initial attachmentId value
+      evidence.attachmentId = "K" + (currEvIdsPlaintiff.length + 1).toString();
+      currEvIdsPlaintiff.push(evidence.id);
+    }
+    updateCurrEvidenceList(evidence);
+  };
+
+  const removeCurrEvidenceIdDefendant = (evidenceId: string) => {
+    setCurrEvIdsDefendant(
+      currEvIdsDefendant.map((evId) => (evId === evidenceId ? undefined : evId))
+    );
+    removeLast(currEvIdsDefendant);
+  };
+
+  const removeCurrEvidenceIdPlaintiff = (evidenceId: string) => {
+    setCurrEvIdsPlaintiff(
+      currEvIdsPlaintiff.map((evId) => (evId === evidenceId ? undefined : evId))
+    );
+    removeLast(currEvIdsPlaintiff);
   };
 
   const showImage = (
@@ -223,25 +275,18 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       setImageFile("");
       setImageFilename("");
     }
-    setEvidenceList([...evidenceList, ev]);
+
     // if has attachment add to plaintiff/defendant arrays for attachment id handling
     if (hasAttachment) {
       if (ev.role === UserRole.Plaintiff) {
-        addNewEvidenceIdPlaintiff(ev);
+        addToCurrEvidenceIdPlaintiff(ev);
       } else {
-        addNewEvidenceIdDefendant(ev);
+        addToCurrEvidenceIdDefendant(ev);
       }
-      // get initial attachment id via index of new evidence in plaintiff/defendant arrays
-      let evAtt;
-      if (ev.role === UserRole.Plaintiff) {
-        evAtt = evidenceIdsPlaintiff.find((e) => e === ev.id);
-      } else {
-        evAtt = evidenceIdsDefendant.find((e) => e === ev.id);
-      }
-      setCurrentEvidenceIds([...currentEvidenceIds, evAtt!]);
+      setCurrentEvidenceList([...currentEvidenceList, ev]);
     } else {
       // if no attachment, no adding to plaintiff/defendant arrays is needed
-      setCurrentEvidenceIds([...currentEvidenceIds, ev.id]);
+      setCurrentEvidenceList([...currentEvidenceList, ev]);
     }
     setCurrentInput("");
     setErrorText("");
@@ -251,19 +296,19 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
 
   // if existing evidence is added to entry, no handling of plaintiff/defendant arrays is needed
   const addExisting = (input: IEvidence) => {
-    setCurrentEvidenceIds([...currentEvidenceIds, input.id]);
+    setCurrentEvidenceList([...currentEvidenceList, input]);
     setCurrentInput("");
   };
 
   // check if evidence would be removed only from entry or whole document
-  const removeEvidence = (evidenceId: string) => {
+  const removeEvidence = (evidence: IEvidence) => {
     // set evidence for possible removal
-    setEvidenceIdToRemove(evidenceId);
+    setEvidenceToRemove(evidence);
     // open edit error if evidence would be removed from whole document
-    if (!hasReferencesInOtherEntries(evidenceId)) {
+    if (!hasReferencesInOtherEntries(evidence.id)) {
       setIsEditErrorVisible(true);
     } else {
-      removeFromEntry(evidenceId);
+      removeFromEntry(evidence);
     }
   };
 
@@ -273,46 +318,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     evidenceToEdit: IEvidence
   ) => {
     const { value } = e.target;
-    if (entries.length > 0) {
-      const newEntries = entries.map((entry) => {
-        entry.evidenceIds = entry.evidenceIds?.map((evId) => {
-          if (evId === evidenceToEdit.id) {
-            let newEv = getEvidenceById(evidenceList, evId);
-            newEv!.name = value;
-            updateEvidenceList(newEv!);
-          } else {
-            currentEvidenceIds.forEach((evId) => {
-              if (evId === evidenceToEdit.id) {
-                let newEv = getEvidenceById(evidenceList, evId);
-                newEv!.name = value;
-                updateEvidenceList(newEv!);
-              }
-            });
-          }
-          if (getEvidenceById(evidenceList, evId)!.hasAttachment) {
-            if (
-              getEvidenceById(evidenceList, evId)!.role === UserRole.Plaintiff
-            ) {
-              updateEvidenceIdsPlaintiff(evId);
-            } else {
-              updateEvidenceIdsDefendant(evId);
-            }
-          }
-          return evId;
-        });
-        return entry;
-      });
-      setEntries(newEntries);
-    } else {
-      currentEvidenceIds.forEach((evId) => {
-        if (evId === evidenceToEdit.id) {
-          let newEv = getEvidenceById(evidenceList, evId);
-          newEv!.name = value;
-          updateEvidenceList(newEv!);
-        }
-      });
-      setCurrentEvidenceIds([...currentEvidenceIds]);
-    }
+    evidenceToEdit.name = value;
+    updateCurrEvidenceList(evidenceToEdit);
   };
 
   // handle input for individual attachment id
@@ -321,46 +328,10 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     evidenceToEdit: IEvidence
   ) => {
     const { value } = e.target;
-    if (entries.length > 0) {
-      const newEntries = entries.map((entry) => {
-        entry.evidenceIds = entry.evidenceIds?.map((evId) => {
-          if (evId === evidenceToEdit.id) {
-            let newEv = getEvidenceById(evidenceList, evId);
-            newEv!.attachmentId = value;
-            updateEvidenceList(newEv!);
-          } else {
-            currentEvidenceIds.forEach((evId) => {
-              if (evId === evidenceToEdit.id) {
-                let newEv = getEvidenceById(evidenceList, evId);
-                newEv!.attachmentId = value;
-                updateEvidenceList(newEv!);
-              }
-            });
-          }
-          if (getEvidenceById(evidenceList, evId)!.hasAttachment) {
-            if (
-              getEvidenceById(evidenceList, evId)!.role === UserRole.Plaintiff
-            ) {
-              updateEvidenceIdsPlaintiff(evId);
-            } else {
-              updateEvidenceIdsDefendant(evId);
-            }
-          }
-          return evId;
-        });
-        return entry;
-      });
-      setEntries(newEntries);
-    } else {
-      currentEvidenceIds.forEach((evId) => {
-        if (evId === evidenceToEdit.id) {
-          let newEv = getEvidenceById(evidenceList, evId);
-          newEv!.attachmentId = value;
-          updateEvidenceList(newEv!);
-        }
-      });
-      setCurrentEvidenceIds([...currentEvidenceIds]);
+    evidenceToEdit.attachmentId = value;
+    if (evidenceToEdit.role === UserRole.Plaintiff) {
     }
+    updateCurrEvidenceList(evidenceToEdit);
   };
 
   const handleImageChange = (
@@ -373,72 +344,40 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       try {
         fileReader.readAsDataURL(file);
         fileReader.onload = (e: any) => {
-          if (entries.length > 0) {
-            const newEntries = entries.map((entry) => {
-              entry.evidenceIds = entry.evidenceIds?.map((evId) => {
-                if (evId === evidenceToEdit.id) {
-                  let newEv = getEvidenceById(evidenceList, evId);
-                  newEv!.imageFile = e.target.result;
-                  newEv!.imageFilename = file.name;
-                  updateEvidenceList(newEv!);
-                }
-                return evId;
-              });
-              return entry;
-            });
-            setEntries(newEntries);
-          } else {
-            const newEvidenceIds = currentEvidenceIds.map((evId) => {
-              if (evId === evidenceToEdit.id) {
-                let newEv = getEvidenceById(evidenceList, evId);
-                newEv!.imageFile = e.target.result;
-                newEv!.imageFilename = file.name;
-                updateEvidenceList(newEv!);
-              }
-              return evId;
-            });
-            setCurrentEvidenceIds(newEvidenceIds);
-          }
+          evidenceToEdit.imageFile = e.target.result;
+          evidenceToEdit.imageFilename = file.name;
+          updateCurrEvidenceList(evidenceToEdit);
         };
         e.target.value = "";
       } catch (error) {}
     }
   };
 
-  const removeFromEntry = (evidenceIdToDelete: string) => {
-    const filteredEvidenceIds = currentEvidenceIds.filter(
-      (evidenceId) => evidenceId !== evidenceIdToDelete
+  const removeFromEntry = (evidenceToDelete: IEvidence) => {
+    // filter evidenceToDelete from currentEvidenceList
+    const filteredEvidences = currentEvidenceList.filter(
+      (evidence) => evidence.id !== evidenceToDelete.id
     );
-    setCurrentEvidenceIds(filteredEvidenceIds);
-    if (!hasReferencesInOtherEntries(evidenceIdToDelete)) {
-      let currEv = getEvidenceById(evidenceList, evidenceIdToDelete);
-      if (currEv!.role === UserRole.Plaintiff) {
-        removeEvidenceIdPlaintiff(evidenceIdToDelete);
-        if (currEv?.hasImageFile) {
-          setCurrPlaintiffFileVolume(
-            currPlaintiffFileVolume - getImageFileSize(currEv.imageFile)
-          );
-        }
+    if (evidenceToDelete.hasAttachment) {
+      if (evidenceToDelete.role === UserRole.Plaintiff) {
+        removeCurrEvidenceIdPlaintiff(evidenceToDelete.id);
       } else {
-        removeEvidenceIdDefendant(evidenceIdToDelete);
-        if (currEv?.hasImageFile) {
-          setCurrDefendantFileVolume(
-            currDefendantFileVolume - getImageFileSize(currEv.imageFile)
-          );
-        }
+        removeCurrEvidenceIdDefendant(evidenceToDelete.id);
       }
     }
-    removeFromEvidenceList(evidenceIdToDelete);
+    setCurrentEvidenceList(filteredEvidences);
   };
 
   // click on "save":
-  const addEvidence = () => {
-    setEvidenceIds(currentEvidenceIds);
+  const saveEvidences = () => {
+    setEvidencesToSave(currentEvidenceList);
+    // dataVolumeToSave
     if (isPlaintiff) {
       setPlaintiffFileVolume(currPlaintiffFileVolume);
     } else {
       setDefendantFileVolume(currDefendantFileVolume);
     }
+    //TODO: check if changes are made without "Hinzufügen", dann Hinweis zum speichern!
     setIsVisible(false);
   };
 
@@ -458,18 +397,18 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const handleMoveEvidence = (direction: Direction, index: number) => {
     if (
       (!(index > 0) && direction === Direction.Up) ||
-      (!(index < currentEvidenceIds.length - 1) && direction === Direction.Down)
+      (!(index < currentEvidenceList.length - 1) &&
+        direction === Direction.Down)
     ) {
       return;
     }
-
     const moveBy = direction === Direction.Up ? -1 : 1;
-    const newCurrentEvidenceIds = [...currentEvidenceIds];
-    [newCurrentEvidenceIds[index + moveBy], newCurrentEvidenceIds[index]] = [
-      newCurrentEvidenceIds[index],
-      newCurrentEvidenceIds[index + moveBy],
+    const newCurrentEvidenceList = [...currentEvidenceList];
+    [newCurrentEvidenceList[index + moveBy], newCurrentEvidenceList[index]] = [
+      newCurrentEvidenceList[index],
+      newCurrentEvidenceList[index + moveBy],
     ];
-    setCurrentEvidenceIds(newCurrentEvidenceIds);
+    setCurrentEvidenceList(newCurrentEvidenceList);
   };
 
   if (!isVisible) {
@@ -494,7 +433,6 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               <button
                 onClick={() => {
                   setIsVisible(false);
-                  //if (backupEvidences) setEvidences(backupEvidences);
                 }}
                 className="text-darkGrey bg-offWhite p-1 rounded-md hover:bg-lightGrey">
                 <X size={24} />
@@ -528,7 +466,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                       {getFilteredEvidencesSuggestions(
                         evidenceList,
                         currentInput,
-                        currentEvidenceIds
+                        currentEvidenceList
                       ).map((ev, index) => (
                         <li
                           key={index}
@@ -727,14 +665,14 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               </div>
             </div>
             <div className="flex border-t border-lightGrey rounded-b-lg py-2 items-center gap-2 justify-between mt-4 mb-2 mx-6">
-              {currentEvidenceIds.length <= 0 ? (
+              {currentEvidenceList.length <= 0 ? (
                 <div className="flex flex-col gap-2 items-center">
                   <span className="italic">Keine Beweise</span>
                 </div>
               ) : (
                 <div className="flex flex-col gap-1 w-full max-h-56 overflow-auto">
                   <span className="ml-1 font-bold">
-                    {(currentEvidenceIds.length === 1 ? "Beweis" : "Beweise") +
+                    {(currentEvidenceList.length === 1 ? "Beweis" : "Beweise") +
                       (currentCaveatOfProof
                         ? " unter Verwahrung gegen die Beweislast"
                         : "") +
@@ -742,190 +680,184 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
                   </span>
 
                   <div className="flex flex-col flex-wrap gap-1">
-                    {getEvidences(evidenceList, currentEvidenceIds).map(
-                      (ev, index) => (
-                        <div key={index} className="flex flex-row">
-                          <div className="flex pr-1 flex-col">
-                            {moveEvidenceButtons.map((button, btnIndex) => (
-                              <button
-                                key={`${btnIndex}-${button.title}`}
-                                onClick={() => {
-                                  handleMoveEvidence(button.action, index);
-                                }}
-                                className={cx(
-                                  "flex items-center py-1 px-1 hover:bg-mediumGrey text-darkGrey hover:text-white rounded transition-all",
-                                  {
-                                    // Disabled buttons when cannot move up or down
-                                    "cursor-default hover:bg-transparent hover:text-darkGrey opacity-50":
-                                      (!(index > 0) &&
-                                        button.action === Direction.Up) ||
-                                      (!(
-                                        index <
-                                        currentEvidenceIds.length - 1
-                                      ) &&
-                                        button.action === Direction.Down),
-                                  }
-                                )}>
-                                {button.icon}
-                              </button>
-                            ))}
-                          </div>
-                          <div
-                            className="flex flex-row items-center px-2 rounded-lg py-1 bg-offWhite justify-between w-full"
-                            key={index}>
-                            {ev.version === currentVersion ? (
-                              <Tooltip
-                                className="w-full"
-                                text="Doppelklick, um zu Editieren - Enter, um zu Bestätigen">
-                                <div
-                                  className="flex flex-row gap-2 items-center"
-                                  onDoubleClick={() => {
-                                    setEvidenceEditMode({
-                                      evidence: ev,
-                                      value: true,
-                                    });
-                                  }}>
-                                  {currentEvidenceIds.length !== 1 && (
-                                    <span className="w-4">
-                                      {index + 1 + "."}
-                                    </span>
-                                  )}
-                                  {evidenceEditMode?.value &&
-                                  evidenceEditMode?.evidence === ev ? (
-                                    <>
-                                      <input
-                                        autoFocus={true}
-                                        type="text"
-                                        name="name"
-                                        placeholder="Beschreibung..."
-                                        className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] border-slate-500"
-                                        value={ev.name}
-                                        onChange={(e) =>
-                                          handleNameChange(e, ev)
+                    {currentEvidenceList.map((ev, index) => (
+                      <div key={index} className="flex flex-row">
+                        <div className="flex pr-1 flex-col">
+                          {moveEvidenceButtons.map((button, btnIndex) => (
+                            <button
+                              key={`${btnIndex}-${button.title}`}
+                              onClick={() => {
+                                handleMoveEvidence(button.action, index);
+                              }}
+                              className={cx(
+                                "flex items-center py-1 px-1 hover:bg-mediumGrey text-darkGrey hover:text-white rounded transition-all",
+                                {
+                                  // Disabled buttons when cannot move up or down
+                                  "cursor-default hover:bg-transparent hover:text-darkGrey opacity-50":
+                                    (!(index > 0) &&
+                                      button.action === Direction.Up) ||
+                                    (!(
+                                      index <
+                                      currentEvidenceList.length - 1
+                                    ) &&
+                                      button.action === Direction.Down),
+                                }
+                              )}>
+                              {button.icon}
+                            </button>
+                          ))}
+                        </div>
+                        <div
+                          className="flex flex-row items-center px-2 rounded-lg py-1 bg-offWhite justify-between w-full"
+                          key={index}>
+                          {ev.version === currentVersion ? (
+                            <Tooltip
+                              className="w-full"
+                              text="Doppelklick, um zu Editieren - Enter, um zu Bestätigen">
+                              <div
+                                className="flex flex-row gap-2 items-center"
+                                onDoubleClick={() => {
+                                  setEvidenceEditMode({
+                                    evidence: ev,
+                                    value: true,
+                                  });
+                                }}>
+                                {currentEvidenceList.length !== 1 && (
+                                  <span className="w-4">{index + 1 + "."}</span>
+                                )}
+                                {evidenceEditMode?.value &&
+                                evidenceEditMode?.evidence === ev ? (
+                                  <>
+                                    <input
+                                      autoFocus={true}
+                                      type="text"
+                                      name="name"
+                                      placeholder="Beschreibung..."
+                                      className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] border-slate-500"
+                                      value={ev.name}
+                                      onChange={(e) => handleNameChange(e, ev)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                          setEvidenceEditMode({
+                                            evidence: ev,
+                                            value: false,
+                                          });
                                         }
-                                        onKeyDown={(e) => {
-                                          if (e.key === "Enter") {
-                                            setEvidenceEditMode({
-                                              evidence: ev,
-                                              value: false,
-                                            });
-                                          }
-                                        }}
-                                      />
-                                      {ev.hasAttachment && (
-                                        <span className="flex flex-row">
-                                          <b>
-                                            {" "}
-                                            als Anlage
-                                            <input
-                                              autoFocus={false}
-                                              type="text"
-                                              name="name"
-                                              placeholder="Anlagennummer"
-                                              className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] border-slate-500 w-14"
-                                              value={ev.attachmentId}
-                                              onChange={(e) =>
-                                                handleAttachmentIdChange(e, ev)
-                                              }
-                                              onKeyDown={(e) => {
-                                                if (e.key === "Enter") {
-                                                  setEvidenceEditMode({
-                                                    evidence: ev,
-                                                    value: false,
-                                                  });
-                                                }
-                                              }}
-                                            />
-                                          </b>
-                                        </span>
-                                      )}
-                                      {ev.hasImageFile && (
-                                        <>
+                                      }}
+                                    />
+                                    {ev.hasAttachment && (
+                                      <span className="flex flex-row">
+                                        <b>
+                                          {" "}
+                                          als Anlage
                                           <input
-                                            type="file"
-                                            ref={imageFileUploadRef}
-                                            onChange={(e) => {
-                                              handleImageChange(e, ev);
-                                            }}
-                                          />
-                                          <ImageSquare
-                                            size={20}
-                                            className="text-mediumGrey hover:text-black"
-                                            onClick={() => {
-                                              if (!isValidImageFile) {
-                                                setErrorText("");
-                                                setIsValidImageFile(true);
+                                            autoFocus={false}
+                                            type="text"
+                                            name="name"
+                                            placeholder="Anlagennummer"
+                                            className="focus:outline focus:outline-offWhite bg-offWhite px-2 m-0 border-b-[1px] border-slate-500 w-14"
+                                            value={ev.attachmentId}
+                                            onChange={(e) =>
+                                              handleAttachmentIdChange(e, ev)
+                                            }
+                                            onKeyDown={(e) => {
+                                              if (e.key === "Enter") {
+                                                setEvidenceEditMode({
+                                                  evidence: ev,
+                                                  value: false,
+                                                });
                                               }
-                                              imageFileUploadRef?.current?.click();
                                             }}
                                           />
-                                        </>
-                                      )}
-                                    </>
-                                  ) : (
-                                    <>
-                                      {ev.hasAttachment ? (
-                                        <span className="break-words font-medium">
-                                          {ev.name}
-                                          <b> als Anlage {ev.attachmentId}</b>
-                                        </span>
-                                      ) : (
-                                        <span className="break-words font-medium">
-                                          {ev.name}
-                                        </span>
-                                      )}
-                                      {ev.hasImageFile && (
+                                        </b>
+                                      </span>
+                                    )}
+                                    {ev.hasImageFile && (
+                                      <>
+                                        <input
+                                          type="file"
+                                          ref={imageFileUploadRef}
+                                          onChange={(e) => {
+                                            handleImageChange(e, ev);
+                                          }}
+                                        />
                                         <ImageSquare
                                           size={20}
                                           className="text-mediumGrey hover:text-black"
                                           onClick={() => {
-                                            showImage(
-                                              ev.imageFile!,
-                                              ev.imageFilename!,
-                                              ev.attachmentId!,
-                                              ev.name
-                                            );
+                                            if (!isValidImageFile) {
+                                              setErrorText("");
+                                              setIsValidImageFile(true);
+                                            }
+                                            imageFileUploadRef?.current?.click();
                                           }}
                                         />
-                                      )}
-                                    </>
-                                  )}
-                                </div>
-                              </Tooltip>
-                            ) : (
-                              <div className="flex flex-row gap-2 items-center">
-                                <span className="w-4">
-                                  {evidenceIds.length === 1
-                                    ? ""
-                                    : index + 1 + "."}
-                                </span>
-
-                                {ev.hasAttachment ? (
-                                  <span className="break-words font-medium">
-                                    {ev.name}
-                                    <b> als Anlage {ev.attachmentId}</b>
-                                  </span>
+                                      </>
+                                    )}
+                                  </>
                                 ) : (
-                                  <span className="break-words font-medium">
-                                    {ev.name}
-                                  </span>
+                                  <>
+                                    {ev.hasAttachment ? (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
+                                        <b> als Anlage {ev.attachmentId}</b>
+                                      </span>
+                                    ) : (
+                                      <span className="break-words font-medium">
+                                        {ev.name}
+                                      </span>
+                                    )}
+                                    {ev.hasImageFile && (
+                                      <ImageSquare
+                                        size={20}
+                                        className="text-mediumGrey hover:text-black"
+                                        onClick={() => {
+                                          showImage(
+                                            ev.imageFile!,
+                                            ev.imageFilename!,
+                                            ev.attachmentId!,
+                                            ev.name
+                                          );
+                                        }}
+                                      />
+                                    )}
+                                  </>
                                 )}
                               </div>
-                            )}
-                            <div>
-                              <XCircle
-                                size={20}
-                                weight="fill"
-                                className="cursor-pointer"
-                                onClick={() => {
-                                  removeEvidence(ev.id);
-                                }}
-                              />
+                            </Tooltip>
+                          ) : (
+                            <div className="flex flex-row gap-2 items-center">
+                              <span className="w-4">
+                                {currentEvidenceList.length === 1
+                                  ? ""
+                                  : index + 1 + "."}
+                              </span>
+
+                              {ev.hasAttachment ? (
+                                <span className="break-words font-medium">
+                                  {ev.name}
+                                  <b> als Anlage {ev.attachmentId}</b>
+                                </span>
+                              ) : (
+                                <span className="break-words font-medium">
+                                  {ev.name}
+                                </span>
+                              )}
                             </div>
+                          )}
+                          <div>
+                            <XCircle
+                              size={20}
+                              weight="fill"
+                              className="cursor-pointer"
+                              onClick={() => {
+                                removeEvidence(ev);
+                              }}
+                            />
                           </div>
                         </div>
-                      )
-                    )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
@@ -947,9 +879,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
             <button
               className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
               onClick={() => {
-                addEvidence();
+                saveEvidences();
               }}>
-              {(currentEvidenceIds.length === 1 ? "Beweis" : "Beweise") +
+              {(currentEvidenceList.length === 1 ? "Beweis" : "Beweise") +
                 " speichern"}
             </button>
           </div>
@@ -979,7 +911,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               bgColor="bg-lightRed hover:bg-darkRed/25"
               textColor="text-darkRed font-bold"
               onClick={() => {
-                removeFromEntry(evidenceIdToRemove!);
+                removeFromEntry(evidenceToRemove!);
                 setIsEditErrorVisible(false);
               }}>
               Löschen

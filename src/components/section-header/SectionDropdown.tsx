@@ -6,6 +6,7 @@ import { UserRole } from "../../types";
 import { Tooltip } from "../Tooltip";
 import { ErrorPopup } from "../ErrorPopup";
 import { useState } from "react";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 interface SectionDropdownProps {
   sectionId: string;
@@ -21,6 +22,7 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
     useCase();
   const { sectionList, setSectionList, setIndividualSorting } = useSection();
   const { showEntrySorting } = useHeaderContext();
+  const { removeEvidencesWithoutReferences } = useEvidence();
 
   const [isDeleteErrorVisible, setIsDeleteErrorVisible] =
     useState<boolean>(false);
@@ -29,9 +31,11 @@ export const SectionDropdown: React.FC<SectionDropdownProps> = ({
 
   const deleteSection = () => {
     // Remove entries that belong to the section
-    setEntries((entries) =>
-      entries.filter((entry) => entry.sectionId !== sectionId)
+    let entriesToDelete = entries.filter(
+      (entry) => entry.sectionId !== sectionId
     );
+    removeEvidencesWithoutReferences(entriesToDelete);
+    setEntries(entriesToDelete);
 
     const indexSection = sectionList.findIndex((sect) => sect.id === sectionId);
 

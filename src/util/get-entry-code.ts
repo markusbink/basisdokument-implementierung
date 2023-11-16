@@ -20,7 +20,7 @@ export const getEntryCodesForEvidence = (
     .filter((entry) => entry.evidenceIds !== undefined)
     // filter entries with evidence
     .filter((entry) => entry.evidenceIds.some((evId) => evId === evidence.id));
-  // return entry codes
+  // return entry codes or empty array
   return entriesWithEvidenceReference.map((entry) =>
     getEntryCode(entries, entry.id)
   );

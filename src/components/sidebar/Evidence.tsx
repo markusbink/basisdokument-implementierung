@@ -29,8 +29,6 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
   const {
     evidenceList,
     removeFromEvidenceList,
-    updateEvidenceIdsDefendant,
-    updateEvidenceIdsPlaintiff,
     removeEvidenceIdDefendant,
     removeEvidenceIdPlaintiff,
   } = useEvidence();
@@ -91,15 +89,6 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
         if (evId === evidence.id) {
           getEvidenceById(evidenceList, evId)!.name = value;
         }
-        if (getEvidenceById(evidenceList, evId)!.hasAttachment) {
-          if (
-            getEvidenceById(evidenceList, evId)!.role === UserRole.Plaintiff
-          ) {
-            updateEvidenceIdsPlaintiff(evId);
-          } else {
-            updateEvidenceIdsDefendant(evId);
-          }
-        }
         return evId;
       });
       return entry;
@@ -114,15 +103,6 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
         if (evId === evidence.id) {
           getEvidenceById(evidenceList, evId)!.attachmentId = value;
         }
-        if (getEvidenceById(evidenceList, evId)!.hasAttachment) {
-          if (
-            getEvidenceById(evidenceList, evId)!.role === UserRole.Plaintiff
-          ) {
-            updateEvidenceIdsPlaintiff(evId);
-          } else {
-            updateEvidenceIdsDefendant(evId);
-          }
-        }
         return evId;
       });
       return entry;
@@ -130,15 +110,17 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
     setEntries(newEntries);
   };
 
-  const removeEvidenceOverall = (id: string) => {
-    removeFromEvidenceList(id);
+  const removeEvidenceOverall = (evidence: IEvidence) => {
+    removeFromEvidenceList(evidence);
     const newEntries = entries.map((entry) => {
-      entry.evidenceIds = entry.evidenceIds?.filter((evId) => evId !== id);
+      entry.evidenceIds = entry.evidenceIds?.filter(
+        (evId) => evId !== evidence.id
+      );
       if (evidence.hasAttachment) {
         if (evidence.role === UserRole.Plaintiff) {
-          removeEvidenceIdPlaintiff(id);
+          removeEvidenceIdPlaintiff(evidence.id);
         } else {
-          removeEvidenceIdDefendant(id);
+          removeEvidenceIdDefendant(evidence.id);
         }
       }
       return entry;
@@ -366,7 +348,7 @@ export const Evidence: React.FC<EvidenceProps> = ({ evidence }) => {
               textColor="text-darkRed font-bold"
               onClick={() => {
                 setIsDeleteErrorVisible(false);
-                removeEvidenceOverall(evidence.id);
+                removeEvidenceOverall(evidence);
               }}>
               Beweis löschen
             </Button>

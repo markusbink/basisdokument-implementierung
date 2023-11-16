@@ -103,7 +103,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
   const { showPatchnotesPopup } = usePatchnotes();
   const { showImprintPopup } = useImprint();
   const {
-    setEvidenceList,
+    updateEvidenceList,
     setEvidenceIdsPlaintiff,
     setEvidenceIdsDefendant,
     setPlaintiffFileVolume,
@@ -352,7 +352,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
     //if evidences are already in own list
     if (basisdokument.evidences) {
       setEntries(basisdokument.entries);
-      setEvidenceList(basisdokument.evidences);
+      updateEvidenceList(basisdokument.evidences, []);
       setEvidenceIdsPlaintiff(basisdokument.evidencesNumPlaintiff);
       setEvidenceIdsDefendant(basisdokument.evidencesNumDefendant);
       if (basisdokument.plaintiffFileVolume) {
@@ -394,7 +394,7 @@ export const Auth: React.FC<AuthProps> = ({ setIsAuthenticated }) => {
         }
       }
       setEntries(updatedEntries);
-      setEvidenceList(newEvidenceList);
+      updateEvidenceList(newEvidenceList, updatedEntries);
       //set plaintiff/defendant arrays
       let newPlaintiffArr: string[] = [];
       let newDefendantArr: string[] = [];

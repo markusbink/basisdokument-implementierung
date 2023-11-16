@@ -12,6 +12,7 @@ import { useView } from "../../contexts/ViewContext";
 import { getTheme } from "../../themes/getTheme";
 import {
   IEntry,
+  IEvidence,
   IndividualEntrySortingEntry,
   UserRole,
   ViewMode,
@@ -23,6 +24,8 @@ import { ErrorPopup } from "../ErrorPopup";
 import { Tooltip } from "../Tooltip";
 import { EntryForm } from "./EntryForm";
 import { EntryHeader } from "./EntryHeader";
+import { getEvidenceIds } from "../../util/get-evidences";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 interface NewEntryProps {
   roleForNewEntry: UserRole.Plaintiff | UserRole.Defendant;
@@ -48,6 +51,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const { currentVersion, entries, setEntries, setIndividualEntrySorting } =
     useCase();
   const { sectionList } = useSection();
+  const { updateEvidenceList } = useEvidence();
 
   const isPlaintiff = roleForNewEntry === UserRole.Plaintiff;
   const entryCodePrefix = isPlaintiff ? "K" : "B";
@@ -56,7 +60,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const createEntry = (
     plainText: string,
     rawHtml: string,
-    evidenceIds: string[],
+    evidences: IEvidence[],
     caveatOfProof: boolean
   ) => {
     if (plainText.length === 0) {
@@ -67,6 +71,8 @@ export const NewEntry: React.FC<NewEntryProps> = ({
     const newEntryCount =
       entries.filter((entry) => entry.sectionId === sectionId).length + 1;
 
+    const newEvidenceIds = getEvidenceIds(evidences);
+
     const entry: IEntry = {
       id: uuidv4(),
       caveatOfProof: caveatOfProof,
@@ -76,8 +82,10 @@ export const NewEntry: React.FC<NewEntryProps> = ({
       sectionId,
       text: rawHtml,
       version: currentVersion,
-      evidenceIds: evidenceIds,
+      evidenceIds: newEvidenceIds,
     };
+
+    updateEvidenceList(evidences, entries);
 
     if (associatedEntry) {
       entry.associatedEntry = associatedEntry;
@@ -227,10 +235,10 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             onAbort={(plainText, rawHtml) => {
               closeNewEntryForm(plainText, rawHtml);
             }}
-            onSave={(plainText, rawHtml, evidenceIds, caveatOfProof) => {
-              createEntry(plainText, rawHtml, evidenceIds, caveatOfProof);
+            onSave={(plainText, rawHtml, evidences, caveatOfProof) => {
+              createEntry(plainText, rawHtml, evidences, caveatOfProof);
             }}
-            evidenceIds={[]}
+            evidences={[]}
           />
         </div>
       </div>

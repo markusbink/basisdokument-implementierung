@@ -29,11 +29,11 @@ export const getEvidences = (
 export const getFilteredEvidencesSuggestions = (
   evidenceList: IEvidence[],
   currentInput: string,
-  addedEvidences: string[]
+  addedEvidences: IEvidence[]
 ): IEvidence[] => {
   let evs = evidenceList
     //filters/excludes current to entry added evidences
-    .filter((ev) => !addedEvidences.some((evidenceId) => evidenceId === ev.id))
+    .filter((ev) => !addedEvidences.some((evidence) => evidence.id === ev.id))
     .filter((ev) => ev !== undefined);
   //filters current input for clarity in suggestions
   if (currentInput) {
