@@ -13,7 +13,6 @@ import { Button } from "../Button";
 import { ExpandButton } from "./ExpandButton";
 import { EvidencesPopup } from "./EvidencePopup";
 import { ImageViewerPopup } from "./ImageViewerPopup";
-import { useEvidence } from "../../contexts/EvidenceContext";
 
 const toolbarOptions = {
   options: ["blockType", "inline", "list", "textAlign"],
