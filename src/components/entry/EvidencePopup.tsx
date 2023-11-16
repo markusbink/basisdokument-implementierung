@@ -931,32 +931,18 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
               )}
             </div>
           </div>
-
-          {((isPlaintiff &&
-            getEvidences(evidenceList, currentEvidenceIds).find(
-              (ev) => ev.role !== UserRole.Plaintiff
-            )) ||
-            (!isPlaintiff &&
-              getEvidences(evidenceList, currentEvidenceIds).find(
-                (ev) => ev.role === UserRole.Plaintiff
-              ))) && (
-            <div>
-              <div className="p-2">
-                Hinweis: Es werden Beweise der Gegenpartei mitangeführt.
-              </div>
-              <input
-                autoFocus={false}
-                type="checkbox"
-                name="caveat"
-                checked={currentCaveatOfProof}
-                placeholder="Beweislast"
-                className="bg-offWhite px-2 m-0 w-8 accent-darkGrey"
-                onChange={(e) => caveatOfProofClicked(e)}
-              />
-              Zusatz "Unter Verwahrung gegen die Beweislast" hinzufügen
-            </div>
-          )}
-
+          <div>
+            <input
+              autoFocus={false}
+              type="checkbox"
+              name="caveat"
+              checked={currentCaveatOfProof}
+              placeholder="Beweislast"
+              className="bg-offWhite px-2 m-0 w-8 accent-darkGrey"
+              onChange={(e) => caveatOfProofClicked(e)}
+            />
+            Zusatz "Unter Verwahrung gegen die Beweislast" hinzufügen
+          </div>
           <div className="flex items-center justify-end">
             <button
               className="bg-darkGrey hover:bg-mediumGrey rounded-md text-white py-2 px-3 text-sm"
