@@ -5,26 +5,33 @@ import { useState } from "react";
 
 export const PatchnotesPopup = () => {
   const { setShowPatchnotesPopup } = usePatchnotes();
-  var [currentPatchnote, setCurrentPatchnote] = useState<string>("2.1.0");
+  var [currentPatchnote, setCurrentPatchnote] = useState<string>("2.2.0");
   var [patchnoteContent, setPatchnoteContent] = useState<string>(
-    `<h5 className="opacity-70">14. Juli 2023</h5>
-    <h3>Basisdokument Version 2.1.0</h3>
-    <div className="flex flex-col gap-2 mt-3">
-      <div>
-        <h4 className="font-semibold">Neue Funktionen:</h4>
-        <ul>
-         <li>Eigener Bereich für Beweise</li>
-         <li>Erweiterte Exportfunktionen</li>
-         <li>Link zu eigener Mandanten-Domain</li>
-        </ul>
-      </div>
-      <div>
-        <h4 className="font-semibold">Funktionen in Arbeit:</h4>
-        <ul>
+    `<h5 className="opacity-70">17. Oktober 2023</h5>
+      <h3>Basisdokument Version 2.2.0</h3>
+      <div className="flex flex-col gap-2 mt-3">
+        <div>
+          <h4 className="font-semibold">Neue Funktionen:</h4>
+          <ul>
+          <li>PDF/TIFF-Dateien zu Beweisen hinzufügen</li>
+          <li>Fortschrittsanzeigen für das Dateivolumen der Anhänge</li>
+          <li>Beweise "unter Verwahrung gegen die Beweislast"</li>
+          <li>Beweise können in der Beweis-Sidebar gefiltert werden</li>
+          <li>Gliederungs-Sidebar erweitert um Beiträge</li>
+          <li>Neue Exportfunktionen: Erweiterte Signatur, Beweisliste</li>
+          <li>Hilfefunktion zusätzlich auf Startseite</li>
+          <li>Keine Aufzählung mehr bei einzelnen Beweisen</li>
+          <li>Darstellungs-Abständer angepasst</li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="font-semibold">Funktionen in Arbeit:</h4>
+          <ul>
+          <li>Vorschau von TIFF-Dateien in allen Browsern</li>
           <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
-        </ul>
-      </div>
-    </div>`
+          </ul>
+        </div>
+      </div>`
   );
 
   function switchPatchnoteContent(contentKey: string) {
@@ -152,6 +159,36 @@ export const PatchnotesPopup = () => {
         );
         setCurrentPatchnote("2.1.0");
         break;
+      case /2.2.0/.test(contentKey):
+        setPatchnoteContent(
+          `<h5 className="opacity-70">17. Oktober 2023</h5>
+             <h3>Basisdokument Version 2.2.0</h3>
+             <div className="flex flex-col gap-2 mt-3">
+               <div>
+                 <h4 className="font-semibold">Neue Funktionen:</h4>
+                 <ul>
+                  <li>PDF/TIFF-Dateien zu Beweisen hinzufügen</li>
+                  <li>Fortschrittsanzeigen für das Dateivolumen der Anhänge</li>
+                  <li>Beweise "unter Verwahrung gegen die Beweislast"</li>
+                  <li>Beweise können in der Beweis-Sidebar gefiltert werden</li>
+                  <li>Gliederungs-Sidebar erweitert um Beiträge</li>
+                  <li>Neue Exportfunktionen: Erweiterte Signatur, Beweisliste</li>
+                  <li>Hilfefunktion zusätzlich auf Startseite</li>
+                  <li>Keine Aufzählung mehr bei einzelnen Beweisen</li>
+                  <li>Darstellungs-Abständer angepasst</li>
+                 </ul>
+               </div>
+               <div>
+                 <h4 className="font-semibold">Funktionen in Arbeit:</h4>
+                 <ul>
+                  <li>Vorschau von TIFF-Dateien in allen Browsern</li>
+                  <li>Übersichtliche Darstellung von bezugnehmenden Beiträgen</li>
+                 </ul>
+               </div>
+             </div>`
+        );
+        setCurrentPatchnote("2.2.0");
+        break;
     }
   }
 
@@ -182,6 +219,20 @@ export const PatchnotesPopup = () => {
               <div className="flex flex-row">
                 {/*tabs*/}
                 <div className="flex flex-col">
+                  <div
+                    className={`w-36 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
+                      currentPatchnote === "2.2.0" ? "" : "border-r opacity-30"
+                    }`}
+                    onClick={() => {
+                      switchPatchnoteContent("2.2.0");
+                    }}>
+                    <div className="flex flex-col">
+                      <div className="font-semibold self-center">
+                        Version 2.2.0
+                      </div>
+                      <div className="opacity-75">17. Oktober 2023</div>
+                    </div>
+                  </div>
                   <div
                     className={`w-36 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
                       currentPatchnote === "2.1.0" ? "" : "border-r opacity-30"
@@ -269,7 +320,7 @@ export const PatchnotesPopup = () => {
                 </div>
                 {/*content*/}
                 <div
-                  className="flex flex-col p-4 h-[380px] overflow-auto"
+                  className="flex flex-col p-4 h-full max-h-[80vh] overflow-auto"
                   dangerouslySetInnerHTML={{ __html: patchnoteContent }}
                 />
               </div>

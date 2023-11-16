@@ -14,19 +14,44 @@ const sliderItems = [
     desc: "Das Basisdokument unterstützt die Digitalisierung ziviler Gerichtsverfahren. In dieser kurzen Einführung werden Ihnen die Funktionen des Basisdokuments erläutert.<br><br>Eine Übersicht zu allen Funktionen finden Sie im <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
   },
   {
+    src: "videos/BDpdftiff.mp4",
+    title: "NEU: PDF/TIFF-Dateien zu Beweisen hinzufügen",
+    desc: "Sie können nun <b>PDF- und TIFF-Dateien</b> zu Beweisen hinzufügen. Über eine Anzeige sehen Sie auf einen Blick, <b>wie viele Dateien sie noch zum Basisdokument hinzufügen können</b>.<br>Nutzen Sie zur Verwaltung auch die <b>Beweise-Sidebar</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "videos/BDuVgdB.mp4",
+    title: "NEU: Beweise unter Verwahrung gegen die Beweislast'",
+    desc: "<b>Beweise der Gegenpartei</b> können nun <b>'unter Verwahrung gegen die Beweislast'</b> hinzugefügt werden.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "videos/BDBeweiseFiltern.mp4",
+    title: "NEU: Beweise filtern",
+    desc: "Sie können nun <b>Beweise</b> in der <b>Beweise-Sidebar filtern</b>. Folgende Filter stehen zur Verfügung: <b>Beweise mit Anlage</b>, <b>Beweise mit PDF/TIFF</b>, <b>Beweise mit externer Anlage</b> und <b>Beweise ohne Anlage</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "videos/BDBeiträgeGliederung.mp4",
+    title: "NEU: Beiträge in der Gliederungs-Sidebar",
+    desc: "Die <b>Gliederungs-Sidebar</b> wurde um die Anzeige der Beiträge erweitert. Per <b>Klick auf einen Beitrag</b> in der Gliederungs-Sidebar gelangen Sie sofort an die entsprechende Stelle im Dokument.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
+    src: "videos/BDErweiterteSignatur.mp4",
+    title: "NEU: Neue Optionen im Export-Dialog",
+    desc: "Im <b>Export-Dialog</b> stehen neue Funktionen zur Verfügung: Eine <b>erweiterte Signatur für Richter:innen</b>, das Herunterladen einer extra <b>PDF mit allen Beweisen des Basisdokuments</b> und dem optionalen <b>Herunterladen aller im Basisdokument gespeicherten Anhänge</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+  },
+  {
     src: "videos/BDBeweise.mp4",
-    title: "NEU: Beweise in Beiträgen + Beweise-Sidebar",
-    desc: "Sie können nun <b>Beweise</b> in einem eigenen Bereich zu Beiträgen hinzufügen. Diese werden im Dokument übergreifend verwaltet. Nutzen Sie dafür die neue <b>Beweise-Sidebar</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+    title: "Beweise in Beiträgen + Beweise-Sidebar",
+    desc: "Sie können <b>Beweise</b> in einem eigenen Bereich zu Beiträgen hinzufügen. Diese werden im Dokument übergreifend verwaltet. Nutzen Sie dafür die <b>Beweise-Sidebar</b>.",
   },
   {
     src: "videos/BDExportDialog.mp4",
-    title: "NEU: Erweiterte Funktionen im Export Dialog",
-    desc: "Ein neuer <b>Export-Dialog</b> bietet Ihnen mehrere neue Optionen für das Herunterladen des Basisdokuments. Optional können Sie ein <b>individuelles Deckblatt</b> oder einen <b>Betreff</b> hinzufügen, eine <b>geänderte Signatur</b> integrieren oder <b>alle neuen Beiträge gesondert herunterladen</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+    title: "Erweiterte Funktionen im Export Dialog",
+    desc: "Der <b>Export-Dialog</b> bietet Ihnen mehrere Optionen für das Herunterladen des Basisdokuments. Optional können Sie ein <b>individuelles Deckblatt</b> oder einen <b>Betreff</b> hinzufügen, eine <b>geänderte Signatur</b> integrieren oder <b>alle neuen Beiträge gesondert herunterladen</b>.",
   },
   {
     src: "videos/BDMandanten-Domain.mp4",
-    title: "NEU: Mandanten-Domain",
-    desc: "Unter der neuen <b>Mandanten-Domain</b> kann das Basisdokument schnell und unkompliziert eingesehen werden. Die Seite ist dazu gedacht externen Personen die Einsicht in Basisdokumente zu erleichtern. In der Mandantenansicht gibt es <b>keine Bearbeitungsmöglichkeiten</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+    title: "Mandanten-Domain",
+    desc: "Unter der <b>Mandanten-Domain</b> kann das Basisdokument schnell und unkompliziert eingesehen werden. Die Seite ist dazu gedacht, externen Personen die Einsicht in Basisdokumente zu erleichtern. In der Mandantenansicht gibt es <b>keine Bearbeitungsmöglichkeiten</b>.",
   },
   {
     src: "videos/BDGliederungs-Sidebar.mp4",
