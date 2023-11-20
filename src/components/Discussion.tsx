@@ -31,7 +31,7 @@ export const Discussion = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="bg-offWhite h-full overflow-y-scroll py-28 px-4 space-y-4 scroll-smooth">
+      <div className="bg-offWhite h-full overflow-y-scroll py-8 px-4 space-y-4 scroll-smooth">
         <div className="max-w-[1500px] m-auto">
           {highlightElementsWithSpecificVersion ? (
             <div className="flex justify-center z-[30] relative">
