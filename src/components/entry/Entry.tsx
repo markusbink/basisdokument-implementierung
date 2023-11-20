@@ -97,8 +97,13 @@ export const Entry: React.FC<EntryProps> = ({
   const { setShowNotePopup, setAssociatedEntryIdNote } = useNotes();
   const { setShowJudgeHintPopup, setAssociatedEntryIdHint } = useHints();
   const { view } = useView();
-  const { evidenceList, updateEvidenceList, removeEvidencesWithoutReferences } =
-    useEvidence();
+  const {
+    evidenceList,
+    updateEvidenceList,
+    removeEvidencesWithoutReferences,
+    setPlaintiffFileVolume,
+    setDefendantFileVolume,
+  } = useEvidence();
 
   const versionTimestamp = versionHistory[entry.version - 1].timestamp;
 
@@ -590,9 +595,13 @@ export const Entry: React.FC<EntryProps> = ({
                       plainText: string,
                       rawHtml: string,
                       evidences: IEvidence[],
-                      caveatOfProof: boolean
+                      caveatOfProof: boolean,
+                      plaintiffVolume: number,
+                      defendantFileVolume: number
                     ) => {
                       updateEntry(plainText, rawHtml, evidences, caveatOfProof);
+                      setPlaintiffFileVolume(plaintiffVolume);
+                      setDefendantFileVolume(defendantFileVolume);
                       setIsExpanded(false);
                     }}
                     evidences={getEvidences(evidenceList, entry.evidenceIds)}

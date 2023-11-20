@@ -13,6 +13,7 @@ import { Button } from "../Button";
 import { ExpandButton } from "./ExpandButton";
 import { EvidencesPopup } from "./EvidencePopup";
 import { ImageViewerPopup } from "./ImageViewerPopup";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 const toolbarOptions = {
   options: ["blockType", "inline", "list", "textAlign"],
@@ -46,7 +47,9 @@ interface EntryBodyProps {
     plainText: string,
     rawHtml: string,
     evidences: IEvidence[],
-    caveatOfProof: boolean
+    caveatOfProof: boolean,
+    plaintiffVolume: number,
+    defendantVolume: number
   ) => void;
   defaultContent?: string;
   evidences: IEvidence[];
@@ -63,12 +66,18 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
   defaultContent,
   evidences,
 }) => {
+  const { plaintiffFileVolume, defendantFileVolume } = useEvidence();
   const [currCaveatOfProof, setCaveatOfProof] =
     useState<boolean>(caveatOfProof);
 
   //evidences from evidencePopup -> to save at onSave if there is no cancellation
   const [evidencesToSave, setEvidencesToSave] =
     useState<IEvidence[]>(evidences);
+  //fileVolumes from evidencePopup -> to save at onSave if there is no cancellation
+  const [plaintiffFileVolumeToSave, setPlaintiffFileVolumeToSave] =
+    useState<number>(plaintiffFileVolume);
+  const [defendantFileVolumeToSave, setDefendantFileVolumeToSave] =
+    useState<number>(defendantFileVolume);
 
   const [hidePlaceholder, setHidePlaceholder] = useState<boolean>(false);
   const [evidencePopupVisible, setEvidencePopupVisible] =
@@ -262,7 +271,14 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
               const newHtml = draftToHtml(
                 convertToRaw(editorState.getCurrentContent())
               );
-              onSave(plainText, newHtml, evidencesToSave, currCaveatOfProof);
+              onSave(
+                plainText,
+                newHtml,
+                evidencesToSave,
+                currCaveatOfProof,
+                plaintiffFileVolumeToSave,
+                defendantFileVolumeToSave
+              );
             }}
             size="sm"
             bgColor="bg-lightGreen hover:bg-darkGreen"
@@ -279,7 +295,11 @@ export const EntryForm: React.FC<EntryBodyProps> = ({
         setIsVisible={setEvidencePopupVisible}
         isPlaintiff={isPlaintiff}
         evidences={evidencesToSave}
-        setEvidencesToSave={setEvidencesToSave}></EvidencesPopup>
+        setEvidencesToSave={setEvidencesToSave}
+        setPlaintiffFileVolumeToSave={setPlaintiffFileVolumeToSave}
+        setDefendantFileVolumeToSave={
+          setDefendantFileVolumeToSave
+        }></EvidencesPopup>
       <ImageViewerPopup
         isVisible={imagePopupVisible}
         filedata={imagePopupData}

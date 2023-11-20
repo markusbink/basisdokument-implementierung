@@ -7,7 +7,7 @@ import {
   X,
   XCircle,
 } from "phosphor-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
 import { getFilteredEvidencesSuggestions } from "../../util/get-evidences";
@@ -31,6 +31,8 @@ interface EvidencesPopupProps {
   isPlaintiff: boolean;
   evidences: IEvidence[];
   setEvidencesToSave: React.Dispatch<React.SetStateAction<IEvidence[]>>;
+  setPlaintiffFileVolumeToSave: React.Dispatch<React.SetStateAction<number>>;
+  setDefendantFileVolumeToSave: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const enum Direction {
@@ -58,6 +60,8 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   isPlaintiff,
   evidences,
   setEvidencesToSave,
+  setPlaintiffFileVolumeToSave,
+  setDefendantFileVolumeToSave,
   caveatOfProof,
   setCaveatOfProof,
 }) => {
@@ -69,9 +73,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     evidenceIdsPlaintiff,
     removeLast,
     plaintiffFileVolume,
-    setPlaintiffFileVolume,
     defendantFileVolume,
-    setDefendantFileVolume,
     getFileSize,
   } = useEvidence();
   const [currentEvidenceList, setCurrentEvidenceList] =
@@ -361,8 +363,18 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
     if (evidenceToDelete.hasAttachment) {
       if (evidenceToDelete.role === UserRole.Plaintiff) {
         removeCurrEvidenceIdPlaintiff(evidenceToDelete.id);
+        if (evidenceToDelete.hasImageFile && evidenceToDelete.imageFile) {
+          setCurrPlaintiffFileVolume(
+            currPlaintiffFileVolume - getFileSize(evidenceToDelete.imageFile)
+          );
+        }
       } else {
         removeCurrEvidenceIdDefendant(evidenceToDelete.id);
+        if (evidenceToDelete.hasImageFile && evidenceToDelete.imageFile) {
+          setCurrDefendantFileVolume(
+            currDefendantFileVolume - getFileSize(evidenceToDelete.imageFile)
+          );
+        }
       }
     }
     setCurrentEvidenceList(filteredEvidences);
@@ -372,12 +384,9 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
   const saveEvidences = () => {
     setEvidencesToSave(currentEvidenceList);
     // dataVolumeToSave
-    if (isPlaintiff) {
-      setPlaintiffFileVolume(currPlaintiffFileVolume);
-    } else {
-      setDefendantFileVolume(currDefendantFileVolume);
-    }
-    //TODO: check if changes are made without "Hinzufügen", dann Hinweis zum speichern!
+    setPlaintiffFileVolumeToSave(currPlaintiffFileVolume);
+    setDefendantFileVolumeToSave(currDefendantFileVolume);
+
     setIsVisible(false);
   };
 

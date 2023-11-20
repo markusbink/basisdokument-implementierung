@@ -92,6 +92,17 @@ export const EvidenceProvider: React.FC<EvidenceProviderProps> = ({
     // that this/these evidences will be deleted completely
     for (let k = 0; k < evidenceList.length; k++) {
       if (getEntryCodesForEvidence(entries, evidenceList[k])?.length === 0) {
+        if (evidenceList[k].hasImageFile && evidenceList[k].imageFile) {
+          if (evidenceList[k].role === UserRole.Plaintiff) {
+            setPlaintiffFileVolume(
+              plaintiffFileVolume - getFileSize(evidenceList[k].imageFile!)
+            );
+          } else {
+            setDefendantFileVolume(
+              defendantFileVolume - getFileSize(evidenceList[k].imageFile!)
+            );
+          }
+        }
         removeFromEvidenceList(evidenceList[k]);
       }
     }

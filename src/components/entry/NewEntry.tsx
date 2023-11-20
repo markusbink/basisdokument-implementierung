@@ -51,7 +51,8 @@ export const NewEntry: React.FC<NewEntryProps> = ({
   const { currentVersion, entries, setEntries, setIndividualEntrySorting } =
     useCase();
   const { sectionList } = useSection();
-  const { updateEvidenceList } = useEvidence();
+  const { updateEvidenceList, setPlaintiffFileVolume, setDefendantFileVolume } =
+    useEvidence();
 
   const isPlaintiff = roleForNewEntry === UserRole.Plaintiff;
   const entryCodePrefix = isPlaintiff ? "K" : "B";
@@ -235,8 +236,17 @@ export const NewEntry: React.FC<NewEntryProps> = ({
             onAbort={(plainText, rawHtml) => {
               closeNewEntryForm(plainText, rawHtml);
             }}
-            onSave={(plainText, rawHtml, evidences, caveatOfProof) => {
+            onSave={(
+              plainText,
+              rawHtml,
+              evidences,
+              caveatOfProof,
+              plaintiffFileVolume,
+              defendantFileVolume
+            ) => {
               createEntry(plainText, rawHtml, evidences, caveatOfProof);
+              setPlaintiffFileVolume(plaintiffFileVolume);
+              setDefendantFileVolume(defendantFileVolume);
             }}
             evidences={[]}
           />
