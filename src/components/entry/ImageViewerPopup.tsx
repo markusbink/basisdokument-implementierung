@@ -1,4 +1,5 @@
 import { X } from "phosphor-react";
+import { useEvidence } from "../../contexts/EvidenceContext";
 
 interface ImageViewerPopupProps {
   filename: string;
@@ -17,14 +18,36 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
   isVisible,
   setIsVisible,
 }) => {
+  const { getFileSize } = useEvidence();
+
   if (!isVisible) {
     return null;
   }
 
-  var filetype = filedata.substring(
+  const filetype = filedata.substring(
     filedata.indexOf(":") + 1,
     filedata.indexOf(";")
   );
+
+  // source: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+  const getFileDataBlob = (base64: string, base64Type: string) => {
+    const base64Marker = ";base64,";
+    const parts = base64.split(base64Marker);
+    const raw = window.atob(parts[1]);
+    const rawLength = raw.length;
+    const uInt8Array = new Uint8Array(rawLength);
+
+    for (let i = 0; i < rawLength; ++i) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], { type: base64Type });
+  };
+
+  const filedataurl =
+    getFileSize(filedata) > 2000000
+      ? URL.createObjectURL(getFileDataBlob(filedata, filetype))
+      : filedata;
 
   return (
     <>
@@ -37,6 +60,7 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
               <button
                 onClick={() => {
                   setIsVisible(false);
+                  URL.revokeObjectURL(filedataurl);
                 }}
                 className="text-darkGrey bg-offWhite p-1 rounded-md hover:bg-lightGrey">
                 <X size={24} />
@@ -47,7 +71,7 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
             <div className="flex justify-center w-full overflow-auto mb-3">
               <embed
                 className="w-[40vw] h-[50vh]"
-                src={filedata + "#navpanes=0"} // hide the nav-panel of pdf-embed at first
+                src={filedataurl + "#navpanes=0"} // hide the nav-panel of pdf-embed at first
                 type={filetype}></embed>
             </div>
             <span className="text-sm text-darkGrey opacity-80">{`${
