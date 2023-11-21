@@ -7,7 +7,7 @@ import {
   X,
   XCircle,
 } from "phosphor-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { SyntheticKeyboardEvent } from "react-draft-wysiwyg";
 import { Button } from "../Button";
 import { getFilteredEvidencesSuggestions } from "../../util/get-evidences";
@@ -435,7 +435,7 @@ export const EvidencesPopup: React.FC<EvidencesPopupProps> = ({
       <div className="fixed inset-0 flex flex-col justify-center items-center z-50">
         <div
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-            p-8 bg-white rounded-lg content-center shadow-lg space-y-8 w-full max-w-[600px]">
+            p-8 bg-white rounded-lg content-center shadow-lg space-y-8 w-full max-w-[600px] overflow-y-auto">
           <div className="flex items-start justify-between rounded-lg ">
             <h3>Beweise hinzufügen</h3>
             <div>
