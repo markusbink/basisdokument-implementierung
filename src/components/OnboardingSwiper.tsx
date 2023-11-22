@@ -36,7 +36,7 @@ const sliderItems = [
   {
     src: "videos/BDErweiterteSignatur.mp4",
     title: "NEU: Neue Optionen im Export-Dialog",
-    desc: "Im <b>Export-Dialog</b> stehen neue Funktionen zur Verfügung: Eine <b>erweiterte Signatur für Richter:innen</b>, das Herunterladen einer extra <b>PDF mit allen Beweisen des Basisdokuments</b> und dem optionalen <b>Herunterladen aller im Basisdokument gespeicherten Anhänge</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
+    desc: "Im <b>Export-Dialog</b> stehen neue Funktionen zur Verfügung: Eine <b>erweiterte Signatur für Richter:innen</b>, das Herunterladen einer extra <b>PDF mit allen Beweisen des Basisdokuments</b> und dem optionalen <b>Herunterladen aller im Basisdokument gespeicherten Anlagen</b>.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
   },
   {
     src: "videos/BDBeweise.mp4",

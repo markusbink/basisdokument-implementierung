@@ -14,7 +14,7 @@ export const PatchnotesPopup = () => {
           <h4 className="font-semibold">Neue Funktionen:</h4>
           <ul>
           <li>PDF/TIFF-Dateien zu Beweisen hinzufügen</li>
-          <li>Fortschrittsanzeigen für das Dateivolumen der Anhänge</li>
+          <li>Fortschrittsanzeigen für das Dateivolumen der Anlagen</li>
           <li>Beweise "unter Verwahrung gegen die Beweislast"</li>
           <li>Beweise können in der Beweis-Sidebar gefiltert werden</li>
           <li>Gliederungs-Sidebar erweitert um Beiträge</li>
@@ -168,7 +168,7 @@ export const PatchnotesPopup = () => {
                  <h4 className="font-semibold">Neue Funktionen:</h4>
                  <ul>
                   <li>PDF/TIFF-Dateien zu Beweisen hinzufügen</li>
-                  <li>Fortschrittsanzeigen für das Dateivolumen der Anhänge</li>
+                  <li>Fortschrittsanzeigen für das Dateivolumen der Anlagen</li>
                   <li>Beweise "unter Verwahrung gegen die Beweislast"</li>
                   <li>Beweise können in der Beweis-Sidebar gefiltert werden</li>
                   <li>Gliederungs-Sidebar erweitert um Beiträge</li>

@@ -83,7 +83,7 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
             className="text-xs pt-4 text-red-600">
             Hinweis: Eine TIFF-Vorschau ist derzeit leider nicht für alle
             Browser möglich. <br /> Bitte laden Sie das Basisdokument herunter,
-            um alle Anhänge zu überprüfen.
+            um alle Anlagen zu überprüfen.
           </span>
         </div>
       </div>

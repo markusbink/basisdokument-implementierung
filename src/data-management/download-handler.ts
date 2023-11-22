@@ -43,8 +43,8 @@ function downloadObjectAsJSON(obj: object, fileName: string) {
 
 function downloadAdditionalFiles(evidences: IEvidence[]) {
   const zip = new JSZip();
-  const plaintiffFolder = zip.folder("Anhang Klagepartei");
-  const defendantFolder = zip.folder("Anhang Beklagtenpartei");
+  const plaintiffFolder = zip.folder("Anlagen Klagepartei");
+  const defendantFolder = zip.folder("Anlagen Beklagtenpartei");
 
   if (evidences) {
     for (let i = 0; i < evidences?.length; i++) {
@@ -75,11 +75,11 @@ function downloadAdditionalFiles(evidences: IEvidence[]) {
   }
   // only download combined zip-folder if one of the two folders is not empty
   if (
-    countZipFiles(zip.folder("Anhang Klagepartei")) ||
-    countZipFiles(zip.folder("Anhang Beklagtenpartei"))
+    countZipFiles(zip.folder("Anlagen Klagepartei")) ||
+    countZipFiles(zip.folder("Anlagen Beklagtenpartei"))
   ) {
     zip.generateAsync({ type: "blob" }).then(function (content) {
-      saveAs(content, "Anhang.zip");
+      saveAs(content, "Anlagen.zip");
     });
   }
 }

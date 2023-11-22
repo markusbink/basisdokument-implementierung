@@ -494,11 +494,11 @@ export const ExportPopup: React.FC<IProps> = ({
                 />
                 <div className="flex flex-row gap-0.5">
                   <span className="font-semibold">
-                    Anhänge nicht herunterladen
+                    Anlagen nicht herunterladen
                   </span>
                   <Tooltip
                     text="Sie können verhindern, dass die im Basisdokument hinterlegten
-                    Anhänge mit heruntergeladen werden."
+                    Anlagen mit heruntergeladen werden."
                     position="top"
                     delayDuration={0}
                     disabled={true}>
