@@ -20,7 +20,7 @@ const sliderItems = [
   },
   {
     src: "videos/BDuVgdB.mp4",
-    title: "NEU: Beweise unter Verwahrung gegen die Beweislast'",
+    title: "NEU: Beweise 'unter Verwahrung gegen die Beweislast'",
     desc: "<b>Beweise der Gegenpartei</b> können nun <b>'unter Verwahrung gegen die Beweislast'</b> hinzugefügt werden.<br><br>Für mehr Infos zu neuen Funktionen, besuchen Sie bitte das <a href='https://www.uni-regensburg.de/forschung/reallabor-informationen/wiki/index.html' target='_blank'>Basisdokument Wiki</a>",
   },
   {
