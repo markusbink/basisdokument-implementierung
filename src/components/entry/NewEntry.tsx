@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { ArrowBendDownRight, Pencil } from "phosphor-react";
+import { ArrowBendDownRight, PencilSimple } from "phosphor-react";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditText } from "react-edit-text";
@@ -217,7 +217,7 @@ export const NewEntry: React.FC<NewEntryProps> = ({
               showEditButton
               editButtonContent={
                 <Tooltip asChild text="Name bearbeiten">
-                  <Pencil />
+                  <PencilSimple />
                 </Tooltip>
               }
               editButtonProps={{

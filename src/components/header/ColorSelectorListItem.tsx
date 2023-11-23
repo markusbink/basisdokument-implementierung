@@ -1,4 +1,4 @@
-import { Check, Pencil } from "phosphor-react";
+import { Check, PencilSimple } from "phosphor-react";
 import { useState } from "react";
 import "react-edit-text/dist/index.css";
 import { Tooltip } from "../Tooltip";
@@ -73,7 +73,7 @@ export const ColorSelectorListItem: React.FC<IProps> = ({
           {inputSelected ? (
             <Check onClick={() => setInputSelected(false)} weight="bold" />
           ) : (
-            <Pencil
+            <PencilSimple
               onClick={() => {
                 setInputSelected(true);
               }}

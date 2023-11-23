@@ -1,5 +1,7 @@
-import { X } from "phosphor-react";
+import { CornersIn, CornersOut, X } from "phosphor-react";
 import { useEvidence } from "../../contexts/EvidenceContext";
+import { useState } from "react";
+import cx from "classnames";
 
 interface ImageViewerPopupProps {
   filename: string;
@@ -19,6 +21,7 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
   setIsVisible,
 }) => {
   const { getFileSize } = useEvidence();
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
   if (!isVisible) {
     return null;
@@ -52,11 +55,22 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
   return (
     <>
       <div className="opacity-25 fixed inset-0 z-50 bg-black !m-0" />
-      <div className="justify-center -translate-y-1/2 -translate-x-1/2 left-1/2 top-1/2 items-center flex bg-white overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-fit h-fit px-5 rounded-md shadow-md">
+      <div className="w-fit h-fit justify-center -translate-y-1/2 -translate-x-1/2 left-1/2 top-1/2 flex bg-white overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none px-5 rounded-md shadow-md">
         <div className="my-6 mx-auto">
-          <div className="flex justify-between">
-            <h3>{title}</h3>
-            <div>
+          <div className="flex justify-between mb-5">
+            <span className="font-bold text-xl self-end">{title}</span>
+            <div className="flex gap-2 items-start">
+              <button
+                onClick={() => {
+                  setIsFullscreen(!isFullscreen);
+                }}
+                className="text-darkGrey bg-offWhite p-1 rounded-md hover:bg-lightGrey">
+                {isFullscreen ? (
+                  <CornersIn size={24} />
+                ) : (
+                  <CornersOut size={24} />
+                )}
+              </button>
               <button
                 onClick={() => {
                   setIsVisible(false);
@@ -70,7 +84,10 @@ export const ImageViewerPopup: React.FC<ImageViewerPopupProps> = ({
           <div>
             <div className="flex justify-center w-full overflow-auto mb-3">
               <embed
-                className="w-[40vw] h-[50vh]"
+                className={cx("", {
+                  "w-[40vw] h-[50vh]": !isFullscreen,
+                  "w-[90vw] h-[80vh]": isFullscreen,
+                })}
                 src={filedataurl + "#navpanes=0"} // hide the nav-panel of pdf-embed at first
                 type={filetype}></embed>
             </div>

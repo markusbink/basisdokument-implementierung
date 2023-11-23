@@ -6,7 +6,7 @@ import {
   BookmarkSimple,
   DotsThree,
   Notepad,
-  Pencil,
+  PencilSimple,
   Scales,
   Trash,
   ArrowSquareOut,
@@ -463,7 +463,7 @@ export const Entry: React.FC<EntryProps> = ({
                           showEditButton
                           editButtonContent={
                             <Tooltip asChild text="Name bearbeiten">
-                              <Pencil />
+                              <PencilSimple />
                             </Tooltip>
                           }
                           editButtonProps={{
@@ -543,7 +543,7 @@ export const Entry: React.FC<EntryProps> = ({
                                     tabIndex={0}
                                     onClick={editEntry}
                                     className="flex items-center gap-2 p-2 rounded-lg hover:bg-offWhite focus:bg-offWhite focus:outline-none">
-                                    <Pencil size={20} />
+                                    <PencilSimple size={20} />
                                     Bearbeiten
                                   </li>
                                   <li
