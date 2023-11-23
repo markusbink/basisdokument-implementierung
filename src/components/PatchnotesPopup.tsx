@@ -220,7 +220,7 @@ export const PatchnotesPopup = () => {
                 {/*tabs*/}
                 <div className="flex flex-col">
                   <div
-                    className={`w-36 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
+                    className={`w-40 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
                       currentPatchnote === "2.2.0" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
@@ -234,7 +234,7 @@ export const PatchnotesPopup = () => {
                     </div>
                   </div>
                   <div
-                    className={`w-36 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
+                    className={`w-40 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
                       currentPatchnote === "2.1.0" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
@@ -248,7 +248,7 @@ export const PatchnotesPopup = () => {
                     </div>
                   </div>
                   <div
-                    className={`w-36 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
+                    className={`w-40 flex-grow h-full grid place-items-center p-2 border-b hover:bg-gray-200 cursor-pointer ${
                       currentPatchnote === "2.0.1" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
@@ -262,7 +262,7 @@ export const PatchnotesPopup = () => {
                     </div>
                   </div>
                   <div
-                    className={`w-36 flex-grow h-full grid place-items-center p-2 hover:bg-gray-200 cursor-pointer ${
+                    className={`w-40 flex-grow h-full grid place-items-center p-2 hover:bg-gray-200 cursor-pointer ${
                       currentPatchnote === "2.0.0" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
@@ -276,7 +276,7 @@ export const PatchnotesPopup = () => {
                     </div>
                   </div>
                   <div
-                    className={`w-36 flex-grow h-full grid place-items-center p-2 border-t hover:bg-gray-200 cursor-pointer ${
+                    className={`w-40 flex-grow h-full grid place-items-center p-2 border-t hover:bg-gray-200 cursor-pointer ${
                       currentPatchnote === "1.0.2" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
@@ -290,7 +290,7 @@ export const PatchnotesPopup = () => {
                     </div>
                   </div>
                   <div
-                    className={`w-36 flex-grow h-full grid place-items-center p-2 border-t hover:bg-gray-200 cursor-pointer ${
+                    className={`w-40 flex-grow h-full grid place-items-center p-2 border-t hover:bg-gray-200 cursor-pointer ${
                       currentPatchnote === "1.0.1" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
@@ -304,7 +304,7 @@ export const PatchnotesPopup = () => {
                     </div>
                   </div>
                   <div
-                    className={`w-36 flex-grow h-full grid place-items-center p-2 border-t hover:bg-gray-200 cursor-pointer ${
+                    className={`w-40 flex-grow h-full grid place-items-center p-2 border-t hover:bg-gray-200 cursor-pointer ${
                       currentPatchnote === "1.0.0" ? "" : "border-r opacity-30"
                     }`}
                     onClick={() => {
