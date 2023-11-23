@@ -7,7 +7,7 @@ export const PatchnotesPopup = () => {
   const { setShowPatchnotesPopup } = usePatchnotes();
   var [currentPatchnote, setCurrentPatchnote] = useState<string>("2.2.0");
   var [patchnoteContent, setPatchnoteContent] = useState<string>(
-    `<h5 className="opacity-70">17. Oktober 2023</h5>
+    `<h5 className="opacity-70">23. November 2023</h5>
       <h3>Basisdokument Version 2.2.0</h3>
       <div className="flex flex-col gap-2 mt-3">
         <div>
@@ -161,7 +161,7 @@ export const PatchnotesPopup = () => {
         break;
       case /2.2.0/.test(contentKey):
         setPatchnoteContent(
-          `<h5 className="opacity-70">17. Oktober 2023</h5>
+          `<h5 className="opacity-70">23. November 2023</h5>
              <h3>Basisdokument Version 2.2.0</h3>
              <div className="flex flex-col gap-2 mt-3">
                <div>
@@ -230,7 +230,7 @@ export const PatchnotesPopup = () => {
                       <div className="font-semibold self-center">
                         Version 2.2.0
                       </div>
-                      <div className="opacity-75">17. Oktober 2023</div>
+                      <div className="opacity-75">23. November 2023</div>
                     </div>
                   </div>
                   <div
