@@ -1,17 +1,20 @@
 import { Info } from "phosphor-react";
 import cx from "classnames";
 import { useState } from "react";
+import { UserRole } from "../types";
 
 interface ErrorPopupProps {
+  role: UserRole;
   isVisible: boolean;
   children: React.ReactNode;
 }
 
 export const VersionPopup: React.FC<ErrorPopupProps> = ({
+  role,
   isVisible,
   children,
 }) => {
-  const [showInfo, setShowInfo] = useState<boolean>(false);
+  const [showInfo, setShowInfo] = useState<boolean>(true);
   if (!isVisible) {
     return null;
   }
@@ -24,7 +27,9 @@ export const VersionPopup: React.FC<ErrorPopupProps> = ({
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
             p-8 bg-white rounded-lg content-center shadow-lg space-y-2 w-full max-w-[800px]">
           <div className="flex justify-between items-center w-full text-xl font-bold">
-            Stammt die hochgeladene Datei von Ihrer Partei?
+            {role === UserRole.Judge
+              ? "Stammt die hochgeladene Datei von Ihrem Gericht?"
+              : "Stammt die hochgeladene Datei von Ihrer Partei?"}
             <Info
               size={30}
               weight="bold"
@@ -44,10 +49,11 @@ export const VersionPopup: React.FC<ErrorPopupProps> = ({
               }
             )}>
             Stammt die hochgeladene Version des Basisdokuments{" "}
-            <b>von Ihrer Partei</b> und Sie möchten daran weiterarbeiten, wird
-            keine neue Version erstellt. Sie können weitere Beiträge hinzufügen
-            und zuletzt hinzugefügte Beiträge noch editieren, bevor sie es
-            wieder an die Gegenpartei übermitteln.
+            <b>von Ihrer Partei oder Ihnen selbst als Gericht</b> und Sie
+            möchten daran weiterarbeiten, wird keine neue Version erstellt. Sie
+            können weitere Beiträge hinzufügen und zuletzt hinzugefügte Beiträge
+            noch editieren, bevor sie es wieder an die Gegenpartei oder das
+            Gericht übermitteln.
             <br></br>
             <br></br>
             Wenn Sie die hochgeladene Version des Basisdokuments zuvor{" "}

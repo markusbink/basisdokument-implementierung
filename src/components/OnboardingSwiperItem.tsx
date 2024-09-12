@@ -1,3 +1,5 @@
+import parse from "html-react-parser";
+
 interface OnboardingSwiperItemProps {
   src: string;
   title: string;
@@ -40,7 +42,7 @@ export const OnboardingSliderItem = ({
         <h3 className="leading-loose text-xl text-center text-darkGrey font-semibold mt-8 mb-2">
           {title}
         </h3>
-        <p className="text-center text-mediumGrey">{desc}</p>
+        <p className="text-center text-mediumGrey">{parse(desc)}</p>
       </div>
     </div>
   );

@@ -61,7 +61,7 @@ export const HeaderContext = createContext<IHeaderContext | null>(null);
 export const HeaderProvider: React.FC<HeaderProviderProps> = ({ children }) => {
   // Define States
   const [showDropdownHeader, setShowDropdownHeader] =
-    useState<IHeaderContext["showDropdownHeader"]>(false);
+    useState<IHeaderContext["showDropdownHeader"]>(true);
   const [showEntrySorting, setShowEntrySorting] =
     useState<IHeaderContext["showEntrySorting"]>(false);
 

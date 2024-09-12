@@ -1,4 +1,4 @@
-import { IEntry } from "../types";
+import { IEntry, IEvidence } from "../types";
 
 export const getEntryCode = (
   entries: IEntry[],
@@ -9,4 +9,19 @@ export const getEntryCode = (
     throw new Error(`Entry ${entryId} not found`);
   }
   return entry.entryCode;
+};
+
+export const getEntryCodesForEvidence = (
+  entries: IEntry[],
+  evidence: IEvidence
+): string[] => {
+  const entriesWithEvidenceReference = entries
+    // prefilter entries with no evidences
+    .filter((entry) => entry.evidences !== undefined)
+    // filter entries with evidence
+    .filter((entry) => entry.evidences.indexOf(evidence) !== -1);
+  // return entry codes
+  return entriesWithEvidenceReference.map((entry) =>
+    getEntryCode(entries, entry.id)
+  );
 };

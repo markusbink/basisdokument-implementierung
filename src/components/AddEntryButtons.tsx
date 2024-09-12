@@ -14,11 +14,13 @@ export const AddEntryButtons: React.FC<AddEntryButtonsProps> = ({
 }) => {
   const [isNewEntryVisible, setIsNewEntryVisible] = useState<boolean>(false);
   const [newEntryRole, setNewEntryRole] = useState<
-    "Klagepartei" | "Beklagtenpartei"
-  >("Klagepartei");
+    UserRole.Plaintiff | UserRole.Defendant
+  >(UserRole.Plaintiff);
   const { user } = useUser();
 
-  const handleClick = (roleForNewEntry: "Klagepartei" | "Beklagtenpartei") => {
+  const handleClick = (
+    roleForNewEntry: UserRole.Plaintiff | UserRole.Defendant
+  ) => {
     setNewEntryRole(roleForNewEntry);
     setIsNewEntryVisible(true);
   };

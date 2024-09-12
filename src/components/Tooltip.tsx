@@ -7,6 +7,8 @@ interface TooltipProps {
   asChild?: boolean;
   position?: "top" | "bottom" | "left" | "right";
   className?: string;
+  delayDuration?: number;
+  disabled?: boolean;
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({
@@ -15,11 +17,13 @@ export const Tooltip: React.FC<TooltipProps> = ({
   asChild,
   position = "top",
   className,
+  delayDuration = 500,
+  disabled = false,
 }) => {
   return (
-    <RadixTooltip.Provider delayDuration={500}>
+    <RadixTooltip.Provider delayDuration={delayDuration}>
       <RadixTooltip.Root>
-        <RadixTooltip.Trigger className={cx(className)} asChild={asChild}>
+        <RadixTooltip.Trigger className={cx(className)} asChild={asChild} disabled={disabled}>
           {children}
         </RadixTooltip.Trigger>
         <RadixTooltip.Content

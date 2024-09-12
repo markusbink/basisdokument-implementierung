@@ -2,6 +2,8 @@ import { List } from "phosphor-react";
 import cx from "classnames";
 import { Button } from "../Button";
 import { useSidebar } from "../../contexts/SidebarContext";
+import { useUser } from "../../contexts";
+import { UserRole } from "../../types";
 
 export const SidebarHeader = () => {
   const {
@@ -11,6 +13,8 @@ export const SidebarHeader = () => {
     activeSidebar,
     setActiveSidebar,
   } = useSidebar();
+
+  const { user } = useUser();
 
   return (
     <div
@@ -38,29 +42,31 @@ export const SidebarHeader = () => {
           }}
         />
       </div>
-      <div
-        className={cx("flex flex-row gap-3", {
-          hidden: !isSidebarOpen,
-        })}>
-        {sidebars.map((sidebar) => (
-          <Button
-            key={sidebar.name}
-            bgColor={
-              sidebar.name === activeSidebar
-                ? "bg-offWhite hover:bg-lightGrey"
-                : "transparent hover:bg-lightGrey"
-            }
-            size="sm"
-            textColor="font-bold text-darkGrey"
-            icon={sidebar.icon}
-            hasText={false}
-            alternativePadding="py-1.5 px-2"
-            onClick={() => {
-              setActiveSidebar(sidebar.name);
-            }}
-          />
-        ))}
-      </div>
+      {user?.role !== UserRole.Client && (
+        <div
+          className={cx("flex flex-row gap-3", {
+            hidden: !isSidebarOpen,
+          })}>
+          {sidebars.map((sidebar) => (
+            <Button
+              key={sidebar.name}
+              bgColor={
+                sidebar.name === activeSidebar
+                  ? "bg-offWhite hover:bg-lightGrey"
+                  : "transparent hover:bg-lightGrey"
+              }
+              size="sm"
+              textColor="font-bold text-darkGrey"
+              icon={sidebar.icon}
+              hasText={false}
+              alternativePadding="py-1.5 px-2"
+              onClick={() => {
+                setActiveSidebar(sidebar.name);
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

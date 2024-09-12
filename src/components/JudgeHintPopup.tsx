@@ -80,7 +80,7 @@ export const JudgeHintPopup = () => {
   const addHint = () => {
     const newHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
-    if (title === "" || newHtml === "<p></p>\n") {
+    if (title === "") {
       setShowErrorText(true);
     } else {
       // edit Hint
@@ -179,6 +179,7 @@ export const JudgeHintPopup = () => {
                   className="leading-relaxed text-base font-bold text-darkGrey">
                   Titel
                 </label>
+                <span className="text-darkRed">*</span>
                 <input
                   value={title}
                   onChange={(e) => {

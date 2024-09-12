@@ -19,7 +19,7 @@ interface ViewProviderProps {
 }
 
 export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
-  const [view, setView] = useState<ViewMode>(ViewMode.Columns);
+  const [view, setView] = useState<ViewMode>(ViewMode.SideBySide);
 
   return (
     <ViewContext.Provider

@@ -1,79 +1,13 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FileArrowDown } from "phosphor-react";
-import { toast } from "react-toastify";
-import { useCase } from "../../contexts";
-import {
-  downloadBasisdokument,
-  downloadEditFile,
-} from "../../data-management/download-handler";
-import {
-  IBookmark,
-  IEntry,
-  IHighlightedEntry,
-  IHighlighter,
-  IHint,
-  IMetaData,
-  INote,
-  ISection,
-  IVersion,
-} from "../../types";
+import { useExport } from "../../contexts";
 
-interface IProps {
-  caseId: string;
-  currentVersion: number;
-  versionHistory: IVersion[];
-  metaData: IMetaData | null;
-  entries: IEntry[];
-  sectionList: ISection[];
-  hints: IHint[];
-  highlightedEntries: IHighlightedEntry[];
-  colorSelection: IHighlighter[];
-  notes: INote[];
-  bookmarks: IBookmark[];
-  individualSorting: string[];
-}
+export const DownloadBasisdokumentButton = () => {
 
-export const DownloadBasisdokumentButton: React.FC<IProps> = ({
-  caseId,
-  currentVersion,
-  versionHistory,
-  metaData,
-  entries,
-  sectionList,
-  hints,
-  highlightedEntries,
-  colorSelection,
-  notes,
-  bookmarks,
-  individualSorting,
-}) => {
-  const { individualEntrySorting } = useCase();
+  const { setIsExportPopupOpen } = useExport();
 
   const onClickDownloadButton = () => {
-    setTimeout(() => {
-      downloadBasisdokument(
-        caseId,
-        currentVersion,
-        versionHistory,
-        metaData,
-        entries,
-        sectionList,
-        hints
-      );
-    }, 100);
-    setTimeout(() => {
-      downloadEditFile(
-        caseId,
-        currentVersion,
-        highlightedEntries,
-        colorSelection,
-        notes,
-        bookmarks,
-        individualSorting,
-        individualEntrySorting
-      );
-    }, 200);
-    toast("Basisdokument wurde heruntergeladen!");
+    setIsExportPopupOpen((currentState) => !currentState);
   };
 
   return (
